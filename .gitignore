@@ -6,6 +6,7 @@ Stock-Analysis-Extension/Legacy/SQL/*
 
 # Database configuration files with credentials
 db_config.yml
+db_config_backup.yml
 db_config.yaml
 db_config.ini
 **/database.config.php
