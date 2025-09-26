@@ -1,5 +1,7 @@
 <?php
 
+namespace App;
+
 /**
  * Core interfaces for improved architecture and dependency injection
  */

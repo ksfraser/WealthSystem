@@ -1,4 +1,9 @@
 <?php
+
+namespace App;
+
+use DateTime;
+
 /**
  * Simple validators that work with the existing centralized database system
  */

@@ -2,13 +2,182 @@
 /**
  * User Authentication and Management System
  * 
+ * @startuml UserAuthDAO_Class_Diagram
+ * !define RECTANGLE class
+ * 
+ * class UserAuthDAO extends CommonDAO {
+ *   - sessionKey : string
+ *   - csrfKey : string  
+ *   - sessionManager : SessionManager
+ *   --
+ *   + __construct()
+ *   + registerUser(username : string, email : string, password : string, isAdmin : bool) : int
+ *   + loginUser(username : string, password : string) : array
+ *   + logoutUser() : bool
+ *   + isLoggedIn() : bool
+ *   + getCurrentUser() : array|null
+ *   + getCurrentUserId() : int|null
+ *   + isAdmin() : bool
+ *   + requireLogin(redirectUrl : string) : void
+ *   + requireAdmin() : void
+ *   + generateCSRFToken() : string
+ *   + validateCSRFToken(token : string) : bool
+ *   + changePassword(userId : int, currentPassword : string, newPassword : string) : bool
+ *   + updateUserProfile(userId : int, email : string) : bool
+ *   + getAllUsers(limit : int, offset : int) : array
+ *   + getUserById(userId : int) : array|null
+ *   + deleteUser(userId : int) : bool
+ *   + updateUserAdminStatus(userId : int, isAdmin : bool) : bool
+ *   + generateJWTToken(userId : int) : string
+ * }
+ * 
+ * abstract class CommonDAO {
+ *   # pdo : PDO
+ *   # errors : array
+ *   # dbConfigClass : class
+ * }
+ * 
+ * class SessionManager {
+ *   - instance : SessionManager
+ *   + getInstance() : SessionManager
+ *   + set(key : string, value : mixed) : bool
+ *   + get(key : string, default : mixed) : mixed
+ *   + remove(key : string) : bool
+ * }
+ * 
+ * class AuthExceptions {
+ *   LoginRequiredException
+ *   AdminRequiredException
+ * }
+ * 
+ * UserAuthDAO --> SessionManager : manages sessions
+ * UserAuthDAO --> AuthExceptions : throws custom exceptions
+ * CommonDAO <|-- UserAuthDAO
+ * 
+ * note right of UserAuthDAO : Comprehensive user\nauthentication system\nwith CSRF protection\nand role management
+ * @enduml
+ * 
+ * @startuml UserAuthDAO_Login_Sequence
+ * participant "Client" as C
+ * participant "UserAuthDAO" as AUTH
+ * participant "Database" as DB
+ * participant "SessionManager" as SM
+ * 
+ * C -> AUTH: loginUser(username, password)
+ * activate AUTH
+ * 
+ * AUTH -> AUTH: validate inputs
+ * AUTH -> DB: SELECT user WHERE username = ?
+ * activate DB
+ * DB --> AUTH: user data
+ * deactivate DB
+ * 
+ * alt user not found
+ *   AUTH --> C: Exception("Invalid username or password")
+ * else user found
+ *   AUTH -> AUTH: password_verify(password, hash)
+ *   alt password valid
+ *     AUTH -> SM: set(sessionKey, userData)
+ *     AUTH -> AUTH: generateCSRFToken()
+ *     AUTH -> SM: set(csrfKey, token)
+ *     AUTH --> C: user data
+ *   else password invalid
+ *     AUTH --> C: Exception("Invalid username or password")
+ *   end
+ * end
+ * deactivate AUTH
+ * @enduml
+ * 
+ * @startuml UserAuthDAO_Registration_Flow
+ * start
+ * :Registration Request;
+ * :Validate username, email, password;
+ * 
+ * if (Validation passed?) then (no)
+ *   :Throw validation exception;
+ *   stop
+ * endif
+ * 
+ * :Check if username/email exists;
+ * if (User already exists?) then (yes)
+ *   :Throw "already exists" exception;
+ *   stop
+ * endif
+ * 
+ * :Hash password with PASSWORD_DEFAULT;
+ * :Insert user into database;
+ * 
+ * if (Insert successful?) then (yes)
+ *   :Return new user ID;
+ *   stop
+ * else (no)
+ *   :Throw "creation failed" exception;
+ *   stop
+ * endif
+ * @enduml
+ * 
+ * @startuml UserAuthDAO_Security_Model
+ * package "Authentication Security" {
+ *   class PasswordHashing {
+ *     + PASSWORD_DEFAULT algorithm
+ *     + password_hash()
+ *     + password_verify()
+ *   }
+ *   
+ *   class CSRFProtection {
+ *     + generateCSRFToken()
+ *     + validateCSRFToken()
+ *     + hash_equals() for timing attack prevention
+ *   }
+ *   
+ *   class SessionSecurity {
+ *     + HttpOnly cookies
+ *     + Secure flag for HTTPS
+ *     + Session regeneration
+ *     + Proper session cleanup
+ *   }
+ *   
+ *   class RoleBasedAccess {
+ *     + requireLogin()
+ *     + requireAdmin()
+ *     + isAdmin()
+ *   }
+ * }
+ * 
+ * UserAuthDAO --> PasswordHashing
+ * UserAuthDAO --> CSRFProtection
+ * UserAuthDAO --> SessionSecurity
+ * UserAuthDAO --> RoleBasedAccess
+ * @enduml
+ * 
  * Features:
- * - User registration and login
- * - Password hashing and verification
- * - Session management
- * - CSRF protection
- * - Role-based access control
+ * - User registration and login with comprehensive validation
+ * - Password hashing using PHP's PASSWORD_DEFAULT algorithm
+ * - Session management through centralized SessionManager
+ * - CSRF protection with token generation and validation
+ * - Role-based access control (admin/user)
  * - JWT token support for API access
+ * - Profile management and admin user controls
+ * 
+ * Security Features:
+ * - Secure password hashing with automatic salt generation
+ * - Timing attack resistant token comparison (hash_equals)
+ * - Session security with proper cookie configuration
+ * - Input validation and sanitization
+ * - SQL injection prevention through prepared statements
+ * - Account lockout protection through generic error messages
+ * 
+ * Design Patterns:
+ * - Template Method: Inherits from CommonDAO for common functionality
+ * - Singleton: Uses SessionManager singleton for session consistency
+ * - Strategy: Different authentication strategies (session, JWT)
+ * - Factory: User creation with different roles
+ * 
+ * Error Handling:
+ * - Comprehensive validation with specific error messages
+ * - Generic security messages to prevent user enumeration
+ * - Centralized error logging through CommonDAO
+ * - Exception-based error handling for auth failures
  */
 
 require_once __DIR__ . '/CommonDAO.php';
@@ -194,7 +363,7 @@ class UserAuthDAO extends CommonDAO {
      */
     public function requireLogin($redirectUrl = 'login.php') {
         if (!$this->isLoggedIn()) {
-            throw new LoginRequiredException($redirectUrl, "User not logged in - login required");
+            throw new \App\Auth\LoginRequiredException($redirectUrl, "User not logged in - login required");
         }
     }
     

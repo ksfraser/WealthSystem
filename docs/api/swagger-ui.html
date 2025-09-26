@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Micro-Cap Experiment API Documentation</title>
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui.css" />
+    <link rel="icon" type="image/png" href="https://petstore.swagger.io/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="https://petstore.swagger.io/favicon-16x16.png" sizes="16x16" />
+    <style>
+        html {
+            box-sizing: border-box;
+            overflow: -moz-scrollbars-vertical;
+            overflow-y: scroll;
+        }
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+        body {
+            margin: 0;
+            background: #fafafa;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        
+        /* Custom styling for ChatGPT Micro-Cap branding */
+        .swagger-ui .topbar {
+            background-color: #1f2937;
+            padding: 10px 0;
+        }
+        
+        .swagger-ui .topbar .download-url-wrapper {
+            display: none;
+        }
+        
+        .swagger-ui .info {
+            margin: 50px 0;
+        }
+        
+        .swagger-ui .info .title {
+            font-size: 36px;
+            color: #1f2937;
+        }
+        
+        .swagger-ui .info .description {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .swagger-ui .scheme-container {
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        
+        .custom-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 0;
+        }
+        
+        .custom-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        
+        .custom-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+        }
+        
+        .api-info {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .api-info h3 {
+            margin-top: 0;
+            color: #1f2937;
+        }
+        
+        .quick-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .quick-links a {
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        
+        .quick-links a:hover {
+            background: #5a67d8;
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-header">
+        <h1>📊 ChatGPT Micro-Cap Experiment API</h1>
+        <p>Interactive API Documentation & Testing Interface</p>
+    </div>
+    
+    <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+        <div class="api-info">
+            <h3>🚀 Welcome to the API Documentation</h3>
+            <p>
+                This interactive documentation allows you to explore and test the ChatGPT Micro-Cap Experiment API directly from your browser. 
+                The API provides comprehensive financial portfolio management capabilities with AI-powered insights.
+            </p>
+            
+            <div class="quick-links">
+                <a href="#tag/Authentication">🔐 Authentication</a>
+                <a href="#tag/Portfolio-Management">💼 Portfolio Management</a>
+                <a href="#tag/Transaction-Management">💰 Transactions</a>
+                <a href="#tag/Market-Data">📈 Market Data</a>
+                <a href="#tag/Analytics">📊 Analytics</a>
+                <a href="../README.md">📚 Complete Docs</a>
+                <a href="../phpdoc/index.html">🔍 PHP Classes</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="swagger-ui"></div>
+
+    <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-bundle.js" charset="UTF-8"></script>
+    <script src="https://unpkg.com/swagger-ui-dist@5.9.0/swagger-ui-standalone-preset.js" charset="UTF-8"></script>
+    <script>
+        window.onload = function() {
+            // Begin Swagger UI call region
+            const ui = SwaggerUIBundle({
+                url: './openapi.yaml',
+                dom_id: '#swagger-ui',
+                deepLinking: true,
+                presets: [
+                    SwaggerUIBundle.presets.apis,
+                    SwaggerUIStandalonePreset
+                ],
+                plugins: [
+                    SwaggerUIBundle.plugins.DownloadUrl
+                ],
+                layout: "StandaloneLayout",
+                validatorUrl: null,
+                tryItOutEnabled: true,
+                supportedSubmitMethods: ['get', 'post', 'put', 'delete', 'patch'],
+                onComplete: function() {
+                    console.log('Swagger UI loaded successfully');
+                },
+                requestInterceptor: function(request) {
+                    // Add default headers or modify requests if needed
+                    console.log('API Request:', request);
+                    return request;
+                },
+                responseInterceptor: function(response) {
+                    // Handle API responses if needed
+                    console.log('API Response:', response);
+                    return response;
+                },
+                // Custom configuration
+                docExpansion: 'none',
+                filter: true,
+                showExtensions: true,
+                showCommonExtensions: true,
+                defaultModelsExpandDepth: 2,
+                defaultModelExpandDepth: 2,
+                displayRequestDuration: true,
+                persistAuthorization: true,
+                // Security configuration
+                initOAuth: {
+                    clientId: 'swagger-ui',
+                    realm: 'chatgpt-microcap',
+                    appName: 'ChatGPT Micro-Cap API Documentation',
+                    scopeSeparator: ' ',
+                    scopes: 'openid profile email',
+                    additionalQueryStringParams: {},
+                    useBasicAuthenticationWithAccessCodeGrant: false,
+                    usePkceWithAuthorizationCodeGrant: true
+                }
+            });
+            // End Swagger UI call region
+
+            window.ui = ui;
+
+            // Add custom functionality
+            setTimeout(function() {
+                // Add version info
+                const infoSection = document.querySelector('.swagger-ui .info');
+                if (infoSection && !document.querySelector('.custom-version-info')) {
+                    const versionDiv = document.createElement('div');
+                    versionDiv.className = 'custom-version-info';
+                    versionDiv.innerHTML = `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #667eea;">
+                            <h4 style="margin: 0 0 10px 0; color: #1f2937;">🎯 API Information</h4>
+                            <p style="margin: 5px 0;"><strong>Version:</strong> 1.0.0</p>
+                            <p style="margin: 5px 0;"><strong>Base URL:</strong> https://api.chatgpt-microcap.com/v1</p>
+                            <p style="margin: 5px 0;"><strong>Environment:</strong> Production</p>
+                            <p style="margin: 5px 0;"><strong>Rate Limiting:</strong> Enabled (varies by subscription tier)</p>
+                            <p style="margin: 5px 0;"><strong>Documentation Updated:</strong> September 26, 2025</p>
+                        </div>
+                    `;
+                    infoSection.appendChild(versionDiv);
+                }
+
+                // Add authentication help
+                const authSection = document.querySelector('.swagger-ui .auth-wrapper');
+                if (authSection && !document.querySelector('.custom-auth-help')) {
+                    const authHelp = document.createElement('div');
+                    authHelp.className = 'custom-auth-help';
+                    authHelp.innerHTML = `
+                        <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px solid #ffeaa7;">
+                            <h5 style="margin: 0 0 10px 0; color: #856404;">🔐 Authentication Help</h5>
+                            <p style="margin: 5px 0; font-size: 14px; color: #856404;">
+                                <strong>API Key:</strong> Get your API key from the dashboard after logging in.<br>
+                                <strong>JWT Token:</strong> Use the /auth/login endpoint to obtain a bearer token.<br>
+                                <strong>Session:</strong> For web applications, use session-based authentication.
+                            </p>
+                            <p style="margin: 10px 0 0 0; font-size: 13px; color: #6c757d;">
+                                💡 Tip: Start by trying the authentication endpoints to get familiar with the API.
+                            </p>
+                        </div>
+                    `;
+                    authSection.insertBefore(authHelp, authSection.firstChild);
+                }
+
+            }, 2000);
+        };
+    </script>
+
+    <!-- Footer -->
+    <footer style="background: #1f2937; color: white; padding: 40px 0; margin-top: 50px;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div>
+                    <h4 style="margin: 0 0 15px 0; color: #9ca3af;">📊 API Resources</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 8px 0;"><a href="../API_Documentation.md" style="color: #d1d5db; text-decoration: none;">📖 Complete API Guide</a></li>
+                        <li style="margin: 8px 0;"><a href="../phpdoc/index.html" style="color: #d1d5db; text-decoration: none;">🔍 PHP Documentation</a></li>
+                        <li style="margin: 8px 0;"><a href="../../project/README.md" style="color: #d1d5db; text-decoration: none;">📋 Project Documentation</a></li>
+                        <li style="margin: 8px 0;"><a href="../README.md" style="color: #d1d5db; text-decoration: none;">🏠 Documentation Home</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 15px 0; color: #9ca3af;">🛠️ Developer Tools</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 8px 0;"><a href="https://github.com/chatgpt-microcap/experiment" style="color: #d1d5db; text-decoration: none;">🐙 GitHub Repository</a></li>
+                        <li style="margin: 8px 0;"><a href="https://postman.com/chatgpt-microcap/workspace" style="color: #d1d5db; text-decoration: none;">📮 Postman Collection</a></li>
+                        <li style="margin: 8px 0;"><a href="https://insomnia.rest/run/?label=ChatGPT%20MicroCap%20API&uri=" style="color: #d1d5db; text-decoration: none;">🌙 Insomnia Workspace</a></li>
+                        <li style="margin: 8px 0;"><a href="./openapi.yaml" style="color: #d1d5db; text-decoration: none;">📄 OpenAPI Spec (YAML)</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 15px 0; color: #9ca3af;">💬 Support & Community</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 8px 0;"><a href="mailto:api@chatgpt-microcap.com" style="color: #d1d5db; text-decoration: none;">📧 API Support</a></li>
+                        <li style="margin: 8px 0;"><a href="https://discord.gg/chatgpt-microcap" style="color: #d1d5db; text-decoration: none;">💬 Discord Community</a></li>
+                        <li style="margin: 8px 0;"><a href="https://community.chatgpt-microcap.com" style="color: #d1d5db; text-decoration: none;">🏛️ Developer Forum</a></li>
+                        <li style="margin: 8px 0;"><a href="https://status.chatgpt-microcap.com" style="color: #d1d5db; text-decoration: none;">📊 API Status</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin: 0 0 15px 0; color: #9ca3af;">📈 Platform Info</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin: 8px 0; color: #d1d5db;">🏷️ Version: v1.0.0</li>
+                        <li style="margin: 8px 0; color: #d1d5db;">📅 Updated: Sep 26, 2025</li>
+                        <li style="margin: 8px 0; color: #d1d5db;">🔧 OpenAPI: 3.0.3</li>
+                        <li style="margin: 8px 0; color: #d1d5db;">⚡ Response Time: <2s avg</li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border: none; border-top: 1px solid #374151; margin: 30px 0;">
+            <div style="text-align: center; color: #9ca3af;">
+                <p style="margin: 0;">
+                    🚀 <strong>ChatGPT Micro-Cap Experiment</strong> - Democratizing Professional-Grade Investment Tools 
+                    | 📝 Built with ❤️ for the Developer Community
+                </p>
+                <p style="margin: 10px 0 0 0; font-size: 14px;">
+                    © 2025 ChatGPT Micro-Cap Experiment. Licensed under MIT License.
+                </p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

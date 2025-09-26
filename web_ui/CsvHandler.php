@@ -1,7 +1,142 @@
 <?php
 /**
  * CsvHandler: Centralized CSV operations for the entire application
- * Handles all CSV reading and writing with error handling and validation
+ * 
+ * @startuml CsvHandler_Class_Diagram
+ * !define RECTANGLE class
+ * 
+ * class CsvHandler {
+ *   - errors : array
+ *   --
+ *   + read(csvPath : string) : array
+ *   + write(csvPath : string, data : array) : bool
+ *   + append(csvPath : string, data : array) : bool
+ *   + validate(csvPath : string, expectedColumns : array) : bool
+ *   + getErrors() : array
+ *   + hasErrors() : bool
+ *   + clearErrors() : void
+ *   - logError(message : string) : void
+ * }
+ * 
+ * note right of CsvHandler : Centralized CSV operations\nwith comprehensive\nerror handling and\nvalidation
+ * @enduml
+ * 
+ * @startuml CsvHandler_Activity_Read
+ * start
+ * :Read CSV Request;
+ * :Clear previous errors;
+ * 
+ * if (File exists?) then (no)
+ *   :Log "file not found" error;
+ *   :Return empty array;
+ *   stop
+ * endif
+ * 
+ * if (File readable?) then (no)
+ *   :Log "not readable" error;
+ *   :Return empty array;
+ *   stop
+ * endif
+ * 
+ * :Open file handle;
+ * if (Handle opened?) then (no)
+ *   :Log "cannot open" error;
+ *   :Return empty array;
+ *   stop
+ * endif
+ * 
+ * :Read header row;
+ * if (Header exists?) then (no)
+ *   :Log "no header" error;
+ *   :Close file;
+ *   :Return empty array;
+ *   stop
+ * endif
+ * 
+ * :Initialize data array;
+ * while (More rows?) is (yes)
+ *   :Read row;
+ *   if (Row column count matches header?) then (no)
+ *     :Log column mismatch error;
+ *   else (yes)
+ *     :Combine with header to create associative array;
+ *     :Add to data array;
+ *   endif
+ * endwhile (no)
+ * 
+ * :Close file;
+ * :Return data array;
+ * stop
+ * @enduml
+ * 
+ * @startuml CsvHandler_Activity_Write
+ * start
+ * :Write CSV Request;
+ * :Clear previous errors;
+ * 
+ * if (Data provided?) then (no)
+ *   :Log "no data" error;
+ *   :Return false;
+ *   stop
+ * endif
+ * 
+ * :Ensure directory exists;
+ * if (Directory created/exists?) then (no)
+ *   :Log directory error;
+ *   :Return false;
+ *   stop
+ * endif
+ * 
+ * :Open file for writing;
+ * if (File opened?) then (no)
+ *   :Log "cannot open" error;
+ *   :Return false;
+ *   stop
+ * endif
+ * 
+ * :Extract header from first row;
+ * :Write header to file;
+ * if (Header write successful?) then (no)
+ *   :Log header write error;
+ *   :Close file;
+ *   :Return false;
+ *   stop
+ * endif
+ * 
+ * while (More data rows?) is (yes)
+ *   :Write row to file;
+ *   if (Row write successful?) then (no)
+ *     :Log row write error;
+ *     :Close file;
+ *     :Return false;
+ *     stop
+ *   endif
+ * endwhile (no)
+ * 
+ * :Close file;
+ * :Return true;
+ * stop
+ * @enduml
+ * 
+ * Handles all CSV reading and writing with error handling and validation.
+ * Provides a centralized, robust interface for CSV operations across the application.
+ * 
+ * Key Features:
+ * - Comprehensive error handling with detailed error messages
+ * - File existence and permissions validation
+ * - Header/data consistency checking
+ * - Directory auto-creation for write operations
+ * - Support for read, write, and append operations
+ * - Column validation against expected schemas
+ * 
+ * Design Patterns:
+ * - Facade: Simplifies complex CSV operations
+ * - Error Collector: Accumulates errors for batch reporting
+ * 
+ * Error Handling Philosophy:
+ * - Fail gracefully with informative error messages
+ * - Continue processing when possible (e.g., skip malformed rows)
+ * - Provide detailed context in error messages (file paths, line numbers)
  */
 class CsvHandler {
     private $errors = [];

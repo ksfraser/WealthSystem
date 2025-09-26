@@ -18,10 +18,6 @@ abstract class AbstractJobProcessor
         // Include dynamic data access
         require_once __DIR__ . '/DynamicStockDataAccess.php';
         $this->stockDataAccess = new DynamicStockDataAccess();
-        
-        // Include TA-Lib calculators
-        require_once __DIR__ . '/src/Services/Calculators/TALibCalculators.php';
-        require_once __DIR__ . '/src/Services/Calculators/CandlestickPatternCalculator.php';
     }
     
     /**
@@ -267,24 +263,27 @@ class TechnicalAnalysisJobProcessor extends AbstractJobProcessor
     }
     
     /**
-     * Detect candlestick patterns using TA-Lib
+     * Detect candlestick patterns
      */
     private function detectCandlestickPatterns($priceData)
     {
-        $patternCalculator = new \App\Services\Calculators\CandlestickPatternCalculator();
-        
-        // Get TA-Lib pattern analysis
-        $scanResults = $patternCalculator->scanAllPatterns($priceData);
-        
-        // Convert TA-Lib results to format expected by savePatterns()
         $patterns = [];
         
-        if (isset($scanResults['patterns_detected']) && !empty($scanResults['patterns_detected'])) {
-            foreach ($scanResults['patterns_detected'] as $patternData) {
-                $date = $patternData['date'];
-                $patterns[$date] = [
-                    'type' => $patternData['pattern'],
-                    'confidence' => $patternData['strength']
+        // Simplified pattern detection
+        // In production, use TA-Lib pattern functions
+        
+        foreach ($priceData as $candle) {
+            $bodySize = abs($candle['close'] - $candle['open']);
+            $upperShadow = $candle['high'] - max($candle['open'], $candle['close']);
+            $lowerShadow = min($candle['open'], $candle['close']) - $candle['low'];
+            
+            // Simple Doji detection
+            if ($bodySize < ($candle['high'] - $candle['low']) * 0.1) {
+                $patterns[] = [
+                    'date' => $candle['date'],
+                    'pattern' => 'DOJI',
+                    'strength' => 80,
+                    'signal' => 'NEUTRAL'
                 ];
             }
         }
@@ -326,37 +325,15 @@ class TechnicalAnalysisJobProcessor extends AbstractJobProcessor
         
         foreach ($patterns as $date => $pattern) {
             $this->stockDataAccess->insertCandlestickPattern($symbol, [
-                'pattern_name' => $pattern['type'],  // Map 'type' to 'pattern_name'
+                'pattern_type' => $pattern['type'],
                 'date' => $date,
-                'strength' => $pattern['confidence'], // Map 'confidence' to 'strength'
-                'signal' => $this->determineSignalFromPattern($pattern['type']),
-                'timeframe' => 'daily',
+                'confidence' => $pattern['confidence'],
                 'created_at' => date('Y-m-d H:i:s')
             ]);
             $saved++;
         }
         
         return $saved;
-    }
-    
-    /**
-     * Determine trading signal from pattern type
-     */
-    private function determineSignalFromPattern($patternType)
-    {
-        // Map pattern types to trading signals based on common interpretations
-        $bullishPatterns = ['HAMMER', 'MORNINGSTAR', 'ENGULFING', 'PIERCING', 'DRAGONFLY_DOJI'];
-        $bearishPatterns = ['SHOOTING_STAR', 'EVENINGSTAR', 'DARK_CLOUD_COVER', 'GRAVESTONE_DOJI'];
-        
-        $upperPattern = strtoupper($patternType);
-        
-        if (in_array($upperPattern, $bullishPatterns)) {
-            return 'BULLISH';
-        } elseif (in_array($upperPattern, $bearishPatterns)) {
-            return 'BEARISH';
-        } else {
-            return 'NEUTRAL';
-        }
     }
 }
 

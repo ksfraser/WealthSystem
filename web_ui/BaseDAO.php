@@ -1,7 +1,117 @@
 <?php
 /**
  * BaseDAO: Abstract base class for all Data Access Objects
- * Provides common functionality for error handling, session management, and basic operations
+ * 
+ * @startuml BaseDAO_Class_Diagram
+ * !define RECTANGLE class
+ * 
+ * abstract class BaseDAO {
+ *   # sessionManager : SessionManager
+ *   # csvHandler : CsvHandler
+ *   # componentName : string
+ *   # sessionKey : string
+ *   --
+ *   + __construct(componentName : string)
+ *   # logError(message : string) : void
+ *   + getErrors() : array
+ *   + clearErrors() : void
+ *   + hasErrors() : bool
+ *   # setRetryData(data : mixed) : void
+ *   + getRetryData() : mixed
+ *   + clearRetryData() : void
+ *   # readCsv(csvPath : string) : array
+ *   # writeCsv(csvPath : string, data : array) : bool
+ *   # appendCsv(csvPath : string, data : array) : bool
+ *   # validateCsv(csvPath : string, expectedColumns : array) : bool
+ *   # findExistingFile(paths : array) : string|null
+ *   # handleOperationResult(success : bool, data : mixed) : bool
+ * }
+ * 
+ * class SessionManager {
+ *   - instance : SessionManager
+ *   - sessionStarted : bool
+ *   - initializationError : string
+ *   --
+ *   + getInstance() : SessionManager
+ *   + isSessionActive() : bool
+ *   + setRetryData(key : string, data : mixed) : bool
+ *   + getRetryData(key : string) : mixed
+ *   + clearRetryData(key : string) : bool
+ *   + addError(component : string, error : string) : bool
+ *   + getErrors(component : string) : array
+ *   + clearErrors(component : string) : bool
+ * }
+ * 
+ * class CsvHandler {
+ *   - errors : array
+ *   --
+ *   + read(csvPath : string) : array
+ *   + write(csvPath : string, data : array) : bool
+ *   + append(csvPath : string, data : array) : bool
+ *   + validate(csvPath : string, expectedColumns : array) : bool
+ *   + getErrors() : array
+ * }
+ * 
+ * BaseDAO --> SessionManager : uses
+ * BaseDAO --> CsvHandler : uses
+ * 
+ * note right of BaseDAO : Provides base functionality\nfor all DAO classes
+ * note right of SessionManager : Singleton pattern\nfor session management
+ * note right of CsvHandler : Centralized CSV operations\nwith error handling
+ * @enduml
+ * 
+ * @startuml BaseDAO_Workflow
+ * !define RECTANGLE class
+ * 
+ * participant "Client" as C
+ * participant "ConcreteDAO" as DAO
+ * participant "BaseDAO" as BASE
+ * participant "SessionManager" as SM
+ * participant "CsvHandler" as CSV
+ * 
+ * C -> DAO: operation()
+ * activate DAO
+ * DAO -> BASE: readCsv(path)
+ * activate BASE
+ * BASE -> CSV: read(path)
+ * activate CSV
+ * CSV -> CSV: validate file
+ * CSV --> BASE: data / errors
+ * deactivate CSV
+ * BASE -> BASE: transfer errors
+ * BASE -> SM: addError() if needed
+ * BASE --> DAO: result
+ * deactivate BASE
+ * 
+ * alt operation fails
+ *   DAO -> BASE: setRetryData(data)
+ *   BASE -> SM: setRetryData(key, data)
+ * else operation succeeds
+ *   DAO -> BASE: clearRetryData()
+ *   BASE -> SM: clearRetryData(key)
+ * end
+ * 
+ * DAO --> C: result
+ * deactivate DAO
+ * @enduml
+ * 
+ * Provides common functionality for error handling, session management, and basic operations.
+ * This abstract base class implements the Template Method pattern for DAO operations.
+ * 
+ * Key Features:
+ * - Centralized error handling with session persistence
+ * - Retry mechanism for failed operations
+ * - Standardized CSV operations with validation
+ * - Component-based error tracking
+ * 
+ * Dependencies:
+ * - SessionManager (Singleton): Session-based data persistence
+ * - CsvHandler: Centralized CSV file operations
+ * 
+ * Design Patterns:
+ * - Abstract Factory: Base for concrete DAO implementations
+ * - Template Method: Common operation workflows
+ * - Dependency Injection: SessionManager and CsvHandler composition
  */
 
 require_once __DIR__ . '/SessionManager.php';

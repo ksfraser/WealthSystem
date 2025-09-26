@@ -374,8 +374,6 @@
             <div class="action-buttons">
                 <button class="btn btn-primary" onclick="loadFactors()">🔄 Refresh Data</button>
                 <button class="btn btn-secondary" onclick="showCorrelations()">📈 View Correlations</button>
-                <button class="btn btn-info" onclick="showIndicatorAccuracy()">🎯 Indicator Accuracy</button>
-                <button class="btn btn-warning" onclick="calculateWeightedScore()">⚖️ Weighted Analysis</button>
                 <button class="btn btn-success" onclick="exportData()">📥 Export Data</button>
                 <button class="btn btn-primary" onclick="showTopPerformers()">🏆 Top Performers</button>
                 <button class="btn btn-secondary" onclick="showWorstPerformers()">📉 Worst Performers</button>
@@ -564,105 +562,6 @@
                     alert('Correlations feature coming soon! Data loaded: ' + JSON.stringify(data.data, null, 2));
                 } else {
                     alert('Error loading correlations: ' + data.error);
-                }
-            } catch (error) {
-                alert('Network error: ' + error.message);
-            }
-        }
-
-        // Show indicator accuracy data
-        async function showIndicatorAccuracy() {
-            try {
-                const response = await fetch(`${API_BASE}/indicator-accuracy`);
-                const data = await response.json();
-                
-                if (data.success) {
-                    let accuracyDisplay = 'Technical Indicator Accuracy Report:\\n\\n';
-                    
-                    if (Object.keys(data.data).length === 0) {
-                        accuracyDisplay += 'No indicator accuracy data available yet.\\n';
-                        accuracyDisplay += 'Start tracking predictions to see accuracy metrics.';
-                    } else {
-                        Object.entries(data.data).forEach(([indicator, stats]) => {
-                            accuracyDisplay += `${indicator.toUpperCase()}:\\n`;
-                            accuracyDisplay += `  • Total Predictions: ${stats.total_predictions}\\n`;
-                            accuracyDisplay += `  • Correct Predictions: ${stats.correct_predictions}\\n`;
-                            accuracyDisplay += `  • Average Accuracy: ${stats.average_accuracy.toFixed(1)}%\\n`;
-                            accuracyDisplay += `  • Last Updated: ${new Date(stats.last_updated * 1000).toLocaleString()}\\n\\n`;
-                        });
-                    }
-                    
-                    alert(accuracyDisplay);
-                } else {
-                    alert('Error loading indicator accuracy: ' + data.error);
-                }
-            } catch (error) {
-                alert('Network error: ' + error.message);
-            }
-        }
-
-        // Calculate weighted score for a stock
-        async function calculateWeightedScore() {
-            const symbol = prompt('Enter stock symbol for weighted analysis:', 'AAPL');
-            if (!symbol) return;
-            
-            try {
-                // Sample market factors and technical indicators for demo
-                const requestData = {
-                    symbol: symbol.toUpperCase(),
-                    market_factors: [
-                        {symbol: 'SP500', value: 0.8},
-                        {symbol: 'NASDAQ', value: 0.9},
-                        {symbol: 'INTEREST_RATE', value: -0.2},
-                        {symbol: 'VIX', value: -0.3}
-                    ],
-                    technical_indicators: [
-                        {name: 'RSI', value: 0.7},
-                        {name: 'MACD', value: 0.6},
-                        {name: 'SMA', value: 0.5}
-                    ]
-                };
-                
-                const response = await fetch(`${API_BASE}/weighted-score`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(requestData)
-                });
-                
-                const data = await response.json();
-                
-                if (data.success) {
-                    const result = data.data;
-                    let analysisDisplay = `Weighted Analysis for ${result.symbol}:\\n\\n`;
-                    
-                    analysisDisplay += `RECOMMENDATION: ${result.recommendation.action.toUpperCase()}\\n`;
-                    analysisDisplay += `Strength: ${result.recommendation.strength}\\n`;
-                    analysisDisplay += `Risk Level: ${result.recommendation.risk_level}\\n`;
-                    analysisDisplay += `Combined Score: ${result.combined_score.weighted_score.toFixed(3)}\\n`;
-                    analysisDisplay += `Confidence: ${result.combined_score.confidence}\\n\\n`;
-                    
-                    analysisDisplay += `FACTOR ANALYSIS:\\n`;
-                    analysisDisplay += `Score: ${result.factor_analysis.normalized_score.toFixed(3)}\\n`;
-                    result.factor_analysis.details.forEach(detail => {
-                        analysisDisplay += `• ${detail.factor}: ${detail.value} × ${detail.correlation} = ${detail.weighted_contribution.toFixed(3)}\\n`;
-                    });
-                    
-                    analysisDisplay += `\\nINDICATOR ANALYSIS:\\n`;
-                    analysisDisplay += `Score: ${result.indicator_analysis.normalized_score.toFixed(3)}\\n`;
-                    result.indicator_analysis.details.forEach(detail => {
-                        const accuracy = detail.accuracy ? `${detail.accuracy.toFixed(1)}%` : 'No data';
-                        analysisDisplay += `• ${detail.indicator}: ${detail.value} × ${detail.performance_weight}x (Accuracy: ${accuracy})\\n`;
-                    });
-                    
-                    if (result.recommendation.reasoning.length > 0) {
-                        analysisDisplay += `\\nREASONING:\\n${result.recommendation.reasoning.join(', ')}`;
-                    }
-                    
-                    alert(analysisDisplay);
-                } else {
-                    alert('Error calculating weighted score: ' + data.error);
                 }
             } catch (error) {
                 alert('Network error: ' + error.message);

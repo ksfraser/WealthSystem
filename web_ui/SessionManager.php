@@ -1,7 +1,115 @@
 <?php
 /**
  * SessionManager: Centralized session management for the entire application
- * Handles all session operations, retry data storage, and session-based error tracking
+ * 
+ * @startuml SessionManager_Class_Diagram
+ * !define RECTANGLE class
+ * 
+ * class SessionManager {
+ *   - {static} instance : SessionManager
+ *   - {static} sessionStarted : bool
+ *   - {static} initializationError : string
+ *   --
+ *   - __construct()
+ *   - initializeSession() : void
+ *   - ensureSessionPath() : void
+ *   - createSessionPath(path : string) : bool
+ *   - canUseSession() : bool
+ *   --
+ *   + {static} getInstance() : SessionManager
+ *   + isSessionActive() : bool
+ *   + getInitializationError() : string|null
+ *   + setRetryData(key : string, data : mixed) : bool
+ *   + getRetryData(key : string) : mixed|null
+ *   + clearRetryData(key : string) : bool
+ *   + addError(component : string, error : string) : bool
+ *   + getErrors(component : string) : array
+ *   + clearErrors(component : string) : bool
+ *   + getAllErrors() : array
+ *   + clearAllErrors() : bool
+ *   + set(key : string, value : mixed) : bool
+ *   + get(key : string, default : mixed) : mixed
+ *   + has(key : string) : bool
+ *   + remove(key : string) : bool
+ *   + destroy() : void
+ * }
+ * 
+ * note right of SessionManager : Singleton Pattern\nManages PHP sessions\nwith error handling\nand retry mechanisms
+ * 
+ * SessionManager --> SessionManager : creates singleton instance
+ * @enduml
+ * 
+ * @startuml SessionManager_State_Diagram
+ * [*] --> NotInitialized : new SessionManager()
+ * 
+ * NotInitialized --> InitializingPath : ensureSessionPath()
+ * InitializingPath --> PathCreated : path exists/created
+ * InitializingPath --> PathFailed : path creation failed
+ * 
+ * PathCreated --> SessionStarting : session_start()
+ * PathFailed --> SessionStarting : fallback to temp
+ * 
+ * SessionStarting --> Active : session started successfully
+ * SessionStarting --> Failed : headers sent / other error
+ * 
+ * Active --> Active : normal operations
+ * Failed --> Failed : operations return false/null
+ * 
+ * Active --> [*] : destroy()
+ * Failed --> [*] : destroy()
+ * @enduml
+ * 
+ * @startuml SessionManager_Sequence
+ * participant "Client" as C
+ * participant "SessionManager" as SM
+ * participant "PHP Session" as PS
+ * participant "Filesystem" as FS
+ * 
+ * C -> SM: getInstance()
+ * activate SM
+ * SM -> SM: __construct() (first time only)
+ * SM -> SM: initializeSession()
+ * SM -> SM: ensureSessionPath()
+ * SM -> FS: check session_save_path()
+ * FS --> SM: path status
+ * 
+ * alt path doesn't exist
+ *   SM -> FS: mkdir(path, 0755, true)
+ *   FS --> SM: success/failure
+ * end
+ * 
+ * SM -> PS: session_start()
+ * PS --> SM: success/failure
+ * SM --> C: SessionManager instance
+ * deactivate SM
+ * 
+ * C -> SM: setRetryData(key, data)
+ * SM -> PS: $_SESSION['retry_data'][key] = data
+ * 
+ * C -> SM: addError(component, error)
+ * SM -> PS: $_SESSION['errors'][component][] = error
+ * @enduml
+ * 
+ * Handles all session operations, retry data storage, and session-based error tracking.
+ * Implements the Singleton pattern to ensure consistent session management across the application.
+ * 
+ * Key Features:
+ * - Singleton pattern for global session management
+ * - Automatic session path creation and validation
+ * - Header-safe session initialization
+ * - Component-based error tracking with session persistence
+ * - Retry data storage for failed operations
+ * - Fallback mechanisms for different environments (CLI, web)
+ * 
+ * Design Patterns:
+ * - Singleton: Ensures single instance across application
+ * - Template Method: Standardized session operation patterns
+ * - Strategy: Different session path creation strategies
+ * 
+ * Error Handling:
+ * - Graceful degradation when sessions can't be started
+ * - Automatic fallback session paths
+ * - Environment-aware error logging (CLI vs web)
  */
 
 class SessionManager {

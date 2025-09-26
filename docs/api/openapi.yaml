@@ -1,0 +1,1086 @@
+openapi: 3.0.3
+info:
+  title: ChatGPT Micro-Cap Experiment API
+  description: |
+    A comprehensive financial trading platform API that democratizes professional-grade investment tools through AI-powered insights and open-source transparency.
+    
+    ## Features
+    - Portfolio management and tracking
+    - Real-time market data integration
+    - AI-powered trading insights
+    - Comprehensive transaction logging
+    - Risk assessment and analytics
+    
+    ## Authentication
+    This API uses multiple authentication methods:
+    - **Session Authentication**: For web application users
+    - **API Key Authentication**: For programmatic access
+    - **JWT Bearer Tokens**: For secure API integration
+    
+    ## Rate Limiting
+    - **Standard Users**: 1000 requests per hour
+    - **Premium Users**: 10,000 requests per hour
+    - **Enterprise Users**: 100,000 requests per hour
+  version: 1.0.0
+  contact:
+    name: ChatGPT Micro-Cap Development Team
+    email: api@chatgpt-microcap.com
+    url: https://github.com/chatgpt-microcap/experiment
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: https://api.chatgpt-microcap.com/v1
+    description: Production API Server
+  - url: https://staging-api.chatgpt-microcap.com/v1
+    description: Staging API Server
+  - url: http://localhost:8080/v1
+    description: Development Server
+
+security:
+  - ApiKeyAuth: []
+  - JwtAuth: []
+  - SessionAuth: []
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User Login
+      description: Authenticate user credentials and return access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  format: password
+                  example: "SecurePassword123"
+                remember_me:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: User Logout
+      description: Invalidate current session or token
+      security:
+        - JwtAuth: []
+        - SessionAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Successfully logged out"
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh Access Token
+      description: Refresh JWT access token using refresh token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+                  example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /portfolios:
+    get:
+      tags:
+        - Portfolio Management
+      summary: Get User Portfolios
+      description: Retrieve all portfolios for the authenticated user
+      parameters:
+        - name: page
+          in: query
+          description: Page number for pagination
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of portfolios per page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          description: Filter portfolios by status
+          required: false
+          schema:
+            type: string
+            enum: [active, inactive, archived]
+      responses:
+        '200':
+          description: Portfolios retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Portfolio'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Portfolio Management
+      summary: Create New Portfolio
+      description: Create a new investment portfolio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePortfolioRequest'
+      responses:
+        '201':
+          description: Portfolio created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /portfolios/{id}:
+    get:
+      tags:
+        - Portfolio Management
+      summary: Get Portfolio Details
+      description: Retrieve detailed information about a specific portfolio
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Portfolio ID
+          schema:
+            type: string
+            example: "portfolio_12345"
+      responses:
+        '200':
+          description: Portfolio details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Portfolio Management
+      summary: Update Portfolio
+      description: Update portfolio information
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Portfolio ID
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePortfolioRequest'
+      responses:
+        '200':
+          description: Portfolio updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Portfolio'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+    delete:
+      tags:
+        - Portfolio Management
+      summary: Delete Portfolio
+      description: Delete a portfolio (soft delete - archived for audit trail)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Portfolio ID
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Portfolio deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /transactions:
+    get:
+      tags:
+        - Transaction Management
+      summary: Get Transactions
+      description: Retrieve user's transaction history
+      parameters:
+        - name: portfolio_id
+          in: query
+          description: Filter by portfolio ID
+          required: false
+          schema:
+            type: string
+        - name: symbol
+          in: query
+          description: Filter by stock symbol
+          required: false
+          schema:
+            type: string
+            example: "AAPL"
+        - name: transaction_type
+          in: query
+          description: Filter by transaction type
+          required: false
+          schema:
+            type: string
+            enum: [buy, sell, dividend, fee]
+        - name: from_date
+          in: query
+          description: Filter transactions from this date (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-01-01"
+        - name: to_date
+          in: query
+          description: Filter transactions to this date (ISO 8601)
+          required: false
+          schema:
+            type: string
+            format: date
+            example: "2024-12-31"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+      responses:
+        '200':
+          description: Transactions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                  pagination:
+                    $ref: '#/components/schemas/PaginationInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Transaction Management
+      summary: Record New Transaction
+      description: Add a new buy/sell transaction to a portfolio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionRequest'
+      responses:
+        '201':
+          description: Transaction recorded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /market/quote/{symbol}:
+    get:
+      tags:
+        - Market Data
+      summary: Get Real-time Quote
+      description: Get current market data for a specific symbol
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          description: Stock symbol
+          schema:
+            type: string
+            example: "AAPL"
+      responses:
+        '200':
+          description: Quote data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketQuote'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /market/search:
+    get:
+      tags:
+        - Market Data
+      summary: Search Securities
+      description: Search for securities by symbol or company name
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Search query (symbol or company name)
+          schema:
+            type: string
+            example: "Apple"
+        - name: limit
+          in: query
+          description: Maximum number of results
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+            default: 10
+      responses:
+        '200':
+          description: Search results retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SecuritySearchResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /analytics/portfolio/{id}/performance:
+    get:
+      tags:
+        - Analytics
+      summary: Get Portfolio Performance
+      description: Retrieve comprehensive portfolio performance analytics
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Portfolio ID
+          schema:
+            type: string
+        - name: period
+          in: query
+          description: Analysis period
+          required: false
+          schema:
+            type: string
+            enum: [1D, 1W, 1M, 3M, 6M, 1Y, 2Y, 5Y, ALL]
+            default: "1Y"
+      responses:
+        '200':
+          description: Performance analytics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioPerformance'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    JwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    SessionAuth:
+      type: apiKey
+      in: cookie
+      name: session_id
+
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+        refresh_token:
+          type: string
+          example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+        token_type:
+          type: string
+          example: "Bearer"
+        expires_in:
+          type: integer
+          example: 3600
+        user:
+          $ref: '#/components/schemas/User'
+
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: "Bearer"
+        expires_in:
+          type: integer
+          example: 3600
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "user_12345"
+        username:
+          type: string
+          example: "john.doe@example.com"
+        email:
+          type: string
+          format: email
+          example: "john.doe@example.com"
+        first_name:
+          type: string
+          example: "John"
+        last_name:
+          type: string
+          example: "Doe"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T00:00:00Z"
+        subscription_tier:
+          type: string
+          enum: [free, premium, enterprise]
+          example: "premium"
+
+    Portfolio:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "portfolio_12345"
+        name:
+          type: string
+          example: "My Growth Portfolio"
+        description:
+          type: string
+          example: "Long-term growth focused portfolio"
+        base_currency:
+          type: string
+          example: "USD"
+        total_value:
+          type: number
+          format: decimal
+          example: 125750.50
+        cash_balance:
+          type: number
+          format: decimal
+          example: 15000.00
+        invested_amount:
+          type: number
+          format: decimal
+          example: 110750.50
+        total_return:
+          type: number
+          format: decimal
+          example: 5250.50
+        return_percentage:
+          type: number
+          format: decimal
+          example: 4.98
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-01T00:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-09-26T12:00:00Z"
+        status:
+          type: string
+          enum: [active, inactive, archived]
+          example: "active"
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Holding'
+
+    Holding:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "AAPL"
+        company_name:
+          type: string
+          example: "Apple Inc."
+        shares:
+          type: number
+          format: decimal
+          example: 50.0
+        average_cost:
+          type: number
+          format: decimal
+          example: 180.25
+        current_price:
+          type: number
+          format: decimal
+          example: 195.50
+        market_value:
+          type: number
+          format: decimal
+          example: 9775.00
+        unrealized_gain_loss:
+          type: number
+          format: decimal
+          example: 762.50
+        unrealized_gain_loss_percentage:
+          type: number
+          format: decimal
+          example: 8.45
+        last_updated:
+          type: string
+          format: date-time
+          example: "2024-09-26T15:30:00Z"
+
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "txn_12345"
+        portfolio_id:
+          type: string
+          example: "portfolio_12345"
+        symbol:
+          type: string
+          example: "AAPL"
+        transaction_type:
+          type: string
+          enum: [buy, sell, dividend, fee]
+          example: "buy"
+        shares:
+          type: number
+          format: decimal
+          example: 10.0
+        price_per_share:
+          type: number
+          format: decimal
+          example: 180.25
+        total_amount:
+          type: number
+          format: decimal
+          example: 1802.50
+        fees:
+          type: number
+          format: decimal
+          example: 9.99
+        transaction_date:
+          type: string
+          format: date
+          example: "2024-09-26"
+        settlement_date:
+          type: string
+          format: date
+          example: "2024-09-28"
+        notes:
+          type: string
+          example: "Quarterly investment purchase"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-09-26T10:30:00Z"
+
+    MarketQuote:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "AAPL"
+        company_name:
+          type: string
+          example: "Apple Inc."
+        current_price:
+          type: number
+          format: decimal
+          example: 195.50
+        previous_close:
+          type: number
+          format: decimal
+          example: 193.25
+        change:
+          type: number
+          format: decimal
+          example: 2.25
+        change_percentage:
+          type: number
+          format: decimal
+          example: 1.16
+        volume:
+          type: integer
+          example: 55420000
+        market_cap:
+          type: number
+          format: decimal
+          example: 3040000000000
+        pe_ratio:
+          type: number
+          format: decimal
+          example: 28.45
+        day_high:
+          type: number
+          format: decimal
+          example: 196.75
+        day_low:
+          type: number
+          format: decimal
+          example: 192.80
+        year_high:
+          type: number
+          format: decimal
+          example: 237.23
+        year_low:
+          type: number
+          format: decimal
+          example: 164.08
+        last_updated:
+          type: string
+          format: date-time
+          example: "2024-09-26T15:59:59Z"
+        market_status:
+          type: string
+          enum: [open, closed, pre_market, after_hours]
+          example: "closed"
+
+    SecuritySearchResult:
+      type: object
+      properties:
+        symbol:
+          type: string
+          example: "AAPL"
+        company_name:
+          type: string
+          example: "Apple Inc."
+        exchange:
+          type: string
+          example: "NASDAQ"
+        currency:
+          type: string
+          example: "USD"
+        security_type:
+          type: string
+          enum: [stock, etf, mutual_fund, option, future]
+          example: "stock"
+        sector:
+          type: string
+          example: "Technology"
+        industry:
+          type: string
+          example: "Consumer Electronics"
+
+    PortfolioPerformance:
+      type: object
+      properties:
+        portfolio_id:
+          type: string
+          example: "portfolio_12345"
+        period:
+          type: string
+          example: "1Y"
+        total_return:
+          type: number
+          format: decimal
+          example: 5250.50
+        total_return_percentage:
+          type: number
+          format: decimal
+          example: 4.98
+        annualized_return:
+          type: number
+          format: decimal
+          example: 4.98
+        volatility:
+          type: number
+          format: decimal
+          example: 18.45
+        sharpe_ratio:
+          type: number
+          format: decimal
+          example: 0.87
+        max_drawdown:
+          type: number
+          format: decimal
+          example: -12.35
+        beta:
+          type: number
+          format: decimal
+          example: 1.15
+        alpha:
+          type: number
+          format: decimal
+          example: 2.34
+        correlation_sp500:
+          type: number
+          format: decimal
+          example: 0.78
+        performance_chart:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+              value:
+                type: number
+                format: decimal
+        benchmark_comparison:
+          type: object
+          properties:
+            sp500_return:
+              type: number
+              format: decimal
+              example: 8.75
+            nasdaq_return:
+              type: number
+              format: decimal
+              example: 12.45
+            relative_performance_sp500:
+              type: number
+              format: decimal
+              example: -3.77
+
+    CreatePortfolioRequest:
+      type: object
+      required:
+        - name
+        - base_currency
+      properties:
+        name:
+          type: string
+          example: "My Growth Portfolio"
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          example: "Long-term growth focused portfolio"
+          maxLength: 500
+        base_currency:
+          type: string
+          example: "USD"
+          enum: [USD, EUR, GBP, JPY, CAD, AUD]
+        initial_cash:
+          type: number
+          format: decimal
+          example: 10000.00
+          minimum: 0
+
+    UpdatePortfolioRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Updated Portfolio Name"
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          example: "Updated portfolio description"
+          maxLength: 500
+
+    CreateTransactionRequest:
+      type: object
+      required:
+        - portfolio_id
+        - symbol
+        - transaction_type
+        - shares
+        - price_per_share
+        - transaction_date
+      properties:
+        portfolio_id:
+          type: string
+          example: "portfolio_12345"
+        symbol:
+          type: string
+          example: "AAPL"
+          pattern: "^[A-Z]{1,10}$"
+        transaction_type:
+          type: string
+          enum: [buy, sell]
+          example: "buy"
+        shares:
+          type: number
+          format: decimal
+          example: 10.0
+          minimum: 0.001
+        price_per_share:
+          type: number
+          format: decimal
+          example: 180.25
+          minimum: 0.01
+        transaction_date:
+          type: string
+          format: date
+          example: "2024-09-26"
+        fees:
+          type: number
+          format: decimal
+          example: 9.99
+          minimum: 0
+        notes:
+          type: string
+          example: "Quarterly investment purchase"
+          maxLength: 500
+
+    PaginationInfo:
+      type: object
+      properties:
+        current_page:
+          type: integer
+          example: 1
+        total_pages:
+          type: integer
+          example: 10
+        total_items:
+          type: integer
+          example: 195
+        items_per_page:
+          type: integer
+          example: 20
+        has_next:
+          type: boolean
+          example: true
+        has_previous:
+          type: boolean
+          example: false
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid request"
+        message:
+          type: string
+          example: "The request could not be processed due to invalid parameters"
+        code:
+          type: string
+          example: "INVALID_REQUEST"
+        details:
+          type: object
+          additionalProperties: true
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-09-26T12:00:00Z"
+        request_id:
+          type: string
+          example: "req_12345"
+
+    ValidationError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Validation failed"
+        message:
+          type: string
+          example: "The request contains invalid data"
+        code:
+          type: string
+          example: "VALIDATION_ERROR"
+        validation_errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                example: "symbol"
+              message:
+                type: string
+                example: "Symbol is required"
+              code:
+                type: string
+                example: "REQUIRED_FIELD"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2024-09-26T12:00:00Z"
+        request_id:
+          type: string
+          example: "req_12345"
+
+  responses:
+    BadRequest:
+      description: Bad Request - Invalid request parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized:
+      description: Unauthorized - Authentication required or invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Forbidden:
+      description: Forbidden - Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound:
+      description: Not Found - Resource does not exist
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    ValidationError:
+      description: Unprocessable Entity - Validation errors
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ValidationError'
+
+    InternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    TooManyRequests:
+      description: Too Many Requests - Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: "Rate limit exceeded"
+            message: "You have exceeded your rate limit. Please try again later."
+            code: "RATE_LIMIT_EXCEEDED"
+            details:
+              limit: 1000
+              window: "1 hour"
+              retry_after: 3600
+
+tags:
+  - name: Authentication
+    description: User authentication and session management
+  - name: Portfolio Management
+    description: Create and manage investment portfolios
+  - name: Transaction Management
+    description: Record and track buy/sell transactions
+  - name: Market Data
+    description: Real-time market quotes and security information
+  - name: Analytics
+    description: Portfolio performance analytics and reporting
+
+externalDocs:
+  description: Complete API Documentation
+  url: https://docs.chatgpt-microcap.com/api/

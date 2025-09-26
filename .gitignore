@@ -1,4 +1,4 @@
-CLAUDE.md
+#CLAUDE.md
 
 # Legacy SQL Directory - Contains private database information
 Stock-Analysis-Extension/Legacy/SQL/
@@ -26,3 +26,8 @@ db_config.ini
 
 # Exclude development/temp finance directory
 src/Ksfraser/Finance/2000/
+
+#exclude required composer packages
+vendor/
+
+.phpdoc/

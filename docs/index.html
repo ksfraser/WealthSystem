@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Micro-Cap Experiment - Documentation Portal</title>
+    <meta name="description" content="Comprehensive documentation portal for the ChatGPT Micro-Cap Experiment - Financial Trading Platform API and project resources">
+    <meta name="keywords" content="API documentation, financial trading, portfolio management, ChatGPT, micro-cap investing">
+    <link rel="icon" type="image/png" href="https://via.placeholder.com/32x32/667eea/ffffff?text=📊" sizes="32x32">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-accent: #f3f4f6;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.2"/><circle cx="10" cy="60" r="0.5" fill="%23ffffff" opacity="0.2"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Search */
+        .search-section {
+            background: var(--bg-primary);
+            padding: 40px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 20px;
+        }
+
+        /* Navigation */
+        .nav-section {
+            padding: 60px 0;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .nav-card {
+            background: var(--bg-primary);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .nav-card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .nav-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        .nav-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .nav-card-links {
+            list-style: none;
+        }
+
+        .nav-card-links li {
+            margin-bottom: 8px;
+        }
+
+        .nav-card-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-card-links a:hover {
+            color: var(--secondary-color);
+            transform: translateX(4px);
+        }
+
+        /* Quick Stats */
+        .stats-section {
+            background: var(--bg-primary);
+            padding: 50px 0;
+            margin: 40px 0;
+            border-radius: 20px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 60px 0 30px;
+            margin-top: 80px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-color);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 30px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header p {
+                font-size: 1.1rem;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .nav-card {
+                padding: 25px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        /* Loading and animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Search results */
+        .search-results {
+            max-width: 600px;
+            margin: 20px auto;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            display: none;
+        }
+
+        .search-results.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .search-result-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .search-result-item:hover {
+            background: var(--bg-accent);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .search-result-title {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 4px;
+        }
+
+        .search-result-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <h1>📊 ChatGPT Micro-Cap Experiment</h1>
+            <p>Comprehensive Documentation Portal for Professional Financial Trading Platform</p>
+        </div>
+    </header>
+
+    <!-- Search Section -->
+    <section class="search-section">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search documentation, APIs, guides..." id="searchInput">
+                <div class="search-icon">🔍</div>
+            </div>
+            <div class="search-results" id="searchResults">
+                <!-- Search results will be populated here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation Section -->
+    <section class="nav-section">
+        <div class="container">
+            <div class="nav-grid">
+                <!-- API Documentation -->
+                <div class="nav-card animate-in">
+                    <div class="nav-card-icon">🚀</div>
+                    <h3>API Documentation</h3>
+                    <p>Complete REST API reference with interactive testing capabilities and comprehensive examples.</p>
+                    <ul class="nav-card-links">
+                        <li><a href="api/swagger-ui.html">🎯 Interactive API Explorer</a></li>
+                        <li><a href="api/API_Documentation.md">📖 Complete API Guide</a></li>
+                        <li><a href="api/openapi.yaml">📄 OpenAPI Specification</a></li>
+                        <li><a href="api/phpdoc/index.html">🔍 PHP Class Documentation</a></li>
+                    </ul>
+                </div>
+
+                <!-- Project Management -->
+                <div class="nav-card animate-in" style="animation-delay: 0.1s;">
+                    <div class="nav-card-icon">📋</div>
+                    <h3>Project Management</h3>
+                    <p>Comprehensive project documentation organized by stakeholder roles and functional areas.</p>
+                    <ul class="nav-card-links">
+                        <li><a href="project/README.md">🏠 Project Overview</a></li>
+                        <li><a href="project/requirements/requirements.md">📊 Requirements Documentation</a></li>
+                        <li><a href="project/quality_assurance/Quality_Assurance.md">🧪 QA Documentation</a></li>
+                        <li><a href="project/business_analysis/Business_Analysis.md">💼 Business Analysis</a></li>
+                    </ul>
+                </div>
+
+                <!-- Developer Resources -->
+                <div class="nav-card animate-in" style="animation-delay: 0.2s;">
+                    <div class="nav-card-icon">👩‍💻</div>
+                    <h3>Developer Resources</h3>
+                    <p>Everything developers need to contribute, integrate, and extend the platform.</p>
+                    <ul class="nav-card-links">
+                        <li><a href="docs/Contributing.md">🤝 Contributing Guide</a></li>
+                        <li><a href="docs/Database-Setup-Guide.md">🗄️ Database Setup</a></li>
+                        <li><a href="docs/HOW_TO_GUIDES.md">📘 How-To Guides</a></li>
+                        <li><a href="docs/Code-Review-Summary.md">📊 Code Review Results</a></li>
+                    </ul>
+                </div>
+
+                <!-- Architecture & Design -->
+                <div class="nav-card animate-in" style="animation-delay: 0.3s;">
+                    <div class="nav-card-icon">🏗️</div>
+                    <h3>Architecture & Design</h3>
+                    <p>Technical architecture, design patterns, and system integration documentation.</p>
+                    <ul class="nav-card-links">
+                        <li><a href="project/architecture/ARCHITECTURE.md">🏛️ System Architecture</a></li>
+                        <li><a href="project/design/Technical_Design.md">🎨 Technical Design</a></li>
+                        <li><a href="project/architecture/Class_Integration_Patterns.md">🔗 Integration Patterns</a></li>
+                        <li><a href="project/design/infrastructure.md">☁️ Infrastructure Setup</a></li>
+                    </ul>
+                </div>
+
+                <!-- Analytics & Reports -->
+                <div class="nav-card animate-in" style="animation-delay: 0.4s;">
+                    <div class="nav-card-icon">📈</div>
+                    <h3>Analytics & Reports</h3>
+                    <p>Technical analysis, performance metrics, and comprehensive code analysis reports.</p>
+                    <ul class="nav-card-links">
+                        <li><a href="docs/TA-Lib_Integration_Analysis.md">📊 TA-Lib Integration</a></li>
+                        <li><a href="docs/Dead_Code_Analysis.md">🧹 Code Cleanup Analysis</a></li>
+                        <li><a href="Results.png">📈 Performance Results</a></li>
+                        <li><a href="Weekly%20Deep%20Research%20(MD)/">📚 Weekly Research</a></li>
+                    </ul>
+                </div>
+
+                <!-- Getting Started -->
+                <div class="nav-card animate-in" style="animation-delay: 0.5s;">
+                    <div class="nav-card-icon">🎯</div>
+                    <h3>Getting Started</h3>
+                    <p>Quick start guides, tutorials, and essential information for new users and developers.</p>
+                    <ul class="nav-card-links">
+                        <li><a href="README.md">🏠 Project Overview</a></li>
+                        <li><a href="docs/Project_Starting_Point.md">🎯 Starting Point Guide</a></li>
+                        <li><a href="Start%20Your%20Own/">🚀 Start Your Own Setup</a></li>
+                        <li><a href="docs/Fedora30-Installation.md">🐧 Linux Installation</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">47</div>
+                    <div class="stat-label">Documentation Files</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">API Endpoints</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Code Examples</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Documentation Coverage</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Stakeholder Groups</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">API Availability</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>📊 Platform</h4>
+                    <ul>
+                        <li><a href="https://github.com/chatgpt-microcap/experiment">GitHub Repository</a></li>
+                        <li><a href="https://chatgpt-microcap.com">Live Platform</a></li>
+                        <li><a href="https://demo.chatgpt-microcap.com">Demo Environment</a></li>
+                        <li><a href="https://status.chatgpt-microcap.com">System Status</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>👥 Community</h4>
+                    <ul>
+                        <li><a href="https://discord.gg/chatgpt-microcap">Discord Server</a></li>
+                        <li><a href="https://community.chatgpt-microcap.com">Developer Forum</a></li>
+                        <li><a href="https://twitter.com/chatgpt_microcap">Twitter Updates</a></li>
+                        <li><a href="https://blog.chatgpt-microcap.com">Developer Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>🛠️ Developer Tools</h4>
+                    <ul>
+                        <li><a href="api/openapi.yaml">OpenAPI Specification</a></li>
+                        <li><a href="https://postman.com/chatgpt-microcap">Postman Collection</a></li>
+                        <li><a href="https://insomnia.rest/run/?label=ChatGPT%20MicroCap">Insomnia Workspace</a></li>
+                        <li><a href="docs/Contributing.md">SDK Development</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>📞 Support</h4>
+                    <ul>
+                        <li><a href="mailto:support@chatgpt-microcap.com">Email Support</a></li>
+                        <li><a href="mailto:api@chatgpt-microcap.com">API Support</a></li>
+                        <li><a href="docs/README-BA-QA.md">Help Documentation</a></li>
+                        <li><a href="https://calendly.com/chatgpt-microcap">Book a Call</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    🚀 <strong>ChatGPT Micro-Cap Experiment</strong> - Democratizing Professional-Grade Investment Tools
+                    | Built with ❤️ for the Developer Community
+                </p>
+                <p style="margin-top: 10px; font-size: 14px;">
+                    © 2025 ChatGPT Micro-Cap Experiment. Licensed under MIT License. 
+                    Documentation updated: September 26, 2025
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        // Sample search data (in production, this would come from a search index)
+        const searchData = [
+            {
+                title: 'API Authentication',
+                description: 'Learn how to authenticate with the API using JWT tokens, API keys, or session auth',
+                url: 'api/API_Documentation.md#authentication',
+                category: 'API'
+            },
+            {
+                title: 'Portfolio Management Endpoints',
+                description: 'Complete reference for creating and managing investment portfolios',
+                url: 'api/API_Documentation.md#portfolio-management',
+                category: 'API'
+            },
+            {
+                title: 'Interactive API Explorer',
+                description: 'Test API endpoints directly in your browser with Swagger UI',
+                url: 'api/swagger-ui.html',
+                category: 'API'
+            },
+            {
+                title: 'Database Setup Guide',
+                description: 'Complete guide for setting up MySQL/MariaDB database',
+                url: 'docs/Database-Setup-Guide.md',
+                category: 'Setup'
+            },
+            {
+                title: 'Contributing Guidelines',
+                description: 'How to contribute code, documentation, and improvements',
+                url: 'docs/Contributing.md',
+                category: 'Development'
+            },
+            {
+                title: 'System Architecture',
+                description: 'High-level system architecture and design patterns',
+                url: 'project/architecture/ARCHITECTURE.md',
+                category: 'Architecture'
+            },
+            {
+                title: 'Quality Assurance Framework',
+                description: 'QA processes, testing procedures, and quality standards',
+                url: 'project/quality_assurance/Quality_Assurance.md',
+                category: 'QA'
+            },
+            {
+                title: 'Business Requirements',
+                description: 'Functional and business requirements documentation',
+                url: 'project/requirements/requirements.md',
+                category: 'Requirements'
+            },
+            {
+                title: 'PHP Class Documentation',
+                description: 'Auto-generated PHP class documentation with PHPDocumentor',
+                url: 'api/phpdoc/index.html',
+                category: 'API'
+            },
+            {
+                title: 'Code Review Summary',
+                description: 'Comprehensive code review results and recommendations',
+                url: 'docs/Code-Review-Summary.md',
+                category: 'Development'
+            }
+        ];
+
+        let searchTimeout;
+        
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+            
+            if (query.length < 2) {
+                searchResults.classList.remove('show');
+                return;
+            }
+            
+            searchTimeout = setTimeout(() => {
+                performSearch(query);
+            }, 300);
+        });
+
+        function performSearch(query) {
+            const results = searchData.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) ||
+                item.description.toLowerCase().includes(query.toLowerCase()) ||
+                item.category.toLowerCase().includes(query.toLowerCase())
+            );
+
+            displaySearchResults(results, query);
+        }
+
+        function displaySearchResults(results, query) {
+            if (results.length === 0) {
+                searchResults.innerHTML = `
+                    <div class="search-result-item">
+                        <div class="search-result-title">No results found</div>
+                        <div class="search-result-description">Try searching for "API", "setup", "authentication", or "portfolio"</div>
+                    </div>
+                `;
+            } else {
+                searchResults.innerHTML = results.slice(0, 8).map(result => `
+                    <div class="search-result-item" onclick="window.location.href='${result.url}'">
+                        <div class="search-result-title">${highlightQuery(result.title, query)}</div>
+                        <div class="search-result-description">${highlightQuery(result.description, query)} • ${result.category}</div>
+                    </div>
+                `).join('');
+            }
+            
+            searchResults.classList.add('show');
+        }
+
+        function highlightQuery(text, query) {
+            const regex = new RegExp(`(${escapeRegex(query)})`, 'gi');
+            return text.replace(regex, '<strong style="color: var(--primary-color);">$1</strong>');
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.classList.remove('show');
+            }
+        });
+
+        // Animate cards on load
+        window.addEventListener('load', function() {
+            const cards = document.querySelectorAll('.nav-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Keyboard navigation for search results
+        let selectedResultIndex = -1;
+
+        searchInput.addEventListener('keydown', function(e) {
+            const resultItems = document.querySelectorAll('.search-result-item');
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedResultIndex = Math.min(selectedResultIndex + 1, resultItems.length - 1);
+                updateSelectedResult(resultItems);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedResultIndex = Math.max(selectedResultIndex - 1, -1);
+                updateSelectedResult(resultItems);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                if (selectedResultIndex >= 0 && resultItems[selectedResultIndex]) {
+                    resultItems[selectedResultIndex].click();
+                }
+            }
+        });
+
+        function updateSelectedResult(resultItems) {
+            resultItems.forEach((item, index) => {
+                if (index === selectedResultIndex) {
+                    item.style.backgroundColor = 'var(--bg-accent)';
+                } else {
+                    item.style.backgroundColor = '';
+                }
+            });
+        }
+
+        // Add some interactive features
+        const navCards = document.querySelectorAll('.nav-card');
+        
+        navCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add loading state for external links
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+            link.addEventListener('click', function() {
+                this.style.opacity = '0.7';
+                this.innerHTML += ' <span style="font-size: 12px;">↗</span>';
+            });
+        });
+
+        // Simple analytics tracking (replace with your analytics code)
+        function trackDocumentationAccess(section, document) {
+            console.log(`Documentation accessed: ${section} - ${document}`);
+            // Add your analytics tracking here
+        }
+
+        // Track navigation clicks
+        document.querySelectorAll('.nav-card-links a').forEach(link => {
+            link.addEventListener('click', function() {
+                const section = this.closest('.nav-card').querySelector('h3').textContent;
+                const document = this.textContent;
+                trackDocumentationAccess(section, document);
+            });
+        });
+    </script>
+</body>
+</html>

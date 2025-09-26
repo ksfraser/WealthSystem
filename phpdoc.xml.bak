@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpdocumentor
+    configVersion="3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://www.phpdoc.org"
+    xsi:schemaLocation="https://www.phpdoc.org https://raw.githubusercontent.com/phpDocumentor/phpDocumentor/master/data/xsd/phpdoc.xsd"
+>
+    <title>ChatGPT Micro-Cap Experiment API</title>
+    <use-cache>true</use-cache>
+    
+    <paths>
+        <output>docs/api/phpdoc</output>
+        <cache>build/api-cache</cache>
+    </paths>
+    
+    <versions>
+        <folder>
+            <number>1.0</number>
+            <apis>
+                <api>
+                    <source dsn=".">
+                        <path>web_ui</path>
+                        <path>src</path>
+                    </source>
+                    <output>api</output>
+                    <ignore>
+                        <path>tests</path>
+                        <path>vendor</path>
+                        <path>archive</path>
+                    </ignore>
+                </api>
+            </apis>
+        </folder>
+    </versions>
+    
+    <settings>
+        <setting name="graphs.enabled" value="true"/>
+        <setting name="guides.enabled" value="true"/>
+    </settings>
+    
+    <templates>
+        <template name="default"/>
+    </templates>
+</phpdocumentor>
