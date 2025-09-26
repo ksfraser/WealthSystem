@@ -58,6 +58,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($userId) {
             $message = "Admin user '{$username}' created successfully! User ID: {$userId}";
+            
+            // Initialize RBAC system after first admin creation
+            try {
+                require_once __DIR__ . '/simple_rbac_migration.php';
+                $rbacMigration = new SimpleRBACMigration();
+                $rbacMigration->run();
+                $message .= "<br>✅ RBAC system initialized successfully!";
+            } catch (Exception $rbacError) {
+                $message .= "<br>⚠️  RBAC initialization failed: " . $rbacError->getMessage();
+                error_log("RBAC initialization failed: " . $rbacError->getMessage());
+            }
+            
             $messageType = 'success';
         } else {
             throw new Exception('Failed to create admin user');

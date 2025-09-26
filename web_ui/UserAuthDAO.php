@@ -351,11 +351,28 @@ class UserAuthDAO extends CommonDAO {
     }
     
     /**
-     * Check if current user is admin
+     * Check if user is admin
+     * Enhanced with RBAC support while maintaining backward compatibility
+     * 
+     * @param int|null $userId Optional user ID (defaults to current user)
+     * @return bool
      */
-    public function isAdmin() {
-        $user = $this->getCurrentUser();
-        return $user && $user['is_admin'];
+    public function isAdmin(?int $userId = null): bool {
+        // Try RBAC first (if available)
+        try {
+            return $this->getRBACService()->isAdmin($userId);
+        } catch (Exception $e) {
+            // Fallback to old is_admin column method
+            if ($userId === null) {
+                // Original behavior - check current user
+                $user = $this->getCurrentUser();
+                return $user && $user['is_admin'];
+            } else {
+                // Check specific user
+                $user = $this->getUserById($userId);
+                return $user ? (bool)$user['is_admin'] : false;
+            }
+        }
     }
     
     /**
@@ -591,5 +608,175 @@ class UserAuthDAO extends CommonDAO {
             'issued_at' => time(),
             'expires_at' => time() + (24 * 60 * 60) // 24 hours
         ]));
+    }
+    
+    // =============================================
+    // RBAC Integration Methods
+    // =============================================
+    
+    private $rbacService = null;
+    
+    /**
+     * Get RBAC service instance (lazy loaded)
+     * 
+     * @return RBACService
+     */
+    private function getRBACService(): RBACService {
+        if ($this->rbacService === null) {
+            require_once __DIR__ . '/RBACService.php';
+            $this->rbacService = new RBACService();
+        }
+        return $this->rbacService;
+    }
+    
+
+    
+    /**
+     * Check if current user has a specific permission
+     * 
+     * @param string $permission Permission name (e.g., 'portfolio.view.own')
+     * @param int|null $userId Optional user ID (defaults to current user)
+     * @return bool
+     */
+    public function hasPermission(string $permission, ?int $userId = null): bool {
+        try {
+            return $this->getRBACService()->hasPermission($permission, $userId);
+        } catch (Exception $e) {
+            // Log error and deny by default
+            $this->logError("RBAC permission check failed: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Check if current user has a specific role
+     * 
+     * @param string $roleName Role name (e.g., 'admin', 'user', 'advisor')
+     * @param int|null $userId Optional user ID (defaults to current user)
+     * @return bool
+     */
+    public function hasRole(string $roleName, ?int $userId = null): bool {
+        try {
+            return $this->getRBACService()->hasRole($roleName, $userId);
+        } catch (Exception $e) {
+            // Fallback for 'admin' role only
+            if ($roleName === 'admin') {
+                $userId = $userId ?? $this->getCurrentUserId();
+                if (!$userId) {
+                    return false;
+                }
+                
+                $user = $this->getUserById($userId);
+                return $user ? (bool)$user['is_admin'] : false;
+            }
+            
+            // Log error and deny by default for other roles
+            $this->logError("RBAC role check failed: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Check if user can access another user's data
+     * 
+     * @param int $targetUserId The user whose data is being accessed
+     * @param string $permission The permission being checked
+     * @param int|null $userId Optional user ID (defaults to current user)
+     * @return bool
+     */
+    public function canAccessUserData(int $targetUserId, string $permission, ?int $userId = null): bool {
+        try {
+            return $this->getRBACService()->canAccessUserData($targetUserId, $permission, $userId);
+        } catch (Exception $e) {
+            // Fallback: only admin can access other users' data, users can access their own
+            $userId = $userId ?? $this->getCurrentUserId();
+            if (!$userId) {
+                return false;
+            }
+            
+            // Users can access their own data
+            if ($userId === $targetUserId) {
+                return true;
+            }
+            
+            // Only admins can access other users' data
+            return $this->isAdmin($userId);
+        }
+    }
+    
+    /**
+     * Get menu items based on user permissions
+     * Integrates with RBAC system for role-based navigation
+     * 
+     * @param int|null $userId Optional user ID (defaults to current user)
+     * @return array Menu items the user can access
+     */
+    public function getPermittedMenuItems(?int $userId = null): array {
+        try {
+            return $this->getRBACService()->getPermittedMenuItems($userId);
+        } catch (Exception $e) {
+            // Fallback to basic menu structure
+            $userId = $userId ?? $this->getCurrentUserId();
+            if (!$userId) {
+                return [];
+            }
+            
+            $menuItems = [];
+            $menuItems[] = ['name' => 'Dashboard', 'url' => 'dashboard.php', 'icon' => '🏠'];
+            $menuItems[] = ['name' => 'My Portfolio', 'url' => 'MyPortfolio.php', 'icon' => '📊'];
+            $menuItems[] = ['name' => 'Portfolios', 'url' => 'portfolios.php', 'icon' => '💼'];
+            
+            if ($this->isAdmin($userId)) {
+                $menuItems[] = ['name' => 'User Management', 'url' => 'admin_users.php', 'icon' => '👥'];
+                $menuItems[] = ['name' => 'System Status', 'url' => 'system_status.php', 'icon' => '🔧'];
+            }
+            
+            return $menuItems;
+        }
+    }
+    
+
+    
+    /**
+     * New method: Require specific permission
+     * 
+     * @param string $permission Permission required
+     * @param string $redirectUrl Optional redirect URL on failure
+     */
+    public function requirePermission(string $permission, string $redirectUrl = 'dashboard.php?error=permission_denied'): void {
+        if (!$this->isLoggedIn()) {
+            header('Location: login.php?error=login_required');
+            exit;
+        }
+        
+        if (!$this->hasPermission($permission)) {
+            header("Location: $redirectUrl");
+            exit;
+        }
+    }
+    
+    /**
+     * Get user's roles for display purposes
+     * 
+     * @param int|null $userId Optional user ID (defaults to current user)
+     * @return array Array of role names
+     */
+    public function getUserRoles(?int $userId = null): array {
+        try {
+            return $this->getRBACService()->getUserRoles($userId ?? $this->getCurrentUserId());
+        } catch (Exception $e) {
+            // Fallback to is_admin check
+            $userId = $userId ?? $this->getCurrentUserId();
+            if (!$userId) {
+                return [];
+            }
+            
+            $roles = ['user']; // Everyone is a user
+            if ($this->isAdmin($userId)) {
+                $roles[] = 'admin';
+            }
+            
+            return $roles;
+        }
     }
 }
