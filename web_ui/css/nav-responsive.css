@@ -1,0 +1,35 @@
+/* Mobile Responsive Navigation - For mobile-friendly pages */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .nav-user {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .nav-links {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .user-dropdown-menu,
+    .portfolio-dropdown-menu {
+        position: static;
+        box-shadow: none;
+        border: none;
+        background: rgba(255,255,255,0.1);
+    }
+    
+    .dropdown-item {
+        color: white;
+    }
+    
+    .dropdown-item:hover {
+        background: rgba(255,255,255,0.2);
+        color: white;
+    }
+}

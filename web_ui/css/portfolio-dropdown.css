@@ -1,0 +1,33 @@
+/* Portfolio Dropdown - For pages with portfolio navigation dropdown */
+.portfolio-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.portfolio-dropdown-toggle {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.portfolio-dropdown-toggle:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.portfolio-dropdown-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    min-width: 160px;
+    z-index: 1000;
+}

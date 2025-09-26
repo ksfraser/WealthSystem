@@ -3,21 +3,11 @@
  * Analytics Dashboard - Simple Version (Debug)
  */
 
-// Skip complex auth for now - just check if user exists in session
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    // Simple redirect without complex auth system
-    header('Location: login.php');
-    exit;
-}
+require_once __DIR__ . '/UserAuthDAO.php';
 
-// Get user data from session
-$currentUser = [
-    'user_id' => $_SESSION['user_id'] ?? 1,
-    'username' => $_SESSION['username'] ?? 'user'
-];
-$user = $currentUser;
-$isAdmin = $_SESSION['is_admin'] ?? false;
+$auth = new UserAuthDAO();
+$auth->requireLogin();
+$user = $auth->getCurrentUser();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,27 +17,15 @@ $isAdmin = $_SESSION['is_admin'] ?? false;
     <title>Analytics Dashboard - Enhanced Trading System</title>
     <?php require_once 'UiStyles.php'; ?>
     <?php UiStyles::render(); ?>
-    <style>
-        /* Simple navigation styles */
-        .nav-header { background: #343a40; color: white; padding: 15px 0; margin-bottom: 20px; }
-        .nav-header .container { display: flex; justify-content: space-between; align-items: center; }
-        .nav-header h2 { margin: 0; }
-        .nav-header .user-info { font-size: 0.9em; }
-    </style>
 </head>
 <body>
 
-<!-- Simple navigation header -->
-<div class="nav-header">
-    <div class="container">
-        <h2>Analytics Dashboard</h2>
-        <div class="user-info">
-            Welcome, <?php echo htmlspecialchars($user['username']); ?> 
-            | <a href="index.php" style="color: #fff;">Dashboard</a>
-            | <a href="logout.php" style="color: #fff;">Logout</a>
-        </div>
-    </div>
-</div>
+<?php
+// Use centralized NavigationService
+require_once 'NavigationService.php';
+$navigationService = new NavigationService();
+echo $navigationService->renderNavigationHeader('Analytics Dashboard - Enhanced Trading System', 'analytics');
+?>
 
 <div class="container">
     <?php require_once 'QuickActions.php'; ?>

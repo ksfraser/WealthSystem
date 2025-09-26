@@ -37,7 +37,71 @@ class NavigationService {
     /**
      * Get navigation CSS - single source of truth
      */
-    public function getNavigationCSS(): string {
+    /**
+     * Get modular CSS - only load what's needed for the page
+     */
+    public function getNavigationCSS(array $modules = ['core']): string {
+        $cssLinks = '';
+        
+        foreach ($modules as $module) {
+            switch ($module) {
+                case 'core':
+                    $cssLinks .= '<link rel="stylesheet" href="css/nav-core.css">' . "\n";
+                    break;
+                case 'links':
+                    $cssLinks .= '<link rel="stylesheet" href="css/nav-links.css">' . "\n";
+                    break;
+                case 'dropdown-base':
+                    $cssLinks .= '<link rel="stylesheet" href="css/dropdown-base.css">' . "\n";
+                    break;
+                case 'user-dropdown':
+                    $cssLinks .= '<link rel="stylesheet" href="css/user-dropdown.css">' . "\n";
+                    break;
+                case 'portfolio-dropdown':
+                    $cssLinks .= '<link rel="stylesheet" href="css/portfolio-dropdown.css">' . "\n";
+                    break;
+                case 'responsive':
+                    $cssLinks .= '<link rel="stylesheet" href="css/nav-responsive.css">' . "\n";
+                    break;
+                case 'all':
+                    // Legacy: load the monolithic file
+                    $cssLinks .= '<link rel="stylesheet" href="navigation.css">' . "\n";
+                    break;
+            }
+        }
+        
+        return $cssLinks;
+    }
+    
+    /**
+     * Get CSS for authenticated dashboard pages (most common)
+     */
+    public function getDashboardCSS(): string {
+        return $this->getNavigationCSS([
+            'core', 'links', 'dropdown-base', 'user-dropdown', 'portfolio-dropdown', 'responsive'
+        ]);
+    }
+    
+    /**
+     * Get CSS for login/register pages (minimal)
+     */
+    public function getAuthPageCSS(): string {
+        return $this->getNavigationCSS([
+            'core', 'dropdown-base', 'user-dropdown', 'responsive'
+        ]);
+    }
+    
+    /**
+     * Get CSS for admin pages 
+     */
+    public function getAdminCSS(): string {
+        return $this->getNavigationCSS([
+            'core', 'links', 'dropdown-base', 'user-dropdown', 'responsive'
+        ]);
+    }
+
+    // Legacy CSS method - keeping for backward compatibility
+    public function getLegacyNavigationCSS(): string {
         return '
         <style>
         .nav-header {
@@ -143,6 +207,7 @@ class NavigationService {
         .dropdown-item:last-child {
             border-bottom: none;
         }
+
         .dropdown-divider {
             height: 1px;
             background-color: #e9ecef;
@@ -174,12 +239,28 @@ class NavigationService {
             }
         }
         
-        // Close dropdown when clicking outside
+        function togglePortfolioDropdown() {
+            var menu = document.getElementById("portfolioDropdownMenu");
+            if (menu) {
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+        }
+        
+        // Close dropdowns when clicking outside
         document.addEventListener("click", function(event) {
-            var dropdown = document.querySelector(".user-dropdown");
-            var menu = document.getElementById("userDropdownMenu");
-            if (dropdown && menu && !dropdown.contains(event.target)) {
-                menu.style.display = "none";
+            var userDropdown = document.querySelector(".user-dropdown");
+            var userMenu = document.getElementById("userDropdownMenu");
+            var portfolioDropdown = document.querySelector(".portfolio-dropdown");  
+            var portfolioMenu = document.getElementById("portfolioDropdownMenu");
+            
+            // Close user dropdown if clicking outside
+            if (userDropdown && userMenu && !userDropdown.contains(event.target)) {
+                userMenu.style.display = "none";
+            }
+            
+            // Close portfolio dropdown if clicking outside
+            if (portfolioDropdown && portfolioMenu && !portfolioDropdown.contains(event.target)) {
+                portfolioMenu.style.display = "none";
             }
         });
         </script>';
@@ -201,9 +282,8 @@ class NavigationService {
                     👤 ' . $username . $adminBadge . ' ▼
                 </button>
                 <div class="user-dropdown-menu" id="userDropdownMenu">
-                    <a href="index.php" class="dropdown-item">🏠 Dashboard</a>
-                    <a href="portfolios.php" class="dropdown-item">📈 Portfolios</a>
-                    <a href="trades.php" class="dropdown-item">📋 Trades</a>
+                    <a href="profile.php" class="dropdown-item">⚙️ Edit Profile</a>
+                    <a href="change_password.php" class="dropdown-item">🔐 Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a href="system_status.php" class="dropdown-item">📊 System Status</a>
                     <div class="dropdown-divider"></div>
@@ -289,14 +369,30 @@ class NavigationService {
         $html .= '<h1 class="nav-title">' . htmlspecialchars($title) . '</h1>';
         $html .= '<div class="nav-user">';
         
-        // Navigation links
-        if (!empty($menuItems)) {
+        // Navigation links with Portfolio dropdown
+        if ($this->isLoggedIn) {
             $html .= '<div class="nav-links">';
+            
+            // Portfolio dropdown with proper CSS classes
+            $html .= '<div class="portfolio-dropdown">';
+            $html .= '<button class="portfolio-dropdown-toggle" onclick="togglePortfolioDropdown()">';
+            $html .= '📈 Portfolio ▼';
+            $html .= '</button>';
+            $html .= '<div class="portfolio-dropdown-menu" id="portfolioDropdownMenu">';
+            $html .= '<a href="index.php" class="dropdown-item">🏠 Dashboard</a>';
+            $html .= '<a href="portfolios.php" class="dropdown-item">📈 Portfolios</a>';
+            $html .= '<a href="trades.php" class="dropdown-item">📋 Trades</a>';
+            $html .= '</div>';
+            $html .= '</div>';
+            
+            // Other navigation items (excluding the portfolio ones)
             foreach ($menuItems as $item) {
-                $activeClass = $item['active'] ? ' active' : '';
-                $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
-                $html .= htmlspecialchars($item['label']);
-                $html .= '</a>';
+                if (!in_array($item['url'], ['index.php', 'portfolios.php', 'trades.php'])) {
+                    $activeClass = $item['active'] ? ' active' : '';
+                    $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
+                    $html .= htmlspecialchars($item['label']);
+                    $html .= '</a>';
+                }
             }
             $html .= '</div>';
         }
@@ -309,7 +405,12 @@ class NavigationService {
         $html .= '</div>'; // nav-header
         
         // Include CSS and JS
-        $html .= $this->getNavigationCSS();
+        // Use modular CSS based on page features
+        if ($this->isLoggedIn) {
+            $html .= $this->getDashboardCSS();
+        } else {
+            $html .= $this->getAuthPageCSS();
+        }
         $html .= $this->getNavigationScript();
         
         return $html;

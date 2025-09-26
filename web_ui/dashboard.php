@@ -26,54 +26,7 @@ $user = $auth->getCurrentUser();
             background: #f8f9fa;
         }
         
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        /* Admin header styling - red gradient */
-        .header.admin {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .user-info span {
-            opacity: 0.9;
-        }
-        
-        .logout-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: background 0.3s;
-        }
-        
-        .logout-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
+
         
         .container {
             max-width: 1200px;
@@ -137,18 +90,7 @@ $user = $auth->getCurrentUser();
             text-align: center;
         }
         
-        .admin-badge {
-            background: #ffffff;
-            color: #dc3545;
-            padding: 0.25rem 0.5rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border: 2px solid #ffffff;
-            text-shadow: none;
-        }
-            font-weight: bold;
-        }
+
         
         .status-info {
             background: #e3f2fd;
@@ -159,37 +101,19 @@ $user = $auth->getCurrentUser();
             color: #1976d2;
         }
         
-        /* Navigation compatibility - adjust for nav header */
-        body {
-            margin: 0;
-            padding: 0;
-        }
-        
-        .header {
-            margin-top: 0;
-        }
+
     </style>
 </head>
 <body>
 
 <?php
-// Include navigation header
-require_once 'nav_header.php';
-renderNavigationHeader('Portfolio Dashboard - Enhanced Trading System');
+// Use centralized NavigationService (follows SRP)
+require_once 'NavigationService.php';
+$navigationService = new NavigationService();
+echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced Trading System', 'dashboard');
 ?>
 
-    <header class="header<?php echo $user['is_admin'] ? ' admin' : ''; ?>">
-        <div class="header-content">
-            <h1>💼 Portfolio Dashboard</h1>
-            <div class="user-info">
-                <span>Welcome, <?php echo htmlspecialchars($user['username']); ?>!</span>
-                <?php if ($user['is_admin']): ?>
-                    <span class="admin-badge">ADMIN</span>
-                <?php endif; ?>
-                <a href="logout.php" class="logout-btn">Logout</a>
-            </div>
-        </div>
-    </header>
+
     
     <div class="container">
         <div class="welcome-section">
@@ -244,15 +168,6 @@ renderNavigationHeader('Portfolio Dashboard - Enhanced Trading System');
                 </div>
             </div>
             
-            <!-- User Profile -->
-            <div class="dashboard-card">
-                <h3>👤 User Profile</h3>
-                <p>Manage your account settings, security preferences, and profile information.</p>
-                <div class="card-links">
-                    <a href="profile.php">⚙️ Edit Profile</a>
-                    <a href="change_password.php">🔐 Change Password</a>
-                </div>
-            </div>
             
             <?php if ($user['is_admin']): ?>
             <!-- Admin Tools -->
