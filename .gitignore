@@ -13,6 +13,7 @@ db_config.ini
 **/db_config.php
 **/.env
 **/.env.local
+**/*.bak
 
 # Also ignore any CSV files that might contain sensitive data
 #**/chatgpt_portfolio_update.csv

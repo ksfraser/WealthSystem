@@ -121,7 +121,16 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
             <p>Access all your investment tools and portfolio data from this centralized dashboard.</p>
             
             <div class="status-info">
-                <strong>🔧 System Status:</strong> User authentication is active. Database connection required for full portfolio functionality.
+                <?php
+                try {
+                    require_once 'UserAuthDAO.php';
+                    $testAuth = new UserAuthDAO();
+                    $testAuth->isLoggedIn();
+                    echo '<strong>🔧 System Status:</strong> 🟢 Database Available - All features operational.';
+                } catch (Exception $e) {
+                    echo '<strong>🔧 System Status:</strong> 🔴 Database Unavailable - Operating in limited mode.';
+                }
+                ?>
             </div>
         </div>
         

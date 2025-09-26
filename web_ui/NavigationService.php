@@ -315,9 +315,9 @@ class NavigationService {
         
         if ($this->isLoggedIn) {
             $items[] = [
-                'url' => 'index.php',
-                'label' => '🏠 Dashboard',
-                'active' => in_array($currentPage, ['index.php', 'dashboard', ''])
+                'url' => 'MyPortfolio.php',
+                'label' => '🏠 My Portfolio',
+                'active' => in_array($currentPage, ['MyPortfolio.php', 'dashboard', ''])
             ];
             
             $items[] = [
@@ -376,18 +376,18 @@ class NavigationService {
             // Portfolio dropdown with proper CSS classes
             $html .= '<div class="portfolio-dropdown">';
             $html .= '<button class="portfolio-dropdown-toggle" onclick="togglePortfolioDropdown()">';
-            $html .= '📈 Portfolio ▼';
+            $html .= '📈 My Portfolio ▼';
             $html .= '</button>';
             $html .= '<div class="portfolio-dropdown-menu" id="portfolioDropdownMenu">';
-            $html .= '<a href="index.php" class="dropdown-item">🏠 Dashboard</a>';
-            $html .= '<a href="portfolios.php" class="dropdown-item">📈 Portfolios</a>';
+            $html .= '<a href="MyPortfolio.php" class="dropdown-item">🏠 My Portfolio</a>';
+            $html .= '<a href="portfolios.php" class="dropdown-item">📈 Manage Portfolios</a>';
             $html .= '<a href="trades.php" class="dropdown-item">📋 Trades</a>';
             $html .= '</div>';
             $html .= '</div>';
             
             // Other navigation items (excluding the portfolio ones)
             foreach ($menuItems as $item) {
-                if (!in_array($item['url'], ['index.php', 'portfolios.php', 'trades.php'])) {
+                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php'])) {
                     $activeClass = $item['active'] ? ' active' : '';
                     $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
                     $html .= htmlspecialchars($item['label']);
