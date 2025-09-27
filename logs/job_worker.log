@@ -1,0 +1,8 @@
+[2025-09-27 18:08:49] INFO: Queuing historical data load for symbol: AAPL
+[2025-09-27 18:08:49] INFO: Queued stock load job for AAPL with 3 chunks
+[2025-09-27 18:08:49] INFO: Processing job #2538 (stock_load)
+[2025-09-27 18:08:49] INFO: Job #2538 completed in 0 seconds
+[2025-09-27 18:08:49] INFO: Queuing historical data load for 2 symbols
+[2025-09-27 18:08:49] INFO: Queued stock load job for MSFT with 3 chunks
+[2025-09-27 18:08:49] INFO: Queued stock load job for GOOGL with 3 chunks
+[2025-09-27 18:08:49] INFO: Queued portfolio load job for 2 symbols

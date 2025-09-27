@@ -9,14 +9,14 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 ini_set('log_errors', 1);
-ini_set('error_log', __DIR__ . '/debug.log');
+ini_set('error_log', 'C:\Users\prote\Documents\ChatGPT-Micro-Cap-Experiment/web_ui/'debug.log');
 
 echo "<h1>Progressive Data Loader Debug</h1>";
 
 try {
     echo "<p>Step 1: Testing includes...</p>";
     
-    require_once '../UserAuthDAO.php';
+    require_once 'C:\Users\prote\Documents\ChatGPT-Micro-Cap-Experiment/web_ui/UserAuthDAO.php';
     echo "<p>✅ UserAuthDAO loaded</p>";
     
     require_once '../StockDAO.php';

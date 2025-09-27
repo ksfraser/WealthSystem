@@ -28,6 +28,27 @@ Welcome to the repository behind my 6-month live trading experiment where ChatGP
 - **🔧 Installation:** See [Installation Guide](#installation) below
 - **📖 Documentation:** Browse comprehensive docs in `docs/` directory
 
+## ⚡ **NEW: Timeout-Free Job Queue System** 
+🎯 **PROBLEM SOLVED:** No more "Maximum execution time exceeded" errors!
+
+✅ **Background Processing** - Load unlimited historical data without timeouts  
+✅ **Real-time Monitoring** - Visual job progress tracking and management  
+✅ **Automatic Recovery** - Jobs retry automatically on failure  
+✅ **Web Interface** - Easy job management at `web_ui/job_manager.html`  
+
+```bash
+# Quick test - eliminates all timeout issues
+php test_job_queue_integration.php
+
+# Queue background jobs instead of direct processing
+php ProgressiveHistoricalLoaderV2.php load-symbol AAPL 2020-01-01
+
+# Use PowerShell management script  
+.\manage_jobs.ps1 help
+```
+
+📖 **Full Documentation:** [JOB_QUEUE_README.md](JOB_QUEUE_README.md) | **User Guide:** [JOB_QUEUE_GUIDE.md](JOB_QUEUE_GUIDE.md)
+
 ## 📁 **Repository Structure**
 
 ### **Core Components**
@@ -169,6 +190,7 @@ The platform implements a **multi-layered architecture** with clear separation o
 - **📉 CSV Analytics** - Portable data format for external analysis
 
 ### **Infrastructure & DevOps**
+- **⚡ Job Queue System** - Timeout-free background processing with visual monitoring
 - **🔄 Background Jobs** - Asynchronous processing system
 - **🧪 Testing Framework** - Comprehensive unit and integration tests
 - **📝 Documentation** - Auto-generated API docs with UML diagrams

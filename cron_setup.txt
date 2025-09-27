@@ -1,0 +1,18 @@
+# Job Queue System - Cron Job Setup
+
+# Add these lines to your crontab to enable automatic job processing
+# Run: crontab -e (Linux/Mac) or use Windows Task Scheduler
+
+# Process jobs every minute
+* * * * * /usr/bin/php /path/to/your/project/JobWorker.php single >> /path/to/your/project/logs/cron.log 2>&1
+
+# Process jobs every 30 seconds (requires two cron entries)
+* * * * * /usr/bin/php /path/to/your/project/JobWorker.php single >> /path/to/your/project/logs/cron.log 2>&1
+* * * * * sleep 30; /usr/bin/php /path/to/your/project/JobWorker.php single >> /path/to/your/project/logs/cron.log 2>&1
+
+# Clean up old jobs daily at 2 AM
+0 2 * * * /usr/bin/php /path/to/your/project/JobQueue.php cleanup >> /path/to/your/project/logs/cleanup.log 2>&1
+
+# Alternative: Run worker continuously (use supervisor or systemd for production)
+# This approach runs the worker as a daemon that processes jobs continuously
+# @reboot /usr/bin/php /path/to/your/project/JobWorker.php run >> /path/to/your/project/logs/worker.log 2>&1 &

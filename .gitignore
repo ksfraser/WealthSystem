@@ -30,6 +30,45 @@ db_config.ini
 /data/
 /data/**
 
+# Debug and test files - should never be in web root for security
+web_ui/debug*
+web_ui/**/debug*
+web_ui/test_*
+web_ui/**/test_*
+web_ui/*_debug.php
+web_ui/**/*_debug.php
+web_ui/diagnostic*
+web_ui/**/diagnostic*
+web_ui/*.bak
+web_ui/**/*.bak
+web_ui/*_backup.php
+web_ui/**/*_backup.php
+web_ui/*_broken.php
+web_ui/**/*_broken.php
+web_ui/*_working.php
+web_ui/**/*_working.php
+web_ui/*_simple.php
+web_ui/**/*_simple.php
+web_ui/*_clean.php
+web_ui/**/*_clean.php
+web_ui/*_original.php
+web_ui/**/*_original.php
+
+# Debug outputs and temporary files
+web_ui/*.txt
+web_ui/**/*.txt
+web_ui/*.log
+web_ui/**/*.log
+web_ui/temp*
+web_ui/**/temp*
+web_ui/tmp*
+web_ui/**/tmp*
+
+# Allow certain necessary files by overriding specific patterns
+!web_ui/README.md
+!web_ui/tests/README.md
+!web_ui/logs/README.md
+
 # Exclude development/temp finance directory
 src/Ksfraser/Finance/2000/
 

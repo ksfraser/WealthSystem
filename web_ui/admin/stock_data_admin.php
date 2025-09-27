@@ -527,10 +527,11 @@ if ($portfolioJobManager) {
             <h3>Populate Historical Data</h3>
             <p>Populate historical price data for a specific stock symbol.</p>
             
-            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-                <strong>💡 Need more than 5 years?</strong> 
-                <a href="progressive_data_loader.php" style="color: #0c5460; font-weight: bold;">Use Progressive Historical Loader</a> 
-                to load complete historical data by overcoming Yahoo Finance limitations.
+            <div style="background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; padding: 15px; border-radius: 4px; margin-bottom: 15px;">
+                <strong>� TIMEOUT PROBLEM SOLVED!</strong><br>
+                <strong>✅ Job Queue System:</strong> <a href="../job_manager.html" style="color: #155724; font-weight: bold;">Job Manager Interface</a> - Visual job monitoring with no timeouts!<br>
+                <strong>📊 Historical Data:</strong> <a href="progressive_data_loader.php" style="color: #155724; font-weight: bold;">Progressive Historical Loader</a> - Now with background job queue support<br>
+                <small>The new job queue system eliminates timeout errors by processing data in background chunks. Perfect for large historical data loads!</small>
             </div>
             
             <form method="POST">
@@ -546,6 +547,47 @@ if ($portfolioJobManager) {
                 </div>
                 <button type="submit" class="btn">Populate Historical Data</button>
             </form>
+        </div>
+
+        <!-- Background Job Queue System -->
+        <div class="section" style="border: 3px solid #28a745; background: linear-gradient(135deg, #f8fff9 0%, #e8f9ed 100%);">
+            <h3>🚀 Background Job Queue System</h3>
+            <p><strong>Timeout-free historical data loading with real-time monitoring!</strong></p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #28a745;">
+                    <h4 style="color: #28a745; margin-top: 0;">📊 Job Manager</h4>
+                    <p>Visual interface with real-time job monitoring, progress tracking, and manual controls.</p>
+                    <a href="../job_manager.html" class="btn" style="background: #28a745; color: white; text-decoration: none; display: inline-block; padding: 8px 16px; border-radius: 4px;">Open Job Manager</a>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #007bff;">
+                    <h4 style="color: #007bff; margin-top: 0;">⏳ Progressive Loader</h4>
+                    <p>Advanced historical data loading with job queue integration for unlimited historical data.</p>
+                    <a href="progressive_data_loader.php" class="btn" style="background: #007bff; color: white; text-decoration: none; display: inline-block; padding: 8px 16px; border-radius: 4px;">Open Progressive Loader</a>
+                </div>
+                
+                <div style="background: white; padding: 15px; border-radius: 8px; border: 2px solid #ffc107;">
+                    <h4 style="color: #856404; margin-top: 0;">⚡ Quick Actions</h4>
+                    <p>Command-line tools for power users and automated processing.</p>
+                    <div style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; margin-top: 10px;">
+                        php JobWorker.php single<br>
+                        php JobQueue.php queue-symbol AAPL
+                    </div>
+                </div>
+            </div>
+            
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                <h4 style="color: #856404; margin: 0 0 10px 0;">💡 Key Benefits</h4>
+                <ul style="margin: 0; color: #856404;">
+                    <li><strong>No More Timeouts:</strong> Jobs process in 25-second chunks</li>
+                    <li><strong>Background Processing:</strong> Queue jobs and continue working</li>
+                    <li><strong>Progress Tracking:</strong> Real-time progress monitoring</li>
+                    <li><strong>Automatic Retry:</strong> Failed jobs retry up to 3 times</li>
+                    <li><strong>Resumable Operations:</strong> Continue where you left off</li>
+                    <li><strong>Unlimited History:</strong> Load decades of historical data</li>
+                </ul>
+            </div>
         </div>
 
         <!-- Job Queue Status -->

@@ -36,7 +36,7 @@ $files_to_check = [
 ];
 
 foreach ($files_to_check as $file) {
-    $path = __DIR__ . '/' . $file;
+    $path = 'C:\Users\prote\Documents\ChatGPT-Micro-Cap-Experiment/web_ui/'' . $file;
     if (file_exists($path)) {
         echo "✅ $file exists (" . filesize($path) . " bytes)\n";
         

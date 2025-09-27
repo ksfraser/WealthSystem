@@ -12,6 +12,8 @@ error_reporting(E_ALL);
 require_once '../UserAuthDAO.php';
 require_once '../StockDAO.php';
 require_once '../../ProgressiveHistoricalLoader.php';
+require_once '../../ProgressiveHistoricalLoaderV2.php';
+require_once '../../JobQueue.php';
 
 // Check authentication and admin status
 $auth = new UserAuthDAO();
@@ -146,6 +148,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                 } catch (Exception $e) {
                     $error = "CSV processing failed: " . $e->getMessage();
+                }
+                break;
+                
+            case 'queue_symbol':
+                $symbol = trim(strtoupper($_POST['symbol'] ?? ''));
+                $startDate = trim($_POST['start_date'] ?? '');
+                $priority = (int)($_POST['priority'] ?? 0);
+                
+                if (!empty($symbol)) {
+                    try {
+                        $loader = new ProgressiveHistoricalLoaderV2();
+                        $result = $loader->loadSymbol($symbol, $startDate ?: null, $priority);
+                        
+                        if ($result['success']) {
+                            $message = "✅ Job queued successfully! Job ID: #{$result['job_id']}. " .
+                                      "Estimated chunks: {$result['estimated_chunks']}. " .
+                                      "The data will be loaded in the background.";
+                            $loadResults = $result;
+                        } else {
+                            $error = "Failed to queue job for {$symbol}";
+                        }
+                        
+                    } catch (Exception $e) {
+                        $error = "Job queue failed: " . $e->getMessage();
+                    }
+                } else {
+                    $error = "Please enter a valid stock symbol";
+                }
+                break;
+                
+            case 'queue_portfolio':
+                try {
+                    $portfolioSymbols = getPortfolioSymbols();
+                    if (empty($portfolioSymbols)) {
+                        $error = "No portfolio symbols found";
+                        break;
+                    }
+                    
+                    $startDate = trim($_POST['start_date'] ?? '');
+                    $priority = (int)($_POST['priority'] ?? 0);
+                    
+                    $loader = new ProgressiveHistoricalLoaderV2();
+                    $result = $loader->loadMultipleSymbols($portfolioSymbols, $startDate ?: null, $priority);
+                    
+                    if ($result['success']) {
+                        $message = "✅ Portfolio job queued successfully! Job ID: #{$result['job_id']}. " .
+                                  "Processing " . count($result['symbols']) . " symbols with {$result['estimated_chunks']} estimated chunks. " .
+                                  "The data will be loaded in the background.";
+                        $loadResults = $result;
+                    } else {
+                        $error = "Failed to queue portfolio job";
+                    }
+                    
+                } catch (Exception $e) {
+                    $error = "Portfolio queue failed: " . $e->getMessage();
+                }
+                break;
+                
+            case 'check_job_status':
+                $jobId = (int)($_POST['job_id'] ?? 0);
+                
+                if ($jobId > 0) {
+                    try {
+                        $loader = new ProgressiveHistoricalLoaderV2();
+                        $progressInfo = $loader->getJobProgress($jobId);
+                        $message = "Job #{$jobId} status: {$progressInfo['status']} - {$progressInfo['progress']['percentage']}% complete";
+                        $loadResults = $progressInfo;
+                        
+                    } catch (Exception $e) {
+                        $error = "Failed to check job status: " . $e->getMessage();
+                    }
+                } else {
+                    $error = "Please enter a valid job ID";
+                }
+                break;
+                
+            case 'process_next_job':
+                try {
+                    $loader = new ProgressiveHistoricalLoaderV2();
+                    $result = $loader->processNextJob(25);
+                    
+                    if ($result['status'] === 'no_jobs') {
+                        $message = "ℹ️ No pending jobs to process";
+                    } else if ($result['status'] === 'completed') {
+                        $message = "✅ Job #{$result['job_id']} processed successfully in {$result['execution_time']} seconds";
+                        $loadResults = $result;
+                    } else if ($result['status'] === 'failed') {
+                        $error = "❌ Job #{$result['job_id']} failed: {$result['error']}";
+                    }
+                    
+                } catch (Exception $e) {
+                    $error = "Failed to process job: " . $e->getMessage();
                 }
                 break;
         }
@@ -443,6 +537,46 @@ try {
             font-size: 13px;
         }
         
+        /* Job Queue Styling */
+        .alert {
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            border: 1px solid #28a745;
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        
+        .btn-info {
+            background-color: #17a2b8;
+            color: white;
+            border: 1px solid #17a2b8;
+        }
+        
+        .btn-info:hover {
+            background-color: #138496;
+            border-color: #117a8b;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .stock-input-group {
@@ -636,6 +770,135 @@ try {
                     Load All Portfolio History
                 </button>
             </form>
+        </div>
+
+        <!-- JOB QUEUE SYSTEM - New Timeout-Free Loading -->
+        <div class="section" style="border: 3px solid #28a745; background: #f8fff9;">
+            <h3>🚀 Background Job Queue (Recommended - No Timeouts!)</h3>
+            <div class="alert" style="background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; margin-bottom: 20px; border-radius: 5px;">
+                <h4 style="color: #155724; margin: 0 0 10px 0;">✅ Timeout Problem Solved!</h4>
+                <p style="color: #155724; margin: 0;">This new system queues jobs in the background, eliminating the 30-second timeout errors. Jobs are processed in small chunks and can be monitored in real-time.</p>
+            </div>
+
+            <!-- Queue Single Symbol -->
+            <h4>📝 Queue Single Symbol</h4>
+            <p>Queue a background job to load historical data for a single symbol (no timeout risk)</p>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="queue_symbol">
+                <div class="form-group">
+                    <label for="queue_symbol">Stock Symbol:</label>
+                    <div class="stock-input-group">
+                        <div class="stock-search-container">
+                            <input type="text" 
+                                   id="queue_symbol" 
+                                   name="symbol" 
+                                   class="stock-autocomplete" 
+                                   placeholder="Start typing symbol or company name..."
+                                   autocomplete="off"
+                                   required>
+                            <input type="hidden" id="queue_symbol_value" name="symbol_confirmed">
+                            <div id="queue_symbol_results" class="autocomplete-results"></div>
+                        </div>
+                        <select id="queue_symbol_dropdown" class="stock-dropdown" onchange="selectFromDropdown('queue_symbol', this.value)">
+                            <option value="">-- Select from list --</option>
+                            <?php
+                            if (!empty($allStocks)) {
+                                foreach ($allStocks as $stock) {
+                                    echo '<option value="' . htmlspecialchars($stock['symbol']) . '">';
+                                    echo htmlspecialchars($stock['symbol'] . ' - ' . $stock['name']);
+                                    echo '</option>';
+                                }
+                            } else {
+                                echo '<option value="">No stocks available</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="queue_start_date">Start From Date (optional):</label>
+                    <input type="date" id="queue_start_date" name="start_date">
+                    <small>Leave blank to auto-detect start point</small>
+                </div>
+                <div class="form-group">
+                    <label for="queue_priority">Priority:</label>
+                    <select id="queue_priority" name="priority">
+                        <option value="0">Normal</option>
+                        <option value="1">High</option>
+                        <option value="2">Urgent</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">🚀 Queue Background Job</button>
+            </form>
+
+            <!-- Queue Portfolio -->
+            <h4 style="margin-top: 30px;">📊 Queue Portfolio</h4>
+            <p>Queue a background job to load historical data for all portfolio symbols</p>
+            
+            <?php if (!empty($portfolioSymbols)): ?>
+                <p><strong>Portfolio Symbols (<?php echo count($portfolioSymbols); ?>):</strong></p>
+                <div class="portfolio-symbols">
+                    <?php foreach ($portfolioSymbols as $symbol): ?>
+                        <span class="symbol-tag"><?php echo htmlspecialchars($symbol); ?></span>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="queue_portfolio">
+                <div class="form-group">
+                    <label for="portfolio_start_date">Start From Date (optional):</label>
+                    <input type="date" id="portfolio_start_date" name="start_date">
+                    <small>Leave blank to auto-detect start point for each symbol</small>
+                </div>
+                <div class="form-group">
+                    <label for="portfolio_priority">Priority:</label>
+                    <select id="portfolio_priority" name="priority">
+                        <option value="0">Normal</option>
+                        <option value="1">High</option>
+                        <option value="2">Urgent</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success" <?php echo empty($portfolioSymbols) ? 'disabled' : ''; ?>>
+                    🚀 Queue Portfolio Background Job
+                </button>
+            </form>
+
+            <!-- Job Status Checker -->
+            <h4 style="margin-top: 30px;">📈 Check Job Status</h4>
+            <p>Check the progress of a queued background job</p>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="check_job_status">
+                <div class="form-group">
+                    <label for="job_id">Job ID:</label>
+                    <input type="number" id="job_id" name="job_id" min="1" placeholder="Enter Job ID from queue result" required>
+                    <small>Enter the Job ID you received when queuing a job</small>
+                </div>
+                <button type="submit" class="btn btn-info">📊 Check Job Status</button>
+            </form>
+
+            <!-- Manual Job Processing -->
+            <h4 style="margin-top: 30px;">⚡ Manual Job Processing</h4>
+            <p>Process the next pending job manually (useful for testing)</p>
+            
+            <form method="POST">
+                <input type="hidden" name="action" value="process_next_job">
+                <button type="submit" class="btn btn-primary">⚡ Process Next Job</button>
+            </form>
+
+            <div class="info-box" style="margin-top: 20px;">
+                <h4>🎯 How Job Queue Works</h4>
+                <ul>
+                    <li><strong>Queue Jobs:</strong> Create background jobs that won't time out</li>
+                    <li><strong>Background Processing:</strong> Jobs run in 25-second chunks automatically</li>
+                    <li><strong>Progress Tracking:</strong> Monitor job progress with Job ID</li>
+                    <li><strong>Automatic Retry:</strong> Failed jobs retry up to 3 times</li>
+                    <li><strong>Web Interface:</strong> Use <a href="../job_manager.html" target="_blank">Job Manager</a> for visual monitoring</li>
+                </ul>
+                <p><strong>💡 Tip:</strong> Set up automatic processing with Windows Task Scheduler or use the <a href="../job_manager.html" target="_blank">Job Manager Web Interface</a> for the best experience!</p>
+            </div>
         </div>
 
         <!-- Process CSV Files -->

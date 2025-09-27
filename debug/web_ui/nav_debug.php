@@ -49,7 +49,7 @@ echo "<table border='1' cellpadding='5' cellspacing='0'>\n";
 echo "<tr><th>Label</th><th>File</th><th>Exists</th><th>Test Link</th></tr>\n";
 
 foreach ($actions as $action) {
-    $filePath = __DIR__ . '/' . $action['href'];
+    $filePath = 'C:\Users\prote\Documents\ChatGPT-Micro-Cap-Experiment/web_ui/'' . $action['href'];
     $exists = file_exists($filePath);
     $status = $exists ? '✅' : '❌';
     

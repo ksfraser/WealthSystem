@@ -695,4 +695,50 @@ class StockDAO {
             return [];
         }
     }
+    
+    /**
+     * Check if data exists for a specific date range
+     */
+    public function hasDataForPeriod(string $symbol, string $startDate, string $endDate): bool {
+        try {
+            $tableName = $this->dbManager->getTableName($symbol, 'prices');
+            
+            $sql = "
+                SELECT COUNT(*) as count 
+                FROM `{$tableName}` 
+                WHERE date >= ? AND date <= ?
+            ";
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$startDate, $endDate]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $result['count'] > 0;
+            
+        } catch (Exception $e) {
+            error_log("Failed to check data period for {$symbol}: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Count total price data records for symbol
+     */
+    public function countPriceData(string $symbol): int {
+        return $this->getPriceDataCount($symbol);
+    }
+    
+    /**
+     * Get database connection
+     */
+    public function getConnection(): PDO {
+        return $this->pdo;
+    }
+    
+    /**
+     * Insert price data (alternative method name for compatibility)
+     */
+    public function insertPriceData(string $symbol, array $priceData): bool {
+        return $this->upsertPriceData($symbol, $priceData);
+    }
 }
