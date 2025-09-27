@@ -1,0 +1,299 @@
+# Enhanced Job Processing Configuration for Stock Data Management
+# Extends the existing distributed job processing system with stock-specific priorities
+
+job_processor:
+  # Worker Configuration
+  worker:
+    # Unique worker ID (auto-generated if not specified)
+    worker_id: null
+    
+    # Worker name/description
+    name: "Stock Data Worker"
+    
+    # Maximum number of concurrent jobs this worker can handle
+    max_concurrent_jobs: 5
+    
+    # Job types this worker can process (empty = all types)
+    supported_job_types: ["stock_fetch", "stock_analysis", "portfolio_priority"]
+    
+    # Worker capabilities/tags for job routing
+    capabilities: ["stock_data", "yahoo_finance", "portfolio_management", "user_priority"]
+    
+    # Polling interval for new jobs (seconds)
+    poll_interval: 2  # Faster polling for user-responsive jobs
+    
+    # Maximum job execution time before timeout (seconds)
+    max_execution_time: 1800  # 30 minutes for large fetches
+    
+    # Worker heartbeat interval (seconds)
+    heartbeat_interval: 15  # More frequent for responsive system
+    
+  # Queue Configuration with Priority Levels
+  queue:
+    # Queue backend: "mqtt" for distributed processing
+    backend: "mqtt"
+    
+    # Priority Queue Configuration
+    priority_queues:
+      # Foreground: User portfolio data (highest priority)
+      foreground:
+        topic_prefix: "jobs/foreground"
+        priority: 1
+        max_jobs: 100
+        ttl: 300  # 5 minutes
+        
+      # Background Fetch: General data updates (medium priority)  
+      background_fetch:
+        topic_prefix: "jobs/background/fetch"
+        priority: 5
+        max_jobs: 1000
+        ttl: 3600  # 1 hour
+        
+      # Background Analysis: AI analysis jobs (lower priority)
+      background_analysis:
+        topic_prefix: "jobs/background/analysis" 
+        priority: 8
+        max_jobs: 500
+        ttl: 7200  # 2 hours
+        
+    # MQTT/Mosquitto configuration
+    mqtt:
+      host: localhost
+      port: 1883
+      username: null      # Optional MQTT username
+      password: null      # Optional MQTT password  
+      keepalive: 60      # Keep-alive interval in seconds
+      client_id_prefix: "stockworker"
+      
+      # Topic Structure for Stock Processing
+      topics:
+        # User portfolio priority jobs
+        portfolio_priority: "stock/portfolio/priority/{user_id}"
+        
+        # Stock data fetch jobs
+        stock_fetch: "stock/fetch/{symbol}"
+        stock_batch_fetch: "stock/fetch/batch"
+        
+        # Stock analysis jobs  
+        stock_analysis: "stock/analysis/{symbol}"
+        
+        # System management
+        worker_heartbeat: "workers/heartbeat/{worker_id}"
+        job_status: "jobs/status/{job_id}"
+        system_stats: "system/stats"
+        
+  # Stock-Specific Job Configuration
+  stock_jobs:
+    # Portfolio Priority Settings
+    portfolio_priority:
+      # Maximum age before data is considered stale (minutes)
+      data_staleness_threshold: 30
+      
+      # Priority boost for user's portfolio stocks
+      portfolio_priority_boost: 10
+      
+      # Maximum concurrent portfolio jobs per user
+      max_concurrent_per_user: 3
+      
+    # Data Fetch Settings
+    data_fetch:
+      # Batch size for bulk operations
+      batch_size: 10
+      
+      # Rate limiting (requests per minute)
+      rate_limit: 60
+      
+      # Data sources priority order
+      sources: ["yahoo_finance", "alpha_vantage", "cached"]
+      
+      # Retry configuration for failed fetches
+      max_retries: 3
+      retry_backoff: [30, 120, 300]  # seconds
+      
+    # Analysis Settings
+    analysis:
+      # LLM analysis timeout (seconds)
+      llm_timeout: 120
+      
+      # Analysis types priority
+      analysis_priority: ["sentiment", "technical", "fundamental", "news"]
+      
+      # Cache analysis results (hours)
+      cache_ttl: 6
+      
+  # Job Configuration
+  jobs:
+    # Priority calculation rules
+    priority_rules:
+      # User login portfolio fetch (highest)
+      user_login: 1
+      
+      # Manual user request (high)
+      user_request: 3
+      
+      # Scheduled data update (medium)
+      scheduled_update: 5
+      
+      # Background analysis (low)
+      background_analysis: 8
+      
+      # Maintenance tasks (lowest)
+      maintenance: 10
+    
+    # Default job priority (1-10, lower = higher priority)
+    default_priority: 5
+    
+    # Job retry configuration
+    max_retries: 3
+    retry_delay: 60  # seconds
+    
+    # Job cleanup - remove completed jobs after X days
+    cleanup_after_days: 7  # Shorter for high-volume stock data
+    
+    # Job timeout by type
+    timeouts:
+      stock_fetch: 300      # 5 minutes
+      portfolio_fetch: 600  # 10 minutes
+      stock_analysis: 900   # 15 minutes
+      batch_analysis: 1800  # 30 minutes
+      
+  # User Portfolio Configuration
+  portfolio:
+    # Portfolio data sources
+    sources:
+      - csv_file: "Scripts and CSV Files/chatgpt_portfolio_update.csv"
+      - database_table: "user_portfolios"
+      
+    # Data freshness requirements by time of day
+    freshness_schedule:
+      market_open: 5    # 5 minutes during market hours
+      market_closed: 60 # 1 hour after market close
+      weekend: 720      # 12 hours on weekends
+      
+    # Priority calculation factors
+    priority_factors:
+      user_activity: 0.4      # User login/activity weight
+      portfolio_value: 0.3    # Portfolio size weight  
+      data_age: 0.2          # Data staleness weight
+      market_volatility: 0.1  # Market conditions weight
+      
+  # Logging
+  logging:
+    # Log level: DEBUG, INFO, WARNING, ERROR
+    level: INFO
+    
+    # Log file location
+    file: logs/stock_job_processor.log
+    
+    # Log rotation
+    max_size: 50MB
+    backup_count: 10
+    
+    # Separate logs for different components
+    component_logs:
+      portfolio: logs/portfolio_jobs.log
+      fetcher: logs/data_fetch.log
+      analyzer: logs/analysis.log
+      mqtt: logs/mqtt.log
+      
+  # Monitoring and Metrics
+  monitoring:
+    # Enable metrics collection
+    enabled: true
+    
+    # Metrics export format: "prometheus", "json"
+    format: "json"
+    
+    # Metrics endpoint port (0 = disabled)
+    port: 8080
+    
+    # Health check endpoint
+    health_check_enabled: true
+    
+    # Stock-specific metrics
+    stock_metrics:
+      # Track data fetch latency by source
+      fetch_latency: true
+      
+      # Track portfolio processing times
+      portfolio_timing: true
+      
+      # Track job queue lengths by priority
+      queue_depth: true
+      
+      # Track worker utilization
+      worker_efficiency: true
+      
+    # Performance thresholds for alerts
+    thresholds:
+      max_queue_depth: 1000
+      max_fetch_latency: 30  # seconds
+      min_worker_efficiency: 0.7
+      max_job_age: 600  # 10 minutes
+      
+  # Database Configuration for Job Storage
+  database:
+    host: localhost
+    port: 3306
+    username: root
+    password: ""
+    database: microcap_trading
+    
+    # Connection pool settings
+    pool:
+      min_connections: 2
+      max_connections: 10
+      idle_timeout: 300
+      
+  # Integration with Existing Systems
+  integration:
+    # Web UI integration
+    web_ui:
+      base_path: "web_ui"
+      admin_endpoint: "/admin/stock_data_admin.php"
+      
+    # Python script integration  
+    python:
+      fetch_script: "fetch_historical_data.py"
+      analysis_script: "trading_script.py"
+      python_path: "python"
+      
+    # External APIs
+    apis:
+      yahoo_finance:
+        rate_limit: 100  # requests per minute
+        timeout: 30      # seconds
+        retry_count: 3
+        
+      openai:
+        model: "gpt-4"
+        max_tokens: 1000
+        timeout: 60
+        
+    # Caching
+    cache:
+      redis_enabled: false
+      file_cache_path: "cache/stock_data"
+      default_ttl: 3600  # 1 hour
+      
+# Environment-specific overrides
+development:
+  job_processor:
+    worker:
+      max_concurrent_jobs: 2
+      poll_interval: 5
+    logging:
+      level: DEBUG
+    monitoring:
+      port: 8081
+      
+production:
+  job_processor:
+    worker:
+      max_concurrent_jobs: 10
+      poll_interval: 1
+    logging:
+      level: INFO
+      max_size: 100MB
+    monitoring:
+      port: 8080

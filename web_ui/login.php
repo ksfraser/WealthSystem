@@ -38,14 +38,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $user = $auth->loginUser($username, $password);
         
-        // Trigger auto-fetch if enabled (runs in background)
+        // Queue priority jobs for user's portfolio (MQTT-based system)
         try {
-            require_once __DIR__ . '/AutoFetchService.php';
-            $autoFetch = new AutoFetchService();
-            $autoFetch->performAutoFetchIfNeeded();
+            require_once __DIR__ . '/../UserPortfolioJobManager.php';
+            require_once __DIR__ . '/includes/config.php';
+            
+            // Load job processor configuration
+            $configFile = __DIR__ . '/../stock_job_processor.yml';
+            if (file_exists($configFile) && function_exists('yaml_parse_file')) {
+                $config = yaml_parse_file($configFile);
+            } else {
+                // Fallback configuration if YAML extension not available
+                $config = [
+                    'job_processor' => [
+                        'stock_jobs' => [
+                            'portfolio_priority' => ['data_staleness_threshold' => 30],
+                            'analysis' => ['cache_ttl' => 360]
+                        ],
+                        'jobs' => [
+                            'priority_rules' => [
+                                'user_login' => 1,
+                                'user_request' => 3,
+                                'scheduled_update' => 5,
+                                'background_analysis' => 8
+                            ]
+                        ],
+                        'portfolio' => [
+                            'priority_factors' => [
+                                'user_activity' => 0.4,
+                                'data_age' => 0.2
+                            ]
+                        ]
+                    ]
+                ];
+            }
+            
+            // Simple logger for job manager
+                $logger = new class {
+                    public function info($message) { error_log("INFO: " . $message); }
+                    public function warning($message) { error_log("WARNING: " . $message); }
+                    public function error($message) { error_log("ERROR: " . $message); }
+                    public function debug($message) { error_log("DEBUG: " . $message); }
+                };
+                
+                $portfolioJobManager = new UserPortfolioJobManager($config['job_processor'], $logger, $db);
+                $result = $portfolioJobManager->processUserLogin($user['id']);
+                
+                if (!$result['success']) {
+                    error_log("Portfolio job queue error during login: " . $result['error']);
+                }
+            
         } catch (Exception $e) {
-            // Silently handle auto-fetch errors to not interfere with login
-            error_log("Auto-fetch error during login: " . $e->getMessage());
+            // Silently handle job queue errors to not interfere with login
+            error_log("Portfolio job manager error during login: " . $e->getMessage());
         }
         
         // Redirect to dashboard or intended page

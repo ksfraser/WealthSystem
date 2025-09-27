@@ -6,10 +6,48 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 }
 
 require_once '../includes/config.php';
-require_once '../includes/StockDAO.php';
+require_once '../StockDAO.php';
+require_once '../../UserPortfolioJobManager.php';
 
-// Initialize StockDAO
+// Initialize StockDAO and Portfolio Job Manager
 $stockDAO = new StockDAO($db);
+
+// Initialize Portfolio Job Manager with fallback config
+$portfolioJobManager = null;
+try {
+    $configFile = '../../stock_job_processor.yml';
+    if (file_exists($configFile) && function_exists('yaml_parse_file')) {
+        $config = yaml_parse_file($configFile);
+    } else {
+        // Fallback configuration
+        $config = [
+            'job_processor' => [
+                'stock_jobs' => [
+                    'portfolio_priority' => ['data_staleness_threshold' => 30],
+                    'analysis' => ['cache_ttl' => 360]
+                ],
+                'jobs' => [
+                    'priority_rules' => [
+                        'user_request' => 3,
+                        'scheduled_update' => 5
+                    ]
+                ]
+            ]
+        ];
+    }
+    
+    // Simple logger
+    $logger = new class {
+        public function info($message) { error_log("INFO: " . $message); }
+        public function warning($message) { error_log("WARNING: " . $message); }
+        public function error($message) { error_log("ERROR: " . $message); }
+        public function debug($message) { error_log("DEBUG: " . $message); }
+    };
+    
+    $portfolioJobManager = new UserPortfolioJobManager($config['job_processor'], $logger, $db);
+} catch (Exception $e) {
+    error_log("Could not initialize Portfolio Job Manager: " . $e->getMessage());
+}
 $message = '';
 $error = '';
 
@@ -20,11 +58,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             case 'fetch_single':
                 $symbol = trim(strtoupper($_POST['symbol'] ?? ''));
                 if (!empty($symbol)) {
-                    $result = fetchSingleStockData($symbol);
-                    if ($result['success']) {
-                        $message = "Successfully fetched data for $symbol";
+                    if ($portfolioJobManager) {
+                        // Use job queue system
+                        $jobId = $portfolioJobManager->queueManualFetch($symbol, $_SESSION['user_id'] ?? null, 1);
+                        if ($jobId) {
+                            $message = "Queued priority fetch job for $symbol (Job ID: $jobId)";
+                        } else {
+                            $error = "Failed to queue fetch job for $symbol";
+                        }
                     } else {
-                        $error = "Failed to fetch data for $symbol: " . $result['error'];
+                        // Fallback to direct fetch
+                        $result = fetchSingleStockData($symbol);
+                        if ($result['success']) {
+                            $message = "Successfully fetched data for $symbol";
+                        } else {
+                            $error = "Failed to fetch data for $symbol: " . $result['error'];
+                        }
                     }
                 } else {
                     $error = "Please enter a valid stock symbol";
@@ -32,11 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
                 
             case 'fetch_portfolio':
-                $result = fetchPortfolioData();
-                if ($result['success']) {
-                    $message = "Successfully fetched data for all portfolio stocks: " . implode(', ', $result['symbols']);
+                if ($portfolioJobManager) {
+                    // Use job queue system for batch portfolio fetch
+                    $jobIds = $portfolioJobManager->queueScheduledBatchFetch();
+                    if (!empty($jobIds)) {
+                        $message = "Queued " . count($jobIds) . " batch fetch jobs for portfolio stocks";
+                    } else {
+                        $error = "Failed to queue portfolio fetch jobs";
+                    }
                 } else {
-                    $error = "Portfolio fetch failed: " . $result['error'];
+                    // Fallback to direct fetch
+                    $result = fetchPortfolioData();
+                    if ($result['success']) {
+                        $message = "Successfully fetched data for all portfolio stocks: " . implode(', ', $result['symbols']);
+                    } else {
+                        $error = "Portfolio fetch failed: " . $result['error'];
+                    }
                 }
                 break;
                 
@@ -44,11 +104,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $symbol = trim(strtoupper($_POST['symbol'] ?? ''));
                 $days = intval($_POST['days'] ?? 365);
                 if (!empty($symbol)) {
-                    $result = populateHistoricalData($symbol, $days);
-                    if ($result['success']) {
-                        $message = "Successfully populated $days days of historical data for $symbol";
+                    if ($portfolioJobManager) {
+                        // Use job queue system for historical data
+                        $jobId = $portfolioJobManager->queueManualFetch($symbol, $_SESSION['user_id'] ?? null, $days);
+                        if ($jobId) {
+                            $message = "Queued historical data job for $symbol ($days days) - Job ID: $jobId";
+                        } else {
+                            $error = "Failed to queue historical data job for $symbol";
+                        }
                     } else {
-                        $error = "Historical data population failed for $symbol: " . $result['error'];
+                        // Fallback to direct population
+                        $result = populateHistoricalData($symbol, $days);
+                        if ($result['success']) {
+                            $message = "Successfully populated $days days of historical data for $symbol";
+                        } else {
+                            $error = "Historical data population failed for $symbol: " . $result['error'];
+                        }
                     }
                 } else {
                     $error = "Please enter a valid stock symbol";
@@ -228,6 +299,16 @@ function isAutoFetchEnabled() {
 
 // Get current portfolio symbols for display
 $portfolioSymbols = getPortfolioSymbols();
+
+// Get job queue statistics if available
+$jobStats = null;
+if ($portfolioJobManager) {
+    try {
+        $jobStats = $portfolioJobManager->getPortfolioJobStats();
+    } catch (Exception $e) {
+        error_log("Could not get job statistics: " . $e->getMessage());
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -460,6 +541,33 @@ $portfolioSymbols = getPortfolioSymbols();
             </form>
         </div>
 
+        <!-- Job Queue Status -->
+        <?php if ($jobStats): ?>
+        <div class="section">
+            <h3>📊 Job Queue Status</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <strong>Portfolio Symbols:</strong><br>
+                    <span class="status-badge status-online"><?php echo $jobStats['total_portfolio_symbols']; ?></span>
+                </div>
+                <div>
+                    <strong>Active Users (24h):</strong><br>
+                    <span class="status-badge status-online"><?php echo $jobStats['active_users_with_portfolios']; ?></span>
+                </div>
+                <div>
+                    <strong>Avg Data Age:</strong><br>
+                    <span class="status-badge <?php echo ($jobStats['avg_data_age'] ?? 0) < 60 ? 'status-online' : 'status-offline'; ?>">
+                        <?php echo ($jobStats['avg_data_age'] ?? 'N/A') . ' min'; ?>
+                    </span>
+                </div>
+                <div>
+                    <strong>Queue System:</strong><br>
+                    <span class="status-badge status-online">MQTT Active</span>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <!-- Data Management Info -->
         <div class="section">
             <h3>System Information</h3>
@@ -468,7 +576,8 @@ $portfolioSymbols = getPortfolioSymbols();
                 <li><strong>Data Source:</strong> Yahoo Finance API</li>
                 <li><strong>Storage:</strong> Individual tables per stock symbol</li>
                 <li><strong>Portfolio Source:</strong> Scripts and CSV Files/chatgpt_portfolio_update.csv</li>
-                <li><strong>Auto-Fetch:</strong> Triggers on user login when enabled</li>
+                <li><strong>Job Processing:</strong> <?php echo $portfolioJobManager ? 'MQTT Priority Queue System' : 'Direct Processing (Fallback)'; ?></li>
+                <li><strong>User Login Trigger:</strong> Portfolio priority jobs queued automatically</li>
             </ul>
         </div>
     </div>
