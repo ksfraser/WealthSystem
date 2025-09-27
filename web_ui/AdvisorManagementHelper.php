@@ -15,23 +15,48 @@ class AdvisorManagementHelper {
     
     /**
      * Get all users suitable for advisor selection (with advisor role or admin)
+     * For admin interface, we'll be permissive and allow all users to be potential advisors
      */
     public function getAdvisorCandidates() {
         try {
             $allUsers = $this->auth->getAllUsers(1000);
             
-            // Filter for users who can be advisors (have advisor role or are admin)
+            if (empty($allUsers)) {
+                return [];
+            }
+            
+            // For admin interface: allow all users to be advisors (admin can assign anyone)
+            // In production, you might want to be more restrictive
             $advisors = [];
             foreach ($allUsers as $user) {
-                // Check if user has advisor role or is admin
+                // Skip obviously invalid users
+                if (empty($user['username']) || empty($user['email'])) {
+                    continue;
+                }
+                
+                // Admin users can definitely be advisors
                 if ($user['is_admin']) {
                     $advisors[] = $user;
-                } elseif ($this->rbac) {
-                    $userRoles = $this->rbac->getUserRoles($user['id']);
-                    if (in_array('advisor', $userRoles)) {
-                        $advisors[] = $user;
+                    continue;
+                }
+                
+                // Check for advisor role if RBAC is available
+                if ($this->rbac) {
+                    try {
+                        $userRoles = $this->rbac->getUserRoles($user['id']);
+                        if (in_array('advisor', $userRoles)) {
+                            $advisors[] = $user;
+                            continue;
+                        }
+                    } catch (Exception $e) {
+                        // RBAC might not be fully set up, continue without it
+                        error_log("RBAC check failed for user {$user['id']}: " . $e->getMessage());
                     }
                 }
+                
+                // For admin interface: include all other users as potential advisors
+                // (Admin can promote anyone to advisor role)
+                $advisors[] = $user;
             }
             
             return $advisors;
@@ -176,14 +201,29 @@ class AdvisorManagementHelper {
      * Debug information about loaded data
      */
     public function getDebugInfo() {
-        $advisors = $this->getAdvisorCandidates();
-        $clients = $this->getClientCandidates();
-        
-        return [
-            'advisor_count' => count($advisors),
-            'client_count' => count($clients),
-            'total_users' => count($this->auth->getAllUsers(1000) ?? [])
-        ];
+        try {
+            $allUsers = $this->auth->getAllUsers(1000) ?? [];
+            $advisors = $this->getAdvisorCandidates();
+            $clients = $this->getClientCandidates();
+            
+            return [
+                'advisor_count' => count($advisors),
+                'client_count' => count($clients),
+                'total_users' => count($allUsers),
+                'rbac_available' => $this->rbac !== null,
+                'sample_user' => !empty($allUsers) ? $allUsers[0] : null
+            ];
+        } catch (Exception $e) {
+            error_log("Debug info error: " . $e->getMessage());
+            return [
+                'error' => $e->getMessage(),
+                'advisor_count' => 0,
+                'client_count' => 0,
+                'total_users' => 0,
+                'rbac_available' => false,
+                'sample_user' => null
+            ];
+        }
     }
 }
 ?>

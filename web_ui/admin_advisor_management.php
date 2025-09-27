@@ -11,6 +11,7 @@ require_once __DIR__ . '/UserAuthDAO.php';
 require_once __DIR__ . '/RBACService.php';
 require_once __DIR__ . '/NavigationManager.php';
 require_once __DIR__ . '/AdvisorManagementHelper.php';
+require_once __DIR__ . '/InvitationService.php';
 
 $auth = new UserAuthDAO();
 $rbac = new RBACService();
@@ -20,6 +21,9 @@ $auth->requireAdmin();
 
 // Initialize the advisor management helper (reusable component)
 $advisorHelper = new AdvisorManagementHelper($auth, $rbac);
+
+// Initialize invitation service
+$invitationService = new InvitationService();
 
 // Initialize navigation
 $navManager = new NavigationManager();
@@ -44,6 +48,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
             case 'revoke_advisor':
                 $result = handleRevokeAdvisor($auth, $_POST);
+                break;
+                
+            case 'revoke_invitation':
+                $invitationId = intval($_POST['invitation_id']);
+                $reason = $_POST['revocation_reason'] ?? '';
+                $result = $invitationService->revokeInvitation($invitationId, $currentUser['id'], $reason);
+                break;
+                
+            case 'delete_invitation':
+                $invitationId = intval($_POST['invitation_id']);
+                $result = $invitationService->deleteInvitation($invitationId);
+                break;
+                
+            case 'approve_invitation':
+                $invitationId = intval($_POST['invitation_id']);
+                $result = $invitationService->adminApproveInvitation($invitationId, $currentUser['id']);
                 break;
                 
             default:
@@ -85,6 +105,26 @@ try {
 } catch (Exception $e) {
     $advisorRelationships = [];
     error_log("Error loading advisor relationships: " . $e->getMessage());
+}
+
+// Get invitations for admin management
+try {
+    $invitationFilters = [];
+    if (isset($_GET['inv_status']) && !empty($_GET['inv_status'])) {
+        $invitationFilters['status'] = $_GET['inv_status'];
+    }
+    if (isset($_GET['inv_type']) && !empty($_GET['inv_type'])) {
+        $invitationFilters['type'] = $_GET['inv_type'];
+    }
+    if (isset($_GET['inv_search']) && !empty($_GET['inv_search'])) {
+        $invitationFilters['search'] = $_GET['inv_search'];
+    }
+    
+    $invitationData = $invitationService->getAllInvitationsForAdmin($invitationFilters, 50, 0);
+    $invitations = $invitationData['success'] ? $invitationData['invitations'] : [];
+} catch (Exception $e) {
+    $invitations = [];
+    error_log("Error loading invitations: " . $e->getMessage());
 }
 
 function handleAssignAdvisor($auth, $postData) {
@@ -555,12 +595,19 @@ echo $navigationService->renderNavigationHeader('Advisor Management - Admin Pane
             <?php endif; ?>
             
             <!-- Debug info -->
-            <div class="message success">
+            <div class="message <?= $debugInfo['total_users'] > 0 ? 'success' : 'error' ?>">
                 <strong>Debug Info:</strong> 
                 Total Users: <?= $debugInfo['total_users'] ?> | 
                 Potential Advisors: <?= $debugInfo['advisor_count'] ?> | 
-                Potential Clients: <?= $debugInfo['client_count'] ?>
-                <br><small>If advisors = 0, users need the "advisor" role. If total users = 0, create users first.</small>
+                Potential Clients: <?= $debugInfo['client_count'] ?> |
+                RBAC Available: <?= $debugInfo['rbac_available'] ? 'Yes' : 'No' ?>
+                <?php if (isset($debugInfo['error'])): ?>
+                    <br><strong>Error:</strong> <?= htmlspecialchars($debugInfo['error']) ?>
+                <?php endif; ?>
+                <?php if ($debugInfo['sample_user']): ?>
+                    <br><small>Sample User: <?= htmlspecialchars($debugInfo['sample_user']['username']) ?> (ID: <?= $debugInfo['sample_user']['id'] ?>)</small>
+                <?php endif; ?>
+                <br><small>If total users = 0: Create users in User Management first. All users can be advisors in admin interface.</small>
             </div>
             
             <!-- New Advisor Assignment -->
@@ -603,6 +650,174 @@ echo $navigationService->renderNavigationHeader('Advisor Management - Admin Pane
                     
                     <button type="submit" class="btn btn-success">Assign Advisor</button>
                 </form>
+            </div>
+            
+            <!-- Invitation Management Section -->
+            <div class="section">
+                <h2>📧 Invitation Management</h2>
+                <p>Manage advisor invitations and approval requests</p>
+                
+                <!-- Invitation Filters -->
+                <div class="filter-section" style="margin-bottom: 20px;">
+                    <form method="GET" class="filter-form" style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+                        <!-- Preserve existing filters -->
+                        <?php if (isset($_GET['filter_type'])): ?>
+                            <input type="hidden" name="filter_type" value="<?= htmlspecialchars($_GET['filter_type']) ?>">
+                        <?php endif; ?>
+                        <?php if (isset($_GET['filter_value'])): ?>
+                            <input type="hidden" name="filter_value" value="<?= htmlspecialchars($_GET['filter_value']) ?>">
+                        <?php endif; ?>
+                        
+                        <div style="display: flex; gap: 15px; align-items: end; flex-wrap: wrap;">
+                            <div class="form-group" style="margin-bottom: 0; min-width: 120px;">
+                                <label for="inv_status" style="display: block; margin-bottom: 5px; font-weight: bold;">Status:</label>
+                                <select name="inv_status" id="inv_status">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" <?= ($_GET['inv_status'] ?? '') === 'pending' ? 'selected' : '' ?>>Pending</option>
+                                    <option value="pending_client" <?= ($_GET['inv_status'] ?? '') === 'pending_client' ? 'selected' : '' ?>>Awaiting Client</option>
+                                    <option value="client_approved" <?= ($_GET['inv_status'] ?? '') === 'client_approved' ? 'selected' : '' ?>>Client Approved</option>
+                                    <option value="approved" <?= ($_GET['inv_status'] ?? '') === 'approved' ? 'selected' : '' ?>>Admin Approved</option>
+                                    <option value="accepted" <?= ($_GET['inv_status'] ?? '') === 'accepted' ? 'selected' : '' ?>>Accepted</option>
+                                    <option value="declined" <?= ($_GET['inv_status'] ?? '') === 'declined' ? 'selected' : '' ?>>Declined</option>
+                                    <option value="revoked" <?= ($_GET['inv_status'] ?? '') === 'revoked' ? 'selected' : '' ?>>Revoked</option>
+                                    <option value="auto_accepted" <?= ($_GET['inv_status'] ?? '') === 'auto_accepted' ? 'selected' : '' ?>>Auto-Accepted</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 0; min-width: 120px;">
+                                <label for="inv_type" style="display: block; margin-bottom: 5px; font-weight: bold;">Type:</label>
+                                <select name="inv_type" id="inv_type">
+                                    <option value="">All Types</option>
+                                    <option value="advisor" <?= ($_GET['inv_type'] ?? '') === 'advisor' ? 'selected' : '' ?>>Advisor</option>
+                                    <option value="friend" <?= ($_GET['inv_type'] ?? '') === 'friend' ? 'selected' : '' ?>>Friend</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" style="margin-bottom: 0; min-width: 200px;">
+                                <label for="inv_search" style="display: block; margin-bottom: 5px; font-weight: bold;">Search:</label>
+                                <input type="text" name="inv_search" id="inv_search" 
+                                       value="<?= htmlspecialchars($_GET['inv_search'] ?? '') ?>"
+                                       placeholder="Email or username...">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Filter Invitations</button>
+                            <a href="?<?= http_build_query(array_filter(['filter_type' => $_GET['filter_type'] ?? '', 'filter_value' => $_GET['filter_value'] ?? ''])) ?>" 
+                               class="btn btn-secondary">Clear Filters</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Invitations Table -->
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Status</th>
+                                <th>Permission</th>
+                                <th>Created</th>
+                                <th>Expires</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (empty($invitations)): ?>
+                                <tr>
+                                    <td colspan="9" class="no-data">No invitations found</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($invitations as $invitation): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($invitation['id']) ?></td>
+                                        <td>
+                                            <span class="role-badge" style="background: <?= $invitation['invitation_type'] === 'advisor' ? '#2196F3' : '#FF9800' ?>;">
+                                                <?= ucfirst(htmlspecialchars($invitation['invitation_type'])) ?>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <?= htmlspecialchars($invitation['inviter_username'] ?? 'Unknown') ?>
+                                            <small>(<?= htmlspecialchars($invitation['inviter_email'] ?? 'N/A') ?>)</small>
+                                        </td>
+                                        <td>
+                                            <?= htmlspecialchars($invitation['invitee_username'] ?? $invitation['invitee_email']) ?>
+                                            <?php if ($invitation['invitee_username'] && $invitation['invitee_email']): ?>
+                                                <small>(<?= htmlspecialchars($invitation['invitee_email']) ?>)</small>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td>
+                                            <?php
+                                            $statusColors = [
+                                                'pending' => '#FF9800',
+                                                'pending_client' => '#9C27B0',
+                                                'client_approved' => '#2196F3',
+                                                'approved' => '#4CAF50',
+                                                'accepted' => '#4CAF50',
+                                                'declined' => '#F44336',
+                                                'revoked' => '#607D8B',
+                                                'auto_accepted' => '#00BCD4'
+                                            ];
+                                            $statusColor = $statusColors[$invitation['status']] ?? '#6c757d';
+                                            ?>
+                                            <span class="role-badge" style="background: <?= $statusColor ?>;">
+                                                <?= ucfirst(str_replace('_', ' ', htmlspecialchars($invitation['status']))) ?>
+                                            </span>
+                                        </td>
+                                        <td><?= htmlspecialchars($invitation['requested_permission_level'] ?? 'N/A') ?></td>
+                                        <td><?= date('M j, Y', strtotime($invitation['created_at'])) ?></td>
+                                        <td>
+                                            <?php if ($invitation['expires_at']): ?>
+                                                <?= date('M j, Y', strtotime($invitation['expires_at'])) ?>
+                                                <?php if (strtotime($invitation['expires_at']) < time()): ?>
+                                                    <small style="color: #F44336;">(Expired)</small>
+                                                <?php endif; ?>
+                                            <?php else: ?>
+                                                N/A
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="actions">
+                                            <?php
+                                            $canRevoke = in_array($invitation['status'], ['pending', 'pending_client', 'client_approved']);
+                                            $canApprove = $invitation['status'] === 'client_approved';
+                                            $canDelete = true; // Admins can always delete
+                                            ?>
+                                            
+                                            <?php if ($canRevoke): ?>
+                                                <form method="POST" style="display: inline;" 
+                                                      onsubmit="return confirm('Are you sure you want to revoke this invitation?')">
+                                                    <input type="hidden" name="action" value="revoke_invitation">
+                                                    <input type="hidden" name="invitation_id" value="<?= $invitation['id'] ?>">
+                                                    <input type="hidden" name="revocation_reason" value="Revoked by administrator">
+                                                    <button type="submit" class="btn btn-warning btn-sm">Revoke</button>
+                                                </form>
+                                            <?php endif; ?>
+                                            
+                                            <?php if ($canApprove): ?>
+                                                <form method="POST" style="display: inline;" 
+                                                      onsubmit="return confirm('Are you sure you want to approve this invitation?')">
+                                                    <input type="hidden" name="action" value="approve_invitation">
+                                                    <input type="hidden" name="invitation_id" value="<?= $invitation['id'] ?>">
+                                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                                </form>
+                                            <?php endif; ?>
+                                            
+                                            <?php if ($canDelete): ?>
+                                                <form method="POST" style="display: inline;" 
+                                                      onsubmit="return confirm('Are you sure you want to permanently delete this invitation? This cannot be undone.')">
+                                                    <input type="hidden" name="action" value="delete_invitation">
+                                                    <input type="hidden" name="invitation_id" value="<?= $invitation['id'] ?>">
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
             <!-- Filter Section -->

@@ -22,7 +22,113 @@ class InvitationService {
         $this->rbac = new RBACService();
         
         // Get PDO connection
-        $reflection = new ReflectionClass($this->userAuth);
+        $r    /**
+     * Get upgrade request by approval token
+     * 
+     * @param string $token Upgrade request token
+     * @return array|null Upgrade request details or null if not found
+     */
+    public function getUpgradeRequestByToken(string $token): ?array {
+        $stmt = $this->pdo->prepare("
+            SELECT aur.*, u.username as applicant_name, u.email as applicant_email
+            FROM advisor_upgrade_requests aur
+            JOIN users u ON aur.user_id = u.id
+            WHERE aur.approval_token = ?
+        ");
+        $stmt->execute([$token]);
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+    
+    /**
+     * Auto-create advisor relationship when inviting existing user
+     * 
+     * Instead of creating an invitation, directly create the advisor-client relationship
+     * and send a notification email. This streamlines the process for existing users.
+     * 
+     * @param int $clientId Client user ID
+     * @param int $advisorId Advisor user ID (existing user)
+     * @param string $permissionLevel 'read' or 'read_write'
+     * @param string $advisorEmail Advisor email for notifications
+     * @param string $message Optional message from client
+     * @return array Result with success status
+     */
+    private function autoCreateAdvisorRelationship(int $clientId, int $advisorId, string $permissionLevel, string $advisorEmail, string $message = ''): array {
+        try {
+            // Create the advisor-client relationship directly
+            $stmt = $this->pdo->prepare("
+                INSERT INTO user_advisors (
+                    user_id, advisor_id, permission_level, status, 
+                    accepted_at, invited_at, notes
+                ) VALUES (?, ?, ?, 'active', NOW(), NOW(), ?)
+            ");
+            
+            $autoNote = "User existed in system - relationship created automatically. " . ($message ?: 'No additional message.');
+            
+            $stmt->execute([$clientId, $advisorId, $permissionLevel, $autoNote]);
+            $relationshipId = $this->pdo->lastInsertId();
+            
+            // Create invitation record for tracking/notification purposes with special status
+            $token = $this->generateInvitationToken();
+            $stmt = $this->pdo->prepare("
+                INSERT INTO invitations (
+                    inviter_id, invitee_email, invitee_id, invitation_type,
+                    subject, message, invitation_token, requested_permission_level,
+                    status, expires_at
+                ) VALUES (?, ?, ?, 'advisor', ?, ?, ?, ?, 'auto_accepted', DATE_ADD(NOW(), INTERVAL 30 DAY))
+            ");
+            
+            $client = $this->userAuth->getUserById($clientId);
+            $subject = "{$client['username']} has added you as their financial advisor";
+            $notificationMessage = "You have been automatically added as an advisor since you already have an account. " . ($message ?: '');
+            
+            $stmt->execute([
+                $clientId,
+                $advisorEmail,
+                $advisorId,
+                $subject,
+                $notificationMessage,
+                $token,
+                $permissionLevel
+            ]);
+            
+            $invitationId = $this->pdo->lastInsertId();
+            
+            // Send notification email (different from invitation - this is a notification of established relationship)
+            $this->sendAdvisorRelationshipNotification($invitationId, $relationshipId);
+            
+            return [
+                'success' => true,
+                'invitation_id' => $invitationId,
+                'relationship_id' => $relationshipId,
+                'auto_created' => true,
+                'message' => 'User already exists! Advisor relationship created automatically and notification sent.'
+            ];
+            
+        } catch (Exception $e) {
+            error_log("Auto-create advisor relationship error: " . $e->getMessage());
+            return ['success' => false, 'error' => 'Failed to create advisor relationship automatically'];
+        }
+    }
+    
+    /**
+     * Send notification email for auto-created advisor relationships
+     * 
+     * @param int $invitationId Invitation record ID for tracking
+     * @param int $relationshipId User advisor relationship ID
+     */
+    private function sendAdvisorRelationshipNotification(int $invitationId, int $relationshipId): void {
+        // Get invitation details
+        $invitation = $this->getInvitationById($invitationId);
+        if (!$invitation) return;
+        
+        // For now, reuse the existing email infrastructure
+        // In the future, this could be a different email template specifically for notifications
+        $this->sendInvitationEmail($invitationId);
+        
+        // Log the auto-creation for audit purposes
+        error_log("Auto-created advisor relationship: Client ID {$invitation['inviter_id']}, Advisor ID {$invitation['invitee_id']}, Relationship ID {$relationshipId}");
+    }
+}eflectionClass($this->userAuth);
         $pdoProperty = $reflection->getProperty('pdo');
         $pdoProperty->setAccessible(true);
         $this->pdo = $pdoProperty->getValue($this->userAuth);
@@ -142,12 +248,12 @@ class InvitationService {
                 return ['success' => false, 'error' => 'Advisor relationship already exists'];
             }
             
-            // NEW: If advisor already exists as a user, auto-create relationship
+            // NEW LOGIC: If advisor already exists as a user, auto-create relationship
             if ($advisorId && $existingAdvisor) {
                 return $this->autoCreateAdvisorRelationship($clientId, $advisorId, $permissionLevel, $advisorEmail, $message);
             }
             
-            // ORIGINAL: For new users, create invitation
+            // ORIGINAL LOGIC: For new users, create invitation
             // Generate token
             $token = $this->generateInvitationToken();
             
@@ -618,7 +724,7 @@ class InvitationService {
     /**
      * Get user's sent invitations
      */
-    public function getUserSentInvitations(int $userId, ?string $type = null): array {
+    public function getUserSentInvitations(int $userId, string $type = null): array {
         $sql = "SELECT * FROM invitations WHERE inviter_id = ?";
         $params = [$userId];
         
@@ -679,321 +785,6 @@ class InvitationService {
         ");
         $stmt->execute([$token]);
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
-    }
-    
-    /**
-     * Auto-create advisor relationship when inviting existing user
-     * 
-     * Instead of creating an invitation, directly create the advisor-client relationship
-     * and send a notification email. This streamlines the process for existing users.
-     * 
-     * @param int $clientId Client user ID
-     * @param int $advisorId Advisor user ID (existing user)
-     * @param string $permissionLevel 'read' or 'read_write'
-     * @param string $advisorEmail Advisor email for notifications
-     * @param string $message Optional message from client
-     * @return array Result with success status
-     */
-    private function autoCreateAdvisorRelationship(int $clientId, int $advisorId, string $permissionLevel, string $advisorEmail, string $message = ''): array {
-        try {
-            // Create the advisor-client relationship directly
-            // Get the current user ID (who is creating this relationship)
-            $currentUserId = $this->userAuth->getCurrentUserId();
-            if (!$currentUserId) {
-                // Fallback: use the client's ID if no current user (shouldn't happen but defensive coding)
-                $currentUserId = $clientId;
-            }
-            
-            $autoNote = "User existed in system - relationship created automatically. " . ($message ?: 'No additional message.');
-            
-            $stmt = $this->pdo->prepare("
-                INSERT INTO user_advisors (
-                    user_id, advisor_id, permission_level, status, 
-                    created_by, notes
-                ) VALUES (?, ?, ?, 'pending', ?, ?)
-            ");
-            
-            $stmt->execute([$clientId, $advisorId, $permissionLevel, $currentUserId, $autoNote]);
-            $relationshipId = $this->pdo->lastInsertId();
-            
-            // Create invitation record for tracking/notification purposes with special status
-            $token = $this->generateInvitationToken();
-            $stmt = $this->pdo->prepare("
-                INSERT INTO invitations (
-                    inviter_id, invitee_email, invitee_id, invitation_type,
-                    subject, message, invitation_token, requested_permission_level,
-                    status, expires_at
-                ) VALUES (?, ?, ?, 'advisor', ?, ?, ?, ?, 'auto_accepted', DATE_ADD(NOW(), INTERVAL 30 DAY))
-            ");
-            
-            $client = $this->userAuth->getUserById($clientId);
-            $subject = "{$client['username']} has added you as their financial advisor";
-            $notificationMessage = "You have been automatically added as an advisor since you already have an account. " . ($message ?: '');
-            
-            $stmt->execute([
-                $clientId,
-                $advisorEmail,
-                $advisorId,
-                $subject,
-                $notificationMessage,
-                $token,
-                $permissionLevel
-            ]);
-            
-            $invitationId = $this->pdo->lastInsertId();
-            
-            // Send notification email (different from invitation - this is a notification of established relationship)
-            $this->sendInvitationEmail($invitationId);
-            
-            return [
-                'success' => true,
-                'invitation_id' => $invitationId,
-                'relationship_id' => $relationshipId,
-                'auto_created' => true,
-                'message' => 'User already exists! Advisor relationship created automatically and notification sent.'
-            ];
-            
-        } catch (Exception $e) {
-            error_log("Auto-create advisor relationship error: " . $e->getMessage());
-            return ['success' => false, 'error' => 'Failed to create advisor relationship automatically'];
-        }
-    }
-
-    // =============================================
-    // Invitation Management (Admin Functions)
-    // =============================================
-    
-    /**
-     * Revoke/cancel an invitation
-     * 
-     * @param int $invitationId Invitation ID to revoke
-     * @param int $revokedBy User ID of who is revoking the invitation
-     * @param string $reason Optional reason for revocation
-     * @return array Result with success status and message
-     */
-    public function revokeInvitation(int $invitationId, int $revokedBy, string $reason = ''): array {
-        try {
-            // Get invitation details first
-            $stmt = $this->pdo->prepare("
-                SELECT id, inviter_id, invitee_email, invitation_type, status, expires_at
-                FROM invitations 
-                WHERE id = ?
-            ");
-            $stmt->execute([$invitationId]);
-            $invitation = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$invitation) {
-                return ['success' => false, 'error' => 'Invitation not found'];
-            }
-            
-            // Check if invitation can be revoked
-            $revokableStatuses = ['pending', 'pending_client', 'client_approved'];
-            if (!in_array($invitation['status'], $revokableStatuses)) {
-                return ['success' => false, 'error' => 'Cannot revoke invitation with status: ' . $invitation['status']];
-            }
-            
-            // Update invitation status to revoked
-            $updateStmt = $this->pdo->prepare("
-                UPDATE invitations 
-                SET status = 'revoked',
-                    revoked_at = NOW(),
-                    revoked_by = ?,
-                    revocation_reason = ?
-                WHERE id = ?
-            ");
-            
-            $revocationReason = $reason ?: 'Revoked by administrator';
-            $updateStmt->execute([$revokedBy, $revocationReason, $invitationId]);
-            
-            if ($updateStmt->rowCount() > 0) {
-                return [
-                    'success' => true, 
-                    'message' => 'Invitation successfully revoked',
-                    'invitation_id' => $invitationId,
-                    'previous_status' => $invitation['status']
-                ];
-            } else {
-                return ['success' => false, 'error' => 'Failed to revoke invitation'];
-            }
-            
-        } catch (Exception $e) {
-            error_log("Invitation revocation error: " . $e->getMessage());
-            return ['success' => false, 'error' => 'Failed to revoke invitation'];
-        }
-    }
-    
-    /**
-     * Delete an invitation permanently (admin function)
-     * 
-     * @param int $invitationId Invitation ID to delete
-     * @return array Result with success status and message
-     */
-    public function deleteInvitation(int $invitationId): array {
-        try {
-            // Get invitation details for logging
-            $stmt = $this->pdo->prepare("
-                SELECT id, inviter_id, invitee_email, invitation_type, status
-                FROM invitations 
-                WHERE id = ?
-            ");
-            $stmt->execute([$invitationId]);
-            $invitation = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$invitation) {
-                return ['success' => false, 'error' => 'Invitation not found'];
-            }
-            
-            // Delete the invitation
-            $deleteStmt = $this->pdo->prepare("DELETE FROM invitations WHERE id = ?");
-            $deleteStmt->execute([$invitationId]);
-            
-            if ($deleteStmt->rowCount() > 0) {
-                return [
-                    'success' => true, 
-                    'message' => 'Invitation deleted successfully',
-                    'deleted_invitation' => $invitation
-                ];
-            } else {
-                return ['success' => false, 'error' => 'Failed to delete invitation'];
-            }
-            
-        } catch (Exception $e) {
-            error_log("Invitation deletion error: " . $e->getMessage());
-            return ['success' => false, 'error' => 'Failed to delete invitation'];
-        }
-    }
-    
-    /**
-     * Admin approve invitation (for advisor upgrade requests)
-     * 
-     * @param int $invitationId Invitation ID to approve
-     * @param int $approvedBy User ID of administrator approving
-     * @return array Result with success status and message
-     */
-    public function adminApproveInvitation(int $invitationId, int $approvedBy): array {
-        try {
-            // Get invitation details first
-            $stmt = $this->pdo->prepare("
-                SELECT id, inviter_id, invitee_id, invitee_email, invitation_type, status, requested_permission_level
-                FROM invitations 
-                WHERE id = ?
-            ");
-            $stmt->execute([$invitationId]);
-            $invitation = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if (!$invitation) {
-                return ['success' => false, 'error' => 'Invitation not found'];
-            }
-            
-            // Check if invitation can be approved
-            if ($invitation['status'] !== 'client_approved') {
-                return ['success' => false, 'error' => 'Invitation must be client approved before admin approval'];
-            }
-            
-            // Update invitation status to approved
-            $updateStmt = $this->pdo->prepare("
-                UPDATE invitations 
-                SET status = 'approved',
-                    approved_at = NOW(),
-                    approved_by = ?
-                WHERE id = ?
-            ");
-            
-            $updateStmt->execute([$approvedBy, $invitationId]);
-            
-            if ($updateStmt->rowCount() > 0) {
-                return [
-                    'success' => true, 
-                    'message' => 'Invitation approved successfully',
-                    'invitation_id' => $invitationId
-                ];
-            } else {
-                return ['success' => false, 'error' => 'Failed to approve invitation'];
-            }
-            
-        } catch (Exception $e) {
-            error_log("Invitation approval error: " . $e->getMessage());
-            return ['success' => false, 'error' => 'Failed to approve invitation'];
-        }
-    }
-    
-    /**
-     * Get all invitations for admin management (with pagination)
-     * 
-     * @param array $filters Optional filters (status, type, search)
-     * @param int $limit Results per page
-     * @param int $offset Starting offset
-     * @return array Results with invitations and total count
-     */
-    public function getAllInvitationsForAdmin(array $filters = [], int $limit = 50, int $offset = 0): array {
-        try {
-            $whereConditions = [];
-            $params = [];
-            
-            // Base query with user details
-            $sql = "
-                SELECT 
-                    i.*,
-                    inviter.username as inviter_username,
-                    inviter.email as inviter_email,
-                    invitee.username as invitee_username,
-                    i.invitee_email
-                FROM invitations i
-                LEFT JOIN users inviter ON i.inviter_id = inviter.id
-                LEFT JOIN users invitee ON i.invitee_id = invitee.id
-            ";
-            
-            // Add filters
-            if (!empty($filters['status'])) {
-                $whereConditions[] = "i.status = ?";
-                $params[] = $filters['status'];
-            }
-            
-            if (!empty($filters['type'])) {
-                $whereConditions[] = "i.invitation_type = ?";
-                $params[] = $filters['type'];
-            }
-            
-            if (!empty($filters['search'])) {
-                $whereConditions[] = "(i.invitee_email LIKE ? OR inviter.username LIKE ? OR invitee.username LIKE ?)";
-                $searchTerm = '%' . $filters['search'] . '%';
-                $params[] = $searchTerm;
-                $params[] = $searchTerm;
-                $params[] = $searchTerm;
-            }
-            
-            // Add WHERE clause if conditions exist
-            if (!empty($whereConditions)) {
-                $sql .= " WHERE " . implode(" AND ", $whereConditions);
-            }
-            
-            // Count total results
-            $countSql = "SELECT COUNT(*) " . substr($sql, strpos($sql, "FROM"));
-            $countStmt = $this->pdo->prepare($countSql);
-            $countStmt->execute($params);
-            $totalCount = $countStmt->fetchColumn();
-            
-            // Add ordering and pagination
-            $sql .= " ORDER BY i.created_at DESC LIMIT ? OFFSET ?";
-            $params[] = $limit;
-            $params[] = $offset;
-            
-            $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($params);
-            $invitations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            return [
-                'success' => true,
-                'invitations' => $invitations,
-                'total_count' => $totalCount,
-                'limit' => $limit,
-                'offset' => $offset
-            ];
-            
-        } catch (Exception $e) {
-            error_log("Get admin invitations error: " . $e->getMessage());
-            return ['success' => false, 'error' => 'Failed to retrieve invitations'];
-        }
     }
 }
 ?>
