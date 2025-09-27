@@ -38,6 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         $user = $auth->loginUser($username, $password);
         
+        // Trigger auto-fetch if enabled (runs in background)
+        try {
+            require_once __DIR__ . '/AutoFetchService.php';
+            $autoFetch = new AutoFetchService();
+            $autoFetch->performAutoFetchIfNeeded();
+        } catch (Exception $e) {
+            // Silently handle auto-fetch errors to not interfere with login
+            error_log("Auto-fetch error during login: " . $e->getMessage());
+        }
+        
         // Redirect to dashboard or intended page
         $redirectUrl = $_GET['redirect'] ?? 'dashboard.php';
         header("Location: $redirectUrl");

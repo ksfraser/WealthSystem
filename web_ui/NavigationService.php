@@ -377,6 +377,12 @@ class NavigationService {
                 ];
                 
                 $items[] = [
+                    'url' => 'admin/stock_data_admin.php',
+                    'label' => '📈 Stock Data',
+                    'active' => $currentPage === 'stock_data_admin'
+                ];
+                
+                $items[] = [
                     'url' => 'database.php',
                     'label' => '🗄️ Database',
                     'active' => $currentPage === 'database.php'

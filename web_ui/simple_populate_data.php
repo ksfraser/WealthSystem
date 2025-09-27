@@ -230,7 +230,7 @@ if (!file_exists(__DIR__ . '/config/database.php')) {
     // For now, just create some sample entries in the stocks table
     try {
         // Use basic connection
-        $pdo = new PDO('mysql:host=localhost;dbname=finance_db;charset=utf8mb4', 'root', '');
+        $pdo = new PDO('mysql:host=localhost;dbname=microcap_trading;charset=utf8mb4', 'root', '');
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         echo "Connected to database\n";
