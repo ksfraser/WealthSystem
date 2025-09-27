@@ -170,6 +170,33 @@ Data Requirements:
   - Transaction fees and commission tracking
 ```
 
+#### **Stock Analysis Integration (FR-002.3)**
+```yaml
+Priority: High
+Description: Integrate comprehensive stock analysis with portfolio management
+
+Portfolio-Stock Linkage:
+  - Direct navigation from portfolio positions to stock analysis
+  - Real-time price updates for portfolio positions
+  - Technical analysis overlay on portfolio charts
+  - News impact assessment on portfolio holdings
+  - Risk analysis aggregation across portfolio
+
+Analysis Features:
+  - Portfolio-level technical indicators
+  - Sector and correlation analysis
+  - Risk-adjusted return calculations
+  - Portfolio optimization recommendations
+  - Rebalancing suggestions based on analysis
+
+Integration Points:
+  - Stock analysis results influence position sizing
+  - News sentiment affects portfolio risk assessment
+  - Technical signals generate portfolio alerts
+  - LLM analysis provides portfolio insights
+  - Performance attribution by stock analysis
+```
+
 ### **FR-003: Trading Operations**
 
 #### **Manual Trading (FR-003.1)**
@@ -191,25 +218,143 @@ Business Rules:
   - Settlement period handling (T+2)
 ```
 
-### **FR-004: Financial Analytics**
+### **FR-004: Stock Analysis & Price Management**
 
-#### **Technical Analysis (FR-004.1)**
+#### **Stock Price Display (FR-004.1)**
+```yaml
+Priority: Critical
+Description: Comprehensive stock price viewing and historical analysis
+
+Current Price Features:
+  - Real-time current price with bid/ask spreads
+  - Daily change and percentage change indicators
+  - Market cap and volume information
+  - 52-week high/low ranges
+  - Previous close and after-hours pricing
+
+Historical Price Features:
+  - Interactive price charts with multiple timeframes
+  - Candlestick, line, and OHLC chart types
+  - Volume overlay and analysis
+  - Zoom and pan functionality
+  - Date range selection tools
+  - Price data export capabilities
+
+Data Sources:
+  - Primary: Yahoo Finance API (free, reliable)
+  - Secondary: Alpha Vantage API (premium features)
+  - Tertiary: Finnhub API (real-time data)
+  - Fallback: Manual price entry system
+```
+
+#### **News Integration (FR-004.2)**
 ```yaml
 Priority: High
-Description: Comprehensive technical analysis tools
+Description: Stock-specific news aggregation and analysis
 
-Indicators Required:
-  - Moving Averages: SMA, EMA, WMA
-  - Oscillators: RSI, MACD, Stochastic
-  - Volatility: Bollinger Bands, ATR
-  - Volume: OBV, VWAP, Volume Profile
-  - Trend: ADX, Parabolic SAR, Ichimoku
+News Sources:
+  - Financial news APIs (NewsAPI, Finnhub News)
+  - RSS feeds from major financial publications
+  - Company press releases and SEC filings
+  - Social media sentiment analysis
+  - Analyst reports and recommendations
 
-Chart Features:
-  - Multiple timeframes (1m, 5m, 1h, 1d, 1w, 1M)
-  - Candlestick and OHLC charts
-  - Volume overlays
-  - Custom indicator combinations
+LLM Integration:
+  - Automated news summarization using OpenAI/Anthropic
+  - Sentiment analysis for news articles
+  - Impact assessment on stock price
+  - Key event extraction and categorization
+  - Trend analysis from news patterns
+
+News Features:
+  - Real-time news updates
+  - News filtering by relevance and date
+  - Sentiment scoring for each article
+  - News impact on price correlation
+  - Custom news alerts and notifications
+```
+
+#### **Technical Analysis (FR-004.3)**
+```yaml
+Priority: High
+Description: Comprehensive technical analysis tools with customizable indicators
+
+Core Indicators:
+  - Moving Averages: SMA, EMA, WMA (5, 10, 20, 50, 200 periods)
+  - Oscillators: RSI (14), MACD (12,26,9), Stochastic (14,3)
+  - Volatility: Bollinger Bands (20,2), ATR (14)
+  - Volume: OBV, VWAP, Volume Profile, Accumulation/Distribution
+  - Trend: ADX (14), Parabolic SAR, Ichimoku Cloud
+
+Advanced Indicators:
+  - Williams %R, Commodity Channel Index (CCI)
+  - Fibonacci Retracements and Extensions
+  - Pivot Points (Standard, Fibonacci, Camarilla)
+  - Support and Resistance Levels
+  - Chart Patterns Recognition (Head & Shoulders, Triangles, etc.)
+
+Chart Customization:
+  - Multiple timeframes (1m, 5m, 15m, 1h, 4h, 1d, 1w, 1M)
+  - Add/remove indicators dynamically
+  - Customizable indicator parameters
+  - Multiple chart layouts and themes
+  - Drawing tools (trendlines, annotations)
+  - Technical pattern alerts
+```
+
+#### **LLM-Powered Analysis (FR-004.4)**
+```yaml
+Priority: Medium
+Description: AI-powered stock analysis and recommendations
+
+Analysis Components:
+  - Fundamental analysis using financial ratios
+  - Technical pattern recognition and interpretation
+  - News sentiment integration with price movements
+  - Risk assessment and volatility analysis
+  - Sector and peer comparison analysis
+
+LLM Features:
+  - Natural language analysis summaries
+  - Investment recommendation explanations
+  - Risk factor identification and assessment
+  - Market condition analysis and impact
+  - Automated research report generation
+
+Integration Points:
+  - OpenAI GPT-4 for comprehensive analysis
+  - Anthropic Claude for risk assessment
+  - Custom prompts for different analysis types
+  - Analysis result caching and versioning
+  - Human oversight and validation system
+```
+
+#### **Individual Stock Database Architecture (FR-004.5)**
+```yaml
+Priority: High
+Description: Dedicated database tables per stock for optimal performance and organization
+
+Stock-Specific Tables:
+  - {SYMBOL}_prices: Historical OHLCV data
+  - {SYMBOL}_fundamentals: Company financial data
+  - {SYMBOL}_technical: Technical indicator calculations
+  - {SYMBOL}_news: Stock-specific news and sentiment
+  - {SYMBOL}_analysis: LLM analysis results and scores
+  - {SYMBOL}_alerts: Price and indicator alerts
+
+Benefits:
+  - Improved query performance for individual stocks
+  - Easier backup and archival of specific stock data
+  - Simplified data partitioning and maintenance
+  - Reduced table lock contention
+  - Flexible retention policies per stock
+
+Management:
+  - Automated table creation for new stocks
+  - Table naming convention enforcement
+  - Index optimization per stock table
+  - Archival and cleanup procedures
+  - Cross-stock analysis view generation
 ```
 
 #### **Risk Analytics (FR-004.2)**

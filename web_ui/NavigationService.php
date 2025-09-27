@@ -60,6 +60,9 @@ class NavigationService {
                 case 'portfolio-dropdown':
                     $cssLinks .= '<link rel="stylesheet" href="css/portfolio-dropdown.css">' . "\n";
                     break;
+                case 'stocks-dropdown':
+                    $cssLinks .= '<link rel="stylesheet" href="css/stocks-dropdown.css">' . "\n";
+                    break;
                 case 'responsive':
                     $cssLinks .= '<link rel="stylesheet" href="css/nav-responsive.css">' . "\n";
                     break;
@@ -78,7 +81,7 @@ class NavigationService {
      */
     public function getDashboardCSS(): string {
         return $this->getNavigationCSS([
-            'core', 'links', 'dropdown-base', 'user-dropdown', 'portfolio-dropdown', 'responsive'
+            'core', 'links', 'dropdown-base', 'user-dropdown', 'portfolio-dropdown', 'stocks-dropdown', 'responsive'
         ]);
     }
     
@@ -162,11 +165,12 @@ class NavigationService {
             font-weight: bold;
             border: 1px solid #ffffff;
         }
-        .user-dropdown {
+        .user-dropdown, .portfolio-dropdown, .stocks-dropdown {
             position: relative;
             display: inline-block;
+            margin-right: 10px;
         }
-        .user-dropdown-toggle {
+        .user-dropdown-toggle, .portfolio-dropdown-toggle, .stocks-dropdown-toggle {
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
@@ -176,10 +180,10 @@ class NavigationService {
             font-size: 14px;
             transition: background-color 0.3s;
         }
-        .user-dropdown-toggle:hover {
+        .user-dropdown-toggle:hover, .portfolio-dropdown-toggle:hover, .stocks-dropdown-toggle:hover {
             background: rgba(255,255,255,0.2);
         }
-        .user-dropdown-menu {
+        .user-dropdown-menu, .portfolio-dropdown-menu, .stocks-dropdown-menu {
             display: none;
             position: absolute;
             right: 0;
@@ -246,12 +250,21 @@ class NavigationService {
             }
         }
         
+        function toggleStocksDropdown() {
+            var menu = document.getElementById("stocksDropdownMenu");
+            if (menu) {
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+        }
+        
         // Close dropdowns when clicking outside
         document.addEventListener("click", function(event) {
             var userDropdown = document.querySelector(".user-dropdown");
             var userMenu = document.getElementById("userDropdownMenu");
             var portfolioDropdown = document.querySelector(".portfolio-dropdown");  
             var portfolioMenu = document.getElementById("portfolioDropdownMenu");
+            var stocksDropdown = document.querySelector(".stocks-dropdown");  
+            var stocksMenu = document.getElementById("stocksDropdownMenu");
             
             // Close user dropdown if clicking outside
             if (userDropdown && userMenu && !userDropdown.contains(event.target)) {
@@ -261,6 +274,11 @@ class NavigationService {
             // Close portfolio dropdown if clicking outside
             if (portfolioDropdown && portfolioMenu && !portfolioDropdown.contains(event.target)) {
                 portfolioMenu.style.display = "none";
+            }
+            
+            // Close stocks dropdown if clicking outside
+            if (stocksDropdown && stocksMenu && !stocksDropdown.contains(event.target)) {
+                stocksMenu.style.display = "none";
             }
         });
         </script>';
@@ -324,6 +342,12 @@ class NavigationService {
                 'url' => 'portfolios.php', 
                 'label' => '📈 Portfolios',
                 'active' => $currentPage === 'portfolios.php'
+            ];
+            
+            $items[] = [
+                'url' => 'stock_search.php',
+                'label' => '🔍 Stock Analysis',
+                'active' => in_array($currentPage, ['stock_search.php', 'stock_analysis.php', 'stock_search', 'stock_analysis'])
             ];
             
             $items[] = [
@@ -391,9 +415,20 @@ class NavigationService {
             $html .= '</div>';
             $html .= '</div>';
             
-            // Other navigation items (excluding the portfolio ones)
+            // Stocks dropdown with proper CSS classes
+            $html .= '<div class="stocks-dropdown">';
+            $html .= '<button class="stocks-dropdown-toggle" onclick="toggleStocksDropdown()">';
+            $html .= '� Stocks ▼';
+            $html .= '</button>';
+            $html .= '<div class="stocks-dropdown-menu" id="stocksDropdownMenu">';
+            $html .= '<a href="stock_search.php" class="dropdown-item">🔍 Stock Search</a>';
+            $html .= '<a href="stock_analysis.php" class="dropdown-item">🤖 Stock Analysis</a>';
+            $html .= '</div>';
+            $html .= '</div>';
+            
+            // Other navigation items (excluding dropdown items)
             foreach ($menuItems as $item) {
-                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php'])) {
+                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php', 'stock_search.php', 'stock_analysis.php'])) {
                     $activeClass = $item['active'] ? ' active' : '';
                     $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
                     $html .= htmlspecialchars($item['label']);

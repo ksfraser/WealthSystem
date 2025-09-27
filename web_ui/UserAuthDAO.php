@@ -740,6 +740,8 @@ class UserAuthDAO extends CommonDAO {
             $menuItems[] = ['name' => 'Dashboard', 'url' => 'dashboard.php', 'icon' => '🏠'];
             $menuItems[] = ['name' => 'My Portfolio', 'url' => 'MyPortfolio.php', 'icon' => '📊'];
             $menuItems[] = ['name' => 'Portfolios', 'url' => 'portfolios.php', 'icon' => '💼'];
+            $menuItems[] = ['name' => 'Stock Search', 'url' => 'stock_search.php', 'icon' => '🔍'];
+            $menuItems[] = ['name' => 'Stock Analysis', 'url' => 'stock_analysis.php', 'icon' => '🤖'];
             
             if ($this->isAdmin($userId)) {
                 $menuItems[] = ['name' => 'User Management', 'url' => 'admin_users.php', 'icon' => '👥'];

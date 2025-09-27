@@ -146,6 +146,17 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
                 </div>
             </div>
             
+            <!-- AI Stock Analysis -->
+            <div class="dashboard-card">
+                <h3>🤖 AI Stock Analysis</h3>
+                <p>Search stocks, get AI-powered recommendations, analyze sentiment, and view technical indicators with individual stock databases.</p>
+                <div class="card-links">
+                    <a href="stock_search.php">🔍 Search Stocks</a>
+                    <a href="stock_analysis.php">📊 Stock Dashboard</a>
+                    <a href="stock_analysis.php?demo=1">🎯 Try Demo Analysis</a>
+                </div>
+            </div>
+            
             <!-- Account Management -->
             <div class="dashboard-card">
                 <h3>🏦 Account Management</h3>
