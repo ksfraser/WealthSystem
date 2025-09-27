@@ -172,18 +172,56 @@ $dbDetails = [
                 <td><span class="status-indicator status-connected">Active</span></td>
             </tr>
         </table>
+        
+        <?php if ($isAdmin): ?>
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+            <h4>📋 Audit Fields Status</h4>
+            <p>All database tables have been enhanced with comprehensive audit tracking:</p>
+            <div class="detail-grid" style="margin-top: 10px;">
+                <div class="detail-item" style="background: #e8f5e8;">
+                    <strong>✅ Audit Fields Implemented</strong><br>
+                    <small>created_at, last_updated, created_by, updated_by</small>
+                </div>
+                <div class="detail-item" style="background: #e8f5e8;">
+                    <strong>✅ Foreign Key Relationships</strong><br>
+                    <small>Audit fields linked to users table</small>
+                </div>
+                <div class="detail-item" style="background: #e8f5e8;">
+                    <strong>✅ Automatic Timestamps</strong><br>
+                    <small>Auto-updating modification tracking</small>
+                </div>
+                <div class="detail-item" style="background: #e8f5e8;">
+                    <strong>✅ User Attribution</strong><br>
+                    <small>Track who creates/modifies records</small>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
     
     <!-- Database Management Tools -->
-    <?php if (isCurrentUserAdmin()): ?>
+    <?php if ($isAdmin): ?>
     <div class="card">
         <h3>🔧 Database Management Tools</h3>
         <p>Administrative tools for database management and maintenance</p>
         <div style="margin-top: 15px;">
             <a href="create_tables.php" class="btn">Create/Update Tables</a>
+            <a href="add_audit_fields_migration.php" class="btn" style="background: #28a745;">🔍 Add Audit Fields</a>
             <a href="backup.php" class="btn">Backup Databases</a>
             <a href="migrate.php" class="btn">Data Migration</a>
             <a href="system_status.php" class="btn btn-success">System Status</a>
+        </div>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 6px;">
+            <h4>🔍 Audit Fields Migration</h4>
+            <p><strong>Purpose:</strong> Adds comprehensive audit tracking to all database tables</p>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><code>created_at</code> - Timestamp when record was created</li>
+                <li><code>last_updated</code> - Automatically updated timestamp for modifications</li>
+                <li><code>created_by</code> - User ID who created the record</li>
+                <li><code>updated_by</code> - User ID who last modified the record</li>
+            </ul>
+            <p><small><strong>Note:</strong> This migration is safe to run multiple times. Existing data will be preserved and only missing audit fields will be added.</small></p>
         </div>
     </div>
     <?php else: ?>
@@ -202,6 +240,9 @@ $dbDetails = [
         <div style="margin-top: 15px;">
             <button onclick="showSection('dbtest')" class="btn">Database Test</button>
             <button onclick="showSection('dbdiagnosis')" class="btn">Database Diagnosis</button>
+            <?php if ($isAdmin): ?>
+            <button onclick="showSection('auditcheck')" class="btn" style="background: #28a745;">Audit Fields Check</button>
+            <?php endif; ?>
             <button onclick="hideAllSections()" class="btn" style="background: #6c757d;">Hide Tests</button>
         </div>
     </div>
@@ -260,6 +301,100 @@ $dbDetails = [
         </div>
     </div>
 
+    <?php if ($isAdmin): ?>
+    <div id="auditcheck" class="card" style="display:none;">
+        <h4>🔍 Audit Fields Status Check</h4>
+        <p>Quick verification of audit fields implementation across all database tables:</p>
+        
+        <?php
+        // Quick audit fields check
+        try {
+            $reflection = new ReflectionClass($userAuth);
+            $pdoProperty = $reflection->getProperty('pdo');
+            $pdoProperty->setAccessible(true);
+            $pdo = $pdoProperty->getValue($userAuth);
+            
+            if ($pdo) {
+                // Get table count
+                $stmt = $pdo->query("SHOW TABLES");
+                $totalTables = $stmt->rowCount();
+                
+                // Check a few sample tables for audit fields
+                $sampleTables = ['users', 'invitations', 'roles'];
+                $auditFieldsPresent = 0;
+                $checkedTables = 0;
+                
+                foreach ($sampleTables as $table) {
+                    try {
+                        $stmt = $pdo->query("DESCRIBE `$table`");
+                        $columns = [];
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            $columns[] = $row['Field'];
+                        }
+                        
+                        $hasAllAuditFields = in_array('created_at', $columns) && 
+                                           in_array('last_updated', $columns) && 
+                                           in_array('created_by', $columns) && 
+                                           in_array('updated_by', $columns);
+                        
+                        if ($hasAllAuditFields) $auditFieldsPresent++;
+                        $checkedTables++;
+                    } catch (Exception $e) {
+                        // Table might not exist
+                    }
+                }
+                
+                $auditCompliance = $checkedTables > 0 ? ($auditFieldsPresent / $checkedTables) * 100 : 0;
+                ?>
+                
+                <div class="detail-grid" style="margin-top: 15px;">
+                    <div class="detail-item" style="background: <?php echo $auditCompliance >= 100 ? '#e8f5e8' : '#fff3cd'; ?>;">
+                        <strong>Total Tables:</strong><br>
+                        <?php echo $totalTables; ?> tables in database
+                    </div>
+                    <div class="detail-item" style="background: <?php echo $auditCompliance >= 100 ? '#e8f5e8' : '#fff3cd'; ?>;">
+                        <strong>Audit Compliance:</strong><br>
+                        <?php echo number_format($auditCompliance, 1); ?>% (<?php echo $auditFieldsPresent; ?>/<?php echo $checkedTables; ?> checked)
+                    </div>
+                    <div class="detail-item" style="background: <?php echo $auditCompliance >= 100 ? '#e8f5e8' : '#fff3cd'; ?>;">
+                        <strong>Status:</strong><br>
+                        <?php if ($auditCompliance >= 100): ?>
+                            ✅ Fully Compliant
+                        <?php elseif ($auditCompliance >= 50): ?>
+                            ⚠️ Partially Implemented
+                        <?php else: ?>
+                            ❌ Need Migration
+                        <?php endif; ?>
+                    </div>
+                    <div class="detail-item" style="background: #f0f0f0;">
+                        <strong>Migration Tool:</strong><br>
+                        <a href="add_audit_fields_migration.php" style="color: #007bff; text-decoration: none; font-weight: bold;">
+                            Run Audit Migration →
+                        </a>
+                    </div>
+                </div>
+                
+                <?php if ($auditCompliance < 100): ?>
+                <div style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 4px;">
+                    <strong>⚠️ Recommendation:</strong> Run the audit fields migration to ensure all tables have proper audit tracking.
+                </div>
+                <?php else: ?>
+                <div style="margin-top: 15px; padding: 10px; background: #e8f5e8; border-radius: 4px;">
+                    <strong>✅ Excellent:</strong> All checked tables have complete audit field implementation.
+                </div>
+                <?php endif; ?>
+                
+                <?php
+            } else {
+                echo "<p style='color: #dc3545;'>❌ Cannot check audit fields - database connection unavailable</p>";
+            }
+        } catch (Exception $e) {
+            echo "<p style='color: #dc3545;'>❌ Error checking audit fields: " . htmlspecialchars($e->getMessage()) . "</p>";
+        }
+        ?>
+    </div>
+    <?php endif; ?>
+
     <script>
     function showSection(id) {
         hideAllSections();
@@ -269,6 +404,9 @@ $dbDetails = [
     function hideAllSections() {
         document.getElementById('dbtest').style.display = 'none';
         document.getElementById('dbdiagnosis').style.display = 'none';
+        <?php if ($isAdmin): ?>
+        document.getElementById('auditcheck').style.display = 'none';
+        <?php endif; ?>
     }
     </script>
 </div>

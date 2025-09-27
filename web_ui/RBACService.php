@@ -187,18 +187,29 @@ class RBACService {
      * Assign a role to a user
      * 
      * @param int $userId User ID
-     * @param string $roleName Role name
+     * @param string|int $roleNameOrId Role name or role ID
      * @param int|null $grantedBy User ID who granted the role
      * @param string|null $notes Optional notes
      * @param string|null $expiresAt Optional expiration date (Y-m-d H:i:s format)
      * @return bool Success status
      */
-    public function assignRole(int $userId, string $roleName, ?int $grantedBy = null, ?string $notes = null, ?string $expiresAt = null): bool {
+    public function assignRole(int $userId, $roleNameOrId, ?int $grantedBy = null, ?string $notes = null, ?string $expiresAt = null): bool {
         try {
-            // Get role ID
-            $roleId = $this->getRoleId($roleName);
-            if (!$roleId) {
-                throw new Exception("Role '$roleName' not found");
+            // Handle both role name and role ID
+            if (is_string($roleNameOrId)) {
+                // Role name provided
+                $roleName = $roleNameOrId;
+                $roleId = $this->getRoleId($roleName);
+                if (!$roleId) {
+                    throw new Exception("Role '$roleName' not found");
+                }
+            } else {
+                // Role ID provided
+                $roleId = (int)$roleNameOrId;
+                $roleName = $this->getRoleName($roleId);
+                if (!$roleName) {
+                    throw new Exception("Role with ID '$roleId' not found");
+                }
             }
             
             // Check if role is already assigned
@@ -220,7 +231,8 @@ class RBACService {
             return $result;
             
         } catch (Exception $e) {
-            error_log("RBAC: Failed to assign role '$roleName' to user $userId: " . $e->getMessage());
+            $roleIdentifier = is_string($roleNameOrId) ? $roleNameOrId : "ID:$roleNameOrId";
+            error_log("RBAC: Failed to assign role '$roleIdentifier' to user $userId: " . $e->getMessage());
             return false;
         }
     }
@@ -229,14 +241,26 @@ class RBACService {
      * Remove a role from a user
      * 
      * @param int $userId User ID
-     * @param string $roleName Role name
+     * @param string|int $roleNameOrId Role name or ID
      * @return bool Success status
      */
-    public function revokeRole(int $userId, string $roleName): bool {
+    public function revokeRole(int $userId, $roleNameOrId): bool {
         try {
-            $roleId = $this->getRoleId($roleName);
-            if (!$roleId) {
-                return false;
+            // Handle both role name and role ID
+            if (is_string($roleNameOrId)) {
+                // Role name provided
+                $roleName = $roleNameOrId;
+                $roleId = $this->getRoleId($roleName);
+                if (!$roleId) {
+                    return false;
+                }
+            } else {
+                // Role ID provided
+                $roleId = (int)$roleNameOrId;
+                $roleName = $this->getRoleName($roleId);
+                if (!$roleName) {
+                    return false;
+                }
             }
             
             $stmt = $this->pdo->prepare("DELETE FROM user_roles WHERE user_id = ? AND role_id = ?");
@@ -249,7 +273,8 @@ class RBACService {
             return $result;
             
         } catch (Exception $e) {
-            error_log("RBAC: Failed to revoke role '$roleName' from user $userId: " . $e->getMessage());
+            $roleIdentifier = is_string($roleNameOrId) ? $roleNameOrId : "ID:$roleNameOrId";
+            error_log("RBAC: Failed to revoke role '$roleIdentifier' from user $userId: " . $e->getMessage());
             return false;
         }
     }
@@ -374,6 +399,19 @@ class RBACService {
     private function getRoleId(string $roleName): ?int {
         $stmt = $this->pdo->prepare("SELECT id FROM roles WHERE name = ?");
         $stmt->execute([$roleName]);
+        $result = $stmt->fetchColumn();
+        return $result ?: null;
+    }
+    
+    /**
+     * Helper: Get role name by ID
+     * 
+     * @param int $roleId Role ID
+     * @return string|null Role name or null if not found
+     */
+    public function getRoleName(int $roleId): ?string {
+        $stmt = $this->pdo->prepare("SELECT name FROM roles WHERE id = ?");
+        $stmt->execute([$roleId]);
         $result = $stmt->fetchColumn();
         return $result ?: null;
     }

@@ -241,10 +241,23 @@ class UserAuthDAO extends CommonDAO {
             // Hash password
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             
-            // Insert user with current timestamp
-            $stmt = $this->pdo->prepare('INSERT INTO users (username, email, password_hash, is_admin, created_at) VALUES (?, ?, ?, ?, NOW())');
-            if ($stmt->execute([$username, $email, $passwordHash, $isAdmin ? 1 : 0])) {
+            // Get current user ID for audit fields (if logged in)
+            $currentUserId = $this->getCurrentUserId();
+            
+            // Insert user with audit fields
+            $stmt = $this->pdo->prepare('INSERT INTO users (username, email, password_hash, is_admin, created_at, created_by) VALUES (?, ?, ?, ?, NOW(), ?)');
+            if ($stmt->execute([$username, $email, $passwordHash, $isAdmin ? 1 : 0, $currentUserId])) {
                 $userId = $this->pdo->lastInsertId();
+                
+                // Automatically assign 'user' role to all new users
+                try {
+                    $rbacService = $this->getRBACService();
+                    $rbacService->assignRole($userId, 'user', $currentUserId, 'Default role assigned during registration');
+                } catch (Exception $e) {
+                    // Log but don't fail registration if RBAC assignment fails
+                    $this->logError("Failed to assign default 'user' role to new user $userId: " . $e->getMessage());
+                }
+                
                 return $userId;
             }
             
@@ -480,9 +493,10 @@ class UserAuthDAO extends CommonDAO {
                 throw new Exception('Email already in use by another user');
             }
             
-            // Update email
-            $stmt = $this->pdo->prepare('UPDATE users SET email = ? WHERE id = ?');
-            if ($stmt->execute([$email, $userId])) {
+            // Update email with audit fields
+            $currentUserId = $this->getCurrentUserId();
+            $stmt = $this->pdo->prepare('UPDATE users SET email = ?, last_updated = NOW(), updated_by = ? WHERE id = ?');
+            if ($stmt->execute([$email, $currentUserId, $userId])) {
                 // Update session if it's the current user
                 if ($this->getCurrentUserId() == $userId) {
                     $userData = $this->sessionManager->get($this->sessionKey);
@@ -511,7 +525,7 @@ class UserAuthDAO extends CommonDAO {
                 return [];
             }
             
-            $stmt = $this->pdo->prepare('SELECT id, username, email, is_admin FROM users ORDER BY username LIMIT ? OFFSET ?');
+            $stmt = $this->pdo->prepare('SELECT id, username, email, is_admin, created_at FROM users ORDER BY username LIMIT ? OFFSET ?');
             $stmt->execute([$limit, $offset]);
             
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -531,7 +545,7 @@ class UserAuthDAO extends CommonDAO {
                 return null;
             }
             
-            $stmt = $this->pdo->prepare('SELECT id, username, email, is_admin FROM users WHERE id = ?');
+            $stmt = $this->pdo->prepare('SELECT id, username, email, is_admin, created_at FROM users WHERE id = ?');
             $stmt->execute([$userId]);
             
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -584,8 +598,9 @@ class UserAuthDAO extends CommonDAO {
      */
     public function updateUserAdminStatus($userId, $isAdmin) {
         try {
-            $stmt = $this->pdo->prepare('UPDATE users SET is_admin = ? WHERE id = ?');
-            if ($stmt->execute([$isAdmin ? 1 : 0, $userId])) {
+            $currentUserId = $this->getCurrentUserId();
+            $stmt = $this->pdo->prepare('UPDATE users SET is_admin = ?, last_updated = NOW(), updated_by = ? WHERE id = ?');
+            if ($stmt->execute([$isAdmin ? 1 : 0, $currentUserId, $userId])) {
                 return $stmt->rowCount() > 0;
             }
             

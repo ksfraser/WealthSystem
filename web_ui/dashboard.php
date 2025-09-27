@@ -167,6 +167,17 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
                 </div>
             </div>
             
+            <!-- Profile & Invitations -->
+            <div class="dashboard-card">
+                <h3>👤 Profile & Invitations</h3>
+                <p>Manage your profile, invite friends and advisors, and upgrade your account.</p>
+                <div class="card-links">
+                    <a href="profile.php">⚙️ Edit Profile</a>
+                    <a href="profile.php#invitations">📧 Manage Invitations</a>
+                    <a href="profile.php#upgrade">🎓 Become an Advisor</a>
+                </div>
+            </div>
+            
             <!-- Reports & Analysis -->
             <div class="dashboard-card">
                 <h3>📊 Reports & Analysis</h3>

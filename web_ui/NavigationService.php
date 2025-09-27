@@ -343,7 +343,13 @@ class NavigationService {
                 $items[] = [
                     'url' => 'admin_users.php',
                     'label' => '👥 Users',
-                    'active' => $currentPage === 'admin_users.php'
+                    'active' => $currentPage === 'admin_users'
+                ];
+                
+                $items[] = [
+                    'url' => 'admin_advisor_management.php',
+                    'label' => '🤝 Advisors',
+                    'active' => $currentPage === 'admin_advisor'
                 ];
                 
                 $items[] = [
