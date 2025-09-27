@@ -22,6 +22,12 @@
         <testsuite name="MicroCap Test Suite">
             <directory>./tests</directory>
         </testsuite>
+        <testsuite name="Stock Data Unit Tests">
+            <directory>./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Stock Data Integration Tests">
+            <directory>./tests/Integration</directory>
+        </testsuite>
         <testsuite name="All">
             <directory>src/Ksfraser/Database/tests</directory>
             <directory>src/Ksfraser/Auth/tests</directory>
@@ -33,10 +39,18 @@
         <include>
             <directory suffix=".php">src/Ksfraser/Database</directory>
             <directory suffix=".php">src/Ksfraser/Auth</directory>
+            <file>YahooFinancePhp.php</file>
+            <file>StockDataService.php</file>
+            <file>ProgressiveHistoricalLoader.php</file>
+            <directory suffix=".php">web_ui</directory>
         </include>
         <exclude>
             <directory>src/Ksfraser/Database/tests</directory>
             <directory>src/Ksfraser/Auth/tests</directory>
+            <directory>tests</directory>
+            <directory>vendor</directory>
+            <directory>data</directory>
+            <file>web_ui/config.php</file>
         </exclude>
     </coverage>
 

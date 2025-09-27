@@ -4,7 +4,13 @@
 
 ```
 tests/
-├── unit/                    # Unit tests for individual classes
+├── Unit/                    # PHPUnit unit tests for stock data system
+│   ├── YahooFinancePhpTest.php        # Yahoo Finance API client tests
+│   ├── StockDataServiceTest.php       # Service layer tests
+│   └── ProgressiveHistoricalLoaderTest.php # Progressive loader tests
+├── Integration/             # PHPUnit integration tests
+│   └── StockDataSystemIntegrationTest.php # End-to-end system tests
+├── unit/                    # Legacy PHP unit tests
 │   ├── test_users.php       # User management testing
 │   ├── test_userauth.php    # Authentication testing
 │   ├── test_ui_components.php # UI component testing
@@ -16,13 +22,21 @@ tests/
 │   ├── test_enhanced_db.php # Enhanced DB testing
 │   ├── test_db_connection.php # DB connection testing
 │   └── test_navigation_fix.php # Navigation testing
-├── integration/             # Integration tests between components
+├── integration/             # Legacy integration tests between components
+├── coverage/                # Code coverage reports (generated)
+├── results/                 # Test result files (generated)
 └── fixtures/               # Test data and fixtures
 ```
 
 ## Test Categories
 
-### Unit Tests
+### PHPUnit Stock Data System Tests
+- **YahooFinancePhpTest:** API client, data retrieval, CSV generation, error handling
+- **StockDataServiceTest:** Service layer, JSON formatting, data chunking, type conversion
+- **ProgressiveHistoricalLoaderTest:** Database integration, progressive loading, multi-symbol processing
+- **StockDataSystemIntegrationTest:** End-to-end workflows, component interaction, data consistency
+
+### Legacy Unit Tests
 - **Authentication Tests:** `test_userauth.php`, `test_minimal_auth.php`, `test_registration.php`
 - **Database Tests:** `test_simple_db.php`, `test_enhanced_db.php`, `test_db_connection.php`
 - **UI Tests:** `test_ui_components.php`, `test_index_basic.php`, `test_navigation_fix.php`
@@ -30,8 +44,8 @@ tests/
 - **Session Tests:** `test_session_headers.php`
 
 ### Integration Tests
-- **Cross-component testing**
-- **Database-to-UI integration**
+- **Stock Data System Integration:** Component interaction, end-to-end data flow validation
+- **Cross-component testing:** Database-to-UI integration
 - **Authentication flow testing**
 - **Portfolio management workflows**
 
@@ -47,14 +61,31 @@ composer global require phpunit/phpunit
 ```
 
 ### Test Execution
+
+#### PHPUnit Stock Data System Tests
 ```bash
-# Run all unit tests
+# Use the convenient test runner
+php test_runner.php                    # Run all tests
+php test_runner.php unit              # Run unit tests only
+php test_runner.php integration       # Run integration tests only
+php test_runner.php full              # Run all tests with coverage
+
+# Or use PHPUnit directly
+./vendor/bin/phpunit                  # Run all PHPUnit tests
+./vendor/bin/phpunit --testsuite "Stock Data Unit Tests"
+./vendor/bin/phpunit tests/Unit/YahooFinancePhpTest.php
+./vendor/bin/phpunit --coverage-html tests/coverage/html
+```
+
+#### Legacy Tests
+```bash
+# Run legacy unit tests
 phpunit tests/unit/
 
-# Run specific test file
+# Run specific legacy test file
 phpunit tests/unit/test_userauth.php
 
-# Run integration tests
+# Run legacy integration tests
 phpunit tests/integration/
 
 # Run all tests with coverage

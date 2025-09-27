@@ -1,11 +1,24 @@
 # ChatGPT Micro-Cap Experiment 🤖📈
 **A Comprehensive Financial Analysis & Portfolio Management Platform**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![PHP 8.0+](https://img.shields.io/badge/php-8.0+-777BB4.svg)](https://www.php.net/)
-[![Architecture](https://img.shields.io/badge/Architecture-Multi--Layer-green.svg)](#architecture-overview)
+[![License: MIT**Key Architectu### **Backend Technologies**
+- **🐍 Python 3.8+** - Trading engine and technical analysis
+- **🐘 PHP 8.4+** - Web application and stock data service
+- **🗄️ MySQL/SQLite** - Primary database with SQLite option for development
+- **📊 TA-Lib** - Professional-grade technical analysis library
+- **🔧 Composer** - PHP dependency management and autoloading
+- **🌐 Guzzle HTTP** - HTTP client for Yahoo Finance API integrationatures:**
+- **🔄 Dual-Storage Strategy:** Database + CSV for maximum reliability
+- **🏭 DAO Pattern:** Standardized data access with inheritance
+- **📊 PHP-Native Stock Data:** Direct Yahoo Finance API integration via YahooFinancePhp
+- **⚡ Background Processing:** Asynchronous job system for technical analysis
+- **📊 Professional Analytics:** TA-Lib integration with 150+ indicators
+- **💾 Organized Data Storage:** Structured data/ directory with CSV and debug files
+- **🔐 Centralized Authentication:** Session-based security with CSRF protections://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PHP 8.4+](https://img.shields.io/badge/php-8.4+-777BB4.svg)](https://www.php.net/)
+[![Architecture](https://img.shields.io/badge/Architecture-PHP--Native-green.svg)](#architecture-overview)
 [![Documentation](https://img.shields.io/badge/Documentation-Complete-brightgreen.svg)](#documentation)
+[![Stock Data](https://img.shields.io/badge/Stock%20Data-Yahoo%20Finance-blue.svg)](#yahoo-finance-integration)
 
 Welcome to the repository behind my 6-month live trading experiment where ChatGPT manages a real-money micro-cap portfolio. This project has evolved from a simple experiment into a comprehensive financial analysis platform with professional-grade capabilities.
 
@@ -18,10 +31,20 @@ Welcome to the repository behind my 6-month live trading experiment where ChatGP
 ## 📁 **Repository Structure**
 
 ### **Core Components**
+
+#### **Stock Data System (New PHP-Native)**
+- **`YahooFinancePhp.php`** - Native PHP Yahoo Finance client for stock data retrieval
+- **`StockDataService.php`** - Stock data service layer with CSV export capabilities
+- **`ProgressiveHistoricalLoader.php`** - Advanced progressive data loading system
+- **`data/`** - Organized data directory with CSV files and debug outputs
+
+#### **Trading & Analysis System**
 - **`trading_script.py`** - Advanced trading engine with multi-source data fetching
-- **`web_ui/`** - Professional PHP web interface with authentication & portfolio management
 - **`src/Services/Calculators/`** - TA-Lib integration with 150+ technical indicators
 - **`worker.php`** - Background job processing system
+
+#### **Web Interface & Data**
+- **`web_ui/`** - Professional PHP web interface with authentication & portfolio management
 - **`Scripts and CSV Files/`** - Live portfolio data (updated daily)
 
 ### **Documentation & Research**
@@ -95,40 +118,40 @@ The platform implements a **multi-layered architecture** with clear separation o
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                 Presentation Layer                       │
-│  [Web Interface] [Navigation] [Authentication UI]       │
+│  [Web Interface] [AJAX Search] [Progressive Data UI]    │
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────┴───────────────────────────────────┐
 │                Business Logic Layer                      │
-│  [Portfolio Management] [Trade Logic] [User Management] │
+│  [StockDataService] [ProgressiveLoader] [Trade Logic]   │
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────┴───────────────────────────────────┐
 │                 Data Access Layer                       │
-│  [DAO Pattern] [Session Manager] [CSV Handler]          │
+│  [YahooFinancePhp] [StockDAO] [CSV Handler]             │
 └─────────────────────┬───────────────────────────────────┘
                       │
 ┌─────────────────────┴───────────────────────────────────┐
 │                  Storage Layer                          │
-│  [MySQL Database] [CSV Files] [Session Storage]        │
+│  [SQLite Database] [CSV Files] [data/ Directory]       │
 └─────────────────────────────────────────────────────────┘
 ```
 
 **Key Architectural Features:**
-- **🔄 Dual-Storage Strategy:** Database + CSV for maximum reliability
-- **🏭 DAO Pattern:** Standardized data access with inheritance
-- **🔐 Centralized Authentication:** Session-based security with CSRF protection
-- **⚡ Background Processing:** Asynchronous job system for technical analysis
-- **📊 Professional Analytics:** TA-Lib integration with 150+ indicators
+- **🔄 PHP-Native Design:** Pure PHP solution with no external dependencies
+- **🏭 Yahoo Finance Integration:** Direct API access via YahooFinancePhp class
+- **� Progressive Data Loading:** Chunked historical data retrieval system
+- **💾 Organized Data Storage:** Structured data/ directory with CSV and debug files
+- **� Centralized Authentication:** Session-based security with CSRF protection
 
 ## **Tech Stack & Features**
 
 ### **Backend Technologies**
-- **🐍 Python 3.8+** - Core trading engine and automation
-- **🐘 PHP 8.0+** - Web application framework
-- **🗄️ MySQL** - Primary database with connection pooling
-- **📊 TA-Lib** - Professional-grade technical analysis library
-- **🔧 Composer** - PHP dependency management
+- **� PHP 8.4+** - Core application and stock data service
+- **🗄️ SQLite** - Lightweight embedded database
+- **🌐 Guzzle HTTP** - HTTP client for Yahoo Finance API integration
+- **🔧 Composer** - PHP dependency management and autoloading
+- **📊 Yahoo Finance API** - Real-time and historical stock data
 
 ### **Frontend Technologies**  
 - **🎨 HTML5/CSS3** - Responsive web interface
@@ -137,10 +160,13 @@ The platform implements a **multi-layered architecture** with clear separation o
 - **📈 Chart.js** - Financial data visualization
 
 ### **Data & Analytics**
-- **📈 yFinance + pandas** - Multi-source market data fetching
-- **📊 Matplotlib** - Advanced performance visualization  
+- **📈 YahooFinancePhp** - Native PHP Yahoo Finance client
+- **📊 StockDataService** - Unified stock data interface with CSV export
 - **🔍 Technical Analysis** - 150+ indicators via TA-Lib integration
 - **📉 Risk Analytics** - CAPM, Sharpe/Sortino ratios, drawdown analysis
+- **🔍 Progressive Loading** - Chunked historical data retrieval
+- **📊 Matplotlib** - Advanced performance visualization
+- **📉 CSV Analytics** - Portable data format for external analysis
 
 ### **Infrastructure & DevOps**
 - **🔄 Background Jobs** - Asynchronous processing system
@@ -182,17 +208,17 @@ The platform implements a **multi-layered architecture** with clear separation o
 ## 📋 **System Requirements**
 
 ### **Minimum Requirements**
-- **🐍 Python 3.8+** (Python 3.11+ recommended for optimal performance)
-- **🐘 PHP 8.0+** with extensions: `pdo_mysql`, `json`, `curl`, `mbstring`
-- **🗄️ MySQL 5.7+** or **MariaDB 10.3+**
-- **💾 Storage:** ~100MB for application, ~50MB for data files
-- **🌐 Network:** Internet connection for real-time market data
-- **🧠 Memory:** 512MB RAM minimum, 2GB+ recommended
+- ** PHP 8.4+** with extensions: `pdo_sqlite`, `pdo_mysql`, `json`, `curl`, `mbstring`
+- **🗄️ Database:** MySQL 8.0+ (production) or SQLite 3.0+ (development/embedded)
+- **🔧 Composer** for PHP dependency management
+- **💾 Storage:** ~50MB for application, ~20MB for data files
+- **🌐 Network:** Internet connection for Yahoo Finance API access
+- **🧠 Memory:** 256MB RAM minimum, 1GB+ recommended
 
 ### **Recommended Production Environment**
 - **💻 OS:** Linux (Ubuntu 20.04+), Windows 10+, or macOS 10.15+
-- **⚡ CPU:** Multi-core processor for background job processing
-- **🗄️ Database:** MySQL 8.0+ with InnoDB storage engine
+- **⚡ CPU:** Single-core sufficient, multi-core for better performance
+- **🗄️ Database:** MySQL 8.0+ (production) or SQLite (development/embedded)
 - **🔧 Web Server:** Apache 2.4+ or Nginx 1.18+
 - **📊 Monitoring:** System monitoring for production deployments
 
@@ -210,8 +236,11 @@ pip install -r requirements.txt
 # Install PHP dependencies (requires Composer)
 composer install
 
-# Set up database (see Database Setup section)
+# Test the stock data service
+php StockDataService.php AAPL 2024-01-01 2024-01-31 --save-csv
+
 # Configure web server to point to web_ui/ directory
+# Database will be created automatically on first use
 ```
 
 ### **🐳 Docker Installation (Recommended)**
@@ -250,23 +279,23 @@ mv composer.phar /usr/local/bin/composer
 # Install PHP dependencies
 composer install --no-dev --optimize-autoloader
 
-# Install TA-Lib PHP extension
-composer require lupecode/php-trader-native
+# Test stock data service installation
+php YahooFinancePhp.php AAPL 2024-01-01 2024-01-31
 ```
 
-#### **3. Database Setup**
-```sql
--- Create database and user
-CREATE DATABASE chatgpt_trading CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'trading_user'@'localhost' IDENTIFIED BY 'secure_password_here';
-GRANT ALL PRIVILEGES ON chatgpt_trading.* TO 'trading_user'@'localhost';
-FLUSH PRIVILEGES;
+#### **2. Database Setup**
+```bash
+# No manual database setup required!
+# SQLite database will be created automatically in web_ui/stocks.db
+# when the application first runs
 
--- Import database schema
-mysql -u trading_user -p chatgpt_trading < database/schema.sql
+# Optional: Pre-create database directory
+mkdir -p web_ui/
+touch web_ui/stocks.db
+chmod 666 web_ui/stocks.db  # Ensure web server can write
 ```
 
-#### **4. Web Server Configuration**
+#### **3. Web Server Configuration**
 
 **Apache (.htaccess example):**
 ```apache
@@ -295,20 +324,22 @@ server {
 
 ### **⚙️ Configuration**
 
-#### **1. Database Configuration**
-Create `web_ui/config/database.php`:
+#### **1. Stock Data Service Configuration**
+The system uses SQLite by default (no configuration needed), but you can customize:
+
+Create `config/stock_service.php`:
 ```php
 <?php
 return [
-    'host' => 'localhost',
-    'database' => 'chatgpt_trading', 
-    'username' => 'trading_user',
-    'password' => 'your_secure_password',
-    'charset' => 'utf8mb4',
-    'options' => [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ]
+    'yahoo_finance' => [
+        'base_url' => 'https://query1.finance.yahoo.com/v8/finance/chart/',
+        'timeout' => 30,
+        'verify_ssl' => false, // Set to true in production
+    ],
+    'data_storage' => [
+        'csv_directory' => __DIR__ . '/../data/csv',
+        'debug_directory' => __DIR__ . '/../data/debug',
+    ],
 ];
 ```
 
