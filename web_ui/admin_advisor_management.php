@@ -10,12 +10,16 @@ ini_set('display_errors', 1);
 require_once __DIR__ . '/UserAuthDAO.php';
 require_once __DIR__ . '/RBACService.php';
 require_once __DIR__ . '/NavigationManager.php';
+require_once __DIR__ . '/AdvisorManagementHelper.php';
 
 $auth = new UserAuthDAO();
 $rbac = new RBACService();
 
 // Check if user is admin
 $auth->requireAdmin();
+
+// Initialize the advisor management helper (reusable component)
+$advisorHelper = new AdvisorManagementHelper($auth, $rbac);
 
 // Initialize navigation
 $navManager = new NavigationManager();
@@ -60,12 +64,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $filterType = $_GET['filter'] ?? 'all';
 $filterValue = $_GET['value'] ?? '';
 
-// Get all users for dropdowns
-try {
-    $users = $auth->getAllUsers(1000);
-} catch (Exception $e) {
-    $users = [];
-    $message = 'Error loading users: ' . $e->getMessage();
+// Get debug information and user data using the helper
+$debugInfo = $advisorHelper->getDebugInfo();
+
+// Set appropriate message based on available data
+if ($debugInfo['total_users'] === 0) {
+    $message = 'No users found in database. Please create some users first via User Management.';
+    $messageType = 'error';
+} elseif ($debugInfo['advisor_count'] === 0) {
+    $message = 'No advisors found. Users need to have the "advisor" role or admin privileges to be advisors.';
+    $messageType = 'error';
+} elseif ($debugInfo['client_count'] === 0) {
+    $message = 'No clients found. This is unusual - all users should be potential clients.';
     $messageType = 'error';
 }
 
@@ -544,6 +554,15 @@ echo $navigationService->renderNavigationHeader('Advisor Management - Admin Pane
                 </div>
             <?php endif; ?>
             
+            <!-- Debug info -->
+            <div class="message success">
+                <strong>Debug Info:</strong> 
+                Total Users: <?= $debugInfo['total_users'] ?> | 
+                Potential Advisors: <?= $debugInfo['advisor_count'] ?> | 
+                Potential Clients: <?= $debugInfo['client_count'] ?>
+                <br><small>If advisors = 0, users need the "advisor" role. If total users = 0, create users first.</small>
+            </div>
+            
             <!-- New Advisor Assignment -->
             <div class="section">
                 <h2>➕ Assign New Advisor</h2>
@@ -558,26 +577,12 @@ echo $navigationService->renderNavigationHeader('Advisor Management - Admin Pane
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="client_user_id">Client:</label>
-                            <select id="client_user_id" name="client_user_id" required>
-                                <option value="">Select Client...</option>
-                                <?php foreach ($users as $user): ?>
-                                    <option value="<?= $user['id'] ?>">
-                                        <?= htmlspecialchars($user['username']) ?> (<?= htmlspecialchars($user['email']) ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?= $advisorHelper->renderClientSelector('client_user_id', 'client_user_id') ?>
                         </div>
                         
                         <div class="form-group">
                             <label for="advisor_user_id">Advisor:</label>
-                            <select id="advisor_user_id" name="advisor_user_id" required>
-                                <option value="">Select Advisor...</option>
-                                <?php foreach ($users as $user): ?>
-                                    <option value="<?= $user['id'] ?>">
-                                        <?= htmlspecialchars($user['username']) ?> (<?= htmlspecialchars($user['email']) ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <?= $advisorHelper->renderAdvisorSelector('advisor_user_id', 'advisor_user_id') ?>
                         </div>
                         
                         <div class="form-group">
