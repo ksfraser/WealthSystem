@@ -8,13 +8,21 @@
  * - Manage invitations and advisor relationships
  */
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once __DIR__ . '/UserAuthDAO.php';
 require_once __DIR__ . '/InvitationService.php';
 require_once __DIR__ . '/RBACService.php';
+require_once __DIR__ . '/AdvisorManagementHelper.php';
+require_once __DIR__ . '/NavigationManager.php';
+require_once __DIR__ . '/NavigationService.php';
 
 $auth = new UserAuthDAO();
 $invitationService = new InvitationService();
 $rbac = new RBACService();
+$advisorHelper = new AdvisorManagementHelper($auth, $rbac);
 
 // Require login
 $auth->requireLogin();
@@ -54,6 +62,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = handleAdvisorInvitation($invitationService, $userId, $_POST);
             break;
             
+        case 'revoke_advisor':
+            $result = handleRevokeAdvisor($auth, $userId, $_POST);
+            break;
+            
+        case 'delete_invitation':
+            $result = handleDeleteInvitation($invitationService, $userId, $_POST);
+            break;
+            
         default:
             $result = ['success' => false, 'message' => 'Unknown action'];
     }
@@ -70,6 +86,9 @@ $hasUpgradeRequest = !empty($invitationService->getUserUpgradeRequests($userId))
 // Get invitations
 $sentInvitations = $invitationService->getUserSentInvitations($userId);
 $receivedInvitations = $invitationService->getUserReceivedInvitations($userId);
+
+// Get user's advisor relationships
+$userAdvisorRelationships = getUserAdvisorRelationships($auth, $userId);
 
 function handleProfileUpdate($auth, $userId, $postData) {
     try {
@@ -158,6 +177,141 @@ function handleAdvisorInvitation($invitationService, $userId, $postData) {
         return ['success' => false, 'message' => 'Failed to send advisor invitation'];
     }
 }
+
+function handleRevokeAdvisor($auth, $userId, $postData) {
+    try {
+        $relationshipId = intval($postData['relationship_id'] ?? 0);
+        
+        if (!$relationshipId) {
+            return ['success' => false, 'message' => 'Invalid relationship ID'];
+        }
+        
+        // Get PDO connection
+        $reflection = new ReflectionClass($auth);
+        $pdoProperty = $reflection->getProperty('pdo');
+        $pdoProperty->setAccessible(true);
+        $pdo = $pdoProperty->getValue($auth);
+        
+        // First verify this relationship belongs to the current user
+        $verifyStmt = $pdo->prepare("
+            SELECT id, advisor_id, status 
+            FROM user_advisors 
+            WHERE id = ? AND user_id = ?
+        ");
+        $verifyStmt->execute([$relationshipId, $userId]);
+        $relationship = $verifyStmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$relationship) {
+            return ['success' => false, 'message' => 'Advisor relationship not found or access denied'];
+        }
+        
+        if ($relationship['status'] === 'revoked') {
+            return ['success' => false, 'message' => 'Advisor access is already revoked'];
+        }
+        
+        // Revoke the advisor relationship
+        $revokeStmt = $pdo->prepare("
+            UPDATE user_advisors 
+            SET status = 'revoked',
+                revoked_at = NOW(),
+                revoked_by = ?,
+                notes = CONCAT(COALESCE(notes, ''), ' [Revoked by user on ', NOW(), ']')
+            WHERE id = ? AND user_id = ?
+        ");
+        
+        if ($revokeStmt->execute([$userId, $relationshipId, $userId])) {
+            return ['success' => true, 'message' => 'Advisor access has been revoked successfully'];
+        } else {
+            return ['success' => false, 'message' => 'Failed to revoke advisor access'];
+        }
+        
+    } catch (Exception $e) {
+        error_log("Revoke advisor error: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to revoke advisor access'];
+    }
+}
+
+function handleDeleteInvitation($invitationService, $userId, $postData) {
+    try {
+        $invitationId = intval($postData['invitation_id'] ?? 0);
+        
+        if (!$invitationId) {
+            return ['success' => false, 'message' => 'Invalid invitation ID'];
+        }
+        
+        // Get the invitation details to verify ownership
+        $reflection = new ReflectionClass($invitationService);
+        $pdoProperty = $reflection->getProperty('pdo');
+        $pdoProperty->setAccessible(true);
+        $pdo = $pdoProperty->getValue($invitationService);
+        
+        $stmt = $pdo->prepare("
+            SELECT id, inviter_id, status 
+            FROM invitations 
+            WHERE id = ? AND inviter_id = ?
+        ");
+        $stmt->execute([$invitationId, $userId]);
+        $invitation = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$invitation) {
+            return ['success' => false, 'message' => 'Invitation not found or access denied'];
+        }
+        
+        // Only allow deletion of pending invitations
+        if (!in_array($invitation['status'], ['pending', 'pending_client', 'client_approved'])) {
+            return ['success' => false, 'message' => 'Cannot delete invitation with status: ' . $invitation['status']];
+        }
+        
+        // Use the InvitationService method to delete
+        return $invitationService->deleteInvitation($invitationId);
+        
+    } catch (Exception $e) {
+        error_log("Delete invitation error: " . $e->getMessage());
+        return ['success' => false, 'message' => 'Failed to delete invitation'];
+    }
+}
+
+/**
+ * Get advisor relationships for a specific user
+ */
+function getUserAdvisorRelationships($auth, $userId) {
+    try {
+        // Get PDO connection from UserAuthDAO
+        $reflection = new ReflectionClass($auth);
+        $pdoProperty = $reflection->getProperty('pdo');
+        $pdoProperty->setAccessible(true);
+        $pdo = $pdoProperty->getValue($auth);
+        
+        $query = "
+            SELECT 
+                ua.id,
+                ua.user_id as client_id,
+                ua.advisor_id,
+                ua.permission_level,
+                ua.status,
+                ua.accepted_at,
+                ua.invited_at,
+                ua.created_by,
+                ua.notes,
+                advisor.username as advisor_name,
+                advisor.email as advisor_email,
+                creator.username as created_by_name
+            FROM user_advisors ua
+            JOIN users advisor ON ua.advisor_id = advisor.id
+            LEFT JOIN users creator ON ua.created_by = creator.id
+            WHERE ua.user_id = ? AND ua.status IN ('active', 'pending')
+            ORDER BY ua.created_at DESC
+        ";
+        
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+    } catch (Exception $e) {
+        error_log("Error fetching user advisor relationships: " . $e->getMessage());
+        return [];
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -174,8 +328,15 @@ function handleAdvisorInvitation($invitationService, $userId, $postData) {
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Profile content area styling */
+        .profile-wrapper {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            min-height: calc(100vh - 80px);
             padding: 20px;
         }
         
@@ -463,6 +624,13 @@ function handleAdvisorInvitation($invitationService, $userId, $postData) {
     </style>
 </head>
 <body>
+<?php
+// Add navigation header
+$navigationService = new NavigationService();
+echo $navigationService->renderNavigationHeader('My Profile', 'profile');
+?>
+
+<div class="profile-wrapper">
     <div class="container">
         <div class="header">
             <h1>My Profile</h1>
@@ -569,6 +737,119 @@ function handleAdvisorInvitation($invitationService, $userId, $postData) {
                         </form>
                     </div>
                 </div>
+                
+                <!-- Advisor Relationships Section -->
+                <div class="form-section">
+                    <h3>My Advisor Relationships</h3>
+                    <p>These are your current advisor relationships and their access levels to your portfolio.</p>
+                    
+                    <?php if (empty($userAdvisorRelationships)): ?>
+                        <div class="no-data" style="text-align: center; padding: 20px; background: #f8f9fa; border-radius: 6px; color: #6c757d;">
+                            <p>You don't have any advisor relationships yet.</p>
+                            <p>Use the "Invite Advisor" form above to connect with a financial advisor.</p>
+                        </div>
+                    <?php else: ?>
+                        <div class="table-container" style="margin-top: 15px;">
+                            <table style="width: 100%; border-collapse: collapse; background: white; border-radius: 6px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <thead style="background: #f8f9fa;">
+                                    <tr>
+                                        <th style="padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; font-weight: 600;">Advisor</th>
+                                        <th style="padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; font-weight: 600;">Email</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6; font-weight: 600;">Access Level</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6; font-weight: 600;">Status</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6; font-weight: 600;">Since</th>
+                                        <th style="padding: 12px; text-align: left; border-bottom: 1px solid #dee2e6; font-weight: 600;">Notes</th>
+                                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #dee2e6; font-weight: 600;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($userAdvisorRelationships as $relationship): ?>
+                                        <tr style="border-bottom: 1px solid #f1f3f4;">
+                                            <td style="padding: 12px;">
+                                                <strong><?= htmlspecialchars($relationship['advisor_name']) ?></strong>
+                                            </td>
+                                            <td style="padding: 12px;">
+                                                <small><?= htmlspecialchars($relationship['advisor_email']) ?></small>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center;">
+                                                <?php
+                                                $permissionColors = [
+                                                    'read' => '#28a745',
+                                                    'RO' => '#28a745',
+                                                    'read_write' => '#ffc107',
+                                                    'RW' => '#ffc107'
+                                                ];
+                                                $permissionLabels = [
+                                                    'read' => 'Read Only',
+                                                    'RO' => 'Read Only',
+                                                    'read_write' => 'Read/Write',
+                                                    'RW' => 'Read/Write'
+                                                ];
+                                                $permission = $relationship['permission_level'];
+                                                $color = $permissionColors[$permission] ?? '#6c757d';
+                                                $label = $permissionLabels[$permission] ?? ucfirst($permission);
+                                                ?>
+                                                <span class="role-badge" style="background: <?= $color ?>; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: 500;">
+                                                    <?= htmlspecialchars($label) ?>
+                                                </span>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center;">
+                                                <?php
+                                                $statusColors = [
+                                                    'active' => '#28a745',
+                                                    'pending' => '#ffc107',
+                                                    'suspended' => '#dc3545'
+                                                ];
+                                                $statusColor = $statusColors[$relationship['status']] ?? '#6c757d';
+                                                ?>
+                                                <span class="role-badge" style="background: <?= $statusColor ?>; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: 500;">
+                                                    <?= ucfirst(htmlspecialchars($relationship['status'])) ?>
+                                                </span>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center;">
+                                                <?php if ($relationship['accepted_at']): ?>
+                                                    <?= date('M j, Y', strtotime($relationship['accepted_at'])) ?>
+                                                <?php elseif ($relationship['invited_at']): ?>
+                                                    <?= date('M j, Y', strtotime($relationship['invited_at'])) ?>
+                                                    <small style="color: #6c757d; display: block;">(Invited)</small>
+                                                <?php else: ?>
+                                                    <small style="color: #6c757d;">Unknown</small>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td style="padding: 12px;">
+                                                <?php if ($relationship['notes']): ?>
+                                                    <small style="color: #6c757d;"><?= htmlspecialchars($relationship['notes']) ?></small>
+                                                <?php else: ?>
+                                                    <small style="color: #adb5bd;">No notes</small>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td style="padding: 12px; text-align: center;">
+                                                <?php if ($relationship['status'] === 'active' || $relationship['status'] === 'pending'): ?>
+                                                    <form method="POST" style="display: inline;" 
+                                                          onsubmit="return confirm('Are you sure you want to revoke access for this advisor? This action cannot be undone.')">
+                                                        <input type="hidden" name="action" value="revoke_advisor">
+                                                        <input type="hidden" name="relationship_id" value="<?= $relationship['id'] ?>">
+                                                        <button type="submit" 
+                                                                style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
+                                                            Revoke Access
+                                                        </button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <small style="color: #6c757d;">No actions available</small>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div style="margin-top: 10px; padding: 10px; background: #e3f2fd; border-radius: 4px; font-size: 0.9em; color: #1976d2;">
+                            <strong>💡 Tip:</strong> Your advisors can view and manage your portfolio based on their access level. 
+                            To modify or remove advisor access, please contact support or use the admin panel if you have access.
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
             
             <!-- Invitations Tab -->
@@ -580,18 +861,37 @@ function handleAdvisorInvitation($invitationService, $userId, $postData) {
                     <?php else: ?>
                         <div class="invitation-list">
                             <?php foreach ($sentInvitations as $invitation): ?>
-                                <div class="invitation-item">
-                                    <div class="invitation-details">
-                                        <h4><?= htmlspecialchars($invitation['subject']) ?></h4>
-                                        <div class="invitation-meta">
+                                <div class="invitation-item" style="display: flex; align-items: center; justify-content: between; padding: 15px; border: 1px solid #e0e0e0; border-radius: 6px; margin-bottom: 10px; background: white;">
+                                    <div class="invitation-details" style="flex-grow: 1;">
+                                        <h4 style="margin: 0 0 5px 0;"><?= htmlspecialchars($invitation['subject']) ?></h4>
+                                        <div class="invitation-meta" style="color: #6c757d; font-size: 0.9em;">
                                             To: <?= htmlspecialchars($invitation['invitee_email']) ?> • 
                                             Type: <?= ucfirst($invitation['invitation_type']) ?> • 
                                             Sent: <?= date('M j, Y', strtotime($invitation['sent_at'])) ?>
                                         </div>
                                     </div>
-                                    <span class="invitation-status status-<?= $invitation['status'] ?>">
-                                        <?= ucfirst($invitation['status']) ?>
-                                    </span>
+                                    <div style="display: flex; align-items: center; gap: 10px;">
+                                        <span class="invitation-status status-<?= $invitation['status'] ?>" 
+                                              style="padding: 4px 8px; border-radius: 12px; font-size: 0.85em; font-weight: 500; 
+                                                     background: <?= in_array($invitation['status'], ['pending', 'pending_client']) ? '#ffc107' : 
+                                                                    ($invitation['status'] === 'accepted' ? '#28a745' : 
+                                                                    ($invitation['status'] === 'declined' ? '#dc3545' : '#6c757d')) ?>; 
+                                                     color: white;">
+                                            <?= ucfirst($invitation['status']) ?>
+                                        </span>
+                                        
+                                        <?php if (in_array($invitation['status'], ['pending', 'pending_client', 'client_approved'])): ?>
+                                            <form method="POST" style="display: inline;" 
+                                                  onsubmit="return confirm('Are you sure you want to delete this invitation?')">
+                                                <input type="hidden" name="action" value="delete_invitation">
+                                                <input type="hidden" name="invitation_id" value="<?= $invitation['id'] ?>">
+                                                <button type="submit" 
+                                                        style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em;">
+                                                    Delete
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -719,5 +1019,6 @@ function handleAdvisorInvitation($invitationService, $userId, $postData) {
             event.target.classList.add('active');
         }
     </script>
+</div>
 </body>
 </html>
