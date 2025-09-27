@@ -1,13 +1,14 @@
 <?php
-session_start();
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header('Location: ../index.php');
-    exit();
-}
-
-require_once '../includes/config.php';
+require_once '../UserAuthDAO.php';
 require_once '../StockDAO.php';
 require_once '../../UserPortfolioJobManager.php';
+
+// Check authentication and admin status
+$auth = new UserAuthDAO();
+$auth->requireAdmin();
+
+// Get database connection from UserAuthDAO
+$db = $auth->getPdo();
 
 // Initialize StockDAO and Portfolio Job Manager
 $stockDAO = new StockDAO($db);
@@ -525,6 +526,12 @@ if ($portfolioJobManager) {
         <div class="section">
             <h3>Populate Historical Data</h3>
             <p>Populate historical price data for a specific stock symbol.</p>
+            
+            <div style="background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                <strong>💡 Need more than 5 years?</strong> 
+                <a href="progressive_data_loader.php" style="color: #0c5460; font-weight: bold;">Use Progressive Historical Loader</a> 
+                to load complete historical data by overcoming Yahoo Finance limitations.
+            </div>
             
             <form method="POST">
                 <input type="hidden" name="action" value="populate_historical">

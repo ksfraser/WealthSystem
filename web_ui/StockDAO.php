@@ -634,4 +634,65 @@ class StockDAO {
             return [];
         }
     }
+    
+    /**
+     * Get price data count for a symbol
+     */
+    public function getPriceDataCount(string $symbol): int {
+        try {
+            $tableName = $this->dbManager->getTableName($symbol, 'prices');
+            
+            $sql = "SELECT COUNT(*) as count FROM `{$tableName}`";
+            $stmt = $this->pdo->query($sql);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return intval($result['count']);
+            
+        } catch (Exception $e) {
+            error_log("Failed to get price data count for {$symbol}: " . $e->getMessage());
+            return 0;
+        }
+    }
+    
+    /**
+     * Get price data for a specific date
+     */
+    public function getPriceDataForDate(string $symbol, string $date): ?array {
+        try {
+            $tableName = $this->dbManager->getTableName($symbol, 'prices');
+            
+            $sql = "SELECT * FROM `{$tableName}` WHERE DATE(date) = ? LIMIT 1";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$date]);
+            
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result ?: null;
+            
+        } catch (Exception $e) {
+            error_log("Failed to get price data for {$symbol} on {$date}: " . $e->getMessage());
+            return null;
+        }
+    }
+    
+    /**
+     * Get price data with ordering (for progressive loader)
+     */
+    public function getPriceDataOrdered(string $symbol, string $order = 'DESC', ?int $limitCount = null): array {
+        try {
+            $tableName = $this->dbManager->getTableName($symbol, 'prices');
+            
+            $sql = "SELECT * FROM `{$tableName}` ORDER BY date {$order}";
+            
+            if ($limitCount !== null) {
+                $sql .= " LIMIT " . intval($limitCount);
+            }
+            
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+        } catch (Exception $e) {
+            error_log("Failed to get ordered price data for {$symbol}: " . $e->getMessage());
+            return [];
+        }
+    }
 }
