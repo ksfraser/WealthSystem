@@ -1,0 +1,49 @@
+{
+    "name": "ksfraser/trading-system",
+    "description": "Enhanced Trading System with Finance Package - PHP 7.3 Compatible",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.3",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "firebase/php-jwt": "^5.5",
+        "guzzlehttp/guzzle": "^6.5",
+        "symfony/http-client": "^4.4",
+        "symfony/http-foundation": "^4.4",
+        "symfony/security-core": "^4.4",
+        "symfony/security-csrf": "^4.4"
+    },
+    "require-dev": {
+        "phpdocumentor/phpdocumentor": "^2.9",
+        "phpstan/phpstan": "^0.12",
+        "phpunit/phpunit": "^8.5",
+        "squizlabs/php_codesniffer": "^3.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ksfraser\\Auth\\": "src/Ksfraser/Auth/",
+            "Ksfraser\\Finance\\": "src/Ksfraser/Finance/",
+            "Ksfraser\\LLM\\": "src/Ksfraser/LLM/",
+            "App\\": "web_ui/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpstan": "phpstan analyse src/",
+        "cs-check": "phpcs src/",
+        "cs-fix": "phpcbf src/"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
