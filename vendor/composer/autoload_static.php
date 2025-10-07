@@ -39,6 +39,7 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '84520262c35d4be794861fe90a86a158' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/polyfill.php',
         '61ba3e92ef91a7a0f1cc260ebd9290e4' => __DIR__ . '/..' . '/openai-php/client/src/OpenAI.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         'ec07570ca5a812141189b1fa81503674' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert/Functions.php',
@@ -100,6 +101,7 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
             'Symfony\\Component\\Config\\' => 25,
             'Symfony\\Component\\Clock\\' => 24,
             'Symfony\\Component\\Cache\\' => 24,
+            'Services\\Calculators\\' => 21,
         ),
         'P' => 
         array (
@@ -129,6 +131,8 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         ),
         'L' => 
         array (
+            'LupeCode\\phpTraderNative\\' => 25,
+            'LupeCode\\phpTraderNativeTest\\' => 29,
             'League\\Uri\\' => 11,
             'League\\Tactician\\' => 17,
             'League\\MimeTypeDetection\\' => 25,
@@ -360,6 +364,10 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         array (
             0 => __DIR__ . '/..' . '/symfony/cache',
         ),
+        'Services\\Calculators\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/Services/Calculators',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
@@ -416,6 +424,14 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         'Masterminds\\' => 
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
+        ),
+        'LupeCode\\phpTraderNative\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lupecode/php-trader-native/source',
+        ),
+        'LupeCode\\phpTraderNativeTest\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lupecode/php-trader-native/tests',
         ),
         'League\\Uri\\' => 
         array (
@@ -738,7 +754,12 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         'Ksfraser\\Finance\\MarketFactors\\Entities\\SectorPerformance' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/MarketFactors/Entities/SectorPerformance.php',
         'Ksfraser\\Finance\\MarketFactors\\Repository\\MarketFactorsRepository' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/MarketFactors/Repository/MarketFactorsRepository.php',
         'Ksfraser\\Finance\\MarketFactors\\Services\\MarketFactorsService' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/MarketFactors/Services/MarketFactorsService.php',
+        'Ksfraser\\Finance\\Repositories\\AbstractDatabaseRepository' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Repositories/AbstractDatabaseRepository.php',
         'Ksfraser\\Finance\\Repositories\\DatabaseRepository' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Repositories/DatabaseRepository.php',
+        'Ksfraser\\Finance\\Repositories\\MySQLDatabaseRepository' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Repositories/MySQLDatabaseRepository.php',
+        'Ksfraser\\Finance\\Repositories\\MySQLTechnicalTableRepository' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Repositories/MySQLTechnicalTableRepository.php',
+        'Ksfraser\\Finance\\Repositories\\SQLiteTechnicalTableRepository' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Repositories/SQLiteTechnicalTableRepository.php',
+        'Ksfraser\\Finance\\Repositories\\TechnicalTableRepositoryInterface' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Repositories/TechnicalTableRepositoryInterface.php',
         'Ksfraser\\Finance\\Services\\BacktestingService' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Services/BacktestingService.php',
         'Ksfraser\\Finance\\Services\\PortfolioService' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Services/PortfolioService.php',
         'Ksfraser\\Finance\\Services\\StockDataService' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Services/StockDataService.php',
@@ -1262,6 +1283,36 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         'League\\Uri\\UriTemplate\\TemplateCanNotBeExpanded' => __DIR__ . '/..' . '/league/uri/UriTemplate/TemplateCanNotBeExpanded.php',
         'League\\Uri\\UriTemplate\\VarSpecifier' => __DIR__ . '/..' . '/league/uri/UriTemplate/VarSpecifier.php',
         'League\\Uri\\UriTemplate\\VariableBag' => __DIR__ . '/..' . '/league/uri/UriTemplate/VariableBag.php',
+        'LupeCode\\phpTraderNativeTest\\LupeTraderFriendlyTest' => __DIR__ . '/..' . '/lupecode/php-trader-native/tests/LupeTraderFriendlyTest.php',
+        'LupeCode\\phpTraderNativeTest\\LupeTraderTest' => __DIR__ . '/..' . '/lupecode/php-trader-native/tests/LupeTraderTest.php',
+        'LupeCode\\phpTraderNativeTest\\TestingTrait' => __DIR__ . '/..' . '/lupecode/php-trader-native/tests/TestingTrait.php',
+        'LupeCode\\phpTraderNativeTest\\TraderFriendlyTest' => __DIR__ . '/..' . '/lupecode/php-trader-native/tests/TraderFriendlyTest.php',
+        'LupeCode\\phpTraderNativeTest\\TraderTest' => __DIR__ . '/..' . '/lupecode/php-trader-native/tests/TraderTest.php',
+        'LupeCode\\phpTraderNative\\LupeTrader' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/LupeTrader.php',
+        'LupeCode\\phpTraderNative\\LupeTraderFriendly' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/LupeTraderFriendly.php',
+        'LupeCode\\phpTraderNative\\TALib\\Classes\\CandleSetting' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Classes/CandleSetting.php',
+        'LupeCode\\phpTraderNative\\TALib\\Classes\\MoneyFlow' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Classes/MoneyFlow.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\Core' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/Core.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\CycleIndicators' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/CycleIndicators.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\Lookback' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/Lookback.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\MathOperators' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/MathOperators.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\MathTransform' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/MathTransform.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\MomentumIndicators' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/MomentumIndicators.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\OverlapStudies' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/OverlapStudies.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\PatternRecognition' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/PatternRecognition.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\PriceTransform' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/PriceTransform.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\StatisticFunctions' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/StatisticFunctions.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\VolatilityIndicators' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/VolatilityIndicators.php',
+        'LupeCode\\phpTraderNative\\TALib\\Core\\VolumeIndicators' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Core/VolumeIndicators.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\CandleSettingType' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/CandleSettingType.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\Compatibility' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/Compatibility.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\MovingAverageType' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/MovingAverageType.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\RangeType' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/RangeType.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\ReturnCode' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/ReturnCode.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\ReturnMessages' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/ReturnMessages.php',
+        'LupeCode\\phpTraderNative\\TALib\\Enum\\UnstablePeriodFunctionID' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TALib/Enum/UnstablePeriodFunctionID.php',
+        'LupeCode\\phpTraderNative\\Trader' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/Trader.php',
+        'LupeCode\\phpTraderNative\\TraderFriendly' => __DIR__ . '/..' . '/lupecode/php-trader-native/source/TraderFriendly.php',
         'Masterminds\\HTML5' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5.php',
         'Masterminds\\HTML5\\Elements' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5/Elements.php',
         'Masterminds\\HTML5\\Entities' => __DIR__ . '/..' . '/masterminds/html5/src/HTML5/Entities.php',
@@ -2746,6 +2797,8 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Services\\Calculators\\BatchTechnicalCalculationService' => __DIR__ . '/../..' . '/src/Services/Calculators/BatchTechnicalCalculationService.php',
+        'Services\\Calculators\\TALibCalculators' => __DIR__ . '/../..' . '/src/Services/Calculators/TALibCalculators.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Symfony\\Component\\Cache\\Adapter\\AbstractAdapter' => __DIR__ . '/..' . '/symfony/cache/Adapter/AbstractAdapter.php',
         'Symfony\\Component\\Cache\\Adapter\\AbstractTagAwareAdapter' => __DIR__ . '/..' . '/symfony/cache/Adapter/AbstractTagAwareAdapter.php',

@@ -10,6 +10,7 @@
         "ext-pdo": "*",
         "firebase/php-jwt": "^6.0",
         "guzzlehttp/guzzle": "^7.0",
+        "lupecode/php-trader-native": "^2.2",
         "openai-php/client": "^0.8.0",
         "symfony/http-client": "^6.4",
         "symfony/http-foundation": "^6.0",
@@ -25,10 +26,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Ksfraser\\Auth\\": "src/Ksfraser/Auth/",
-            "Ksfraser\\Finance\\": "src/Ksfraser/Finance/",
-            "Ksfraser\\LLM\\": "src/Ksfraser/LLM/",
-            "App\\": "web_ui/"
+        "Ksfraser\\Auth\\": "src/Ksfraser/Auth/",
+        "Ksfraser\\Finance\\": "src/Ksfraser/Finance/",
+        "Ksfraser\\LLM\\": "src/Ksfraser/LLM/",
+        "Services\\Calculators\\": "src/Services/Calculators/",
+        "App\\": "web_ui/"
         }
     },
     "autoload-dev": {

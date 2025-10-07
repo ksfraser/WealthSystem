@@ -18,14 +18,17 @@ class CardComponent implements ComponentInterface {
     }
     
     public function toHtml() {
-        $iconHtml = $this->cardDto->icon ? "<span class='card-icon'>{$this->cardDto->icon}</span> " : '';
+        $type = isset($this->cardDto->type) ? htmlspecialchars($this->cardDto->type, ENT_QUOTES, 'UTF-8') : '';
+        $title = isset($this->cardDto->title) ? htmlspecialchars($this->cardDto->title, ENT_QUOTES, 'UTF-8') : '';
+        $iconHtml = $this->cardDto->icon ? "<span class='card-icon' aria-hidden='true'>{$this->cardDto->icon}</span> " : '';
         $actionsHtml = $this->renderActions();
-        
+        $content = $this->cardDto->content;
+        // ARIA role and label for accessibility
         return "
-        <div class='card {$this->cardDto->type}'>
-            <h3>{$iconHtml}{$this->cardDto->title}</h3>
+        <div class='card {$type}' role='region' aria-label='{$title}'>
+            <h3>{$iconHtml}{$title}</h3>
             <div class='card-content'>
-                {$this->cardDto->content}
+                {$content}
             </div>
             {$actionsHtml}
         </div>";

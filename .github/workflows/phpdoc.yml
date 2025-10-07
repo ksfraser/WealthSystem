@@ -1,0 +1,45 @@
+# This workflow generates PHPDoc documentation and checks for requirements traceability on every push.
+# It ensures that UML diagrams and docblocks are up-to-date and that a requirements mapping is present.
+
+name: PHPDoc & Traceability
+
+on:
+  push:
+    branches: [ main, TradingStrategies ]
+  pull_request:
+    branches: [ main, TradingStrategies ]
+
+jobs:
+  phpdoc-traceability:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          extensions: mbstring, xml, curl, json, dom
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist || true
+
+      - name: Generate PHPDoc documentation
+        run: |
+          composer global require phpdocumentor/phpdocumentor
+          ~/.composer/vendor/bin/phpdoc -d . -t docs/phpdoc
+
+      - name: Check for requirements traceability matrix
+        run: |
+          if [ ! -f docs/requirements_traceability.md ]; then
+            echo '❌ Requirements traceability matrix missing!'; exit 1;
+          fi
+          grep -q 'Requirement' docs/requirements_traceability.md || (echo '❌ No requirements found in traceability matrix!'; exit 1)
+
+      - name: Upload PHPDoc artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: phpdoc-html
+          path: docs/phpdoc

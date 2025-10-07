@@ -247,7 +247,7 @@ MIT License - see LICENSE file for details.
 - [ ] Add chart/visualization components
 - [ ] Add pagination component
 - [ ] Add breadcrumb component
-- [ ] Improve accessibility (ARIA labels)
+- [x] Improve accessibility (ARIA labels)
 - [ ] Add JavaScript interaction helpers
 - [ ] Create more themes
-- [ ] Add RTL language support
+- [x] Add RTL language support

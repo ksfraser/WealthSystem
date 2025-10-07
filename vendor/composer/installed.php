@@ -3,7 +3,7 @@
         'name' => 'ksfraser/trading-system',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'dfae2c591d1dd950f10f4d1289403713ae744e1c',
+        'reference' => '68acd52bca1799bfe71e2320184d14cc235a9cf8',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -112,7 +112,7 @@
         'ksfraser/trading-system' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'dfae2c591d1dd950f10f4d1289403713ae744e1c',
+            'reference' => '68acd52bca1799bfe71e2320184d14cc235a9cf8',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -189,6 +189,15 @@
             'install_path' => __DIR__ . '/../league/uri-interfaces',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'lupecode/php-trader-native' => array(
+            'pretty_version' => 'v2.2.0',
+            'version' => '2.2.0.0',
+            'reference' => '45f2ab3d98e7b2f6b4568ac791ad8c9a50564cc4',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../lupecode/php-trader-native',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'masterminds/html5' => array(
             'pretty_version' => '2.10.0',

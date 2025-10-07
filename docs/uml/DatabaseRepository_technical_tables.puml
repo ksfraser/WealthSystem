@@ -1,0 +1,7 @@
+@startuml
+class DatabaseRepository {
+    +getSymbolTechnicalTableName(symbol: string): string
+    +createSymbolTechnicalTable(symbol: string): bool
+    +saveSymbolTechnicalValues(symbol: string, values: array): bool
+}
+@enduml

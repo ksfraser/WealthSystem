@@ -27,6 +27,7 @@ class PageRenderer implements RendererInterface {
         $this->options = array_merge([
             'theme' => 'default',
             'lang' => 'en',
+            'dir' => 'ltr', // RTL support
             'charset' => 'UTF-8',
             'viewport' => 'width=device-width, initial-scale=1.0',
             'meta' => [],
@@ -42,8 +43,10 @@ class PageRenderer implements RendererInterface {
         $contentHtml = $this->renderComponents();
         $scripts = $this->renderScripts();
         
+        $lang = isset($this->options['lang']) ? htmlspecialchars($this->options['lang'], ENT_QUOTES, 'UTF-8') : 'en';
+        $dir = isset($this->options['dir']) ? htmlspecialchars($this->options['dir'], ENT_QUOTES, 'UTF-8') : 'ltr';
         return "<!DOCTYPE html>
-<html lang='{$this->options['lang']}'>
+<html lang='{$lang}' dir='{$dir}'>
 <head>
     <meta charset='{$this->options['charset']}'>
     <meta name='viewport' content='{$this->options['viewport']}'>
@@ -53,7 +56,7 @@ class PageRenderer implements RendererInterface {
 </head>
 <body>
     {$navigationHtml}
-    <div class='container'>
+    <div class='container' role='main'>
         {$contentHtml}
     </div>
     {$scripts}
