@@ -124,21 +124,22 @@ class StockDataService {
         $currentStart = new DateTime($startDate);
         $finalEnd = new DateTime($endDate);
         
-        while ($currentStart < $finalEnd) {
+        while ($currentStart <= $finalEnd) {
             $currentEnd = clone $currentStart;
             $currentEnd->add(new DateInterval("P{$chunkMonths}M"));
-            
             if ($currentEnd > $finalEnd) {
                 $currentEnd = $finalEnd;
             }
-            
             $chunks[] = [
                 'start' => $currentStart->format('Y-m-d'),
                 'end' => $currentEnd->format('Y-m-d')
             ];
-            
+            // Next chunk starts the day after this chunk's end
             $currentStart = clone $currentEnd;
             $currentStart->add(new DateInterval('P1D'));
+            if ($currentStart > $finalEnd) {
+                break;
+            }
         }
         
         return $chunks;

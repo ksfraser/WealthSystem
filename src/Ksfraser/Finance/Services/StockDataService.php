@@ -15,6 +15,47 @@ use Ksfraser\Finance\Interfaces\LLMProviderInterface;
 use DateTime;
 
 class StockDataService
+
+    /**
+     * Get stock OHLCV data and technical indicators for a symbol and period
+     *
+     * @param string $symbol
+     * @param string $period
+     * @param array $indicators
+     * @param array $params
+     * @return array [ 'ohlcv' => [...], 'indicators' => [...] ]
+     */
+    public function getStockDataWithIndicators(string $symbol, string $period = '1y', array $indicators = ['rsi','sma','ema','macd','bbands'], array $params = []): array
+    {
+        // Get OHLCV data using existing logic
+        $ohlcv = $this->getStockData($symbol, $period);
+        // Only calculate indicators if we have enough data
+        $indicatorsOut = [];
+        if (!empty($ohlcv) && is_array($ohlcv) && isset($ohlcv[0]['Open'])) {
+            // Normalize to expected format for TALibCalculators
+            $ohlcvRows = [];
+            foreach ($ohlcv as $row) {
+                // Ensure all required keys exist
+                if (isset($row['Date'], $row['Open'], $row['High'], $row['Low'], $row['Close'], $row['Volume'])) {
+                    $ohlcvRows[] = [
+                        'Date' => $row['Date'],
+                        'Open' => $row['Open'],
+                        'High' => $row['High'],
+                        'Low' => $row['Low'],
+                        'Close' => $row['Close'],
+                        'Volume' => $row['Volume'],
+                    ];
+                }
+            }
+            if (count($ohlcvRows) > 0) {
+                $indicatorsOut = \Services\Calculators\TALibCalculators::calculateIndicators($ohlcvRows, $indicators, $params);
+            }
+        }
+        return [
+            'ohlcv' => $ohlcv,
+            'indicators' => $indicatorsOut
+        ];
+    }
 {
     private $dataSources;
     private $repository;
@@ -361,5 +402,46 @@ class StockDataService
             error_log("Error getting stock data for {$symbol}: " . $e->getMessage());
             return [];
         }
+    }
+
+    /**
+     * Get stock OHLCV data and technical indicators for a symbol and period
+     *
+     * @param string $symbol
+     * @param string $period
+     * @param array $indicators
+     * @param array $params
+     * @return array [ 'ohlcv' => [...], 'indicators' => [...] ]
+     */
+    public function getStockDataWithIndicators(string $symbol, string $period = '1y', array $indicators = ['rsi','sma','ema','macd','bbands'], array $params = []): array
+    {
+        // Get OHLCV data using existing logic
+        $ohlcv = $this->getStockData($symbol, $period);
+        // Only calculate indicators if we have enough data
+        $indicatorsOut = [];
+        if (!empty($ohlcv) && is_array($ohlcv) && isset($ohlcv[0]['Open'])) {
+            // Normalize to expected format for TALibCalculators
+            $ohlcvRows = [];
+            foreach ($ohlcv as $row) {
+                // Ensure all required keys exist
+                if (isset($row['Date'], $row['Open'], $row['High'], $row['Low'], $row['Close'], $row['Volume'])) {
+                    $ohlcvRows[] = [
+                        'Date' => $row['Date'],
+                        'Open' => $row['Open'],
+                        'High' => $row['High'],
+                        'Low' => $row['Low'],
+                        'Close' => $row['Close'],
+                        'Volume' => $row['Volume'],
+                    ];
+                }
+            }
+            if (count($ohlcvRows) > 0) {
+                $indicatorsOut = \Services\Calculators\TALibCalculators::calculateIndicators($ohlcvRows, $indicators, $params);
+            }
+        }
+        return [
+            'ohlcv' => $ohlcv,
+            'indicators' => $indicatorsOut
+        ];
     }
 }

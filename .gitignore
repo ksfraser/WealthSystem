@@ -75,4 +75,13 @@ src/Ksfraser/Finance/2000/
 #exclude required composer packages
 vendor/
 
+# Ignore phpDocumentor generated HTML documentation
+/docs/
+/doc/
+/html/
+/public/
+phpdoc-html/
+phpdoc/
+site/
+
 .phpdoc/

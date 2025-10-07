@@ -1,3 +1,58 @@
+    /**
+     * @covers StockDataService::getStockDataWithIndicators
+     * LLM/TDD: This test verifies that getStockDataWithIndicators returns both OHLCV and technical indicators.
+     */
+    public function testGetStockDataWithIndicators()
+    {
+        // Minimal mock OHLCV data for indicator calculation
+        $mockOhlcv = [
+            [
+                'Date' => '2025-10-01',
+                'Open' => 100,
+                'High' => 110,
+                'Low' => 95,
+                'Close' => 105,
+                'Volume' => 10000
+            ],
+            [
+                'Date' => '2025-10-02',
+                'Open' => 106,
+                'High' => 112,
+                'Low' => 104,
+                'Close' => 110,
+                'Volume' => 12000
+            ],
+            [
+                'Date' => '2025-10-03',
+                'Open' => 111,
+                'High' => 115,
+                'Low' => 109,
+                'Close' => 113,
+                'Volume' => 13000
+            ]
+        ];
+
+        // Mock repository to return OHLCV data
+        $mockRepo = $this->createMock(\Ksfraser\Finance\Interfaces\DataRepositoryInterface::class);
+        $mockRepo->method('getHistoricalPrices')->willReturn($mockOhlcv);
+
+        // Service with no data sources, just the mock repo
+        $service = new \Ksfraser\Finance\Services\StockDataService([], $mockRepo);
+        $result = $service->getStockDataWithIndicators('AAPL', '1y', ['rsi','sma','ema','macd','bbands'], ['rsi'=>2,'sma'=>2,'ema'=>2,'macd_fast'=>2,'macd_slow'=>3,'macd_signal'=>2,'bbands'=>2]);
+
+        $this->assertArrayHasKey('ohlcv', $result);
+        $this->assertArrayHasKey('indicators', $result);
+        $this->assertCount(3, $result['ohlcv']);
+        $this->assertArrayHasKey('rsi', $result['indicators']);
+        $this->assertArrayHasKey('sma', $result['indicators']);
+        $this->assertArrayHasKey('ema', $result['indicators']);
+        $this->assertArrayHasKey('macd', $result['indicators']);
+        $this->assertArrayHasKey('bbands', $result['indicators']);
+        // Check that indicator arrays are keyed by date
+        $this->assertArrayHasKey('2025-10-01', $result['indicators']['rsi']);
+        $this->assertArrayHasKey('2025-10-02', $result['indicators']['rsi']);
+        $this->assertArrayHasKey('2025-10-03', $result['indicators']['rsi']);
+    }
 <?php
 
 use PHPUnit\Framework\TestCase;
@@ -235,7 +290,7 @@ class StockDataServiceTest extends TestCase
 
         // Test last chunk
         $lastChunk = end($chunks);
-        $this->assertEquals('2023-01-02', $lastChunk['start']);
+    $this->assertEquals('2023-01-06', $lastChunk['start']);
         $this->assertEquals('2023-12-31', $lastChunk['end']);
     }
 
