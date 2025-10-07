@@ -14,13 +14,30 @@ class NavigationService {
     
     // Allow test injection only if TEST_MODE_9f3b2c is defined
     public function __construct($testAuth = null) {
-        if (defined('TEST_MODE_9f3b2c') && is_array($testAuth)) {
-            $this->isLoggedIn = $testAuth['isLoggedIn'] ?? false;
-            $this->currentUser = $testAuth['currentUser'] ?? null;
-            $this->isAdmin = $testAuth['isAdmin'] ?? false;
-        } else {
-            $this->initializeAuth();
+        if (defined('TEST_MODE_9f3b2c')) {
+            // Always use static test-mode state if defined
+            global $NAVSERVICE_TEST_AUTH;
+            $auth = is_array($testAuth) ? $testAuth : (is_array($NAVSERVICE_TEST_AUTH ?? null) ? $NAVSERVICE_TEST_AUTH : null);
+            if (is_array($auth)) {
+                $this->isLoggedIn = $auth['isLoggedIn'] ?? false;
+                $this->currentUser = $auth['currentUser'] ?? null;
+                $this->isAdmin = $auth['isAdmin'] ?? false;
+                file_put_contents(__DIR__ . '/debug_navservice_ctor.json', json_encode([
+                    'ctor' => 'test',
+                    'isLoggedIn' => $this->isLoggedIn,
+                    'currentUser' => $this->currentUser,
+                    'isAdmin' => $this->isAdmin
+                ], JSON_PRETTY_PRINT));
+                return;
+            }
         }
+        $this->initializeAuth();
+        file_put_contents(__DIR__ . '/debug_navservice_ctor.json', json_encode([
+            'ctor' => 'prod',
+            'isLoggedIn' => $this->isLoggedIn,
+            'currentUser' => $this->currentUser,
+            'isAdmin' => $this->isAdmin
+        ], JSON_PRETTY_PRINT));
     }
     
     private function initializeAuth() {
@@ -296,6 +313,11 @@ class NavigationService {
      * This is the SINGLE method that determines user display logic
      */
     public function renderUserSection(): string {
+        file_put_contents(__DIR__ . '/debug_navservice_renderUserSection.json', json_encode([
+            'isLoggedIn' => $this->isLoggedIn,
+            'currentUser' => $this->currentUser,
+            'isAdmin' => $this->isAdmin
+        ], JSON_PRETTY_PRINT));
         if ($this->isLoggedIn && $this->currentUser) {
             // Authenticated user with logout dropdown
             $username = htmlspecialchars($this->currentUser['username']);

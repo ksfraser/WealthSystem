@@ -191,20 +191,25 @@
 </style>
 </head>
 <body>
-    <div class="nav-header"><div class="nav-container"><h1 class="nav-title">Enhanced Trading System Dashboard</h1><div class="nav-user">
+    <div class="nav-header"><div class="nav-container"><h1 class="nav-title">Enhanced Trading System Dashboard</h1><div class="nav-user"><div class="nav-links"><div class="portfolio-dropdown"><button class="portfolio-dropdown-toggle" onclick="togglePortfolioDropdown()">📈 My Portfolio ▼</button><div class="portfolio-dropdown-menu" id="portfolioDropdownMenu"><a href="MyPortfolio.php" class="dropdown-item">🏠 My Portfolio</a><a href="portfolios.php" class="dropdown-item">📈 Manage Portfolios</a><a href="trades.php" class="dropdown-item">📋 Trades</a></div></div><div class="stocks-dropdown"><button class="stocks-dropdown-toggle" onclick="toggleStocksDropdown()">� Stocks ▼</button><div class="stocks-dropdown-menu" id="stocksDropdownMenu"><a href="stock_search.php" class="dropdown-item">🔍 Stock Search</a><a href="stock_analysis.php" class="dropdown-item">🤖 Stock Analysis</a></div></div><a href="analytics.php" class="nav-link">📊 Analytics</a></div>
             <div class="user-dropdown">
                 <button class="user-dropdown-toggle" onclick="toggleUserDropdown()">
-                    👤 Guest ▼
+                    👤 &lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt; ▼
                 </button>
                 <div class="user-dropdown-menu" id="userDropdownMenu">
-                    <a href="login.php" class="dropdown-item">🚪 Login</a>
-                    <a href="register.php" class="dropdown-item">📝 Register</a>
+                    <a href="profile.php" class="dropdown-item">⚙️ Edit Profile</a>
+                    <a href="change_password.php" class="dropdown-item">🔐 Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a href="system_status.php" class="dropdown-item">📊 System Status</a>
+                    <div class="dropdown-divider"></div>
+                    <a href="logout.php" class="dropdown-item">🚪 Logout</a>
                 </div>
             </div></div></div></div><link rel="stylesheet" href="css/nav-core.css">
+<link rel="stylesheet" href="css/nav-links.css">
 <link rel="stylesheet" href="css/dropdown-base.css">
 <link rel="stylesheet" href="css/user-dropdown.css">
+<link rel="stylesheet" href="css/portfolio-dropdown.css">
+<link rel="stylesheet" href="css/stocks-dropdown.css">
 <link rel="stylesheet" href="css/nav-responsive.css">
 
         <script>

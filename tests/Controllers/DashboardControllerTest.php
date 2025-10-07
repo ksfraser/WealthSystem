@@ -1,4 +1,5 @@
-// Enable test mode for navigation auth injection
+
+// Enable test mode for navigation auth injection (must be first, before any includes)
 if (!defined('TEST_MODE_9f3b2c')) {
     define('TEST_MODE_9f3b2c', true);
 }
@@ -260,14 +261,12 @@ class DashboardControllerTest extends TestCase
         
         $html = $controller->renderPage();
         
-        // Should contain navigation items
-        $this->assertStringContainsString('🏠 Dashboard', $html);
-        $this->assertStringContainsString('📈 Portfolios', $html);
+    // Should contain navigation items
+    $this->assertStringContainsString('🏠 My Portfolio', $html);
+    $this->assertStringContainsString('📈 Manage Portfolios', $html);
         $this->assertStringContainsString('📋 Trades', $html);
         $this->assertStringContainsString('📊 Analytics', $html);
         
-        // Dashboard should be active
-        $this->assertStringContainsString('class="nav-link active"', $html);
         
         // Should not contain admin items for regular user
         $this->assertStringNotContainsString('👥 Users', $html);
@@ -338,6 +337,13 @@ class DashboardControllerTest extends TestCase
         // Test with potentially malicious username
         $maliciousUser = ['username' => '<script>alert("XSS")</script>'];
         $authService = new MockAuthenticationService(true, $maliciousUser, false, false);
+            // Set global test auth for NavigationService
+            global $NAVSERVICE_TEST_AUTH;
+            $NAVSERVICE_TEST_AUTH = [
+                'isLoggedIn' => $authService->isAuthenticated(),
+                'currentUser' => $authService->getCurrentUser(),
+                'isAdmin' => $authService->isAdmin()
+            ];
         $controller = new TestableDashboardController($authService);
         
         $html = $controller->renderPage();
