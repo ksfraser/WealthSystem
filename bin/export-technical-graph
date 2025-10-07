@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+// bin/export-technical-graph
+// Entrypoint for Symfony Console graph export command
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Ksfraser\CLI\ExportGraphCommand;
+
+$application = new Application();
+$application->add(new ExportGraphCommand());
+$application->setDefaultCommand('export:graph', true);
+$application->run();

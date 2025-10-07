@@ -76,6 +76,7 @@ return array(
     'League\\CommonMark\\' => array($vendorDir . '/league/commonmark/src'),
     'Ksfraser\\LLM\\' => array($baseDir . '/src/Ksfraser/LLM'),
     'Ksfraser\\Finance\\' => array($baseDir . '/src/Ksfraser/Finance'),
+    'Ksfraser\\CLI\\' => array($baseDir . '/src/CLI'),
     'Ksfraser\\Auth\\' => array($baseDir . '/src/Ksfraser/Auth'),
     'Jean85\\' => array($vendorDir . '/jean85/pretty-package-versions/src'),
     'Http\\Message\\MultipartStream\\' => array($vendorDir . '/php-http/multipart-stream-builder/src'),

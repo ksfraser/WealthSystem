@@ -12,8 +12,15 @@ class NavigationService {
     private $currentUser = null;
     private $isAdmin = false;
     
-    public function __construct() {
-        $this->initializeAuth();
+    // Allow test injection only if TEST_MODE_9f3b2c is defined
+    public function __construct($testAuth = null) {
+        if (defined('TEST_MODE_9f3b2c') && is_array($testAuth)) {
+            $this->isLoggedIn = $testAuth['isLoggedIn'] ?? false;
+            $this->currentUser = $testAuth['currentUser'] ?? null;
+            $this->isAdmin = $testAuth['isAdmin'] ?? false;
+        } else {
+            $this->initializeAuth();
+        }
     }
     
     private function initializeAuth() {

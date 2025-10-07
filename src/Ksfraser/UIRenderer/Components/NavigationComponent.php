@@ -15,12 +15,16 @@ class NavigationComponent implements ComponentInterface {
     /** @var NavigationService */
     private $navigationService;
     
-    public function __construct(NavigationDto $navigationDto) {
+    public function __construct(NavigationDto $navigationDto, $testAuth = null) {
         $this->navigationDto = $navigationDto;
-        
         // Include and use centralized navigation service
         require_once dirname(__DIR__, 4) . '/web_ui/NavigationService.php';
-        $this->navigationService = new \NavigationService();
+        // Only allow test auth injection if TEST_MODE_9f3b2c is defined
+        if (defined('TEST_MODE_9f3b2c') && is_array($testAuth)) {
+            $this->navigationService = new \NavigationService($testAuth);
+        } else {
+            $this->navigationService = new \NavigationService();
+        }
     }
     
     public function toHtml() {

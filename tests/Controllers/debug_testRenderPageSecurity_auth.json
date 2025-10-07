@@ -1,0 +1,7 @@
+{
+    "isLoggedIn": true,
+    "currentUser": {
+        "username": "<script>alert(\"XSS\")<\/script>"
+    },
+    "isAdmin": false
+}

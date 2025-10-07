@@ -12,6 +12,7 @@
         "guzzlehttp/guzzle": "^7.0",
         "lupecode/php-trader-native": "^2.2",
         "openai-php/client": "^0.8.0",
+        "symfony/console": "^6.4",
         "symfony/http-client": "^6.4",
         "symfony/http-foundation": "^6.0",
         "symfony/password-hasher": "^7.3",
@@ -26,11 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-        "Ksfraser\\Auth\\": "src/Ksfraser/Auth/",
-        "Ksfraser\\Finance\\": "src/Ksfraser/Finance/",
-        "Ksfraser\\LLM\\": "src/Ksfraser/LLM/",
-        "Services\\Calculators\\": "src/Services/Calculators/",
-        "App\\": "web_ui/"
+    "Ksfraser\\Auth\\": "src/Ksfraser/Auth/",
+    "Ksfraser\\Finance\\": "src/Ksfraser/Finance/",
+    "Ksfraser\\LLM\\": "src/Ksfraser/LLM/",
+    "Ksfraser\\CLI\\": "src/CLI/",
+    "Services\\Calculators\\": "src/Services/Calculators/",
+    "App\\": "web_ui/"
         }
     },
     "autoload-dev": {

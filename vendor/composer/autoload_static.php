@@ -145,6 +145,7 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         array (
             'Ksfraser\\LLM\\' => 13,
             'Ksfraser\\Finance\\' => 17,
+            'Ksfraser\\CLI\\' => 13,
             'Ksfraser\\Auth\\' => 14,
         ),
         'J' => 
@@ -470,6 +471,10 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         array (
             0 => __DIR__ . '/../..' . '/src/Ksfraser/Finance',
         ),
+        'Ksfraser\\CLI\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src/CLI',
+        ),
         'Ksfraser\\Auth\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src/Ksfraser/Auth',
@@ -732,6 +737,9 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         'Ksfraser\\Auth\\AuthMiddleware' => __DIR__ . '/../..' . '/src/Ksfraser/Auth/AuthMiddleware.php',
         'Ksfraser\\Auth\\AuthUI' => __DIR__ . '/../..' . '/src/Ksfraser/Auth/AuthUI.php',
         'Ksfraser\\Auth\\AuthUtils' => __DIR__ . '/../..' . '/src/Ksfraser/Auth/AuthUtils.php',
+        'Ksfraser\\CLI\\BaseCLIOpts' => __DIR__ . '/../..' . '/src/CLI/BaseCLIOpts.php',
+        'Ksfraser\\CLI\\ExportGraphCommand' => __DIR__ . '/../..' . '/src/CLI/ExportGraphCommand.php',
+        'Ksfraser\\CLI\\GraphExportCLIOpts' => __DIR__ . '/../..' . '/src/CLI/GraphExportCLIOpts.php',
         'Ksfraser\\Finance\\Backtesting\\BacktestingEngine' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Backtesting/BacktestingEngine.php',
         'Ksfraser\\Finance\\Backtesting\\Interfaces\\BacktestingEngineInterface' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Backtesting/Interfaces/BacktestingEngineInterface.php',
         'Ksfraser\\Finance\\Constants\\StrategyConstants' => __DIR__ . '/../..' . '/src/Ksfraser/Finance/Constants/StrategyConstants.php',
@@ -3957,6 +3965,7 @@ class ComposerStaticInitfbee484fbcb98ba45566f17e8eb69e9b
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'Symfony\\Polyfill\\Php83\\Php83' => __DIR__ . '/..' . '/symfony/polyfill-php83/Php83.php',
+        'Tests\\CLI\\BaseCLIOptsTest' => __DIR__ . '/../..' . '/tests/CLI/BaseCLIOptsTest.php',
         'Tests\\Unit\\Finance\\MarketFactors\\ForexRateTest' => __DIR__ . '/../..' . '/tests/Unit/Finance/MarketFactors/ForexRateTest.php',
         'Tests\\Unit\\Finance\\MarketFactors\\IndexPerformanceTest' => __DIR__ . '/../..' . '/tests/Unit/Finance/MarketFactors/IndexPerformanceTest.php',
         'Tests\\Unit\\Finance\\MarketFactors\\MarketFactorTest' => __DIR__ . '/../..' . '/tests/Unit/Finance/MarketFactors/MarketFactorTest.php',

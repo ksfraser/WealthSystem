@@ -376,7 +376,38 @@ Alert Thresholds:
   - Liquidity risk monitoring
 ```
 
----
+
+#### **Advanced Technical Analytics & LLM Integration (FR-004.6)**
+```yaml
+Priority: High
+Description: Real-time technical analysis, candlestick analytics, accuracy metrics, historical analysis, and LLM-driven news search in the UI.
+
+UI Requirements:
+  - Real-time interactive graphs for technical indicators (RSI, MACD, SMA, EMA, etc.) per symbol
+  - Display of candlestick pattern occurrences on price charts
+  - Visualization of candlestick prediction accuracy (per pattern and overall)
+  - Historical performance analytics by candlestick type (win/loss, accuracy, frequency)
+  - Per-symbol technical indicator tables with batch calculation support
+  - User-selectable timeframes and dynamic chart updates
+
+Analytics Requirements:
+  - Calculation and display of indicator/price mismatches (e.g., RSI divergence)
+  - Automated accuracy metrics for all technical and candlestick signals
+  - Historical analysis of indicator/candlestick performance (rolling and cumulative)
+  - Exportable analytics data (CSV, PNG)
+
+LLM Integration:
+  - Automated news search and summarization for detected indicator/price mismatches
+  - LLM-generated explanations for technical/candlestick signal failures
+  - News correlation analytics (news events vs. indicator/candlestick outcomes)
+  - User-facing natural language summaries of analytics and news findings
+
+Acceptance Criteria:
+  - All new analytics and UI features are requirements-driven (TDD/LLM compliance)
+  - Features are versioned and documented before implementation or testing
+  - UI displays real-time, accurate, and actionable analytics for all supported symbols
+  - LLM explanations and news search are integrated and user-accessible
+```
 
 ## 🔒 **Non-Functional Requirements**
 

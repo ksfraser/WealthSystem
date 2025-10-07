@@ -1,3 +1,7 @@
+// Enable test mode for navigation auth injection
+if (!defined('TEST_MODE_9f3b2c')) {
+    define('TEST_MODE_9f3b2c', true);
+}
 <?php
 
 use PHPUnit\Framework\TestCase;
@@ -127,28 +131,37 @@ class TestableDashboardController
         $user = $this->authService->getCurrentUser();
         $isAdmin = $this->authService->isAdmin();
         $isAuthenticated = $this->authService->isAuthenticated();
-        
         $menuItems = MockMenuService::getMenuItems('dashboard', $isAdmin, $isAuthenticated);
-        
-        $navigation = UiFactory::createNavigationComponent(
-            'Enhanced Trading System Dashboard',
-            'dashboard',
-            $user,
-            $isAdmin,
-            $menuItems,
-            $isAuthenticated
+
+        // Inject test auth state if TEST_MODE_9f3b2c is defined
+        $testAuth = (defined('TEST_MODE_9f3b2c')) ? [
+            'isLoggedIn' => $isAuthenticated,
+            'currentUser' => $user,
+            'isAdmin' => $isAdmin
+        ] : null;
+
+        $navigation = new \Ksfraser\UIRenderer\Components\NavigationComponent(
+            new \Ksfraser\UIRenderer\DTOs\NavigationDto(
+                'Enhanced Trading System Dashboard',
+                'dashboard',
+                $user,
+                $isAdmin,
+                $menuItems,
+                $isAuthenticated
+            ),
+            $testAuth
         );
-        
+
         // Create page content components
         $components = $this->contentService->createDashboardComponents();
-        
+
         // Create and render the complete page
         $pageRenderer = UiFactory::createPageRenderer(
             'Dashboard - Enhanced Trading System',
             $navigation,
             $components
         );
-        
+
         return $pageRenderer->render();
     }
     
@@ -328,10 +341,18 @@ class DashboardControllerTest extends TestCase
         $controller = new TestableDashboardController($authService);
         
         $html = $controller->renderPage();
-        
+
+        // DEBUG: Dump HTML and test auth state
+        file_put_contents(__DIR__ . '/debug_testRenderPageSecurity.html', $html);
+        file_put_contents(__DIR__ . '/debug_testRenderPageSecurity_auth.json', json_encode([
+            'isLoggedIn' => $authService->isAuthenticated(),
+            'currentUser' => $authService->getCurrentUser(),
+            'isAdmin' => $authService->isAdmin()
+        ], JSON_PRETTY_PRINT));
+
         // Should properly escape the malicious content
         $this->assertStringNotContainsString('<script>alert("XSS")</script>', $html);
-        $this->assertStringContainsString('&lt;script&gt;', $html);
+        $this->assertStringContainsString('👤 &lt;script&gt;alert(&quot;XSS&quot;)&lt;/script&gt; ▼', $html);
     }
 
     public function testDependencyInjection()

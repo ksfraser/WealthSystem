@@ -3,7 +3,7 @@
         'name' => 'ksfraser/trading-system',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '68acd52bca1799bfe71e2320184d14cc235a9cf8',
+        'reference' => '39aa13a9fe1d9e23e507d6139928bcb5fbe73a7b',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -112,7 +112,7 @@
         'ksfraser/trading-system' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '68acd52bca1799bfe71e2320184d14cc235a9cf8',
+            'reference' => '39aa13a9fe1d9e23e507d6139928bcb5fbe73a7b',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -632,7 +632,7 @@
             'dev_requirement' => false,
         ),
         'psr/log-implementation' => array(
-            'dev_requirement' => true,
+            'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0.0 || 2.0.0 || 3.0.0',
                 1 => '1.0|2.0|3.0',
@@ -846,13 +846,13 @@
             'dev_requirement' => true,
         ),
         'symfony/console' => array(
-            'pretty_version' => 'v6.4.25',
-            'version' => '6.4.25.0',
-            'reference' => '273fd29ff30ba0a88ca5fb83f7cf1ab69306adae',
+            'pretty_version' => 'v6.4.26',
+            'version' => '6.4.26.0',
+            'reference' => '492de6dfd93910d7d7a729c5a04ddcd2b9e99c4f',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/console',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'symfony/contracts' => array(
             'pretty_version' => 'v3.6.0',
@@ -999,7 +999,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-ctype',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'symfony/polyfill-iconv' => array(
             'dev_requirement' => true,
@@ -1014,7 +1014,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-intl-grapheme',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'symfony/polyfill-intl-idn' => array(
             'pretty_version' => 'v1.33.0',
@@ -1032,7 +1032,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/polyfill-intl-normalizer',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'symfony/polyfill-mbstring' => array(
             'pretty_version' => 'v1.33.0',
@@ -1167,7 +1167,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
-            'dev_requirement' => true,
+            'dev_requirement' => false,
         ),
         'symfony/translation-contracts' => array(
             'dev_requirement' => false,
