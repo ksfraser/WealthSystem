@@ -1,0 +1,9 @@
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":6,"expected":16,"actual":2}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":7,"expected":16,"actual":2}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":8,"expected":16,"actual":2}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":11,"expected":16,"actual":3}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":12,"expected":16,"actual":3}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":13,"expected":16,"actual":3}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":16,"expected":16,"actual":11}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":17,"expected":16,"actual":11}
+[2025-10-08 20:35:56] WARNING: CSV line has different column count than header {"file":"C:\\Users\\prote\\AppData\\Local\\Temp\\php8A21.tmp","line":18,"expected":16,"actual":11}

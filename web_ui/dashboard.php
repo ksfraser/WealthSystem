@@ -174,7 +174,7 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
                 <p>Import transaction data and account holdings from your brokerages and banks.</p>
                 <div class="card-links">
                     <a href="bank_import.php">💾 Bank CSV Import</a>
-                    <a href="trade_log.php">📝 Trade Log</a>
+                    <a href="trades.php">📝 Trade Log</a>
                 </div>
             </div>
             

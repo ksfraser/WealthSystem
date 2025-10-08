@@ -20,10 +20,10 @@ interface ConfigurationInterface
 
 interface LoggerInterface
 {
-    public function error($message, array $context = []);
-    public function warning($message, array $context = []);
-    public function info($message, array $context = []);
-    public function debug($message, array $context = []);
+    public function error(string $message, array $context = []): void;
+    public function warning(string $message, array $context = []): void;
+    public function info(string $message, array $context = []): void;
+    public function debug(string $message, array $context = []): void;
 }
 
 interface ValidatorInterface

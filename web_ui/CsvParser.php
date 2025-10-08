@@ -1,6 +1,9 @@
 <?php
-
+namespace App;
 require_once __DIR__ . '/CoreInterfaces.php';
+
+use App\CsvParserInterface;
+use App\LoggerInterface;
 
 /**
  * Robust CSV parser with error handling and validation
@@ -28,7 +31,6 @@ class CsvParser implements CsvParserInterface
 
         $rows = [];
         $handle = fopen($filePath, 'r');
-        
         if (!$handle) {
             $this->logger->error('Failed to open CSV file', ['file' => $filePath]);
             return [];
@@ -45,7 +47,6 @@ class CsvParser implements CsvParserInterface
             $lineNumber = 1;
             while (($data = fgetcsv($handle)) !== false) {
                 $lineNumber++;
-                
                 if (count($data) !== count($header)) {
                     $this->logger->warning('CSV line has different column count than header', [
                         'file' => $filePath,
@@ -55,76 +56,27 @@ class CsvParser implements CsvParserInterface
                     ]);
                     continue;
                 }
-
                 $rows[] = array_combine($header, $data);
             }
-
-            $this->logger->info('CSV parsed successfully', [
-                'file' => $filePath,
-                'rows' => count($rows)
-            ]);
-
-        } catch (Exception $e) {
-            $this->logger->error('Error parsing CSV', [
-                'file' => $filePath,
-                'error' => $e->getMessage()
-            ]);
-            $rows = [];
-        } finally {
             fclose($handle);
+        } catch (\Throwable $e) {
+            $this->logger->error('Exception while parsing CSV', ['file' => $filePath, 'error' => $e->getMessage()]);
+            fclose($handle);
+            return [];
         }
-
         return $rows;
     }
 
     public function write($filePath, array $data)
     {
-        if (empty($data)) {
-            $this->logger->warning('Attempted to write empty data to CSV', ['file' => $filePath]);
-            return false;
-        }
-
-        // Ensure directory exists
-        $directory = dirname($filePath);
-        if (!is_dir($directory)) {
-            mkdir($directory, 0755, true);
-        }
-
+        if (empty($data)) return false;
         $handle = fopen($filePath, 'w');
-        if (!$handle) {
-            $this->logger->error('Failed to open CSV file for writing', ['file' => $filePath]);
-            return false;
+        if ($handle === false) return false;
+        fputcsv($handle, array_keys($data[0]));
+        foreach ($data as $row) {
+            fputcsv($handle, $row);
         }
-
-        try {
-            // Write header
-            $header = array_keys($data[0]);
-            if (!fputcsv($handle, $header)) {
-                throw new Exception('Failed to write CSV header');
-            }
-
-            // Write data rows
-            foreach ($data as $row) {
-                if (!fputcsv($handle, $row)) {
-                    throw new Exception('Failed to write CSV row');
-                }
-            }
-
-            $this->logger->info('CSV written successfully', [
-                'file' => $filePath,
-                'rows' => count($data)
-            ]);
-
-            return true;
-
-        } catch (Exception $e) {
-            $this->logger->error('Error writing CSV', [
-                'file' => $filePath,
-                'error' => $e->getMessage()
-            ]);
-            return false;
-        } finally {
-            fclose($handle);
-        }
+        fclose($handle);
+        return true;
     }
 }

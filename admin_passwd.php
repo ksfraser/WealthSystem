@@ -30,30 +30,14 @@ if (!$input) {
     $input = prompt("Enter username or email to reset: ");
 }
 
-// Find user by username or email
-$users = $auth->getAllUsers(1000, 0);
-
-$userId = null;
-$username = null;
-$matchType = '';
-foreach ($users as $user) {
-    if ($user['username'] === $input) {
-        $userId = $user['id'];
-        $username = $user['username'];
-        $matchType = 'username';
-        break;
-    }
-    if ($user['email'] === $input) {
-        $userId = $user['id'];
-        $username = $user['username'];
-        $matchType = 'email';
-        break;
-    }
-}
-if (!$userId) {
+// Efficient DB lookup by username or email
+$user = $auth->getUserByUsernameOrEmail($input);
+if (!$user) {
     echo "User not found: $input\n";
     exit(1);
 }
+$userId = $user['id'];
+$username = $user['username'];
 
 while (true) {
     $pw1 = promptHidden("Enter new password: ");

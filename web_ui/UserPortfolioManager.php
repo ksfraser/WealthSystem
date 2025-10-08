@@ -6,19 +6,46 @@
 
 require_once __DIR__ . '/UserAuthDAO.php';
 require_once __DIR__ . '/CommonDAO.php';
+require_once __DIR__ . '/Logger.php';
 
+require_once __DIR__ . '/CsvParser.php';
+use App\CsvParser;
+
+/**
+ * UserPortfolioManager
+ * Manages user portfolios with DB and CSV fallback, using robust CSV parser.
+ *
+ * @startuml UserPortfolioManager_Class_Diagram
+ * class UserPortfolioManager {
+ *   + readUserPortfolio($userId = null)
+ *   + writeUserPortfolio($rows, $userId = null)
+ *   + deleteUserPortfolio($userId)
+ *   # readUserPortfolioCsv($userId)
+ *   # writeUserPortfolioCsv($rows, $userId)
+ *   # getUserTableName($userId)
+ *   # getUserCsvPath($userId)
+ * }
+ * UserPortfolioManager --> CsvParser
+ * UserPortfolioManager --> FileLogger
+ * @enduml
+ */
 class UserPortfolioManager extends CommonDAO {
-    
+    /** @var UserAuthDAO */
     private $userAuth;
+    /** @var string */
     private $baseTableName;
+    /** @var string */
     private $baseCsvPath;
-    
+    /** @var CsvParser */
+    private $csvParser;
+
     public function __construct($baseCsvPath = '', $baseTableName = 'portfolios') {
         parent::__construct('LegacyDatabaseConfig');
         $this->userAuth = new UserAuthDAO();
         $this->baseTableName = $baseTableName;
         $this->baseCsvPath = $baseCsvPath ?: __DIR__ . '/../Scripts and CSV Files/chatgpt_portfolio_update.csv';
-        
+        $logger = new FileLogger(__DIR__ . '/../logs/user_portfolio_manager.log', 'info');
+        $this->csvParser = new CsvParser($logger);
         // Use centralized SessionManager instead of direct session_start()
         require_once __DIR__ . '/SessionManager.php';
         SessionManager::getInstance();
@@ -144,56 +171,32 @@ class UserPortfolioManager extends CommonDAO {
     /**
      * Read user portfolio from CSV
      */
-    private function readUserPortfolioCsv($userId) {
+    /**
+     * Read user portfolio from CSV using CsvParser
+     * @param int $userId
+     * @return array
+     */
+    public function readUserPortfolioCsv($userId) {
         $csvPath = $this->getUserCsvPath($userId);
-        
         if (!file_exists($csvPath)) {
             return [];
         }
-        
-        $data = [];
-        if (($handle = fopen($csvPath, 'r')) !== false) {
-            $headers = fgetcsv($handle);
-            while (($row = fgetcsv($handle)) !== false) {
-                if (count($row) === count($headers)) {
-                    $data[] = array_combine($headers, $row);
-                }
-            }
-            fclose($handle);
-        }
-        
-        return $data;
+        return $this->csvParser->parse($csvPath);
     }
     
     /**
      * Write user portfolio to CSV
      */
-    private function writeUserPortfolioCsv($rows, $userId) {
+    /**
+     * Write user portfolio to CSV using CsvParser
+     * @param array $rows
+     * @param int $userId
+     * @return bool
+     */
+    public function writeUserPortfolioCsv($rows, $userId) {
         if (empty($rows)) return true;
-        
         $csvPath = $this->getUserCsvPath($userId);
-        
-        try {
-            $handle = fopen($csvPath, 'w');
-            if ($handle === false) {
-                throw new Exception("Cannot open CSV file for writing: $csvPath");
-            }
-            
-            // Write headers
-            fputcsv($handle, array_keys($rows[0]));
-            
-            // Write data rows
-            foreach ($rows as $row) {
-                fputcsv($handle, $row);
-            }
-            
-            fclose($handle);
-            return true;
-            
-        } catch (Exception $e) {
-            $this->logError("CSV write failed: " . $e->getMessage());
-            return false;
-        }
+        return $this->csvParser->write($csvPath, $rows);
     }
     
     /**

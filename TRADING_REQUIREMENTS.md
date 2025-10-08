@@ -1,3 +1,24 @@
+# CSV Operations Refactor - Requirements Update
+
+## New Requirements
+- All CSV file operations in production code must use `CsvParser` or `CsvHandler`.
+- All CSV operations must be covered by unit tests (see `tests/Unit/UserPortfolioManagerTest.php`).
+- All public methods in CSV-related classes must have PHPDoc blocks.
+- All major classes must have UML diagrams in documentation.
+- Logging for CSV operations must be written to a log file for diagnostics.
+
+## Implementation
+- `UserPortfolioManager.php` refactored to use `CsvParser` for all CSV read/write.
+- Logging for portfolio CSV operations is in `logs/user_portfolio_manager.log`.
+- Unit test created: `tests/Unit/UserPortfolioManagerTest.php`.
+- UML and PHPDoc blocks added to `UserPortfolioManager.php`.
+
+## See Also
+- `ARCHITECTURE_IMPLEMENTATION.md` for architecture and UML.
+- `README.md` for project overview.
+
+---
+Last updated: 2025-10-08
 # Trading System Requirements Documentation
 
 ## Overview

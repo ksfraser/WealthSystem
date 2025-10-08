@@ -860,4 +860,38 @@ class UserAuthDAO extends CommonDAO {
             return $roles;
         }
     }
+    /**
+     * Get user by username or email (efficient lookup)
+     *
+     * @param string $input Username or email to search for
+     * @return array|null User record as associative array, or null if not found
+     *
+     * @startuml UserAuthDAO_GetUserByUsernameOrEmail
+     * participant "Admin CLI" as CLI
+     * participant "UserAuthDAO" as AUTH
+     * participant "Database" as DB
+     * CLI -> AUTH: getUserByUsernameOrEmail(input)
+     * activate AUTH
+     * AUTH -> DB: SELECT ... WHERE username = ? OR email = ?
+     * activate DB
+     * DB --> AUTH: user record/null
+     * deactivate DB
+     * AUTH --> CLI: user record/null
+     * deactivate AUTH
+     * @enduml
+     */
+    public function getUserByUsernameOrEmail($input) {
+        try {
+            if (!$this->pdo) {
+                return null;
+            }
+            $stmt = $this->pdo->prepare('SELECT id, username, email, is_admin, created_at FROM users WHERE username = ? OR email = ? LIMIT 1');
+            $stmt->execute([$input, $input]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            $this->logError("Get user by username/email failed: " . $e->getMessage());
+            return null;
+        }
+    }
+
 }
