@@ -474,6 +474,70 @@ class UserAuthDAO extends CommonDAO {
     }
     
     /**
+     * Initiate password reset (user flow)
+     * Generates a reset token and stores it with expiry (1 hour)
+     */
+    public function initiatePasswordReset($email) {
+        if (!$this->pdo) throw new Exception('Database connection not available');
+        $this->ensurePasswordResetsTable();
+        $stmt = $this->pdo->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$user) throw new Exception('No user found with that email');
+        $token = bin2hex(random_bytes(32));
+        $expires = date('Y-m-d H:i:s', time() + 3600);
+        $stmt = $this->pdo->prepare('INSERT INTO password_resets (user_id, token, expires_at) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE token = VALUES(token), expires_at = VALUES(expires_at)');
+        $stmt->execute([$user['id'], $token, $expires]);
+        return $token;
+    }
+
+    /**
+     * Complete password reset (user flow)
+     * Validates token and sets new password
+     */
+    public function resetPasswordWithToken($token, $newPassword) {
+        if (!$this->pdo) throw new Exception('Database connection not available');
+        $this->ensurePasswordResetsTable();
+        $stmt = $this->pdo->prepare('SELECT user_id, expires_at FROM password_resets WHERE token = ?');
+        $stmt->execute([$token]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row) throw new Exception('Invalid or expired token');
+        if (strtotime($row['expires_at']) < time()) throw new Exception('Token expired');
+        if (strlen($newPassword) < 8) throw new Exception('New password must be at least 8 characters long');
+        $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt = $this->pdo->prepare('UPDATE users SET password_hash = ? WHERE id = ?');
+        $stmt->execute([$newPasswordHash, $row['user_id']]);
+        $stmt = $this->pdo->prepare('DELETE FROM password_resets WHERE user_id = ?');
+        $stmt->execute([$row['user_id']]);
+        return true;
+    }
+    /**
+     * Ensure password_resets table exists (auto-create if missing)
+     */
+    private function ensurePasswordResetsTable() {
+        $sql = "CREATE TABLE IF NOT EXISTS password_resets (
+            user_id INT NOT NULL,
+            token VARCHAR(64) NOT NULL,
+            expires_at DATETIME NOT NULL,
+            PRIMARY KEY (user_id),
+            UNIQUE KEY (token),
+            FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        $this->pdo->exec($sql);
+    }
+
+    /**
+     * Admin resets a user's password (no current password required)
+     */
+    public function adminResetUserPassword($userId, $newPassword) {
+        if (!$this->pdo) throw new Exception('Database connection not available');
+        if (strlen($newPassword) < 8) throw new Exception('New password must be at least 8 characters long');
+        $newPasswordHash = password_hash($newPassword, PASSWORD_DEFAULT);
+        $stmt = $this->pdo->prepare('UPDATE users SET password_hash = ? WHERE id = ?');
+        return $stmt->execute([$newPasswordHash, $userId]);
+    }
+
+    /**
      * Update user profile
      */
     public function updateUserProfile($userId, $email) {

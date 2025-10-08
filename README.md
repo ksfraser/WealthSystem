@@ -155,9 +155,28 @@ The platform implements a **multi-layered architecture** with clear separation o
 │                 Presentation Layer                       │
 │  [Web Interface] [AJAX Search] [Progressive Data UI]    │
 └─────────────────────┬───────────────────────────────────┘
+                    # 🔑 Password Reset Features
+
+                    ## User Password Reset (Forgot Password)
+                    - Users can request a password reset via the "Forgot Password?" link on the login page.
+                    - A secure reset token is generated and (in production) would be emailed to the user. For demo/testing, the token is displayed on screen.
+                    - Users can reset their password using the token via the "Reset Password (token)" link.
+                    - All logic is implemented in `UserAuthDAO`, `PasswordResetController`, and `PasswordResetViews.php`.
+                    - The `password_resets` table is created automatically if missing (see `web_ui/migrate_create_password_resets.sql`).
                       │
+                    ## Admin Password Reset
+                    - Admins can reset any user's password via the "Admin Reset User Password" link on the login page.
+                    - Admins select a user and set a new password directly.
+                    - All logic is implemented in `UserAuthDAO`, `AdminPasswordResetController`, and `AdminPasswordResetView.php`.
 ┌─────────────────────┴───────────────────────────────────┐
+                    ## Security Notes
+                    - Passwords are hashed using PHP's `PASSWORD_DEFAULT` algorithm.
+                    - Reset tokens expire after 1 hour and are deleted after use.
+                    - All flows follow SRP and MVC best practices.
 │                Business Logic Layer                      │
+                    ## Testing
+                    - Unit tests for password reset and admin reset are in `tests/Unit/test_password_reset.php`.
+                    - Run all tests with `php test_runner.php` or individually with `php tests/Unit/test_password_reset.php`.
 │  [StockDataService] [ProgressiveLoader] [Trade Logic]   │
 └─────────────────────┬───────────────────────────────────┘
                       │
@@ -227,9 +246,11 @@ The platform implements a **multi-layered architecture** with clear separation o
 - ✅ **Composite Signals** - Multi-indicator analysis for enhanced accuracy
 - ✅ **Real-time Processing** - Background job system for continuous analysis
 
+
 ### **Web Interface & User Management**
 - ✅ **Multi-User Support** - Role-based access control (Admin/User)
 - ✅ **Secure Authentication** - Password hashing, CSRF protection, session management
+- ✅ **User & Admin Password Reset** - Secure, token-based user reset and direct admin reset flows
 - ✅ **Responsive Design** - Mobile-friendly interface with modern UI
 - ✅ **Portfolio Dashboard** - Real-time portfolio views and performance tracking
 - ✅ **Trade Management** - Interactive trade entry, history, and analysis

@@ -284,6 +284,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="register.php">Create Account</a>
             <span>|</span>
             <a href="forgot_password.php">Forgot Password?</a>
+            <span>|</span>
+            <a href="reset_password.php">Reset Password (token)</a>
+            <span>|</span>
+            <a href="admin_reset_password.php">Admin Reset User Password</a>
         </div>
         
         <div class="demo-info">
