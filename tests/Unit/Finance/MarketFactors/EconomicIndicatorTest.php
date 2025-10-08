@@ -205,7 +205,7 @@ class EconomicIndicatorTest extends TestCase
         $this->assertEquals('Consumer Price Index', $array['name']);
         $this->assertEquals('economic', $array['type']);
         $this->assertEquals(2.8, $array['value']);
-        $this->assertEquals(0.2, $array['change']);
+    $this->assertEqualsWithDelta(0.2, $array['change'], 0.00001);
         $this->assertEqualsWithDelta(7.69, $array['change_percent'], 0.01);
         $this->assertArrayHasKey('metadata', $array);
         $this->assertEquals('US', $array['metadata']['country']);

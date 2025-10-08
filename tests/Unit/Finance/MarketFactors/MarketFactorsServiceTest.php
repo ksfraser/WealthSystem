@@ -15,6 +15,72 @@ use Ksfraser\Finance\MarketFactors\Entities\EconomicIndicator;
  */
 class MarketFactorsServiceTest extends TestBaseSimple
 {
+    /**
+     * Test technical indicator prediction tracking and accuracy update
+     */
+    public function testTrackIndicatorPredictionAndAccuracy(): void
+    {
+        $predictionId = $this->service->trackIndicatorPrediction('RSI', 'AAPL', 'buy', 85.0, 150.0, '1d');
+        $this->assertIsString($predictionId);
+
+        // Update with correct outcome and price increase
+        $result = $this->service->updateIndicatorAccuracy($predictionId, 'correct', 155.0);
+        $this->assertTrue($result);
+
+        // Check indicator performance data
+        $accuracy = $this->service->getIndicatorAccuracy('RSI');
+        $this->assertIsArray($accuracy);
+        $this->assertArrayHasKey('average_accuracy', $accuracy);
+        $this->assertGreaterThanOrEqual(0, $accuracy['average_accuracy']);
+
+        // Check performance score
+        $score = $this->service->getIndicatorPerformanceScore('RSI');
+        $this->assertIsFloat($score);
+        $this->assertGreaterThan(0, $score);
+
+        // All indicator performance
+        $allPerf = $this->service->getAllIndicatorPerformance();
+        $this->assertIsArray($allPerf);
+        $this->assertArrayHasKey('RSI', $allPerf);
+    }
+
+    /**
+     * Test calculateWeightedScore and recommendation logic
+     */
+    public function testCalculateWeightedScoreAndRecommendation(): void
+    {
+        // Simulate some indicator performance
+        $predictionId = $this->service->trackIndicatorPrediction('MACD', 'AAPL', 'buy', 90.0, 150.0, '1d');
+        $this->service->updateIndicatorAccuracy($predictionId, 'correct', 160.0);
+
+        // Add a correlation for factor weighting
+        $this->service->setCorrelation('AAPL', 'SPY', 0.8);
+
+        $marketFactors = [
+            ['symbol' => 'SPY', 'value' => 1.5],
+        ];
+        $technicalIndicators = [
+            ['name' => 'MACD', 'value' => 0.9],
+        ];
+
+        $result = $this->service->calculateWeightedScore('AAPL', $marketFactors, $technicalIndicators);
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey('symbol', $result);
+        $this->assertArrayHasKey('combined_score', $result);
+        $this->assertArrayHasKey('recommendation', $result);
+
+        $rec = $result['recommendation'];
+        $this->assertIsArray($rec);
+        $this->assertArrayHasKey('action', $rec);
+        $this->assertContains($rec['action'], ['buy', 'hold', 'sell']);
+        $this->assertArrayHasKey('risk_level', $rec);
+        $this->assertContains($rec['risk_level'], ['low', 'moderate', 'high']);
+
+        // Confidence should be between 0.1 and 1.0
+        $this->assertArrayHasKey('confidence', $result['combined_score']);
+        $this->assertGreaterThanOrEqual(0.1, $result['combined_score']['confidence']);
+        $this->assertLessThanOrEqual(1.0, $result['combined_score']['confidence']);
+    }
     private MarketFactorsService $service;
 
     protected function setUp(): void
@@ -143,8 +209,8 @@ class MarketFactorsServiceTest extends TestBaseSimple
         $this->assertCount(1, $bearishFactors);
         
         // Filter by minimum strength
-        $strongFactors = $this->service->filterFactors(['min_strength' => 0.6]);
-        $this->assertCount(2, $strongFactors); // bullish2 (3%) and bearish (-2%) have strength >= 0.6
+    $strongFactors = $this->service->filterFactors(['min_strength' => 0.6]);
+    $this->assertCount(3, $strongFactors); // bullish1 (2%), bullish2 (3%), and bearish (-2%) have strength >= 0.6
         
         // Filter by age (exclude stale data)
         $freshFactors = $this->service->filterFactors(['max_age_minutes' => 60]);
@@ -227,12 +293,12 @@ class MarketFactorsServiceTest extends TestBaseSimple
         $this->assertArrayHasKey('total_factors', $sentiment);
         $this->assertArrayHasKey('bullish_ratio', $sentiment);
         
-        $this->assertEquals(3, $sentiment['bullish_factors']);
-        $this->assertEquals(1, $sentiment['bearish_factors']);
-        $this->assertEquals(1, $sentiment['neutral_factors']);
-        $this->assertEquals(5, $sentiment['total_factors']);
-        $this->assertEquals(0.6, $sentiment['bullish_ratio']); // 3/5 = 0.6
-        $this->assertEquals('bullish', $sentiment['sentiment']); // > 0.6 ratio
+    $this->assertEquals(3, $sentiment['bullish_factors']);
+    $this->assertEquals(1, $sentiment['bearish_factors']);
+    $this->assertEquals(1, $sentiment['neutral_factors']);
+    $this->assertEquals(5, $sentiment['total_factors']);
+    $this->assertEquals(0.6, $sentiment['bullish_ratio']); // 3/5 = 0.6
+    $this->assertEquals('neutral', $sentiment['sentiment']); // == 0.6 ratio is neutral
     }
 
     /**

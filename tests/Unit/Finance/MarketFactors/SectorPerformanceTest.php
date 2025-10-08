@@ -52,7 +52,7 @@ class SectorPerformanceTest extends TestBaseSimple
         $marketPerformance = 1.5;
         $relativePerformance = $sector->getRelativePerformance($marketPerformance);
         
-        $this->assertEquals(1.7, $relativePerformance); // 3.2 - 1.5 = 1.7
+    $this->assertEqualsWithDelta(1.7, $relativePerformance, 0.00001); // 3.2 - 1.5 = 1.7
     }
 
     /**

@@ -120,6 +120,7 @@ So, starting with just $100, I wanted to answer a simple but powerful question:
 *Performance data is updated after each trading day. See the CSV files in `Scripts and CSV Files/` for detailed daily tracking.*
 
 # Features of This Repo
+- **Advanced Analytics, Risk, and Indicator Accuracy** — Centralized in `MarketFactorsService.php`, the platform provides advanced analytics, risk assessment, and technical indicator accuracy tracking for all market factors. This includes correlation analysis, weighted scoring, recommendation generation, confidence quantification, and backtesting support. All analytics, risk, and indicator accuracy logic is fully documented and unit tested. See the new requirements section in `TRADING_REQUIREMENTS.md` for details.
 - Live trading scripts — used to evaluate prices and update holdings daily  
 - LLM-powered decision engine — ChatGPT picks the trades  
 - Performance tracking — CSVs with daily PnL, total equity, and trade history  
@@ -132,6 +133,19 @@ AI is being hyped across every industry, but can it really manage money without 
 This project is an attempt to find out — with transparency, data, and a real budget.
 
 # 🏗️ **Architecture Overview**
+## **Advanced Analytics, Risk, and Indicator Accuracy**
+The `MarketFactorsService.php` implements a comprehensive analytics engine for market factors, including:
+- Market factor management and filtering
+- Correlation analysis and matrix generation
+- Technical indicator prediction tracking and accuracy calculation
+- Risk level calculation for factors and portfolio
+- Weighted scoring and recommendation engine
+- Confidence quantification for recommendations
+- Market sentiment aggregation
+- Backtesting and historical performance analysis
+- Data import/export for reproducibility
+
+All features are mapped to explicit requirements in `TRADING_REQUIREMENTS.md` and are covered by dedicated unit tests.
 
 ## **System Architecture**
 The platform implements a **multi-layered architecture** with clear separation of concerns:

@@ -25,6 +25,32 @@ This document outlines the comprehensive requirements for the ChatGPT Micro-Cap 
    - Results persistence
 
 ## Trading Strategies
+### 6. Advanced Analytics, Risk, and Indicator Accuracy (MarketFactorsService)
+**File**: `src/Ksfraser/Finance/MarketFactors/Services/MarketFactorsService.php`
+
+**Description**: Provides advanced analytics, risk assessment, and indicator accuracy tracking for all market factors. Centralizes logic for factor management, correlation analysis, weighted scoring, and recommendation generation.
+
+**Key Features**:
+- **Market Factor Management**: Add, update, retrieve, and filter market factors by type, sector, or index.
+- **Correlation Analysis**: Analyze and track correlations between market factors, including correlation matrix generation and management.
+- **Technical Indicator Accuracy Tracking**: Track predictions made by technical indicators, update and calculate their accuracy, and maintain detailed performance metrics for each indicator.
+- **Risk Level Calculation**: Calculate risk levels for market factors and the overall portfolio using volatility, drawdown, and other risk metrics.
+- **Weighted Scoring System**: Compute weighted scores for market factors based on configurable criteria (e.g., performance, accuracy, risk, sentiment).
+- **Recommendation Engine**: Generate buy/hold/sell recommendations for market factors using analytics, scoring, and risk assessment.
+- **Confidence Calculation**: Quantify the confidence level of recommendations based on historical accuracy and current analytics.
+- **Market Sentiment Analysis**: Aggregate and analyze sentiment across all tracked factors.
+- **Backtesting Support**: Provide methods for historical performance analysis and indicator validation.
+- **Data Import/Export**: Support for importing/exporting factor data and analytics for reproducibility and auditability.
+
+**Required Functions**:
+- `trackIndicatorPrediction`, `updateIndicatorAccuracy`, `calculatePredictionAccuracy`, `updateIndicatorPerformance`, `getIndicatorAccuracy`, `getIndicatorPerformanceScore`, `getAllIndicatorPerformance`, `calculateWeightedScore`, `generateRecommendation`, `calculateConfidence`, `calculateRiskLevel`, `getMarketSummary`, `getSectorSummary`, `getIndexSummary`, `getForexSummary`, `getEconomicsSummary`, `trackCorrelation`, `getCorrelationMatrix`, `calculateMarketSentiment`, `exportData`, `importData`.
+
+**Testing Requirements**:
+- All analytics, risk, and indicator accuracy functions must have unit tests covering normal, edge, and error cases.
+- Recommendation and scoring logic must be validated against historical data and simulated scenarios.
+
+**Documentation Requirements**:
+- All advanced analytics, risk, and indicator accuracy features must be documented in the README and technical documentation, with clear mapping to code and requirements.
 
 ### 1. Turtle Trading System
 **File**: `turtle.php`

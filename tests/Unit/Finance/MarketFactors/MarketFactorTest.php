@@ -215,7 +215,7 @@ class MarketFactorTest extends TestBaseSimple
         $this->assertTrue($staleFactor->isStale(60));  // Stale (90 min > 60 min)
         
         // Test with different threshold
-        $this->assertFalse($freshFactor->isStale(5));  // Stale with 5 min threshold
+    $this->assertTrue($freshFactor->isStale(5));  // Stale with 5 min threshold
         $this->assertTrue($staleFactor->isStale(120)); // Still stale with 120 min threshold
     }
 
