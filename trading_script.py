@@ -1017,9 +1017,11 @@ def daily_results(chatgpt_portfolio: pd.DataFrame, cash: float) -> None:
         initial_price = float(spx_norm["Close"].iloc[0])
         price_now = float(spx_norm["Close"].iloc[-1])
         try:
-            starting_equity = float(input("what was your starting equity? "))
-        except Exception:
+            starting_equity_input = input("what was your starting equity? ")
+            starting_equity = float(starting_equity_input)
+        except (ValueError, TypeError):
             print("Invalid input for starting equity. Defaulting to NaN.")
+            starting_equity = np.nan
         spx_value = (starting_equity / initial_price) * price_now if not np.isnan(starting_equity) else np.nan
 
     # -------- Pretty Printing --------
@@ -1098,8 +1100,9 @@ def load_latest_portfolio_state(
         portfolio = pd.DataFrame(columns=["ticker", "shares", "stop_loss", "buy_price", "cost_basis"])
         print("Portfolio CSV is empty. Returning set amount of cash for creating portfolio.")
         try:
-            cash = float(input("What would you like your starting cash amount to be? "))
-        except ValueError:
+            cash_input = input("What would you like your starting cash amount to be? ")
+            cash = float(cash_input)
+        except (ValueError, TypeError):
             raise ValueError(
                 "Cash could not be converted to float datatype. Please enter a valid number."
             )

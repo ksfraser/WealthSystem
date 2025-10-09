@@ -516,5 +516,18 @@ class NavigationService {
     public function getCurrentUser(): ?array {
         return $this->currentUser;
     }
+
+    public function getPDO() {
+        // Expose the PDO object from UserAuthDAO
+        if ($this->userAuth) {
+            $reflection = new ReflectionClass($this->userAuth);
+            if ($reflection->hasProperty('pdo')) {
+                $pdoProperty = $reflection->getProperty('pdo');
+                $pdoProperty->setAccessible(true);
+                return $pdoProperty->getValue($this->userAuth);
+            }
+        }
+        return null;
+    }
 }
 ?>

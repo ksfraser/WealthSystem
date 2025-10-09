@@ -100,43 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_opening'], $_PO
 
 // Get transactions, optionally filtered by bank account
 try {
-    $transactions = $investGLDAO->getTransactions($userId);
+    $transactions = $investGLDAO->getTransactions($userId, null, null, $bankAccountId);
 } catch (Exception $e) {
     error_log('Failed to fetch transactions: ' . $e->getMessage());
     $transactions = [];
-}
-
-// If bank_account_id is provided, filter transactions to only those from that bank account
-if ($bankAccountId && $bankAccount) {
-    // Filter transactions by bank name and account number from midcap_transactions
-    $filteredTransactions = [];
-    foreach ($transactions as $transaction) {
-        try {
-            // Check if this GL transaction corresponds to a midcap transaction with matching bank details
-            $stmt = $pdo->prepare("
-                SELECT COUNT(*) as count FROM midcap_transactions mt
-                WHERE mt.bank_name = ? AND mt.account_number = ?
-                AND mt.symbol = ? AND mt.shares = ? AND mt.amount = ?
-                AND DATE(mt.txn_date) = ?
-            ");
-            $stmt->execute([
-                $bankAccount['bank_name'],
-                $bankAccount['account_number'],
-                $transaction['stock_symbol'],
-                $transaction['quantity'],
-                $transaction['amount'],
-                $transaction['tran_date']
-            ]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            if ($result['count'] > 0) {
-                $filteredTransactions[] = $transaction;
-            }
-        } catch (Exception $e) {
-            error_log('Error filtering transaction: ' . $e->getMessage());
-            // Skip this transaction if there's an error
-        }
-    }
-    $transactions = $filteredTransactions;
 }
 
 // Apply additional filters
@@ -347,7 +314,7 @@ if ($bankAccountId && isset($bankAccount)) {
 
 		<table class="transactions-table">
 			<tr>
-				<th>ID</th><th>Date</th><th>Type</th><th>Symbol</th><th>Qty</th><th>Amount</th><th>Status</th><th>Description</th>
+				<th>ID</th><th>Date</th><th>Type</th><th>Symbol</th><th>Qty</th><th>Amount</th><th>Status</th><th>Description</th><th>Actions</th>
 			</tr>
 			<?php foreach ($transactions as $row): ?>
 			<tr class="status-<?= strtolower(statusLabel($row)) ?>">
@@ -359,6 +326,10 @@ if ($bankAccountId && isset($bankAccount)) {
 				<td><?= htmlspecialchars($row['amount']) ?></td>
 				<td><?= htmlspecialchars(statusLabel($row)) ?></td>
 				<td><?= htmlspecialchars($row['description']) ?></td>
+                <td>
+                    <a href="edit_transaction.php?id=<?= $row['id'] ?>" class="btn-action btn-edit">Edit</a>
+                    <button class="btn-action btn-delete" data-id="<?= $row['id'] ?>">Delete</button>
+                </td>
 			</tr>
 			<?php endforeach; ?>
 		</table>
@@ -367,5 +338,35 @@ if ($bankAccountId && isset($bankAccount)) {
 	</div>
 
 	<?php echo $navScript; ?>
+    <script>
+    document.addEventListener('click', function(e) {
+        if (e.target && e.target.classList.contains('btn-delete')) {
+            const transactionId = e.target.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete transaction #' + transactionId + '?')) {
+                fetch('api/delete_transaction.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'id=' + transactionId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        // Remove the row from the table
+                        e.target.closest('tr').remove();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An unexpected error occurred.');
+                });
+            }
+        }
+    });
+    </script>
 </body>
 </html>

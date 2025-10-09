@@ -44,19 +44,22 @@ class CsvParser implements CsvParserInterface
                 return [];
             }
 
+            // Normalize header
+            $normalizedHeader = array_map([$this, 'normalizeHeader'], $header);
+
             $lineNumber = 1;
             while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
                 $lineNumber++;
-                if (count($data) !== count($header)) {
+                if (count($data) !== count($normalizedHeader)) {
                     $this->logger->warning('CSV line has different column count than header', [
                         'file' => $filePath,
                         'line' => $lineNumber,
-                        'expected' => count($header),
+                        'expected' => count($normalizedHeader),
                         'actual' => count($data)
                     ]);
                     continue;
                 }
-                $rows[] = array_combine($header, $data);
+                $rows[] = array_combine($normalizedHeader, $data);
             }
             fclose($handle);
         } catch (\Throwable $e) {
@@ -65,6 +68,24 @@ class CsvParser implements CsvParserInterface
             return [];
         }
         return $rows;
+    }
+
+    /**
+     * Normalizes a header string to a consistent format.
+     *
+     * @param string $header The raw header string.
+     * @return string The normalized header string.
+     */
+    private function normalizeHeader($header) {
+        // Trim whitespace from the beginning and end of the string
+        $header = trim($header);
+        // Convert the entire string to lowercase
+        $header = strtolower($header);
+        // Replace any sequence of non-alphanumeric characters (except underscore) with a single underscore
+        $header = preg_replace('/[^a-z0-9_]+/', '_', $header);
+        // Remove any leading or trailing underscores that might result from the replacement
+        $header = trim($header, '_');
+        return $header;
     }
 
     public function write($filePath, array $data)

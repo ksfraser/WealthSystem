@@ -48,7 +48,7 @@ if (isset($_POST['action']) && $_POST['action'] === 'select_existing') {
     }
 
     try {
-        $dao->importToMidCap($rows, $type);
+        $dao->importToMidCap($rows, $type, $userId, $existingAccountId);
 
         echo "<h2>Import Complete</h2>";
         echo "<p>Successfully imported " . count($rows) . " transactions to existing account '{$existingAccount['bank_name']} - {$existingAccount['account_number']}'.</p>";
@@ -97,10 +97,10 @@ if (isset($_POST['action']) && $_POST['action'] === 'create_and_import') {
     }
 
     try {
-        $dao->importToMidCap($rows, $type);
-
-        // Create bank account and grant access
+        // Create bank account first to get the ID
         $bankAccountId = $bankDAO->createBankAccountIfNotExists($bank, $acct, $userId, $nickname, $accountType, $currency);
+
+        $dao->importToMidCap($rows, $type, $userId, $bankAccountId);
 
         echo "<h2>Import Complete</h2>";
         echo "<p>Successfully imported " . count($rows) . " transactions.</p>";
@@ -246,10 +246,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
 }
 
 // Upload form
-$navHeader = $navService->renderNavigationHeader('Import Bank CSV');
-$navCSS = $navService->getDashboardCSS();
-$navScript = $navService->getNavigationScript();
-?>
 $navHeader = $navService->renderNavigationHeader('Import Bank CSV');
 $navCSS = $navService->getDashboardCSS();
 $navScript = $navService->getNavigationScript();

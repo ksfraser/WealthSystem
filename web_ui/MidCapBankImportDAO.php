@@ -6,12 +6,15 @@ require_once __DIR__ . '/CsvParser.php';
 use App\CsvParser;
 require_once __DIR__ . '/Logger.php';
 require_once __DIR__ . '/InvestGLDAO.php';
+require_once __DIR__ . '/StockSymbolDAO.php';
 
 class MidCapBankImportDAO extends CommonDAO {
     /** @var CsvParser */
     private $csvParser;
     /** @var InvestGLDAO */
     private $investGLDAO;
+    /** @var StockSymbolDAO */
+    private $stockSymbolDAO;
     /**
      * @param PDO|null $pdo Optionally inject PDO for testability/DI
      */
@@ -21,6 +24,7 @@ class MidCapBankImportDAO extends CommonDAO {
         $this->csvParser = new CsvParser($logger);
         $this->pdo = $pdo ?: $this->pdo;
         $this->investGLDAO = new InvestGLDAO($this->pdo);
+        $this->stockSymbolDAO = new StockSymbolDAO($this->pdo);
         if ($this->pdo) {
             $schemaDir = __DIR__ . '/schema';
             $migrator = new SchemaMigrator($this->pdo, $schemaDir);
@@ -60,51 +64,91 @@ class MidCapBankImportDAO extends CommonDAO {
      * Import staged data into mid-cap tables and GL (double-entry)
      * @param array $rows
      * @param string $type 'holdings' or 'transactions'
+     * @param int $userId The user ID performing the import
      * @return bool
      */
-    public function importToMidCap($rows, $type) {
+    public function importToMidCap($rows, $type, $userId, $bankAccountId) {
         if ($type === 'holdings') {
             // For each holding, create an opening balance GL entry
             foreach ($rows as $row) {
-                $userId = $row['user_id'] ?? 1; // TODO: Replace with real user context
+                $symbol = $this->getAliasedValue($row, ['symbol', 'ticker', 'stock_symbol']);
+                if (!$symbol) {
+                    // Skip rows that don't have a symbol, they might be cash balances or headers
+                    continue;
+                }
+                $this->stockSymbolDAO->ensureSymbolExists($symbol);
+
                 $glAccount = '1100'; // TODO: Map to correct GL account
-                $symbol = $row['symbol'] ?? $row['Symbol'] ?? $row['Ticker'] ?? '';
-                $date = $row['date'] ?? $row['Date'] ?? date('Y-m-d');
-                $qty = $row['shares'] ?? $row['quantity'] ?? $row['Shares'] ?? 0;
-                $price = $row['current_price'] ?? $row['price'] ?? $row['Price'] ?? 0;
-                $marketValue = $row['market_value'] ?? $row['Market Value'] ?? $qty * $price;
+                $date = $this->getAliasedValue($row, ['date'], date('Y-m-d'));
+                $qty = $this->getAliasedValue($row, ['shares', 'quantity']);
+                $price = $this->getAliasedValue($row, ['price', 'current_price']);
+                $marketValue = $this->getAliasedValue($row, ['market_value', 'total_value'], $qty * $price);
                 $desc = 'Opening balance from import';
-                $this->investGLDAO->addOpeningBalance($userId, $glAccount, $symbol, $date, $qty, $price, $marketValue, $desc);
+                $this->investGLDAO->addOpeningBalance($userId, $glAccount, $symbol, $date, $qty, $price, $marketValue, $desc, $bankAccountId);
             }
         } else {
             $table = 'midcap_transactions';
             foreach ($rows as $row) {
+                $symbol = $this->getAliasedValue($row, ['symbol', 'ticker', 'stock_symbol']);
+                if (!$symbol) {
+                    // Skip rows that don't have a symbol
+                    continue;
+                }
                 $this->insertTransaction($table, $row);
+                
+                // Also add to gl_trans_invest
+                $date = $this->getAliasedValue($row, ['date', 'transaction_date', 'txn_date'], date('Y-m-d'));
+                $tranType = $this->getAliasedValue($row, ['type', 'transaction_type', 'txn_type'], 'UNKNOWN');
+                $amount = $this->getAliasedValue($row, ['amount', 'total']);
+                $qty = $this->getAliasedValue($row, ['shares', 'quantity']);
+                $price = $this->getAliasedValue($row, ['price']);
+                $fees = $this->getAliasedValue($row, ['commission', 'fee', 'fees'], 0);
+                $costBasis = 0; // This might need more complex calculation
+                $desc = $this->getAliasedValue($row, ['description'], 'Imported transaction');
+
+                $this->investGLDAO->addTransaction($userId, '1100', $symbol, $date, $tranType, $amount, $qty, $price, $fees, $costBasis, $desc, $bankAccountId);
             }
         }
         return true;
     }
 
+    /**
+     * Gets a value from a row by checking multiple possible keys (aliases).
+     *
+     * @param array $row The data row.
+     * @param array $aliases An array of possible keys.
+     * @param mixed $default The default value if no key is found.
+     * @return mixed The found value or the default.
+     */
+    private function getAliasedValue(array $row, array $aliases, $default = null) {
+        foreach ($aliases as $alias) {
+            if (isset($row[$alias])) {
+                return $row[$alias];
+            }
+        }
+        return $default;
+    }
+
     private function insertTransaction($table, $row) {
         try {
             $stmt = $this->pdo->prepare("INSERT INTO $table (bank_name, account_number, symbol, txn_type, shares, price, amount, txn_date, settlement_date, currency_subaccount, market, description, currency_of_price, commission, exchange_rate, currency_of_amount, settlement_instruction, exchange_rate_cad, cad_equivalent, extra) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            $symbol = $row['Ticker'] ?? $row['Symbol'] ?? $row['symbol'] ?? null;
-            $txnType = $row['Type'] ?? $row['Transaction Type'] ?? $row['txn_type'] ?? null;
-            $shares = $row['Shares'] ?? $row['Quantity'] ?? $row['shares'] ?? 0;
-            $price = $row['Price'] ?? $row['price'] ?? 0;
-            $amount = $row['Amount'] ?? $row['Total'] ?? $row['amount'] ?? 0;
-            $txnDate = $row['Date'] ?? $row['Transaction Date'] ?? $row['txn_date'] ?? null;
-            $settlementDate = $row['Settlement Date'] ?? null;
-            $currencySubaccount = $row['Currency of Sub-account Held In'] ?? null;
-            $market = $row['Market'] ?? null;
-            $description = $row['Description'] ?? null;
-            $currencyOfPrice = $row['Currency of Price'] ?? null;
-            $commission = $row['Commission'] ?? null;
-            $exchangeRate = $row['Exchange Rate'] ?? null;
-            $currencyOfAmount = $row['Currency of Amount'] ?? null;
-            $settlementInstruction = $row['Settlement Instruction'] ?? null;
-            $exchangeRateCad = $row['Exchange Rate (Canadian Equivalent)'] ?? null;
-            $cadEquivalent = $row['Canadian Equivalent'] ?? null;
+            $symbol = $this->getAliasedValue($row, ['symbol', 'ticker']);
+            $txnType = $this->getAliasedValue($row, ['type', 'transaction_type', 'txn_type']);
+            $shares = $this->getAliasedValue($row, ['shares', 'quantity'], 0);
+            $price = $this->getAliasedValue($row, ['price'], 0);
+            $amount = $this->getAliasedValue($row, ['amount', 'total'], 0);
+            $txnDate = $this->getAliasedValue($row, ['date', 'transaction_date', 'txn_date']);
+            $settlementDate = $this->getAliasedValue($row, ['settlement_date']);
+            $currencySubaccount = $this->getAliasedValue($row, ['currency_of_sub_account_held_in']);
+            $market = $this->getAliasedValue($row, ['market']);
+            $description = $this->getAliasedValue($row, ['description']);
+            $currencyOfPrice = $this->getAliasedValue($row, ['currency_of_price']);
+            $commission = $this->getAliasedValue($row, ['commission', 'fee', 'fees']);
+            $exchangeRate = $this->getAliasedValue($row, ['exchange_rate']);
+            $currencyOfAmount = $this->getAliasedValue($row, ['currency_of_amount']);
+            $settlementInstruction = $this->getAliasedValue($row, ['settlement_instruction']);
+            $exchangeRateCad = $this->getAliasedValue($row, ['exchange_rate_canadian_equivalent']);
+            $cadEquivalent = $this->getAliasedValue($row, ['canadian_equivalent']);
             $extra = json_encode($row);
             $stmt->execute([
                 $row['bank_name'] ?? '',
