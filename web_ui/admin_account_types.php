@@ -1,4 +1,13 @@
 <?php
+require_once __DIR__ . '/auth_check.php';
+try {
+    requireAdmin();
+} catch (Exception $e) {
+    // Redirect to a generic 'access denied' page or the dashboard
+    header('Location: /dashboard.php?error=access_denied');
+    exit;
+}
+
 /**
  * Admin Account Types Management
  * Handles table creation, prepopulation, and CRUD operations for account types
@@ -57,6 +66,9 @@ class AccountTypesDAO extends EnhancedCommonDAO
             throw new RuntimeException('No database connection available');
         }
 
+        // Ensure table exists before trying to populate it
+        $this->ensureTableExists();
+
         $accountTypes = [
             // CAD Accounts
             ['name' => 'Cash', 'description' => 'Regular cash account', 'currency' => 'CAD', 'is_registered' => false],
@@ -93,20 +105,26 @@ class AccountTypesDAO extends EnhancedCommonDAO
 
         foreach ($accountTypes as $accountType) {
             try {
-                $sql = "INSERT IGNORE INTO account_types (name, description, currency, is_registered) 
+                // Check if the account type already exists
+                $checkSql = "SELECT COUNT(*) FROM account_types WHERE name = :name";
+                $stmt = $this->executeQuery($checkSql, ['name' => $accountType['name']]);
+                $exists = $stmt->fetchColumn() > 0;
+
+                if ($exists) {
+                    $existingCount++;
+                    continue;
+                }
+
+                // If not, insert it
+                $sql = "INSERT INTO account_types (name, description, currency, is_registered) 
                         VALUES (:name, :description, :currency, :is_registered)";
                 
-                $stmt = $this->executeQuery($sql, $accountType);
-                $rowsAffected = $stmt->rowCount();
-                
-                if ($rowsAffected > 0) {
-                    $insertedCount++;
-                    $this->logger->info('Account type inserted', ['name' => $accountType['name']]);
-                } else {
-                    $existingCount++;
-                }
+                $this->executeQuery($sql, $accountType);
+                $insertedCount++;
+                $this->logger->info('Account type inserted', ['name' => $accountType['name']]);
+
             } catch (Exception $e) {
-                $this->logError('Failed to insert account type: ' . $accountType['name'] . ' - ' . $e->getMessage());
+                $this->logError('Failed to process account type: ' . $accountType['name'] . ' - ' . $e->getMessage());
             }
         }
 

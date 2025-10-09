@@ -260,6 +260,24 @@ if ($bankAccountId && isset($bankAccount)) {
 			color: white;
 			text-decoration: none;
 		}
+
+        .add-transaction-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 20px;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+
+        .add-transaction-btn:hover {
+            background: #218838;
+            color: white;
+            text-decoration: none;
+        }
 	</style>
 </head>
 <body>
@@ -334,6 +352,7 @@ if ($bankAccountId && isset($bankAccount)) {
 			<?php endforeach; ?>
 		</table>
 
+        <a href="add_transaction.php?bank_account_id=<?= htmlspecialchars((string)$bankAccountId) ?>" class="add-transaction-btn">Add Transaction</a>
 		<a href="user_bank_accounts.php" class="back-link">← Back to Bank Accounts</a>
 	</div>
 

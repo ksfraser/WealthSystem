@@ -280,6 +280,13 @@ class NavigationService {
                 menu.style.display = menu.style.display === "block" ? "none" : "block";
             }
         }
+
+        function toggleAdminDropdown() {
+            var menu = document.getElementById("adminDropdownMenu");
+            if (menu) {
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+        }
         
         // Close dropdowns when clicking outside
         document.addEventListener("click", function(event) {
@@ -289,6 +296,8 @@ class NavigationService {
             var portfolioMenu = document.getElementById("portfolioDropdownMenu");
             var stocksDropdown = document.querySelector(".stocks-dropdown");  
             var stocksMenu = document.getElementById("stocksDropdownMenu");
+            var adminDropdown = document.querySelector(".admin-dropdown");
+            var adminMenu = document.getElementById("adminDropdownMenu");
             
             // Close user dropdown if clicking outside
             if (userDropdown && userMenu && !userDropdown.contains(event.target)) {
@@ -303,6 +312,11 @@ class NavigationService {
             // Close stocks dropdown if clicking outside
             if (stocksDropdown && stocksMenu && !stocksDropdown.contains(event.target)) {
                 stocksMenu.style.display = "none";
+            }
+
+            // Close admin dropdown if clicking outside
+            if (adminDropdown && adminMenu && !adminDropdown.contains(event.target)) {
+                adminMenu.style.display = "none";
             }
         });
         </script>';
@@ -330,6 +344,8 @@ class NavigationService {
                 </button>
                 <div class="user-dropdown-menu" id="userDropdownMenu">
                     <a href="profile.php" class="dropdown-item">⚙️ Edit Profile</a>
+                    <a href="profile.php#invitations" class="dropdown-item">📧 Manage Invitations</a>
+                    <a href="profile.php#upgrade" class="dropdown-item">🎓 Become an Advisor</a>
                     <a href="change_password.php" class="dropdown-item">🔐 Change Password</a>
                     <div class="dropdown-divider"></div>
                     <a href="system_status.php" class="dropdown-item">📊 System Status</a>
@@ -453,23 +469,64 @@ class NavigationService {
             $html .= '<a href="MyPortfolio.php" class="dropdown-item">🏠 My Portfolio</a>';
             $html .= '<a href="portfolios.php" class="dropdown-item">📈 Manage Portfolios</a>';
             $html .= '<a href="trades.php" class="dropdown-item">📋 Trades</a>';
+            $html .= '<a href="../simple_automation.py" class="dropdown-item">🤖 Automation</a>';
             $html .= '</div>';
             $html .= '</div>';
             
             // Stocks dropdown with proper CSS classes
             $html .= '<div class="stocks-dropdown">';
             $html .= '<button class="stocks-dropdown-toggle" onclick="toggleStocksDropdown()">';
-            $html .= '� Stocks ▼';
+            $html .= '🔍 Stocks ▼';
             $html .= '</button>';
             $html .= '<div class="stocks-dropdown-menu" id="stocksDropdownMenu">';
             $html .= '<a href="stock_search.php" class="dropdown-item">🔍 Stock Search</a>';
             $html .= '<a href="stock_analysis.php" class="dropdown-item">🤖 Stock Analysis</a>';
+            $html .= '<a href="stock_analysis.php?demo=1" class="dropdown-item">🎯 Demo Analysis</a>';
             $html .= '</div>';
             $html .= '</div>';
+
+            // Data dropdown
+            $html .= '<div class="data-dropdown" style="position: relative; display: inline-block;">';
+            $html .= '<button class="data-dropdown-toggle" onclick="toggleDataDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
+            $html .= '📥 Data ▼';
+            $html .= '</button>';
+            $html .= '<div class="data-dropdown-menu" id="dataDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
+            $html .= '<a href="bank_import.php" class="dropdown-item">💾 Bank CSV Import</a>';
+            $html .= '<a href="trades.php" class="dropdown-item">📝 Trade Log</a>';
+            $html .= '</div>';
+            $html .= '</div>';
+
+            // Reports dropdown
+            $html .= '<div class="reports-dropdown" style="position: relative; display: inline-block;">';
+            $html .= '<button class="reports-dropdown-toggle" onclick="toggleReportsDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
+            $html .= '📊 Reports ▼';
+            $html .= '</button>';
+            $html .= '<div class="reports-dropdown-menu" id="reportsDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
+            $html .= '<a href="../Scripts and CSV Files/Generate_Graph.py" class="dropdown-item">📈 Performance Charts</a>';
+            $html .= '<a href="reports.php" class="dropdown-item">📋 Custom Reports</a>';
+            $html .= '</div>';
+            $html .= '</div>';
+
+            // Admin dropdown (only for admins)
+            if ($this->isAdmin) {
+                $html .= '<div class="admin-dropdown" style="position: relative; display: inline-block;">';
+                $html .= '<button class="admin-dropdown-toggle" onclick="toggleAdminDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
+                $html .= '🔧 Admin ▼';
+                $html .= '</button>';
+                $html .= '<div class="admin-dropdown-menu" id="adminDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
+                $html .= '<a href="admin_users.php" class="dropdown-item">👥 User Management</a>';
+                $html .= '<a href="admin_account_types.php" class="dropdown-item">📋 Account Types</a>';
+                $html .= '<a href="admin_brokerages.php" class="dropdown-item">🏢 Brokerages</a>';
+                $html .= '<a href="admin_bank_accounts.php" class="dropdown-item">🏪 Bank Accounts</a>';
+                $html .= '<a href="admin_system.php" class="dropdown-item">⚙️ System Settings</a>';
+                $html .= '<a href="database.php" class="dropdown-item">🗄️ Database</a>';
+                $html .= '</div>';
+                $html .= '</div>';
+            }
             
             // Other navigation items (excluding dropdown items)
             foreach ($menuItems as $item) {
-                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php', 'stock_search.php', 'stock_analysis.php', 'user_bank_accounts.php'])) {
+                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php', 'stock_search.php', 'stock_analysis.php', 'user_bank_accounts.php', 'admin_users.php', 'admin_advisor_management.php', 'admin/stock_data_admin.php', 'database.php', 'admin_account_types.php', 'admin_brokerages.php', 'admin_bank_accounts.php', 'admin_system.php'])) {
                     $activeClass = $item['active'] ? ' active' : '';
                     $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
                     $html .= htmlspecialchars($item['label']);

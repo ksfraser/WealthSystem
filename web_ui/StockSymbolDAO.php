@@ -3,8 +3,12 @@ require_once __DIR__ . '/CommonDAO.php';
 
 class StockSymbolDAO extends CommonDAO {
 
-    public function __construct() {
-        parent::__construct('LegacyDatabaseConfig');
+    public function __construct($pdo = null) {
+        if ($pdo) {
+            $this->pdo = $pdo;
+        } else {
+            parent::__construct('LegacyDatabaseConfig');
+        }
     }
 
     /**
@@ -43,6 +47,16 @@ class StockSymbolDAO extends CommonDAO {
             error_log("Failed to add symbol {$symbol}: " . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Retrieves all stock symbols from the master list.
+     *
+     * @return array A list of all stock symbols.
+     */
+    public function getAllSymbols() {
+        $stmt = $this->pdo->query("SELECT symbol FROM stock_symbols ORDER BY symbol ASC");
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**

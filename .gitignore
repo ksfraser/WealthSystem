@@ -85,3 +85,6 @@ phpdoc/
 site/
 
 .phpdoc/
+
+# Ignore CIBC import files
+/CIBC/

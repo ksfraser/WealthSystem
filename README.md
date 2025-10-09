@@ -248,10 +248,12 @@ The platform implements a **multi-layered architecture** with clear separation o
 
 
 ### **Web Interface & User Management**
+- ✅ **Comprehensive Navigation** - All features accessible via dynamic, role-based dropdown menus.
 - ✅ **Multi-User Support** - Role-based access control (Admin/User)
 - ✅ **Secure Authentication** - Password hashing, CSRF protection, session management
 - ✅ **User & Admin Password Reset** - Secure, token-based user reset and direct admin reset flows
 - ✅ **Bank Account Management** - Create, share, and manage bank accounts with RBAC permissions
+- ✅ **Transaction Management** - Manually add, edit, and delete investment transactions.
 - ✅ **Account Sharing System** - Grant read/write/owner access to family members and advisors
 - ✅ **Responsive Design** - Mobile-friendly interface with modern UI
 - ✅ **Portfolio Dashboard** - Real-time portfolio views and performance tracking
