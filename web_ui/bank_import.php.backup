@@ -1,0 +1,1020 @@
+<?php
+
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/auth_check.php';
+require_once __DIR__ . '/MidCapBankImportDAO.php';
+require_once __DIR__ . '/BankAccountsDAO.php';
+require_once __DIR__ . '/NavigationService.php';
+require_once __DIR__ . '/BankImportView.php';
+
+$dao = new MidCapBankImportDAO();
+$bankDAO = new BankAccountsDAO();
+$navService = new NavigationService();
+$view = new BankImportView($navService);
+
+// Get current user
+$currentUser = getCurrentUser();
+$userId = $currentUser['id'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
+    $type = $_POST['csv_type'] ?? '';
+    $tmpName = $_FILES['csv_file']['tmp_name'];
+    try {
+        if ($type === 'holdings') {
+            $rows = $dao->parseAccountHoldingsCSV($tmpName);
+        } else {
+            $rows = $dao->parseTransactionHistoryCSV($tmpName);
+        }
+        $stagingFile = $dao->saveStagingCSV($rows, $type);
+        $bankInfo = $dao->identifyBankAccount($rows);
+        if ($bankInfo === null) {
+            $prompt = 'Could not identify bank/account. Please enter details:';
+        } else {
+            $prompt = 'Bank/account identified: ' . htmlspecialchars(json_encode($bankInfo));
+        }
+
+        // Get user bank accounts for the staging page
+        $userBankAccounts = $bankDAO->getUserBankAccounts($userId);
+
+        // Show confirmation form
+        $view->renderStagingPage($prompt, $stagingFile, $type, $userBankAccounts);
+        exit;
+    } catch (Throwable $e) {
+        $view->renderStagingErrorPage($e);
+        exit;
+    }
+}
+
+if (isset($_POST['confirm_import'])) {
+    $stagingFile = $_POST['staging_file'];
+    $type = $_POST['csv_type'];
+    $bank = $_POST['bank_name'];
+    $acct = $_POST['account_number'];
+    $rows = [];
+    if (($handle = fopen($stagingFile, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+            $rows[] = array_combine($header, $data);
+        }
+        fclose($handle);
+    }
+    // Add bank/account info to each row
+    foreach ($rows as &$row) {
+        $row['bank_name'] = $bank;
+        $row['account_number'] = $acct;
+    }
+    try {
+        $dao->importToMidCap($rows, $type);
+
+        // Create bank account and grant access
+        $bankAccountId = $dao->createBankAccountIfNotExists($bank, $acct, $userId, '', 'Investment Account', 'CAD');
+
+        $accountName = "Bank account '{$bank} - {$acct}' has been created and you have been granted owner access.";
+        $viewTransactionsUrl = "view_imported_transactions.php";
+        $downloadLogUrl = "download_import_log.php?file=" . urlencode($stagingFile);
+
+        $view->renderSuccessPage($rows, $accountName, $viewTransactionsUrl, $downloadLogUrl);
+        exit;
+    } catch (Throwable $e) {
+        $view->renderErrorPage('Import Error', 'An error occurred during the import process:', $e);
+        exit;
+    }
+}
+
+// Handle selecting existing account
+if (isset($_POST['action']) && $_POST['action'] === 'select_existing') {
+    $stagingFile = $_POST['staging_file'];
+    $type = $_POST['csv_type'];
+    $existingAccountId = (int)$_POST['existing_account_id'];
+
+    // Get the existing account details
+    $existingAccount = $bankDAO->getBankAccountById($existingAccountId);
+    if (!$existingAccount) {
+        $view->renderAccountNotFoundError();
+        exit;
+    }
+
+    $rows = [];
+    if (($handle = fopen($stagingFile, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+            $rows[] = array_combine($header, $data);
+        }
+        fclose($handle);
+    }
+
+    // Add bank/account info to each row
+    foreach ($rows as &$row) {
+        $row['bank_name'] = $existingAccount['bank_name'];
+        $row['account_number'] = $existingAccount['account_number'];
+    }
+
+    try {
+        $dao->importToMidCap($rows, $type);
+
+        $accountName = "Successfully imported to existing account '{$existingAccount['bank_name']} - {$existingAccount['account_number']}'.";
+        $viewTransactionsUrl = "view_imported_transactions.php?bank_account_id={$existingAccountId}";
+        $downloadLogUrl = "download_import_log.php?file=" . urlencode($stagingFile);
+
+        $view->renderSuccessPage($rows, $accountName, $viewTransactionsUrl, $downloadLogUrl);
+        exit;
+    } catch (Throwable $e) {
+        $view->renderErrorPage('Import Error', 'An error occurred during the import process:', $e);
+        exit;
+    }
+}
+
+// Handle creating new account and importing
+if (isset($_POST['action']) && $_POST['action'] === 'create_and_import') {
+    $stagingFile = $_POST['staging_file'];
+    $type = $_POST['csv_type'];
+    $bank = $_POST['bank_name'];
+    $acct = $_POST['account_number'];
+    $nickname = $_POST['nickname'] ?? '';
+    $accountType = $_POST['account_type'] ?? 'Investment Account';
+    $currency = $_POST['currency'] ?? 'CAD';
+
+    $rows = [];
+    if (($handle = fopen($stagingFile, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+            $rows[] = array_combine($header, $data);
+        }
+        fclose($handle);
+    }
+
+    // Add bank/account info to each row
+    foreach ($rows as &$row) {
+        $row['bank_name'] = $bank;
+        $row['account_number'] = $acct;
+    }
+
+    try {
+        $dao->importToMidCap($rows, $type);
+
+        // Create bank account and grant access
+        $bankAccountId = $bankDAO->createBankAccountIfNotExists($bank, $acct, $userId, $nickname, $accountType, $currency);
+
+        $accountName = "New bank account '{$bank} - {$acct}' has been created and you have been granted owner access.";
+        $viewTransactionsUrl = "view_imported_transactions.php?bank_account_id={$bankAccountId}";
+        $downloadLogUrl = "download_import_log.php?file=" . urlencode($stagingFile);
+
+        $view->renderSuccessPage($rows, $accountName, $viewTransactionsUrl, $downloadLogUrl);
+        exit;
+    } catch (Throwable $e) {
+        $view->renderErrorPage('Import Error', 'An error occurred during the import process:', $e);
+        exit;
+    }
+}
+
+// Upload form
+$view->renderUploadForm();
+
+                .account-selection h3 {
+                    margin-top: 0;
+                    color: #333;
+                }
+
+                .form-group {
+                    margin-bottom: 15px;
+                }
+
+                .form-group label {
+                    display: block;
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                }
+
+                .form-group select {
+                    width: 100%;
+                    padding: 8px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                }
+
+                .btn {
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    padding: 10px 20px;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                }
+
+                .btn:hover {
+                    background: #218838;
+                    color: white;
+                    text-decoration: none;
+                }
+
+                .btn-secondary {
+                    background: #6c757d;
+                }
+
+                .btn-secondary:hover {
+                    background: #545b62;
+                }
+
+                .btn-primary {
+                    background: #007bff;
+                }
+
+                .btn-primary:hover {
+                    background: #0056b3;
+                }
+
+                .back-link {
+                    display: inline-block;
+                    margin-top: 20px;
+                    color: #007bff;
+                    text-decoration: none;
+                }
+
+                .back-link:hover {
+                    text-decoration: underline;
+                }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+
+            <div class="staging-container">
+                <div class="staging-header">
+                    <h1>Staging Complete</h1>
+                    <p><?php echo htmlspecialchars($prompt); ?></p>
+                </div>
+
+                <div class="staging-content">
+                    <div class="account-selection">
+                        <h3>Assign to Existing Bank Account</h3>
+                        <form method="post" action="bank_import.php" style="margin-bottom: 20px;">
+                            <input type="hidden" name="staging_file" value="<?php echo htmlspecialchars($stagingFile); ?>">
+                            <input type="hidden" name="csv_type" value="<?php echo htmlspecialchars($type); ?>">
+                            <input type="hidden" name="action" value="select_existing">
+
+                            <div class="form-group">
+                                <label for="existing_account">Select Existing Bank Account:</label>
+                                <select name="existing_account_id" id="existing_account" required>
+                                    <option value="">-- Choose an existing account --</option>
+                                    <?php foreach ($userBankAccounts as $account): ?>
+                                        <?php
+                                        $displayName = htmlspecialchars($account['bank_name'] . ' - ' . $account['account_number']);
+                                        if (!empty($account['account_nickname'])) {
+                                            $displayName .= ' (' . htmlspecialchars($account['account_nickname']) . ')';
+                                        }
+                                        ?>
+                                        <option value="<?php echo $account['id']; ?>"><?php echo $displayName; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn">Select Account & Import</button>
+                        </form>
+
+                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+
+                        <h3>Or Create New Bank Account</h3>
+                        <button type="button" id="showCreateForm" class="btn btn-primary">Create New Account</button>
+
+                        <div id="createFormContainer" style="display: none; background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%); border: 2px solid #2196f3; padding: 25px; border-radius: 8px; margin-top: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                            <h3 style="color: #1976d2; margin-top: 0; text-align: center;">🏦 Create New Bank Account</h3>
+                            <p style="text-align: center; color: #666; margin-bottom: 20px;">Add a new bank account to track your transactions</p>
+                            <form method="post" action="bank_import.php" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; align-items: end;">
+                                <input type="hidden" name="staging_file" value="<?php echo htmlspecialchars($stagingFile); ?>">
+                                <input type="hidden" name="csv_type" value="<?php echo htmlspecialchars($type); ?>">
+                                <input type="hidden" name="action" value="create_and_import">
+                                <div>
+                                    <label for="bank_name" style="display: block; margin-bottom: 5px; font-weight: bold;">Bank Name *</label>
+                                    <input type="text" id="bank_name" name="bank_name" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                </div>
+                                <div>
+                                    <label for="account_number" style="display: block; margin-bottom: 5px; font-weight: bold;">Account Number *</label>
+                                    <input type="text" id="account_number" name="account_number" required style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                </div>
+                                <div>
+                                    <label for="nickname" style="display: block; margin-bottom: 5px; font-weight: bold;">Nickname (Optional)</label>
+                                    <input type="text" id="nickname" name="nickname" placeholder="e.g., My RBC Account" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                </div>
+                                <div>
+                                    <label for="account_type" style="display: block; margin-bottom: 5px; font-weight: bold;">Account Type</label>
+                                    <select id="account_type" name="account_type" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <option value="Investment Account">Investment Account</option>
+                                        <option value="Savings Account">Savings Account</option>
+                                        <option value="Checking Account">Checking Account</option>
+                                        <option value="Retirement Account">Retirement Account</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="currency" style="display: block; margin-bottom: 5px; font-weight: bold;">Currency</label>
+                                    <select id="currency" name="currency" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                        <option value="CAD">CAD - Canadian Dollar</option>
+                                        <option value="USD">USD - US Dollar</option>
+                                        <option value="EUR">EUR - Euro</option>
+                                        <option value="GBP">GBP - British Pound</option>
+                                    </select>
+                                </div>
+                                <div style="grid-column: span 2;">
+                                    <button type="submit" class="btn" style="width: 100%;">Create Account & Import</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="bank_import.php" class="back-link">← Back to Upload Form</a>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.getElementById('showCreateForm').addEventListener('click', function() {
+                    const container = document.getElementById('createFormContainer');
+                    if (container.style.display === 'none') {
+                        container.style.display = 'block';
+                        this.textContent = 'Hide Create Form';
+                    } else {
+                        container.style.display = 'none';
+                        this.textContent = 'Create New Account';
+                    }
+                });
+            </script>
+
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+require_once __DIR__ . '/auth_check.php';
+require_once __DIR__ . '/MidCapBankImportDAO.php';
+require_once __DIR__ . '/BankAccountsDAO.php';
+require_once __DIR__ . '/NavigationService.php';
+
+$dao = new MidCapBankImportDAO();
+$bankDAO = new BankAccountsDAO();
+$navService = new NavigationService();
+
+// Get current user
+$currentUser = getCurrentUser();
+$userId = $currentUser['id'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
+    $type = $_POST['csv_type'] ?? '';
+    $tmpName = $_FILES['csv_file']['tmp_name'];
+    try {
+        if ($type === 'holdings') {
+            $rows = $dao->parseAccountHoldingsCSV($tmpName);
+        } else {
+            $rows = $dao->parseTransactionHistoryCSV($tmpName);
+        }
+        $stagingFile = $dao->saveStagingCSV($rows, $type);
+        $bankInfo = $dao->identifyBankAccount($rows);
+        if ($bankInfo === null) {
+            $prompt = 'Could not identify bank/account. Please enter details:';
+        } else {
+            $prompt = 'Bank/account identified: ' . htmlspecialchars(json_encode($bankInfo));
+        }
+        // Show confirmation form
+        echo "<h2>Staging Complete</h2>";
+        echo "<p>$prompt</p>";
+        echo '<form method="post" action="bank_import.php">';
+        echo '<input type="hidden" name="staging_file" value="' . htmlspecialchars($stagingFile) . '">';
+        echo '<input type="text" name="bank_name" placeholder="Bank Name" required> ';
+        echo '<input type="text" name="account_number" placeholder="Account Number" required> ';
+        echo '<input type="hidden" name="csv_type" value="' . htmlspecialchars($type) . '">';
+        echo '<button type="submit" name="confirm_import">Import</button>';
+        echo '</form>';
+        exit;
+    } catch (Throwable $e) {
+        // Show error with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Error');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Error - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .error-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .error-header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .error-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+                .back-link:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="error-container">
+                <div class="error-header">
+                    <h1>Error During Staging</h1>
+                </div>
+                <div class="error-content">
+                    <pre style="background: #f8f9fa; padding: 15px; border-radius: 4px; border: 1px solid #dee2e6;"><?php echo htmlspecialchars($e); ?></pre>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="bank_import.php" class="back-link">← Try Again</a>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+}
+
+if (isset($_POST['confirm_import'])) {
+    $stagingFile = $_POST['staging_file'];
+    $type = $_POST['csv_type'];
+    $bank = $_POST['bank_name'];
+    $acct = $_POST['account_number'];
+    $rows = [];
+    if (($handle = fopen($stagingFile, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+            $rows[] = array_combine($header, $data);
+        }
+        fclose($handle);
+    }
+    // Add bank/account info to each row
+    foreach ($rows as &$row) {
+        $row['bank_name'] = $bank;
+        $row['account_number'] = $acct;
+    }
+    try {
+        $dao->importToMidCap($rows, $type);
+
+        // Create bank account and grant access
+        $bankAccountId = $bankDAO->createBankAccountIfNotExists($bank, $acct, $userId, '', 'Investment Account', 'CAD');
+
+        // Show success with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Complete');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Complete - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .success-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .success-header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .success-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .next-actions { margin-top: 20px; }
+                .next-actions h3 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+                .next-actions ul { list-style: none; padding: 0; }
+                .next-actions li { margin: 10px 0; }
+                .next-actions a { color: #007bff; text-decoration: none; padding: 8px 12px; border: 1px solid #007bff; border-radius: 4px; transition: all 0.3s; }
+                .next-actions a:hover { background: #007bff; color: white; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="success-container">
+                <div class="success-header">
+                    <h1>Import Complete</h1>
+                    <p>Successfully imported <?php echo count($rows); ?> transactions.</p>
+                    <p>Bank account '<?php echo htmlspecialchars($bank . ' - ' . $acct); ?>' has been created and you have been granted owner access.</p>
+                </div>
+                <div class="success-content">
+                    <div class="next-actions">
+                        <h3>Next Actions</h3>
+                        <ul>
+                            <li><a href="view_imported_transactions.php">View Imported Transactions</a></li>
+                            <li><a href="user_bank_accounts.php">View Your Bank Accounts</a></li>
+                            <li><a href="reconcile_ledger.php">Reconcile with Ledger/Journal</a></li>
+                            <li><a href="bank_import.php">Import Another File</a></li>
+                            <li><a href="dashboard.php">Return to Dashboard</a></li>
+                            <li><a href="download_import_log.php?file=<?php echo urlencode($stagingFile); ?>">Download Import Log/Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    } catch (Throwable $e) {
+        // Show error with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Error');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Error - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .error-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .error-header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .error-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .error-details { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #dc3545; }
+                .back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+                .back-link:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="error-container">
+                <div class="error-header">
+                    <h1>Import Error</h1>
+                </div>
+                <div class="error-content">
+                    <p>An error occurred during the import process:</p>
+                    <div class="error-details">
+                        <pre><?php echo htmlspecialchars($e); ?></pre>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="bank_import.php" class="back-link">← Try Again</a>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+}
+
+// Handle selecting existing account
+if (isset($_POST['action']) && $_POST['action'] === 'select_existing') {
+    $stagingFile = $_POST['staging_file'];
+    $type = $_POST['csv_type'];
+    $existingAccountId = (int)$_POST['existing_account_id'];
+
+    // Get the existing account details
+    $existingAccount = $bankDAO->getBankAccountById($existingAccountId);
+    if (!$existingAccount) {
+        // Show error with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Error');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Error - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .error-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .error-header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .error-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+                .back-link:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="error-container">
+                <div class="error-header">
+                    <h1>Account Not Found</h1>
+                </div>
+                <div class="error-content">
+                    <p>The selected bank account was not found. It may have been deleted or you may not have access to it.</p>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="bank_import.php" class="back-link">← Try Again</a>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+
+    $rows = [];
+    if (($handle = fopen($stagingFile, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+            $rows[] = array_combine($header, $data);
+        }
+        fclose($handle);
+    }
+
+    // Add bank/account info to each row
+    foreach ($rows as &$row) {
+        $row['bank_name'] = $existingAccount['bank_name'];
+        $row['account_number'] = $existingAccount['account_number'];
+    }
+
+    try {
+        $dao->importToMidCap($rows, $type);
+
+        // Show success with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Complete');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Complete - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .success-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .success-header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .success-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .next-actions { margin-top: 20px; }
+                .next-actions h3 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+                .next-actions ul { list-style: none; padding: 0; }
+                .next-actions li { margin: 10px 0; }
+                .next-actions a { color: #007bff; text-decoration: none; padding: 8px 12px; border: 1px solid #007bff; border-radius: 4px; transition: all 0.3s; }
+                .next-actions a:hover { background: #007bff; color: white; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="success-container">
+                <div class="success-header">
+                    <h1>Import Complete</h1>
+                    <p>Successfully imported <?php echo count($rows); ?> transactions to existing account '<?php echo htmlspecialchars($existingAccount['bank_name'] . ' - ' . $existingAccount['account_number']); ?>'.</p>
+                </div>
+                <div class="success-content">
+                    <div class="next-actions">
+                        <h3>Next Actions</h3>
+                        <ul>
+                            <li><a href="view_imported_transactions.php?bank_account_id=<?php echo $existingAccountId; ?>">View Imported Transactions</a></li>
+                            <li><a href="user_bank_accounts.php">View Your Bank Accounts</a></li>
+                            <li><a href="reconcile_ledger.php">Reconcile with Ledger/Journal</a></li>
+                            <li><a href="bank_import.php">Import Another File</a></li>
+                            <li><a href="dashboard.php">Return to Dashboard</a></li>
+                            <li><a href="download_import_log.php?file=<?php echo urlencode($stagingFile); ?>">Download Import Log/Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    } catch (Throwable $e) {
+        // Show error with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Error');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Error - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .error-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .error-header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .error-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .error-details { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #dc3545; }
+                .back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+                .back-link:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="error-container">
+                <div class="error-header">
+                    <h1>Import Error</h1>
+                </div>
+                <div class="error-content">
+                    <p>An error occurred during the import process:</p>
+                    <div class="error-details">
+                        <pre><?php echo htmlspecialchars($e); ?></pre>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="bank_import.php" class="back-link">← Try Again</a>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+}
+
+// Handle creating new account and importing
+if (isset($_POST['action']) && $_POST['action'] === 'create_and_import') {
+    $stagingFile = $_POST['staging_file'];
+    $type = $_POST['csv_type'];
+    $bank = $_POST['bank_name'];
+    $acct = $_POST['account_number'];
+    $nickname = $_POST['nickname'] ?? '';
+    $accountType = $_POST['account_type'] ?? 'Investment Account';
+    $currency = $_POST['currency'] ?? 'CAD';
+
+    $rows = [];
+    if (($handle = fopen($stagingFile, 'r')) !== false) {
+        $header = fgetcsv($handle, 0, ',', '"', '\\');
+        while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
+            $rows[] = array_combine($header, $data);
+        }
+        fclose($handle);
+    }
+
+    // Add bank/account info to each row
+    foreach ($rows as &$row) {
+        $row['bank_name'] = $bank;
+        $row['account_number'] = $acct;
+    }
+
+    try {
+        $dao->importToMidCap($rows, $type);
+
+        // Create bank account and grant access
+        $bankAccountId = $bankDAO->createBankAccountIfNotExists($bank, $acct, $userId, $nickname, $accountType, $currency);
+
+        // Show success with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Complete');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Complete - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .success-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .success-header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .success-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .next-actions { margin-top: 20px; }
+                .next-actions h3 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+                .next-actions ul { list-style: none; padding: 0; }
+                .next-actions li { margin: 10px 0; }
+                .next-actions a { color: #007bff; text-decoration: none; padding: 8px 12px; border: 1px solid #007bff; border-radius: 4px; transition: all 0.3s; }
+                .next-actions a:hover { background: #007bff; color: white; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="success-container">
+                <div class="success-header">
+                    <h1>Import Complete</h1>
+                    <p>Successfully imported <?php echo count($rows); ?> transactions.</p>
+                    <p>New bank account '<?php echo htmlspecialchars($bank . ' - ' . $acct); ?>' has been created and you have been granted owner access.</p>
+                </div>
+                <div class="success-content">
+                    <div class="next-actions">
+                        <h3>Next Actions</h3>
+                        <ul>
+                            <li><a href="view_imported_transactions.php?bank_account_id=<?php echo $bankAccountId; ?>">View Imported Transactions</a></li>
+                            <li><a href="user_bank_accounts.php">View Your Bank Accounts</a></li>
+                            <li><a href="reconcile_ledger.php">Reconcile with Ledger/Journal</a></li>
+                            <li><a href="bank_import.php">Import Another File</a></li>
+                            <li><a href="dashboard.php">Return to Dashboard</a></li>
+                            <li><a href="download_import_log.php?file=<?php echo urlencode($stagingFile); ?>">Download Import Log/Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    } catch (Throwable $e) {
+        // Show error with proper HTML structure
+        $navHeader = $navService->renderNavigationHeader('Import Bank CSV - Error');
+        $navCSS = $navService->getDashboardCSS();
+        $navScript = $navService->getNavigationScript();
+        ?>
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Import Bank CSV - Error - Enhanced Trading System</title>
+            <link rel="stylesheet" href="css/nav-core.css">
+            <link rel="stylesheet" href="css/nav-links.css">
+            <link rel="stylesheet" href="css/dropdown-base.css">
+            <link rel="stylesheet" href="css/user-dropdown.css">
+            <link rel="stylesheet" href="css/portfolio-dropdown.css">
+            <link rel="stylesheet" href="css/stocks-dropdown.css">
+            <link rel="stylesheet" href="css/nav-responsive.css">
+            <style>
+                .error-container { max-width: 800px; margin: 0 auto; padding: 20px; }
+                .error-header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center; }
+                .error-content { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                .error-details { background: #f8f9fa; padding: 15px; border-radius: 4px; margin: 20px 0; border-left: 4px solid #dc3545; }
+                .back-link { display: inline-block; margin-top: 20px; color: #007bff; text-decoration: none; }
+                .back-link:hover { text-decoration: underline; }
+            </style>
+        </head>
+        <body>
+            <?php echo $navHeader; ?>
+            <div class="error-container">
+                <div class="error-header">
+                    <h1>Import Error</h1>
+                </div>
+                <div class="error-content">
+                    <p>An error occurred during the import process:</p>
+                    <div class="error-details">
+                        <pre><?php echo htmlspecialchars($e); ?></pre>
+                    </div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <a href="bank_import.php" class="back-link">← Try Again</a>
+                    </div>
+                </div>
+            </div>
+            <?php echo $navScript; ?>
+        </body>
+        </html>
+        <?php
+        exit;
+    }
+}
+
+// Upload form
+$navHeader = $navService->renderNavigationHeader('Import Bank CSV');
+$navCSS = $navService->getDashboardCSS();
+$navScript = $navService->getNavigationScript();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Import Bank CSV - Enhanced Trading System</title>
+    <link rel="stylesheet" href="css/nav-core.css">
+    <link rel="stylesheet" href="css/nav-links.css">
+    <link rel="stylesheet" href="css/dropdown-base.css">
+    <link rel="stylesheet" href="css/user-dropdown.css">
+    <link rel="stylesheet" href="css/portfolio-dropdown.css">
+    <link rel="stylesheet" href="css/stocks-dropdown.css">
+    <link rel="stylesheet" href="css/nav-responsive.css">
+    <style>
+        .import-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .import-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .import-form {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group select,
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background: #218838;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <?php echo $navHeader; ?>
+
+    <div class="import-container">
+        <div class="import-header">
+            <h1>Import Bank CSV</h1>
+            <p>Upload and import your bank transaction data</p>
+        </div>
+
+        <div class="import-form">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="csv_type">CSV Type:</label>
+                    <select name="csv_type" id="csv_type">
+                        <option value="holdings">Account Holdings</option>
+                        <option value="transactions">Transaction History</option>
+                    </select>
+                    <div class="help-text">
+                        Select "Account Holdings" for position data or "Transaction History" for trade records
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="csv_file">CSV File:</label>
+                    <input type="file" name="csv_file" id="csv_file" required accept=".csv">
+                    <div class="help-text">
+                        Choose a CSV file exported from your bank or brokerage
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Upload and Process</button>
+            </form>
+        </div>
+    </div>
+
+    <?php echo $navScript; ?>
+</body>
+</html>
