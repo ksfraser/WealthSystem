@@ -46,9 +46,9 @@ class MidCapBankImportDAO extends CommonDAO {
         $file = $dir . "/staging_{$type}_" . date('Ymd_His') . ".csv";
         $fp = fopen($file, 'w');
         if (!empty($rows)) {
-            fputcsv($fp, array_keys($rows[0]));
+            fputcsv($fp, array_keys($rows[0]), ',', '"', '\\');
             foreach ($rows as $row) {
-                fputcsv($fp, $row);
+                fputcsv($fp, $row, ',', '"', '\\');
             }
         }
         fclose($fp);

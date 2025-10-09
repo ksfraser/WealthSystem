@@ -125,7 +125,7 @@ class YahooFinancePhp {
         $file = fopen($filename, 'w');
         
         // Write header
-        fputcsv($file, ['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume']);
+        fputcsv($file, ['Date', 'Open', 'High', 'Low', 'Close', 'Adj Close', 'Volume'], ',', '"', '\\');
         
         // Write data
         foreach ($data['data'] as $row) {
@@ -137,7 +137,7 @@ class YahooFinancePhp {
                 $row['Close'],
                 $row['Adj Close'],
                 $row['Volume']
-            ]);
+            ], ',', '"', '\\');
         }
         
         fclose($file);

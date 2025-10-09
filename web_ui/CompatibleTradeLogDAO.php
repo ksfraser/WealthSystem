@@ -112,9 +112,9 @@ class CompatibleTradeLogDAO {
                 return false;
             }
             
-            fputcsv($fp, $header);
+            fputcsv($fp, $header, ',', '"', '\\');
             foreach ($rows as $row) {
-                fputcsv($fp, $row);
+                fputcsv($fp, $row, ',', '"', '\\');
             }
             fclose($fp);
             return true;

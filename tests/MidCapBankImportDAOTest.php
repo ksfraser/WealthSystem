@@ -134,9 +134,9 @@ class MidCapBankImportDAOTest extends TestCase
         
         // Create staging file manually to test format
         $fp = fopen($stagingFile, 'w');
-        fputcsv($fp, array_keys($rows[0]));
+        fputcsv($fp, array_keys($rows[0]), ',', '"', '\\');
         foreach ($rows as $row) {
-            fputcsv($fp, $row);
+            fputcsv($fp, $row, ',', '"', '\\');
         }
         fclose($fp);
         

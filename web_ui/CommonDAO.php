@@ -174,8 +174,8 @@ abstract class CommonDAO {
             if (empty($rows)) return false;
             $header = array_keys($rows[0]);
             $fp = fopen($csvPath, 'w');
-            fputcsv($fp, $header);
-            foreach ($rows as $row) fputcsv($fp, $row);
+            fputcsv($fp, $header, ',', '"', '\\');
+            foreach ($rows as $row) fputcsv($fp, $row, ',', '"', '\\');
             fclose($fp);
             return true;
         } catch (Exception $e) {

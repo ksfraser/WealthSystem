@@ -223,7 +223,7 @@ class CsvHandler {
             
             // Write header
             $header = array_keys($data[0]);
-            if (!fputcsv($handle, $header)) {
+            if (!fputcsv($handle, $header, ',', '"', '\\')) {
                 $this->logError("Failed to write CSV header to: $csvPath");
                 fclose($handle);
                 return false;
@@ -231,7 +231,7 @@ class CsvHandler {
             
             // Write data rows
             foreach ($data as $row) {
-                if (!fputcsv($handle, $row)) {
+                if (!fputcsv($handle, $row, ',', '"', '\\')) {
                     $this->logError("Failed to write CSV row to: $csvPath");
                     fclose($handle);
                     return false;
@@ -272,7 +272,7 @@ class CsvHandler {
             
             // Write data rows (no header needed for append)
             foreach ($data as $row) {
-                if (!fputcsv($handle, $row)) {
+                if (!fputcsv($handle, $row, ',', '"', '\\')) {
                     $this->logError("Failed to append CSV row to: $csvPath");
                     fclose($handle);
                     return false;
