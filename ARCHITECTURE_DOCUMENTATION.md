@@ -133,7 +133,38 @@ class DashboardContentService {
 - Role-based content customization
 - Component orchestration
 
-### 3. Controller Layer
+### 3. Bank Account Access Control System
+
+#### BankAccountsDAO
+```php
+class BankAccountsDAO extends EnhancedCommonDAO {
+    public function getBankAccountAccess($bankAccountId);
+    public function setBankAccountAccess($bankAccountId, $userId, $permissionLevel, $grantedBy);
+    public function revokeBankAccountAccess($bankAccountId, $userId);
+    public function getUserAccessibleBankAccounts($userId);
+    public function createBankAccountIfNotExists($bankName, $accountNumber, $userId, ...);
+}
+```
+
+**Responsibilities**:
+- Bank account CRUD operations
+- Role-Based Access Control (RBAC) for account sharing
+- Permission management (owner, read_write, read)
+- Audit trail maintenance
+- Automatic account creation during imports
+
+#### Permission Levels
+- **Owner**: Full read/write access + sharing management
+- **Read_Write**: View and modify account data
+- **Read**: View-only access to account data
+
+#### Access Control Flow
+1. User creates or imports bank account → Automatic owner access granted
+2. Owner can share account via modal interface → Permission level selection
+3. Shared users appear in access lists → Revoke access functionality
+4. All operations logged with timestamps → Audit trail maintained
+
+### 4. Controller Layer
 
 #### DashboardController
 ```php
@@ -152,7 +183,7 @@ class DashboardController {
 - Page rendering coordination
 - Error handling
 
-### 4. Navigation System (`NavigationManager.php`)
+### 5. Navigation System (`NavigationManager.php`)
 
 #### NavigationManager
 ```php
@@ -396,6 +427,7 @@ The SOLID architecture implementation provides:
 - ✅ **Testable Design**: Comprehensive unit test coverage
 - ✅ **Scalable Architecture**: Easy to extend and modify
 - ✅ **Security**: Proper RBAC and input validation
+- ✅ **Bank Account Access Control**: Complete RBAC system for account sharing
 - ✅ **Performance**: Optimized rendering and loading
 - ✅ **Best Practices**: Industry-standard design patterns
 

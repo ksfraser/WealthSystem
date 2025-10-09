@@ -37,12 +37,12 @@ interface DatabaseConnectionInterface
 interface DatabaseStatementInterface
 {
     public function execute(array $params = []): bool;
-    public function fetch(int $fetchStyle = null);
-    public function fetchAll(int $fetchStyle = null): array;
+    public function fetch(?int $fetchStyle = null);
+    public function fetchAll(?int $fetchStyle = null): array;
     public function fetchColumn(int $column = 0);
     public function rowCount(): int;
-    public function bindParam($parameter, &$variable, int $dataType = null): bool;
-    public function bindValue($parameter, $value, int $dataType = null): bool;
+    public function bindParam($parameter, &$variable, ?int $dataType = null): bool;
+    public function bindValue($parameter, $value, ?int $dataType = null): bool;
 }
 
 /**
@@ -68,7 +68,7 @@ class EnhancedDbManager
      * @param string|null $configFile Optional config file path
      * @return array Configuration array
      */
-    public static function getConfig(string $configFile = null): array
+    public static function getConfig(?string $configFile = null): array
     {
         if (self::$config !== null) {
             return self::$config;

@@ -1,6 +1,3 @@
-require_once __DIR__ . '/InvestGLDAO.php';
-    /** @var InvestGLDAO */
-    private $investGLDAO;
 <?php
 
 require_once __DIR__ . '/CommonDAO.php';
@@ -8,6 +5,7 @@ require_once __DIR__ . '/SchemaMigrator.php';
 require_once __DIR__ . '/CsvParser.php';
 use App\CsvParser;
 require_once __DIR__ . '/Logger.php';
+require_once __DIR__ . '/InvestGLDAO.php';
 
 class MidCapBankImportDAO extends CommonDAO {
     /** @var CsvParser */

@@ -166,7 +166,7 @@ class PdoStatementWrapper implements DatabaseStatementInterface
      * @param int|null $fetchStyle Fetch style
      * @return mixed Row data or false
      */
-    public function fetch(int $fetchStyle = null)
+    public function fetch(?int $fetchStyle = null)
     {
         return $this->stmt->fetch($fetchStyle ?? PDO::FETCH_ASSOC);
     }
@@ -177,7 +177,7 @@ class PdoStatementWrapper implements DatabaseStatementInterface
      * @param int|null $fetchStyle Fetch style
      * @return array All rows
      */
-    public function fetchAll(int $fetchStyle = null): array
+    public function fetchAll(?int $fetchStyle = null): array
     {
         return $this->stmt->fetchAll($fetchStyle ?? PDO::FETCH_ASSOC);
     }
@@ -211,7 +211,7 @@ class PdoStatementWrapper implements DatabaseStatementInterface
      * @param int|null $dataType Data type
      * @return bool Success status
      */
-    public function bindParam($parameter, &$variable, int $dataType = null): bool
+    public function bindParam($parameter, &$variable, ?int $dataType = null): bool
     {
         return $this->stmt->bindParam($parameter, $variable, $dataType ?? PDO::PARAM_STR);
     }
@@ -224,7 +224,7 @@ class PdoStatementWrapper implements DatabaseStatementInterface
      * @param int|null $dataType Data type
      * @return bool Success status
      */
-    public function bindValue($parameter, $value, int $dataType = null): bool
+    public function bindValue($parameter, $value, ?int $dataType = null): bool
     {
         return $this->stmt->bindValue($parameter, $value, $dataType ?? PDO::PARAM_STR);
     }

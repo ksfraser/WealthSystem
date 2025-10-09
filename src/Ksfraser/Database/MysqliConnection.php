@@ -249,7 +249,7 @@ class MysqliStatementWrapper implements DatabaseStatementInterface
      * @param int|null $fetchStyle Fetch style (ignored for MySQLi)
      * @return array|false Row data or false
      */
-    public function fetch(int $fetchStyle = null)
+    public function fetch(?int $fetchStyle = null)
     {
         if ($this->result === null || $this->result === false) {
             return false;
@@ -264,7 +264,7 @@ class MysqliStatementWrapper implements DatabaseStatementInterface
      * @param int|null $fetchStyle Fetch style (ignored for MySQLi)
      * @return array All rows
      */
-    public function fetchAll(int $fetchStyle = null): array
+    public function fetchAll(?int $fetchStyle = null): array
     {
         if ($this->result === null || $this->result === false) {
             return [];
@@ -312,7 +312,7 @@ class MysqliStatementWrapper implements DatabaseStatementInterface
      * @param int|null $dataType Data type
      * @return bool Success status
      */
-    public function bindParam($parameter, &$variable, int $dataType = null): bool
+    public function bindParam($parameter, &$variable, ?int $dataType = null): bool
     {
         // MySQLi doesn't support named parameters or individual binding
         // This is a simplified implementation for compatibility
@@ -327,7 +327,7 @@ class MysqliStatementWrapper implements DatabaseStatementInterface
      * @param int|null $dataType Data type
      * @return bool Success status
      */
-    public function bindValue($parameter, $value, int $dataType = null): bool
+    public function bindValue($parameter, $value, ?int $dataType = null): bool
     {
         // MySQLi doesn't support named parameters or individual binding
         // This is a simplified implementation for compatibility

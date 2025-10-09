@@ -37,7 +37,7 @@ class CsvParser implements CsvParserInterface
         }
 
         try {
-            $header = fgetcsv($handle);
+            $header = fgetcsv($handle, 0, ',', '"', '\\');
             if (!$header || empty($header)) {
                 $this->logger->warning('CSV file has no header or empty header', ['file' => $filePath]);
                 fclose($handle);
@@ -45,7 +45,7 @@ class CsvParser implements CsvParserInterface
             }
 
             $lineNumber = 1;
-            while (($data = fgetcsv($handle)) !== false) {
+            while (($data = fgetcsv($handle, 0, ',', '"', '\\')) !== false) {
                 $lineNumber++;
                 if (count($data) !== count($header)) {
                     $this->logger->warning('CSV line has different column count than header', [
@@ -72,9 +72,9 @@ class CsvParser implements CsvParserInterface
         if (empty($data)) return false;
         $handle = fopen($filePath, 'w');
         if ($handle === false) return false;
-        fputcsv($handle, array_keys($data[0]));
+        fputcsv($handle, array_keys($data[0]), ',', '"', '\\');
         foreach ($data as $row) {
-            fputcsv($handle, $row);
+            fputcsv($handle, $row, ',', '"', '\\');
         }
         fclose($handle);
         return true;
