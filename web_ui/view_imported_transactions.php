@@ -7,7 +7,8 @@ $userId = 1;
 $pdo = new PDO('mysql:host=localhost;dbname=test_db;charset=utf8mb4', 'test_user', 'test_pass'); // Update credentials
 $dao = new InvestGLDAO($pdo);
 
-// Handle match form submission
+// Handle filter and match form submission
+$filter = $_GET['filter'] ?? 'all';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_opening'], $_POST['match_real'])) {
 	$dummyId = (int)$_POST['match_opening'];
 	$realId = (int)$_POST['match_real'];
@@ -33,6 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['match_opening'], $_PO
 	}
 }
 $transactions = $dao->getTransactions($userId);
+if ($filter === 'matched') {
+	$transactions = array_filter($transactions, function($row) { return $row['matched_tran_id']; });
+} elseif ($filter === 'unmatched') {
+	$transactions = array_filter($transactions, function($row) { return !$row['matched_tran_id'] && $row['tran_type'] !== 'OPENING_BAL_ADJ'; });
+} elseif ($filter === 'adj') {
+	$transactions = array_filter($transactions, function($row) { return $row['tran_type'] === 'OPENING_BAL_ADJ'; });
+}
 
 function statusLabel($row) {
 	if ($row['tran_type'] === 'OPENING_BAL_ADJ') return 'Adj';
@@ -56,6 +64,16 @@ function statusLabel($row) {
 </head>
 <body>
 <h2>Imported Transactions</h2>
+<form method="get" style="margin-bottom:1em;">
+	<label>Filter:
+		<select name="filter" onchange="this.form.submit()">
+			<option value="all"<?= $filter==='all'?' selected':'' ?>>All</option>
+			<option value="matched"<?= $filter==='matched'?' selected':'' ?>>Matched</option>
+			<option value="unmatched"<?= $filter==='unmatched'?' selected':'' ?>>Unmatched</option>
+			<option value="adj"<?= $filter==='adj'?' selected':'' ?>>Adjustment</option>
+		</select>
+	</label>
+</form>
 <?php if (!empty($msg)) echo '<p style="color:green;">' . htmlspecialchars($msg) . '</p>'; ?>
 
 <form method="post" style="margin-bottom:1em;">

@@ -5,9 +5,16 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+require_once __DIR__ . '/auth_check.php';
 require_once __DIR__ . '/MidCapBankImportDAO.php';
+require_once __DIR__ . '/BankAccountsDAO.php';
 
 $dao = new MidCapBankImportDAO();
+$bankDAO = new BankAccountsDAO();
+
+// Get current user
+$currentUser = getCurrentUser();
+$userId = $currentUser['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
     $type = $_POST['csv_type'] ?? '';
@@ -62,20 +69,26 @@ if (isset($_POST['confirm_import'])) {
         $row['account_number'] = $acct;
     }
     try {
-    $dao->importToMidCap($rows, $type);
-    echo "<h2>Import Complete</h2>";
-    echo '<div style="margin-top:1em;">';
-    echo '<h3>Next Actions</h3>';
-    echo '<ul>';
-    echo '<li><a href="view_imported_transactions.php">View Imported Transactions</a></li>';
-    echo '<li><a href="reconcile_ledger.php">Reconcile with Ledger/Journal</a></li>';
-    echo '<li><a href="account_admin.php">Assign/Link to Bank Account</a></li>';
-    echo '<li><a href="bank_import.php">Import Another File</a></li>';
-    echo '<li><a href="dashboard.php">Return to Dashboard</a></li>';
-    echo '<li><a href="download_import_log.php?file=' . urlencode($stagingFile) . '">Download Import Log/Report</a></li>';
-    echo '</ul>';
-    echo '</div>';
-    exit;
+        $dao->importToMidCap($rows, $type);
+
+        // Create bank account and grant access
+        $bankAccountId = $bankDAO->createBankAccountIfNotExists($bank, $acct, $userId, '', 'Investment Account', 'CAD');
+
+        echo "<h2>Import Complete</h2>";
+        echo "<p>Successfully imported " . count($rows) . " transactions.</p>";
+        echo "<p>Bank account '{$bank} - {$acct}' has been created and you have been granted owner access.</p>";
+        echo '<div style="margin-top:1em;">';
+        echo '<h3>Next Actions</h3>';
+        echo '<ul>';
+        echo '<li><a href="view_imported_transactions.php">View Imported Transactions</a></li>';
+        echo '<li><a href="user_bank_accounts.php">View Your Bank Accounts</a></li>';
+        echo '<li><a href="reconcile_ledger.php">Reconcile with Ledger/Journal</a></li>';
+        echo '<li><a href="bank_import.php">Import Another File</a></li>';
+        echo '<li><a href="dashboard.php">Return to Dashboard</a></li>';
+        echo '<li><a href="download_import_log.php?file=' . urlencode($stagingFile) . '">Download Import Log/Report</a></li>';
+        echo '</ul>';
+        echo '</div>';
+        exit;
     } catch (Throwable $e) {
         echo '<h2 style="color:red;">Error during import</h2>';
         echo '<pre>' . htmlspecialchars($e) . '</pre>';

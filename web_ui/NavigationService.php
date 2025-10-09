@@ -391,6 +391,12 @@ class NavigationService {
                 'active' => $currentPage === 'analytics.php'
             ];
             
+            $items[] = [
+                'url' => 'user_bank_accounts.php',
+                'label' => '🏦 Bank Accounts',
+                'active' => $currentPage === 'user_bank_accounts.php'
+            ];
+            
             // Admin-only items
             if ($this->isAdmin) {
                 $items[] = [
@@ -463,13 +469,17 @@ class NavigationService {
             
             // Other navigation items (excluding dropdown items)
             foreach ($menuItems as $item) {
-                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php', 'stock_search.php', 'stock_analysis.php'])) {
+                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php', 'stock_search.php', 'stock_analysis.php', 'user_bank_accounts.php'])) {
                     $activeClass = $item['active'] ? ' active' : '';
                     $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
                     $html .= htmlspecialchars($item['label']);
                     $html .= '</a>';
                 }
             }
+            
+            // Bank Accounts link
+            $bankActiveClass = $currentPage === 'user_bank_accounts.php' ? ' active' : '';
+            $html .= '<a href="user_bank_accounts.php" class="nav-link' . $bankActiveClass . '">🏦 Bank Accounts</a>';
             $html .= '</div>';
         }
         

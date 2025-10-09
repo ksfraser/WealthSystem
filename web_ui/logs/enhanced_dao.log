@@ -1,1 +1,22 @@
 [2025-09-07 22:13:14] [ERROR] Database connection failed {"config_class":"LegacyDatabaseConfig","errors":["DB connection failed: could not find driver"]}
+[2025-10-08 22:11:12] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-08 22:11:33] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-08 22:11:42] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-08 22:11:47] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 02:52:54] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 02:53:01] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 03:17:37] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 03:17:41] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 03:17:54] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 03:17:58] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 03:47:58] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:03:56] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:21:40] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:24:52] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:24:52] [ERROR] Error creating bank account if not exists: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`stock_market_2`.`bank_account_access`, CONSTRAINT `bank_account_access_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE) {"class":"BankAccountsDAO","timestamp":"2025-10-09 04:24:52"}
+[2025-10-09 04:25:18] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:25:18] [ERROR] Error creating bank account if not exists: SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`stock_market_2`.`bank_account_access`, CONSTRAINT `bank_account_access_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE) {"class":"BankAccountsDAO","timestamp":"2025-10-09 04:25:18"}
+[2025-10-09 04:26:38] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:30:03] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:30:30] [INFO] Database connection established {"config_class":"LegacyDatabaseConfig"}
+[2025-10-09 04:30:30] [INFO] Created bank account: CIBC - 17 (ID: 78)
