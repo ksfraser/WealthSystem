@@ -8,10 +8,14 @@ require_once __DIR__ . '/auth_check.php';
 require_once __DIR__ . '/MidCapBankImportDAO.php';
 require_once __DIR__ . '/BankAccountsDAO.php';
 require_once __DIR__ . '/NavigationService.php';
+require_once __DIR__ . '/parsers/ParserFactory.php';
+require_once __DIR__ . '/parsers/CsvFileReader.php';
 
 $dao = new MidCapBankImportDAO();
 $bankDAO = new BankAccountsDAO();
 $navService = new NavigationService();
+$parserFactory = new ParserFactory();
+$csvReader = new CsvFileReader();
 
 // Get current user
 $currentUser = getCurrentUser();
@@ -124,23 +128,80 @@ if (isset($_POST['action']) && $_POST['action'] === 'create_and_import') {
     }
 }
 
-// Handle file upload and staging
+// Handle file upload and staging with new parser system
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
-    $type = $_POST['csv_type'] ?? '';
+    $selectedBankAccountId = $_POST['bank_account_id'] ?? '';
+    $selectedParser = $_POST['parser_type'] ?? '';
     $tmpName = $_FILES['csv_file']['tmp_name'];
+    
     try {
-        if ($type === 'holdings') {
-            $rows = $dao->parseAccountHoldingsCSV($tmpName);
-        } else {
-            $rows = $dao->parseTransactionHistoryCSV($tmpName);
+        // Validate uploaded file first
+        $uploadedFile = $_FILES['csv_file'];
+        $validation = $parserFactory->validateUploadedFile($uploadedFile);
+        if (!$validation['valid']) {
+            throw new InvalidArgumentException($validation['message']);
         }
-        $stagingFile = $dao->saveStagingCSV($rows, $type);
-        $bankInfo = $dao->identifyBankAccount($rows);
-        if ($bankInfo === null) {
-            $prompt = 'Could not identify bank/account. Please assign to an account:';
-        } else {
-            $prompt = 'Bank/account identified: ' . htmlspecialchars(json_encode($bankInfo)) . '. Please confirm or assign to a different account:';
+        
+        // Validate bank account selection
+        if (empty($selectedBankAccountId)) {
+            throw new Exception('Please select a bank account for this import.');
         }
+        
+        // Read CSV content after validation
+        $csvLines = $csvReader->readCsvLines($tmpName);
+        
+        // Get the selected bank account
+        $selectedAccount = $bankDAO->getBankAccountById($selectedBankAccountId);
+        if (!$selectedAccount) {
+            throw new Exception('Selected bank account not found.');
+        }
+        
+        // Validate parser selection and file format
+        if (empty($selectedParser)) {
+            // Try to auto-detect parser
+            $detectedParser = $parserFactory->detectParser($csvLines);
+            if ($detectedParser) {
+                $selectedParser = $detectedParser;
+                $detectionMessage = "Auto-detected format: " . $parserFactory->getAvailableParsers()[$detectedParser]['name'];
+            } else {
+                throw new Exception('Could not determine file format. Please select a parser type.');
+            }
+        } else {
+            // Validate selected parser can handle the file
+            if (!$parserFactory->validateFile($csvLines, $selectedParser)) {
+                $availableParsers = $parserFactory->getAvailableParsers();
+                $selectedParserName = $availableParsers[$selectedParser]['name'] ?? $selectedParser;
+                
+                // Try to suggest a compatible parser
+                $detectedParser = $parserFactory->detectParser($csvLines);
+                if ($detectedParser) {
+                    $suggestedParserName = $availableParsers[$detectedParser]['name'];
+                    throw new Exception("The selected format '{$selectedParserName}' cannot process this file. Try '{$suggestedParserName}' instead.");
+                } else {
+                    throw new Exception("The selected format '{$selectedParserName}' cannot process this file, and no compatible format was detected.");
+                }
+            }
+            $detectionMessage = "Using selected format: " . $parserFactory->getAvailableParsers()[$selectedParser]['name'];
+        }
+        
+        // Parse the file using the appropriate parser
+        $transactions = $parserFactory->parseWithParser($csvLines, $selectedParser);
+        
+        if (empty($transactions)) {
+            throw new Exception('No valid transactions found in the uploaded file.');
+        }
+        
+        // Convert to legacy format for compatibility with existing import logic
+        $rows = [];
+        foreach ($transactions as $transaction) {
+            $rows[] = array_merge($transaction, [
+                'bank_name' => $selectedAccount['bank_name'],
+                'account_number' => $selectedAccount['account_number']
+            ]);
+        }
+        
+        $stagingFile = $dao->saveStagingCSV($rows, 'parsed_transactions');
+        $prompt = $detectionMessage . '. Ready to import to account: ' . htmlspecialchars($selectedAccount['bank_name'] . ' - ' . $selectedAccount['account_number']);
 
         // Get user's accessible bank accounts
         $userBankAccounts = $bankDAO->getUserAccessibleBankAccounts($userId);
@@ -340,13 +401,43 @@ $navScript = $navService->getNavigationScript();
         <div class="import-form">
             <form method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="csv_type">CSV Type:</label>
-                    <select name="csv_type" id="csv_type">
-                        <option value="holdings">Account Holdings</option>
-                        <option value="transactions">Transaction History</option>
+                    <label for="bank_account_id">Target Bank Account:</label>
+                    <select name="bank_account_id" id="bank_account_id" required>
+                        <option value="">-- Select Bank Account --</option>
+                        <?php 
+                        $userBankAccounts = $bankDAO->getUserAccessibleBankAccounts($userId);
+                        foreach ($userBankAccounts as $account): 
+                            $displayName = htmlspecialchars($account['bank_name'] . ' - ' . $account['account_number']);
+                            if (!empty($account['account_nickname'])) {
+                                $displayName .= ' (' . htmlspecialchars($account['account_nickname']) . ')';
+                            }
+                        ?>
+                            <option value="<?php echo $account['id']; ?>">
+                                <?php echo $displayName; ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
                     <div class="help-text">
-                        Select "Account Holdings" for position data or "Transaction History" for trade records
+                        Select the bank account where these transactions belong. 
+                        <a href="user_bank_accounts.php" target="_blank">Manage your bank accounts</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="parser_type">File Format (Optional):</label>
+                    <select name="parser_type" id="parser_type">
+                        <option value="">-- Auto-detect format --</option>
+                        <?php 
+                        $availableParsers = $parserFactory->getAvailableParsers();
+                        foreach ($availableParsers as $key => $parser): 
+                        ?>
+                            <option value="<?php echo htmlspecialchars($key); ?>">
+                                <?php echo htmlspecialchars($parser['name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="help-text">
+                        Leave blank to auto-detect the file format, or select a specific format if you know it
                     </div>
                 </div>
 
@@ -360,6 +451,18 @@ $navScript = $navService->getNavigationScript();
 
                 <button type="submit" class="submit-btn">Upload and Process</button>
             </form>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                <h3>Supported Formats</h3>
+                <ul style="margin: 0; padding-left: 20px;">
+                    <?php foreach ($availableParsers as $parser): ?>
+                        <li>
+                            <strong><?php echo htmlspecialchars($parser['name']); ?>:</strong>
+                            <?php echo htmlspecialchars($parser['description']); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
         </div>
     </div>
 

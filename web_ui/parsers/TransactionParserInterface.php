@@ -3,45 +3,64 @@
  * Transaction Parser Interface
  *
  * Defines the contract for all bank-specific transaction parsers.
- * Ensures that each parser can validate a file and return transactions
- * in a standardized format.
+ * Follows Single Responsibility Principle (SRP) - parsers only parse content,
+ * they don't handle file I/O operations.
+ *
+ * @startuml TransactionParserInterface
+ * interface TransactionParserInterface {
+ *   +canParse(lines: array): bool
+ *   +parse(lines: array): StandardTransaction[]
+ *   +getParserName(): string
+ * }
+ * 
+ * class StandardTransaction {
+ *   +tran_date: string
+ *   +stock_symbol: string
+ *   +tran_type: string
+ *   +quantity: float
+ *   +price: float
+ *   +amount: float
+ *   +description: string
+ * }
+ * 
+ * TransactionParserInterface ..> StandardTransaction : creates
+ * @enduml
  */
 interface TransactionParserInterface {
     /**
-     * Validates if the file content matches the expected format for this parser.
+     * Validates if the CSV content matches the expected format for this parser.
      *
-     * @param array $headers The header row(s) from the CSV file.
-     * @param array $sampleRow A sample data row from the CSV file.
-     * @return bool True if the format is valid, false otherwise.
+     * @param array $lines Array of CSV lines (each line is an array of columns)
+     * @return bool True if this parser can handle the format, false otherwise
      */
-    public function validate(array $headers, array $sampleRow): bool;
+    public function canParse(array $lines): bool;
 
     /**
-     * Parses the given file content and returns an array of standardized transaction objects.
+     * Parses the given CSV content and returns standardized transaction objects.
      *
-     * @param string $filePath The path to the CSV file.
-     * @return array An array of associative arrays, where each represents a transaction.
-     *               Example:
-     *               [
-     *                   [
-     *                       'tran_date' => '2025-09-02',
-     *                       'stock_symbol' => 'BNS',
-     *                       'tran_type' => 'Dividend',
-     *                       'quantity' => 10,
-     *                       'price' => 10.00,
-     *                       'amount' => 100.00,
-     *                       'description' => 'Description text'
-     *                   ],
-     *                   ...
-     *               ]
+     * @param array $lines Array of CSV lines (each line is an array of columns)
+     * @return array Array of standardized transaction arrays
+     * @throws InvalidArgumentException If the format is not supported by this parser
+     * 
+     * @example
+     * [
+     *     [
+     *         'tran_date' => '2025-09-02',
+     *         'stock_symbol' => 'BNS',
+     *         'tran_type' => 'Dividend',
+     *         'quantity' => 10.0,
+     *         'price' => 10.00,
+     *         'amount' => 100.00,
+     *         'description' => 'Dividend payment'
+     *     ]
+     * ]
      */
-    public function parse(string $filePath): array;
+    public function parse(array $lines): array;
 
     /**
-     * Returns the number of header rows to skip.
+     * Returns a human-readable name for this parser.
      *
-     * @param string $filePath The path to the CSV file.
-     * @return int The number of rows to skip.
+     * @return string Parser identification name
      */
-    public function getHeaderRowSkipCount(string $filePath): int;
+    public function getParserName(): string;
 }

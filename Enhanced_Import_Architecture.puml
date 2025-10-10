@@ -1,0 +1,123 @@
+@startuml Enhanced_Import_System_Architecture
+
+!define RECTANGLE class
+
+package "Enhanced Bank Import System" {
+    
+    ' User Interface Layer
+    RECTANGLE BankImportUI {
+        + selectBankAccount()
+        + selectParserType() 
+        + uploadFile()
+        + validateInputs()
+        + displayErrors()
+        + showSupportedFormats()
+    }
+    
+    ' Parser Factory Layer  
+    RECTANGLE ParserFactory {
+        - parsers: TransactionParserInterface[]
+        + validateUploadedFile()
+        + detectParser()
+        + parseWithParser()
+        + getAvailableParsers()
+        + validateFile()
+    }
+    
+    ' Parser Interface
+    interface TransactionParserInterface {
+        + canParse(csvLines): bool
+        + parse(csvLines): array
+        + getParserName(): string
+    }
+    
+    ' Concrete Parsers
+    RECTANGLE CibcParser {
+        + canParse(): bool
+        + parse(): array
+        + getParserName(): string
+        + extractSymbolFromDescription()
+        + findHeaderRowIndex()
+    }
+    
+    RECTANGLE MidCapParser {
+        + canParse(): bool  
+        + parse(): array
+        + getParserName(): string
+        + transformToStandardFormat()
+    }
+    
+    ' File Handler
+    RECTANGLE CsvFileReader {
+        + readCsvLines(): array
+        + readCsvFromString(): array
+    }
+    
+    ' Data Access Layer
+    RECTANGLE BankAccountsDAO {
+        + getUserAccessibleBankAccounts()
+        + getBankAccountById()
+        + createBankAccountIfNotExists()
+    }
+    
+    RECTANGLE MidCapBankImportDAO {
+        + importToMidCap()
+        + saveStagingCSV()
+    }
+    
+    ' External Dependencies
+    RECTANGLE PDOConnection {
+        + query()
+        + prepare()
+        + execute()
+    }
+}
+
+' Relationships
+BankImportUI --> ParserFactory : uses
+ParserFactory --> TransactionParserInterface : manages
+ParserFactory --> CsvFileReader : uses
+
+TransactionParserInterface <|-- CibcParser : implements
+TransactionParserInterface <|-- MidCapParser : implements
+
+BankImportUI --> BankAccountsDAO : validates accounts
+BankImportUI --> MidCapBankImportDAO : imports data
+
+BankAccountsDAO --> PDOConnection : database access
+MidCapBankImportDAO --> PDOConnection : database access
+
+' User Flow
+actor User
+User --> BankImportUI : 1. Select Bank Account
+User --> BankImportUI : 2. Upload CSV File
+BankImportUI --> ParserFactory : 3. Validate & Parse
+ParserFactory --> CibcParser : 4a. CIBC Format
+ParserFactory --> MidCapParser : 4b. MidCap Format
+ParserFactory --> BankImportUI : 5. Return Transactions
+BankImportUI --> MidCapBankImportDAO : 6. Import to Database
+
+' Notes
+note right of ParserFactory
+  Factory Pattern implementation
+  - Auto-detection of formats
+  - Extensible parser registration
+  - Comprehensive validation
+  - Error handling with suggestions
+end note
+
+note right of TransactionParserInterface
+  Single Responsibility Principle
+  - Only handles parsing logic
+  - No file I/O operations
+  - Standardized output format
+end note
+
+note bottom of CibcParser
+  Complex header detection
+  - Multiple header row handling  
+  - Symbol extraction from descriptions
+  - Date format normalization
+end note
+
+@enduml

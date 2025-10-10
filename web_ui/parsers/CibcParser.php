@@ -1,11 +1,36 @@
 <?php
 require_once __DIR__ . '/TransactionParserInterface.php';
 
+use InvalidArgumentException;
+
+/**
+ * CIBC Transaction Parser
+ *
+ * Parses CIBC bank CSV transaction files and converts them to standardized format.
+ * Follows Single Responsibility Principle - only handles CIBC-specific parsing logic.
+ *
+ * @startuml CibcParser
+ * class CibcParser implements TransactionParserInterface {
+ *   -EXPECTED_HEADERS: array
+ *   -SYMBOL_MAPPINGS: array
+ *   +canParse(lines: array): bool
+ *   +parse(lines: array): array
+ *   +getParserName(): string
+ *   -findHeaderRowIndex(lines: array): int
+ *   -transformToStandardFormat(data: array): array
+ *   -extractSymbolFromDescription(description: string): string
+ *   -cleanNumericValue(value: string): float
+ * }
+ * @enduml
+ */
 class CibcParser implements TransactionParserInterface {
     
+    /**
+     * Expected CIBC CSV header columns
+     */
     private const EXPECTED_HEADERS = [
         'Transaction Date',
-        'Settlement Date',
+        'Settlement Date', 
         'Currency of Sub-account Held In',
         'Transaction Type',
         'Symbol',
@@ -23,115 +48,191 @@ class CibcParser implements TransactionParserInterface {
         'Canadian Equivalent'
     ];
 
-    public function validate(array $headers, array $sampleRow): bool {
-        // In CIBC files, the actual header is on a specific row, not the first.
-        // We will find the row that matches our expected headers.
-        foreach($headers as $headerRow) {
-            $trimmedHeaders = array_map('trim', $headerRow);
-            if ($trimmedHeaders === self::EXPECTED_HEADERS) {
+    /**
+     * Known symbol mappings for descriptions that don't contain clear symbols
+     */
+    private const SYMBOL_MAPPINGS = [
+        'BOSTON PIZZA' => 'BPF.UN',
+        'SIR ROYALTY' => 'SRV.UN',
+        'ROYAL BANK' => 'RY',
+        'KEG ROYALTIES' => 'KEG.UN',
+        'PIZZA PIZZA' => 'PZA',
+        'MTY FOOD' => 'MTY',
+        'CANADIAN IMPERIAL BANK' => 'CM',
+        'ISHARES S&P/TSX CANADIAN DIVIDEND' => 'CDZ'
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canParse(array $lines): bool {
+        if (empty($lines)) {
+            return false;
+        }
+
+        // Look for CIBC-specific header pattern in first 20 lines
+        foreach ($lines as $index => $line) {
+            if ($index > 20) break; // Don't search too far
+            
+            if (!is_array($line)) continue;
+            
+            $trimmedLine = array_map('trim', $line);
+            
+            // Check if this line contains CIBC header pattern
+            if (in_array('Transaction Date', $trimmedLine) && 
+                in_array('Settlement Date', $trimmedLine) &&
+                in_array('Transaction Type', $trimmedLine)) {
                 return true;
             }
         }
+
         return false;
     }
 
-    public function parse(string $filePath): array {
+    /**
+     * {@inheritdoc}
+     */
+    public function parse(array $lines): array {
+        if (!$this->canParse($lines)) {
+            throw new InvalidArgumentException('Invalid CIBC CSV format');
+        }
+
         $transactions = [];
-        $file = fopen($filePath, 'r');
-        if (!$file) {
-            throw new Exception("Could not open file: {$filePath}");
-        }
-
-        $skipRows = $this->getHeaderRowSkipCount($filePath);
-        for ($i = 0; $i < $skipRows; $i++) {
-            fgetcsv($file); // Skip header lines
-        }
+        $headerIndex = $this->findHeaderRowIndex($lines);
         
-        // Read header row
-        $header = fgetcsv($file);
-        $header = array_map('trim', $header);
+        if ($headerIndex === -1) {
+            return []; // No valid header found
+        }
 
-        while (($row = fgetcsv($file)) !== false) {
-            if (count($row) < count($header) || empty(trim(implode('', $row)))) {
-                continue; // Skip empty or malformed rows
+        $header = array_map('trim', $lines[$headerIndex]);
+
+        // Process data rows after header
+        $lineCount = count($lines);
+        for ($i = $headerIndex + 1; $i < $lineCount; $i++) {
+            $row = $lines[$i];
+            
+            if (empty($row)) {
+                continue; // Skip empty rows
+            }
+
+            // Pad row to match header length (CIBC files can have variable column counts)
+            $headerCount = count($header);
+            while (count($row) < $headerCount) {
+                $row[] = '';
             }
             
+            // Truncate if row is longer than header
+            if (count($row) > count($header)) {
+                $row = array_slice($row, 0, count($header));
+            }
+
             $transactionData = array_combine($header, $row);
 
-            // Basic data integrity check
-            if (empty($transactionData['Transaction Date']) || empty($transactionData['Transaction Type'])) {
+            // Skip empty rows (all fields are empty) - check this first
+            if (empty(trim(implode('', $row)))) {
+                continue;
+            }
+
+            // Validate required fields
+            if (empty(trim($transactionData['Transaction Date'] ?? '')) || 
+                empty(trim($transactionData['Transaction Type'] ?? ''))) {
                 continue;
             }
 
             $transactions[] = $this->transformToStandardFormat($transactionData);
         }
 
-        fclose($file);
         return $transactions;
     }
 
-    public function getHeaderRowSkipCount(string $filePath): int {
-        $file = fopen($filePath, 'r');
-        if (!$file) {
-            return 0;
-        }
-
-        $rowCount = 0;
-        while (($row = fgetcsv($file)) !== false) {
-            $rowCount++;
-            $trimmedRow = array_map('trim', $row);
-            if (in_array('Transaction Date', $trimmedRow) && in_array('Settlement Date', $trimmedRow)) {
-                fclose($file);
-                return $rowCount -1; // Return the number of rows *before* the header
-            }
-            if ($rowCount > 20) { // Safety break
-                break;
-            }
-        }
-
-        fclose($file);
-        return 9; // Default if not found
+    /**
+     * {@inheritdoc}
+     */
+    public function getParserName(): string {
+        return 'CIBC Transaction Parser';
     }
 
+    /**
+     * Find the index of the header row in the CSV lines
+     *
+     * @param array $lines CSV lines
+     * @return int Header row index, or -1 if not found
+     */
+    private function findHeaderRowIndex(array $lines): int {
+        foreach ($lines as $index => $line) {
+            if ($index > 20) break; // Don't search too far
+            
+            if (!is_array($line)) continue;
+            
+            $trimmedLine = array_map('trim', $line);
+            
+            if (in_array('Transaction Date', $trimmedLine) && 
+                in_array('Settlement Date', $trimmedLine)) {
+                return $index;
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * Transform CIBC data to standardized transaction format
+     *
+     * @param array $cibcData Raw CIBC transaction data
+     * @return array Standardized transaction data
+     */
     private function transformToStandardFormat(array $cibcData): array {
+        $symbol = trim($cibcData['Symbol'] ?? '');
+        
         // Extract symbol from description if not present in symbol field
-        $symbol = trim($cibcData['Symbol']);
         if (empty($symbol)) {
-            $symbol = $this->extractSymbolFromDescription($cibcData['Description']);
+            $symbol = $this->extractSymbolFromDescription($cibcData['Description'] ?? '');
         }
 
         return [
             'tran_date' => date('Y-m-d', strtotime(trim($cibcData['Transaction Date']))),
             'stock_symbol' => $symbol,
             'tran_type' => trim($cibcData['Transaction Type']),
-            'quantity' => (float) str_replace(',', '', trim($cibcData['Quantity'])),
-            'price' => (float) str_replace(',', '', trim($cibcData['Price'])),
-            'amount' => (float) str_replace(',', '', trim($cibcData['Amount'])),
-            'description' => trim($cibcData['Description']),
+            'quantity' => $this->cleanNumericValue($cibcData['Quantity'] ?? '0'),
+            'price' => $this->cleanNumericValue($cibcData['Price'] ?? '0'),
+            'amount' => $this->cleanNumericValue($cibcData['Amount'] ?? '0'),
+            'description' => trim($cibcData['Description'] ?? ''),
         ];
     }
 
+    /**
+     * Extract stock symbol from transaction description
+     *
+     * @param string $description Transaction description
+     * @return string Stock symbol or empty string if not found
+     */
     private function extractSymbolFromDescription(string $description): string {
-        // Example: "ISHARES S&P/TSX CANADIAN DIVIDEND ARISTOCRATS INDEX ETF COM UNIT"
-        // Look for common patterns like stock tickers (e.g., 3-5 uppercase letters)
-        if (preg_match('/\b([A-Z]{2,5}(\.[A-Z]{2})?)\b/', $description, $matches)) {
-            // Check against a list of common non-symbols to avoid false positives
-            $nonSymbols = ['ETF', 'COM', 'UNIT', 'INC', 'CORP', 'TRUST', 'FUND'];
+        // Check known mappings first
+        foreach (self::SYMBOL_MAPPINGS as $keyword => $symbol) {
+            if (stripos($description, $keyword) !== false) {
+                return $symbol;
+            }
+        }
+
+        // Look for ticker patterns (2-5 uppercase letters, optionally with .XX suffix)
+        if (preg_match('/\b([A-Z]{2,5}(?:\.[A-Z]{1,3})?)\b/', $description, $matches)) {
+            // Filter out common words that aren't symbols
+            $nonSymbols = ['ETF', 'COM', 'UNIT', 'INC', 'CORP', 'TRUST', 'FUND', 'DIV', 'PAY', 'MONEY', 'MARKET', 'CASH', 'FUND'];
             if (!in_array($matches[1], $nonSymbols)) {
                 return $matches[1];
             }
         }
-        
-        // Fallback for specific known descriptions
-        if (strpos($description, 'BOSTON PIZZA') !== false) return 'BPF.UN';
-        if (strpos($description, 'SIR ROYALTY') !== false) return 'SRV.UN';
-        if (strpos($description, 'ROYAL BANK') !== false) return 'RY';
-        if (strpos($description, 'KEG ROYALTIES') !== false) return 'KEG.UN';
-        if (strpos($description, 'PIZZA PIZZA') !== false) return 'PZA';
-        if (strpos($description, 'MTY FOOD') !== false) return 'MTY';
-        if (strpos($description, 'CANADIAN IMPERIAL BANK') !== false) return 'CM';
-        if (strpos($description, 'ISHARES S&P/TSX CANADIAN DIVIDEND') !== false) return 'CDZ';
 
-        return ''; // Return empty if no symbol can be reliably extracted
+        return '';
+    }
+
+    /**
+     * Clean and convert string to numeric value
+     *
+     * @param string $value Numeric string potentially with commas
+     * @return float Cleaned numeric value
+     */
+    private function cleanNumericValue(string $value): float {
+        return (float) str_replace([',', ' '], '', trim($value));
     }
 }

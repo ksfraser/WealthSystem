@@ -1,0 +1,4 @@
+symbol,shares,price,market_value
+AAPL,100,150.00,15000.00
+GOOG,50,2800.00,140000.00
+MSFT,75,300.00,22500.00

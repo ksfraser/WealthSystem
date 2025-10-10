@@ -1,0 +1,4 @@
+"Transaction Date","Settlement Date","Currency of Sub-account Held In","Transaction Type","Symbol","Market","Description","Quantity","Currency of Price","Price","Commission","Exchange Rate","Currency of Amount","Amount","Settlement Instruction","Exchange Rate (Canadian Equivalent)","Canadian Equivalent"
+" September 2, 2025"," September 2, 2025","CAD","Dividend","","","1000THS SCOTIA MONEY MARKET FD SR F (557)  FD SR F (557) AS OF 08/29/25 REINVESTED DIV @ 10.00","10","","0.00","","","CAD","0.00","",""
+" August 29, 2025"," August 29, 2025","CAD","Dividend","CDZ","CDN","ISHARES S&P/TSX CANADIAN DIVIDEND ARISTOCRATS INDEX ETF COM UNIT  DIVIDEND ARISTOCRATS INDEX ETF COM UNIT DIST      ON     100 SHS REC 08/26/25 PAY 08/29/25","0","","0.117","","","CAD","11.70","",""
+" August 14, 2025"," August 14, 2025","CAD","Merger","","CDN","KEG ROYALTIES INCOME FUND TRUST UNITS  TRUST UNITS CASH FOR MERGED SHRS","750","","0.00","","","CAD","13,950.00","",""
