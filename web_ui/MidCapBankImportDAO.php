@@ -2,46 +2,70 @@
 
 require_once __DIR__ . '/CommonDAO.php';
 require_once __DIR__ . '/SchemaMigrator.php';
-require_once __DIR__ . '/CsvParser.php';
-use App\CsvParser;
-require_once __DIR__ . '/Logger.php';
 require_once __DIR__ . '/InvestGLDAO.php';
 require_once __DIR__ . '/StockSymbolDAO.php';
 
+/**
+ * MidCap Bank Import Data Access Object
+ *
+ * Streamlined DAO focused solely on data insertion and persistence.
+ * All parsing responsibilities have been moved to dedicated parser classes.
+ * Follows Single Responsibility Principle (SRP) - only handles database operations.
+ *
+ * @startuml MidCapBankImportDAO
+ * class MidCapBankImportDAO {
+ *   -investGLDAO: InvestGLDAO
+ *   -stockSymbolDAO: StockSymbolDAO
+ *   +__construct(PDO $pdo = null)
+ *   +saveStagingCSV(array $rows, string $type): string
+ *   +importToMidCap(array $rows, string $type, int $userId, int $bankAccountId): bool
+ *   -insertTransaction(string $table, array $row): void
+ *   -getAliasedValue(array $row, array $aliases, mixed $default = null): mixed
+ * }
+ * 
+ * MidCapBankImportDAO --> InvestGLDAO : uses
+ * MidCapBankImportDAO --> StockSymbolDAO : uses
+ * MidCapBankImportDAO --> CommonDAO : extends
+ * @enduml
+ */
 class MidCapBankImportDAO extends CommonDAO {
-    /** @var CsvParser */
-    private $csvParser;
+    
     /** @var InvestGLDAO */
     private $investGLDAO;
+    
     /** @var StockSymbolDAO */
     private $stockSymbolDAO;
+    
     /**
-     * @param PDO|null $pdo Optionally inject PDO for testability/DI
+     * Constructor - Initialize DAO with database dependencies
+     * 
+     * @param PDO|null $pdo Optional PDO injection for testability/DI
      */
     public function __construct($pdo = null) {
         parent::__construct('LegacyDatabaseConfig');
-        $logger = new FileLogger(__DIR__ . '/../logs/bank_import.log', 'info');
-        $this->csvParser = new CsvParser($logger);
         $this->pdo = $pdo ?: $this->pdo;
         $this->investGLDAO = new InvestGLDAO($this->pdo);
         $this->stockSymbolDAO = new StockSymbolDAO($this->pdo);
+        
+        // Run schema migrations if PDO is available
         if ($this->pdo) {
             $schemaDir = __DIR__ . '/schema';
             $migrator = new SchemaMigrator($this->pdo, $schemaDir);
             $migrator->migrate();
         }
     }
-    // Parse Account Holdings CSV
-    public function parseAccountHoldingsCSV($filePath) {
-        return $this->csvParser->parse($filePath);
-    }
 
-    // Parse Transaction History CSV
-    public function parseTransactionHistoryCSV($filePath) {
-        return $this->csvParser->parse($filePath);
-    }
-
-    // Staging: Save parsed data to a temp CSV (not tracked by git)
+    /**
+     * Save parsed transaction data to staging CSV file
+     *
+     * Creates a temporary CSV file for audit trail and debugging purposes.
+     * Files are stored in bank_imports directory (excluded from git).
+     *
+     * @param array $rows Array of transaction data rows
+     * @param string $type Type identifier (e.g., 'transactions', 'holdings')
+     * @return string Path to the created staging file
+     * @throws RuntimeException If directory creation or file writing fails
+     */
     public function saveStagingCSV($rows, $type) {
         $dir = __DIR__ . "/../bank_imports";
         if (!is_dir($dir)) {
@@ -59,13 +83,20 @@ class MidCapBankImportDAO extends CommonDAO {
         return $file;
     }
 
-    // Insert staged data into mid-cap tables
     /**
-     * Import staged data into mid-cap tables and GL (double-entry)
-     * @param array $rows
-     * @param string $type 'holdings' or 'transactions'
+     * Import parsed transaction data into MidCap tables and General Ledger
+     *
+     * Processes standardized transaction data and inserts into appropriate tables.
+     * Creates double-entry accounting records in the investment GL.
+     * Ensures stock symbols exist before processing transactions.
+     *
+     * @param array $rows Standardized transaction data from parsers
+     * @param string $type Import type: 'holdings' for positions, 'transactions' for trades
      * @param int $userId The user ID performing the import
-     * @return bool
+     * @param int $bankAccountId Target bank account ID for the transactions
+     * @return bool True on successful import
+     * @throws PDOException On database operation failures
+     * @throws InvalidArgumentException On invalid transaction data
      */
     public function importToMidCap($rows, $type, $userId, $bankAccountId) {
         if ($type === 'holdings') {
@@ -113,12 +144,15 @@ class MidCapBankImportDAO extends CommonDAO {
     }
 
     /**
-     * Gets a value from a row by checking multiple possible keys (aliases).
+     * Get value from row using flexible key matching
      *
-     * @param array $row The data row.
-     * @param array $aliases An array of possible keys.
-     * @param mixed $default The default value if no key is found.
-     * @return mixed The found value or the default.
+     * Supports multiple field name aliases to handle different CSV formats.
+     * Useful for backwards compatibility and format variations.
+     *
+     * @param array $row The transaction data row
+     * @param array $aliases Array of possible field names to check
+     * @param mixed $default Default value if no matching key found
+     * @return mixed The found value or default
      */
     private function getAliasedValue(array $row, array $aliases, $default = null) {
         foreach ($aliases as $alias) {
@@ -129,8 +163,22 @@ class MidCapBankImportDAO extends CommonDAO {
         return $default;
     }
 
+    /**
+     * Insert individual transaction record into database
+     *
+     * Handles the low-level database insertion with proper error handling.
+     * Maps transaction fields to database columns using flexible key matching.
+     *
+     * @param string $table Target database table name
+     * @param array $row Transaction data row with standardized fields
+     * @throws PDOException On database operation failure
+     * @throws Exception On data validation failure
+     */
     private function insertTransaction($table, $row) {
         try {
+            // Validate transaction data before insertion
+            $this->validateTransactionData($row);
+            
             $stmt = $this->pdo->prepare("INSERT INTO $table (bank_name, account_number, symbol, txn_type, shares, price, amount, txn_date, settlement_date, currency_subaccount, market, description, currency_of_price, commission, exchange_rate, currency_of_amount, settlement_instruction, exchange_rate_cad, cad_equivalent, extra) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             $symbol = $this->getAliasedValue($row, ['symbol', 'ticker']);
             $txnType = $this->getAliasedValue($row, ['type', 'transaction_type', 'txn_type']);
@@ -179,10 +227,26 @@ class MidCapBankImportDAO extends CommonDAO {
         }
     }
 
-    // Try to identify bank/account from CSV header or data
-    public function identifyBankAccount($rows) {
-        // TODO: Implement logic to guess bank/account from data
-        // Return null if not sure
-        return null;
+    /**
+     * Validate transaction data before insertion
+     *
+     * Performs basic validation on transaction records to ensure data quality.
+     * Can be extended to add more sophisticated validation rules.
+     *
+     * @param array $row Transaction data row
+     * @return bool True if validation passes
+     * @throws InvalidArgumentException On validation failure
+     */
+    private function validateTransactionData(array $row): bool {
+        // Basic validation - ensure required fields are present
+        $requiredFields = ['bank_name', 'account_number'];
+        
+        foreach ($requiredFields as $field) {
+            if (empty($row[$field])) {
+                throw new InvalidArgumentException("Missing required field: {$field}");
+            }
+        }
+        
+        return true;
     }
 }

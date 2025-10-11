@@ -191,33 +191,155 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
             throw new Exception('No valid transactions found in the uploaded file.');
         }
         
-        // Convert to legacy format for compatibility with existing import logic
+        // Validate transaction data quality
+        $validTransactions = [];
+        $skippedTransactions = [];
+        
+        foreach ($transactions as $index => $transaction) {
+            // Basic validation - ensure required fields are present
+            if (empty($transaction['date']) || empty($transaction['description']) || !isset($transaction['amount'])) {
+                $skippedTransactions[] = [
+                    'row' => $index + 1,
+                    'reason' => 'Missing required fields (date, description, or amount)',
+                    'data' => $transaction
+                ];
+                continue;
+            }
+            
+            // Validate date format
+            $date = DateTime::createFromFormat('Y-m-d', $transaction['date']);
+            if (!$date) {
+                $skippedTransactions[] = [
+                    'row' => $index + 1,
+                    'reason' => 'Invalid date format: ' . $transaction['date'],
+                    'data' => $transaction
+                ];
+                continue;
+            }
+            
+            // Validate amount is numeric
+            if (!is_numeric($transaction['amount'])) {
+                $skippedTransactions[] = [
+                    'row' => $index + 1,
+                    'reason' => 'Amount is not numeric: ' . $transaction['amount'],
+                    'data' => $transaction
+                ];
+                continue;
+            }
+            
+            $validTransactions[] = $transaction;
+        }
+        
+        // Check if we have any valid transactions
+        if (empty($validTransactions)) {
+            $message = 'No valid transactions found after validation.';
+            if (!empty($skippedTransactions)) {
+                $message .= ' ' . count($skippedTransactions) . ' transactions were skipped due to data quality issues.';
+            }
+            throw new Exception($message);
+        }
+        
+        // Convert transactions to legacy format for the existing DAO
         $rows = [];
-        foreach ($transactions as $transaction) {
+        foreach ($validTransactions as $transaction) {
             $rows[] = array_merge($transaction, [
                 'bank_name' => $selectedAccount['bank_name'],
                 'account_number' => $selectedAccount['account_number']
             ]);
         }
         
-        $stagingFile = $dao->saveStagingCSV($rows, 'parsed_transactions');
-        $prompt = $detectionMessage . '. Ready to import to account: ' . htmlspecialchars($selectedAccount['bank_name'] . ' - ' . $selectedAccount['account_number']);
+        // Import transactions to the selected bank account using existing DAO
+        $dao->importToMidCap($rows, 'transactions', $userId, $selectedBankAccountId);
+        
+        // Display success message with comprehensive results
+        echo '<div style="max-width: 800px; margin: 20px auto; padding: 20px; font-family: Arial, sans-serif;">';
+        echo '<div style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">';
+        echo '<h1 style="margin: 0 0 10px 0; font-size: 24px;">✅ Import Successful!</h1>';
+        echo '<p style="margin: 0; font-size: 16px;">' . $detectionMessage . '</p>';
+        echo '</div>';
+        
+        echo '<div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">';
+        echo '<h2 style="color: #333; margin-top: 0;">Import Summary</h2>';
+        echo '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">';
+        
+        echo '<div style="padding: 15px; background: #e8f5e8; border-left: 4px solid #28a745; border-radius: 4px;">';
+        echo '<h3 style="margin: 0 0 5px 0; color: #155724;">✓ Successfully Imported</h3>';
+        echo '<p style="margin: 0; font-size: 18px; font-weight: bold; color: #155724;">' . count($validTransactions) . ' transactions</p>';
+        echo '</div>';
+        
+        if (!empty($skippedTransactions)) {
+            echo '<div style="padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">';
+            echo '<h3 style="margin: 0 0 5px 0; color: #856404;">⚠ Skipped</h3>';
+            echo '<p style="margin: 0; font-size: 18px; font-weight: bold; color: #856404;">' . count($skippedTransactions) . ' transactions</p>';
+            echo '</div>';
+        }
+        
+        echo '</div>';
+        
+        echo '<div style="margin-bottom: 20px;">';
+        echo '<h3 style="color: #333;">Target Account</h3>';
+        $accountDisplay = htmlspecialchars($selectedAccount['bank_name'] . ' - ' . $selectedAccount['account_number']);
+        if (!empty($selectedAccount['account_nickname'])) {
+            $accountDisplay .= ' (' . htmlspecialchars($selectedAccount['account_nickname']) . ')';
+        }
+        echo '<p style="font-size: 16px; background: #f8f9fa; padding: 10px; border-radius: 4px; margin: 0;">' . $accountDisplay . '</p>';
+        echo '</div>';
+        
+        // Show skipped transactions if any
+        if (!empty($skippedTransactions)) {
+            echo '<div style="margin-bottom: 20px;">';
+            echo '<h3 style="color: #856404;">⚠ Skipped Transactions</h3>';
+            echo '<div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 4px; padding: 15px;">';
+            echo '<p style="margin: 0 0 10px 0; color: #856404;">The following transactions were skipped due to data quality issues:</p>';
+            echo '<ul style="margin: 0; padding-left: 20px;">';
+            foreach ($skippedTransactions as $skipped) {
+                echo '<li style="margin-bottom: 5px; color: #856404;">';
+                echo '<strong>Row ' . $skipped['row'] . ':</strong> ' . htmlspecialchars($skipped['reason']);
+                echo '</li>';
+            }
+            echo '</ul>';
+            echo '</div>';
+            echo '</div>';
+        }
+        
+        echo '</div>';
+        
+        // Action buttons
+        echo '<div style="text-align: center; margin: 20px 0;">';
+        echo '<a href="view_imported_transactions.php?bank_account_id=' . $selectedBankAccountId . '" style="background: #007bff; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; margin: 0 10px; display: inline-block;">View Imported Transactions</a>';
+        echo '<a href="user_bank_accounts.php" style="background: #6c757d; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; margin: 0 10px; display: inline-block;">Manage Bank Accounts</a>';
+        echo '<a href="bank_import.php" style="background: #28a745; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; margin: 0 10px; display: inline-block;">Import Another File</a>';
+        echo '<a href="dashboard.php" style="background: #17a2b8; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; margin: 0 10px; display: inline-block;">Return to Dashboard</a>';
+        echo '</div>';
+        echo '</div>';
+        
+        exit;
+        
+    } catch (Exception $e) {
+        echo '<div style="max-width: 800px; margin: 20px auto; padding: 20px; font-family: Arial, sans-serif;">';
+        echo '<div style="background: linear-gradient(135deg, #dc3545, #c82333); color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">';
+        echo '<h1 style="margin: 0 0 10px 0; font-size: 24px;">❌ Import Failed</h1>';
+        echo '<p style="margin: 0; font-size: 16px;">There was an error processing your file</p>';
+        echo '</div>';
+        
+        echo '<div style="background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px;">';
+        echo '<h2 style="color: #dc3545; margin-top: 0;">Error Details</h2>';
+        echo '<div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 4px; padding: 15px;">';
+        echo '<p style="margin: 0; color: #721c24;">' . htmlspecialchars($e->getMessage()) . '</p>';
+        echo '</div>';
+        echo '</div>';
+        
+        echo '<div style="text-align: center; margin: 20px 0;">';
+        echo '<a href="bank_import.php" style="background: #28a745; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; margin: 0 10px; display: inline-block;">Try Again</a>';
+        echo '<a href="dashboard.php" style="background: #6c757d; color: white; text-decoration: none; padding: 12px 24px; border-radius: 4px; margin: 0 10px; display: inline-block;">Return to Dashboard</a>';
+        echo '</div>';
+        echo '</div>';
+        exit;
+    }
+}
 
-        // Get user's accessible bank accounts
-        $userBankAccounts = $bankDAO->getUserAccessibleBankAccounts($userId);
-
-        // Show staging complete with account selection form
-        echo "<h2>Staging Complete</h2>";
-        echo "<p>$prompt</p>";
-        echo "<p>Processed " . count($rows) . " rows from your CSV file.</p>";
-
-        echo '<div style="margin: 20px 0; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9;">';
-        echo '<h3>Assign to Existing Bank Account</h3>';
-        echo '<form method="post" action="bank_import.php" style="margin-bottom: 20px;">';
-        echo '<input type="hidden" name="staging_file" value="' . htmlspecialchars($stagingFile) . '">';
-        echo '<input type="hidden" name="csv_type" value="' . htmlspecialchars($type) . '">';
-        echo '<input type="hidden" name="action" value="select_existing">';
-
+// Legacy staging logic (keeping for backward compatibility)
+if (false) { // Disabled - using new direct import above
         echo '<label for="existing_account" style="display: block; margin-bottom: 10px; font-weight: bold;">Select Existing Bank Account:</label>';
         echo '<select name="existing_account_id" id="existing_account" required style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;">';
         echo '<option value="">-- Choose an existing account --</option>';
@@ -299,12 +421,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
         </script>';
 
         exit;
-    } catch (Throwable $e) {
-        echo '<h2 style="color:red;">Error during staging</h2>';
-        echo '<pre>' . htmlspecialchars($e) . '</pre>';
-        exit;
-    }
 }
+// End of legacy staging logic
 
 // Upload form
 $navHeader = $navService->renderNavigationHeader('Import Bank CSV');
