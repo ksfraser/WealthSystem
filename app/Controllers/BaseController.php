@@ -6,6 +6,7 @@ use App\Core\Request;
 use App\Core\Response;
 use App\Core\Container;
 use App\Core\Interfaces\ControllerInterface;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
  * Base Controller
@@ -26,8 +27,9 @@ abstract class BaseController implements ControllerInterface
     }
     /**
      * Handle request - Template method that can be overridden
+     * Returns Symfony Response (base class for all response types)
      */
-    public function handle(Request $request): Response 
+    public function handle(Request $request): SymfonyResponse 
     {
         // Pre-processing hook
         $this->before($request);
@@ -43,8 +45,9 @@ abstract class BaseController implements ControllerInterface
     
     /**
      * Main processing method - must be implemented by child classes
+     * Returns Symfony Response (allows Response, JsonResponse, RedirectResponse, etc.)
      */
-    abstract protected function process(Request $request): Response;
+    abstract protected function process(Request $request): SymfonyResponse;
     
     /**
      * Pre-processing hook - can be overridden by child classes
@@ -57,15 +60,16 @@ abstract class BaseController implements ControllerInterface
     /**
      * Post-processing hook - can be overridden by child classes
      */
-    protected function after(Request $request, Response $response): void 
+    protected function after(Request $request, SymfonyResponse $response): void 
     {
         // Default implementation - do nothing
     }
     
     /**
      * Render view with data
+     * Returns Symfony Response with HTML content
      */
-    protected function view(string $template, array $data = []): Response 
+    protected function view(string $template, array $data = []): SymfonyResponse 
     {
         // Try to use ViewService if available
         try {
@@ -95,16 +99,18 @@ abstract class BaseController implements ControllerInterface
     
     /**
      * Return JSON response
+     * Returns Symfony JsonResponse (subclass of Response)
      */
-    protected function json(array $data, int $statusCode = 200): Response 
+    protected function json(array $data, int $statusCode = 200): SymfonyResponse 
     {
         return Response::json($data, $statusCode);
     }
     
     /**
      * Return redirect response
+     * Returns Symfony RedirectResponse (subclass of Response)
      */
-    protected function redirect(string $url, int $statusCode = 302): Response 
+    protected function redirect(string $url, int $statusCode = 302): SymfonyResponse 
     {
         return Response::redirect($url, $statusCode);
     }
