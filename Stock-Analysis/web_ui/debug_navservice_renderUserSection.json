@@ -1,0 +1,11 @@
+{
+    "isLoggedIn": true,
+    "currentUser": {
+        "id": 3,
+        "username": "Kevin",
+        "email": "fraser.ks@gmail.com",
+        "is_admin": false,
+        "login_time": 1759936627
+    },
+    "isAdmin": false
+}
