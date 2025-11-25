@@ -6,7 +6,18 @@
  * Tests the complete data flow from existing systems to new MVC architecture.
  */
 
-require_once __DIR__ . '/app/Core/ServiceContainer.php';
+// Load Composer autoloader
+require_once __DIR__ . '/vendor/autoload.php';
+
+// Register App namespace autoloader
+spl_autoload_register(function ($class) {
+    if (strpos($class, 'App\\') === 0) {
+        $file = __DIR__ . '/app/' . str_replace(['App\\', '\\'], ['', '/'], $class) . '.php';
+        if (file_exists($file)) {
+            require_once $file;
+        }
+    }
+});
 
 use App\Core\ServiceContainer;
 

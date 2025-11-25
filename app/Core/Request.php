@@ -2,143 +2,127 @@
 
 namespace App\Core;
 
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
+
 /**
  * HTTP Request class
  * 
- * Represents an HTTP request with all relevant data.
- * Follows Single Responsibility Principle (SRP) - handles only request data.
+ * Extends Symfony's Request class instead of reinventing the wheel.
+ * Provides compatibility layer for existing code while using battle-tested implementation.
+ * Follows Single Responsibility Principle (SRP) - delegates to Symfony HTTP Foundation.
  */
-class Request 
+class Request extends SymfonyRequest
 {
-    private array $get;
-    private array $post;
-    private array $server;
-    private array $files;
-    private array $cookies;
-    private string $method;
-    private string $uri;
-    private array $headers;
-    
-    public function __construct(
-        array $get = null,
-        array $post = null, 
-        array $server = null,
-        array $files = null,
-        array $cookies = null
-    ) {
-        $this->get = $get ?? $_GET;
-        $this->post = $post ?? $_POST;
-        $this->server = $server ?? $_SERVER;
-        $this->files = $files ?? $_FILES;
-        $this->cookies = $cookies ?? $_COOKIE;
-        
-        $this->method = strtoupper($this->server['REQUEST_METHOD'] ?? 'GET');
-        $this->uri = $this->server['REQUEST_URI'] ?? '/';
-        $this->headers = $this->parseHeaders();
-    }
-    
     /**
-     * Get request method (GET, POST, PUT, DELETE, etc.)
+     * Create Request from PHP globals
      */
-    public function getMethod(): string 
+    public static function fromGlobals(): self
     {
-        return $this->method;
+        $request = parent::createFromGlobals();
+        return self::createFromSymfonyRequest($request);
     }
     
     /**
-     * Get request URI
+     * Create from Symfony Request
+     */
+    public static function createFromSymfonyRequest(SymfonyRequest $symfonyRequest): self
+    {
+        $request = new self(
+            $symfonyRequest->query->all(),
+            $symfonyRequest->request->all(),
+            $symfonyRequest->attributes->all(),
+            $symfonyRequest->cookies->all(),
+            $symfonyRequest->files->all(),
+            $symfonyRequest->server->all(),
+            $symfonyRequest->getContent()
+        );
+        
+        if ($symfonyRequest->hasSession()) {
+            $request->setSession($symfonyRequest->getSession());
+        }
+        
+        return $request;
+    }
+    
+    /**
+     * Get request URI path (compatibility method)
      */
     public function getUri(): string 
     {
-        return parse_url($this->uri, PHP_URL_PATH) ?? '/';
+        return $this->getPathInfo();
     }
     
     /**
-     * Get GET parameter
+     * Get GET parameter (compatibility method)
+     * Renamed to avoid conflict with parent get() method
      */
-    public function get(string $key, $default = null) 
+    public function getQuery(string $key, $default = null) 
     {
-        return $this->get[$key] ?? $default;
+        return $this->query->get($key, $default);
     }
     
     /**
-     * Get POST parameter
+     * Legacy alias for getQuery() - for backward compatibility
+     * Note: parent::get() shadows this, so use getQuery() for new code
+     */
+    public function getParam(string $key, $default = null) 
+    {
+        return $this->query->get($key, $default);
+    }
+    
+    /**
+     * Get POST parameter (compatibility method)
      */
     public function post(string $key, $default = null) 
     {
-        return $this->post[$key] ?? $default;
+        return $this->request->get($key, $default);
     }
     
     /**
-     * Get all GET parameters
+     * Get all GET parameters (compatibility method)
      */
     public function allGet(): array 
     {
-        return $this->get;
+        return $this->query->all();
     }
     
     /**
-     * Get all POST parameters
+     * Get all POST parameters (compatibility method)
      */
     public function allPost(): array 
     {
-        return $this->post;
+        return $this->request->all();
     }
     
     /**
-     * Get uploaded file
+     * Get uploaded file (compatibility method)
      */
-    public function file(string $key): ?array 
+    public function file(string $key) 
     {
-        return $this->files[$key] ?? null;
+        return $this->files->get($key);
     }
     
     /**
-     * Get cookie value
+     * Get cookie value (compatibility method)
      */
     public function cookie(string $key, $default = null) 
     {
-        return $this->cookies[$key] ?? $default;
+        return $this->cookies->get($key, $default);
     }
     
     /**
-     * Get header value
+     * Get header value (compatibility method)
      */
     public function header(string $key, $default = null) 
     {
-        return $this->headers[strtolower($key)] ?? $default;
+        return $this->headers->get($key, $default);
     }
     
     /**
-     * Check if request is AJAX
+     * Check if request is AJAX (compatibility method)
      */
     public function isAjax(): bool 
     {
-        return strtolower($this->header('x-requested-with', '')) === 'xmlhttprequest';
-    }
-    
-    /**
-     * Check if request method matches
-     */
-    public function isMethod(string $method): bool 
-    {
-        return $this->method === strtoupper($method);
-    }
-    
-    /**
-     * Parse HTTP headers from server variables
-     */
-    private function parseHeaders(): array 
-    {
-        $headers = [];
-        
-        foreach ($this->server as $key => $value) {
-            if (strpos($key, 'HTTP_') === 0) {
-                $header = str_replace('_', '-', strtolower(substr($key, 5)));
-                $headers[$header] = $value;
-            }
-        }
-        
-        return $headers;
+        return $this->isXmlHttpRequest();
     }
 }
