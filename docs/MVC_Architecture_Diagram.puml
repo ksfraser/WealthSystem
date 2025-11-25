@@ -1,0 +1,244 @@
+@startuml MVC_Architecture_Overview
+
+!define RECTANGLE class
+
+skinparam packageStyle rectangle
+skinparam backgroundColor #FEFEFE
+skinparam roundcorner 10
+
+title ChatGPT Micro-Cap MVC Architecture with Symfony HTTP Foundation
+
+' Define colors
+skinparam class {
+    BackgroundColor<<Controller>> #B3E5FC
+    BackgroundColor<<Service>> #C8E6C9
+    BackgroundColor<<Repository>> #FFE082
+    BackgroundColor<<Model>> #FFCCBC
+    BackgroundColor<<Core>> #E1BEE7
+    BackgroundColor<<Symfony>> #F48FB1
+    BackgroundColor<<Legacy>> #CFD8DC
+}
+
+package "HTTP Layer (Symfony)" <<Symfony>> {
+    class Request <<Symfony>> {
+        +fromGlobals(): self
+        +getUri(): string
+        +post(key): mixed
+        +isAjax(): bool
+        --Extends--
+        Symfony\\HttpFoundation\\Request
+    }
+    
+    class Response <<Symfony>> {
+        +json(data): JsonResponse
+        +redirect(url): RedirectResponse
+        +html(content): Response
+        --Extends--
+        Symfony\\HttpFoundation\\Response
+    }
+}
+
+package "Core Framework" <<Core>> {
+    class Router <<Core>> {
+        -Container container
+        -array routes
+        +get(path, handler)
+        +post(path, handler)
+        +dispatch(Request): Response
+    }
+    
+    class Container <<Core>> {
+        -array bindings
+        -array instances
+        +bind(abstract, concrete)
+        +get(abstract): object
+        +instance(abstract, instance)
+    }
+    
+    class Application <<Core>> {
+        -Container container
+        -Router router
+        +run(): void
+    }
+}
+
+package "Controllers" <<Controller>> {
+    abstract class BaseController <<Controller>> {
+        #Container container
+        +handle(Request): Response
+        #view(template, data): Response
+        #json(data): JsonResponse
+        #redirect(url): RedirectResponse
+        #validate(request, rules): array
+        {abstract} #process(Request): Response
+    }
+    
+    class DashboardController <<Controller>> {
+        -PortfolioServiceInterface service
+        -MarketDataServiceInterface marketData
+        +index(): Response
+        +portfolio(): Response
+    }
+    
+    class BankImportController <<Controller>> {
+        -BankImportServiceInterface service
+        +index(): Response
+        +upload(): Response
+    }
+}
+
+package "Services" <<Service>> {
+    interface PortfolioServiceInterface <<Service>> {
+        +getDashboardData(userId): array
+        +getPortfolio(userId): array
+        +updateHolding(userId, symbol, data): bool
+    }
+    
+    class PortfolioService <<Service>> {
+        -PortfolioRepositoryInterface repository
+        -MarketDataServiceInterface marketData
+        +getDashboardData(userId): array
+        +calculateMetrics(portfolio): array
+    }
+    
+    class MarketDataService <<Service>> {
+        -DynamicStockDataAccess dataAccess
+        +getCurrentPrices(symbols): array
+        +getHistoricalPrices(symbol, start, end): array
+    }
+    
+    class DataSynchronizationService <<Service>> {
+        +synchronizePortfolioData(userId): array
+        +validateDataSources(): bool
+    }
+}
+
+package "Repositories" <<Repository>> {
+    interface RepositoryInterface <<Repository>> {
+        +findById(id): ?ModelInterface
+        +findBy(criteria): array
+        +create(data): ModelInterface
+        +update(id, data): bool
+        +delete(id): bool
+    }
+    
+    class PortfolioRepository <<Repository>> {
+        -MicroCapPortfolioDAO dao
+        -CommonDAO commonDao
+        +getPortfolioByUserId(userId): array
+        +updateHolding(userId, symbol, data): bool
+    }
+    
+    class UserRepository <<Repository>> {
+        -UserAuthDAO dao
+        +findByUsername(username): ?User
+        +authenticate(username, password): bool
+    }
+}
+
+package "Models" <<Model>> {
+    class Portfolio <<Model>> {
+        -int id
+        -int userId
+        -array holdings
+        +getTotalValue(): float
+        +getDailyChange(): float
+    }
+    
+    class User <<Model>> {
+        -int id
+        -string username
+        -string email
+    }
+}
+
+package "Legacy DAOs" <<Legacy>> {
+    class MicroCapPortfolioDAO <<Legacy>> {
+        +getPortfolio(userId): array
+        +loadFromCSV(): array
+    }
+    
+    class UserAuthDAO <<Legacy>> {
+        +getUserByUsername(username): array
+        +validateCredentials(username, password): bool
+    }
+    
+    class CommonDAO <<Legacy>> {
+        +query(sql, params): array
+        +execute(sql, params): bool
+    }
+    
+    class DynamicStockDataAccess <<Legacy>> {
+        +getPrices(symbols): array
+        +getHistoricalData(symbol, start, end): array
+    }
+}
+
+' Relationships - HTTP Layer
+Router --> Request : "accepts"
+Router --> Response : "returns"
+
+' Relationships - Core Framework
+Application --> Router : "uses"
+Application --> Container : "manages"
+Router --> Container : "resolves dependencies"
+
+' Relationships - Controllers
+BaseController <|-- DashboardController : "extends"
+BaseController <|-- BankImportController : "extends"
+Router --> BaseController : "dispatches to"
+BaseController --> Request : "receives"
+BaseController --> Response : "returns"
+
+' Relationships - Controllers to Services
+DashboardController --> PortfolioServiceInterface : "depends on"
+DashboardController --> MarketDataService : "uses"
+BankImportController --> "BankImportServiceInterface" : "depends on"
+
+' Relationships - Services
+PortfolioServiceInterface <|.. PortfolioService : "implements"
+PortfolioService --> PortfolioRepository : "uses"
+PortfolioService --> MarketDataService : "uses"
+MarketDataService --> DynamicStockDataAccess : "bridges to"
+
+' Relationships - Repositories
+RepositoryInterface <|-- PortfolioRepository : "implements"
+RepositoryInterface <|-- UserRepository : "implements"
+PortfolioRepository --> MicroCapPortfolioDAO : "bridges to"
+PortfolioRepository --> CommonDAO : "uses"
+UserRepository --> UserAuthDAO : "bridges to"
+
+' Relationships - Models
+PortfolioService --> Portfolio : "creates"
+UserRepository --> User : "creates"
+
+' Container Resolution
+Container ..> DashboardController : "creates"
+Container ..> PortfolioService : "creates"
+Container ..> PortfolioRepository : "creates"
+
+note right of Request
+  **Symfony HTTP Foundation**
+  - Battle-tested components
+  - PSR-7 compatible
+  - Security best practices
+  - Rich feature set
+end note
+
+note right of PortfolioRepository
+  **Bridge Pattern**
+  - Connects new MVC to legacy DAOs
+  - No breaking changes
+  - Gradual migration path
+  - Preserves existing functionality
+end note
+
+note bottom of Container
+  **Dependency Injection**
+  - Automatic resolution
+  - Singleton support
+  - Interface binding
+  - Loose coupling
+end note
+
+@enduml

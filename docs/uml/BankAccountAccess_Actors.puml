@@ -1,0 +1,20 @@
+@startuml
+actor User
+actor Advisor
+actor FamilyMember
+actor Admin
+entity "bank_accounts" as BankAccounts
+entity "users" as Users
+entity "bank_account_access" as Access
+
+User --> (Manage Own Account Access)
+(Manage Own Account Access) --> Access : grant/revoke
+Advisor --> (Access Shared Account)
+FamilyMember --> (Access Shared Account)
+(Access Shared Account) --> Access : permission check
+Admin --> (Override Access)
+(Admin) --> Access : admin override
+
+BankAccounts ||--o{ Access : "has access"
+Users ||--o{ Access : "can access"
+@enduml

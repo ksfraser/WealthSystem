@@ -1,0 +1,103 @@
+@startuml
+entity "bank_accounts" as BankAccounts {
+  * id : INT <<PK>>
+  * bank_name : VARCHAR
+  * account_number : VARCHAR
+  * account_nickname : VARCHAR
+  * account_type : VARCHAR
+  * currency : VARCHAR
+  * is_active : BOOLEAN
+}
+
+entity "users" as Users {
+  * id : INT <<PK>>
+  * username : VARCHAR
+  * email : VARCHAR
+  * password_hash : VARCHAR
+}
+
+entity "bank_account_access" as Access {
+  * id : INT <<PK>>
+  * bank_account_id : INT <<FK>>
+  * user_id : INT <<FK>>
+  * permission_level : ENUM('owner','read_write','read')
+  * granted_by : INT <<FK>>
+  * granted_at : TIMESTAMP
+  * revoked_at : TIMESTAMP
+}
+
+package "Web UI Layer - MVC Architecture" {
+  class "user_bank_accounts.php" as UserBankAccounts {
+    + handleRequest()
+    + renderPage()
+    -- MVC Entry Point --
+  }
+
+  class "BankAccountController.php" as Controller {
+    - $bankDAO : BankAccountsDAO
+    - $userAuth : UserAuthDAO
+    - $navigationService : NavigationService
+    - $viewService : BankAccountViewService
+    + __construct(...)
+    + handleGetRequest(currentUser)
+    + handlePostRequest(postData, currentUser)
+    + renderPage(data)
+    -- Business Logic Orchestration --
+  }
+
+  class "BankAccountViewService.php" as ViewService {
+    - $navigationService : NavigationService
+    + __construct(navigationService)
+    + renderPage(data)
+    + renderHtmlHead()
+    + renderHeader()
+    + renderAccountInfo(data)
+    + renderCreateAccountForm()
+    + renderAccountsTable(data)
+    + renderShareAccountModal(data)
+    -- Component-based Rendering --
+  }
+
+  class "NavigationService.php" as NavigationService {
+    + renderNavigationHeader(title)
+    + getCurrentUser()
+  }
+}
+
+package "Business Logic Layer" {
+  class "BankAccountsDAO.php" as BankAccountsDAO {
+    + getBankAccountAccess(bankAccountId)
+    + setBankAccountAccess(bankAccountId, userId, permissionLevel, grantedBy)
+    + revokeBankAccountAccess(bankAccountId, userId)
+    + getUserAccessibleBankAccounts(userId)
+    + createBankAccountIfNotExists(bankName, accountNumber, userId, ...)
+  }
+
+  class "UserAuthDAO.php" as UserAuthDAO {
+    + getAllUsers(limit)
+    + authenticateUser(username, password)
+  }
+}
+
+' Relationships
+BankAccounts ||--o{ Access : "has access"
+Users ||--o{ Access : "can access"
+Users ||--o{ Access : "grants access"
+Access ||--o{ Users : "granted by"
+
+' MVC Flow
+UserBankAccounts --> Controller : "creates & delegates"
+Controller --> BankAccountsDAO : "uses for data access"
+Controller --> UserAuthDAO : "uses for user data"
+Controller --> ViewService : "uses for rendering"
+ViewService --> NavigationService : "uses for navigation"
+
+' Data Flow
+Controller --> BankAccounts : "manages through DAO"
+Controller --> Access : "manages through DAO"
+UserAuthDAO --> Users : "manages"
+
+note right of Controller : Handles all business logic\nand request orchestration
+note right of ViewService : Component-based rendering\nwith proper separation
+note bottom of UserBankAccounts : Clean MVC entry point\nwith dependency injection
+@enduml

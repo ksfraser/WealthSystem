@@ -1,0 +1,123 @@
+@startuml Data_Integration_Flow
+
+!define RECTANGLE class
+
+skinparam backgroundColor #FEFEFE
+skinparam roundcorner 10
+
+title Data Integration & Synchronization Flow
+
+actor User
+participant "DashboardController" as Controller
+participant "PortfolioService" as Service
+participant "MarketDataService" as Market
+participant "DataSyncService" as Sync
+participant "PortfolioRepository" as Repo
+database "CSV Files" as CSV
+database "MySQL Database" as DB
+participant "Python Script" as Python
+
+== Portfolio Dashboard Request ==
+
+User -> Controller : GET /dashboard
+activate Controller
+
+Controller -> Service : getDashboardData(userId)
+activate Service
+
+Service -> Sync : synchronizePortfolioData(userId)
+activate Sync
+
+== Data Collection Phase ==
+
+Sync -> Repo : getPortfolio(userId)
+activate Repo
+
+Repo -> CSV : loadFromCSV()
+activate CSV
+CSV --> Repo : holdings data
+deactivate CSV
+
+Repo --> Sync : portfolio holdings
+deactivate Repo
+
+Sync -> Market : getCurrentPrices(symbols)
+activate Market
+
+Market -> DB : SELECT price FROM stock_data
+activate DB
+DB --> Market : price data
+deactivate DB
+
+Market --> Sync : current prices
+deactivate Market
+
+== Data Enrichment Phase ==
+
+Sync -> Sync : calculateCurrentValues()
+note right
+  - Merge holdings with prices
+  - Calculate P&L
+  - Compute total value
+  - Determine daily change
+end note
+
+Sync --> Service : enriched portfolio
+deactivate Sync
+
+== Additional Data Phase ==
+
+Service -> Market : getMarketSummary()
+activate Market
+
+Market -> DB : SELECT indicators
+activate DB
+DB --> Market : technical indicators
+deactivate DB
+
+Market --> Service : market summary
+deactivate Market
+
+Service -> Service : calculateMetrics()
+note right
+  - Total portfolio value
+  - Daily change %
+  - Total return
+  - Risk metrics
+end note
+
+Service --> Controller : dashboard data
+deactivate Service
+
+== Response Generation ==
+
+Controller -> Controller : view('Dashboard/index', data)
+Controller --> User : HTML Response
+deactivate Controller
+
+== Alternative: Python Integration ==
+
+alt Advanced Analytics Required
+    User -> Controller : GET /api/analytics
+    activate Controller
+    
+    Controller -> Service : getAdvancedAnalytics(userId)
+    activate Service
+    
+    Service -> Python : execute('trading_script.py', args)
+    activate Python
+    
+    Python -> CSV : read portfolio data
+    Python -> DB : fetch historical data
+    Python -> Python : AI analysis
+    Python --> Service : recommendations
+    deactivate Python
+    
+    Service --> Controller : analytics result
+    deactivate Service
+    
+    Controller --> User : JSON Response
+    deactivate Controller
+end
+
+@enduml
