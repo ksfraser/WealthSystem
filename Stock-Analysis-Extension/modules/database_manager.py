@@ -1,6 +1,53 @@
 """
 Database Manager for Stock Analysis Extension
 Handles MySQL database operations including creation, connection, and data management
+
+REQUIREMENTS TRACEABILITY:
+==========================
+Business Requirements:
+- BR-031: Historical analysis review
+
+Business Capabilities:
+- BC-301: MySQL Database Persistence
+- BC-303: Trade Log Management
+- BC-304: Position Management
+
+Functional Requirements:
+- FR-1200-1207: Database Operations
+  * Store stock prices, fundamentals, technical indicators
+  * Store analysis results, trade log, portfolio positions
+  * Create database schema on initialization
+  * Handle connection errors gracefully
+- FR-1300-1305: Data Retrieval
+  * Retrieve historical analysis results
+  * Retrieve price history for charts
+  * Retrieve trade history by date range
+  * Retrieve current portfolio positions
+  * Support filtering by date, symbol, score
+
+Technical Requirements:
+- TR-500-512: DatabaseManager module specification
+- TR-801: Performance (< 1 sec database query)
+- TR-904: SQL injection prevention (parameterized queries)
+
+Database Schema:
+- stock_prices: Historical price data with OHLCV
+- stock_fundamentals: Company fundamental metrics
+- technical_indicators: Calculated technical indicators
+- analysis_results: Comprehensive analysis scores
+- portfolios: Portfolio definitions with cash tracking
+- portfolio_positions: Current holdings with entry/stop/target
+- trade_log: Complete trade history with commissions
+- front_accounting_sync: FA integration tracking
+
+Dependencies:
+- DEP-101: MySQL Server 8.0+ (critical)
+
+Performance:
+- Indexed queries for symbol, date lookups
+- Connection pooling for efficiency
+- Batch insert operations
+- Automatic schema creation
 """
 
 import mysql.connector

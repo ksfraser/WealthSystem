@@ -1,6 +1,38 @@
 """
 Main Application for Stock Analysis Extension
 Entry point for the stock analysis and portfolio management system
+
+REQUIREMENTS TRACEABILITY:
+==========================
+Business Requirements:
+- BR-001: Automated stock analysis
+- BR-002: Data-driven recommendations  
+- BR-003: Portfolio management with risk controls
+- BR-010: Professional-grade analysis tools
+- BR-011: Clear buy/sell/hold recommendations
+- BR-012: Portfolio performance tracking
+- BR-020: Efficient multi-stock analysis
+
+Functional Requirements:
+- FR-1500-1505: User Interface Functions (interactive menu, reports)
+- FR-1600-1603: Reporting Functions (analysis reports, export)
+- FR-1700-1703: Configuration Functions (load, validate config)
+- FR-1800-1804: Logging and Error Handling
+- FR-1900-1903: Automation Functions (daily analysis, updates)
+
+Technical Requirements:
+- TR-100-103: System Architecture (MVC pattern, modular design)
+- TR-800: Performance requirement (< 30 sec analysis)
+- TR-900-905: Security requirements (config management, validation)
+- TR-1000-1005: Deployment requirements
+- TR-1200-1204: Code quality requirements
+
+Implementation Details:
+- Application Controller: Coordinates all modules
+- Interactive Menu: User-facing interface
+- Configuration Management: Load and validate settings
+- Logging Setup: Comprehensive error tracking
+- Daily Analysis: Automated portfolio updates
 """
 
 import sys

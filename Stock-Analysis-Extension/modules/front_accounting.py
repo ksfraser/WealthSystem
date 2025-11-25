@@ -1,6 +1,64 @@
 """
 FrontAccounting Integration Module
 Handles integration with FrontAccounting system for trade tracking and portfolio management
+
+REQUIREMENTS TRACEABILITY:
+==========================
+Business Requirements:
+- BR-004: Accounting system integration
+- BR-040: Generate journal entries for trades
+- BR-041: Mark-to-market valuation tracking
+- BR-042: Financial reporting
+
+Business Capabilities:
+- BC-302: FrontAccounting Integration
+
+Functional Requirements:
+- FR-1400: Create journal entries for BUY trades
+- FR-1401: Create journal entries for SELL trades
+- FR-1402: Create mark-to-market adjustment entries
+- FR-1403: Track FrontAccounting sync status
+- FR-1404: Handle FrontAccounting API errors
+- FR-1405: Support optional FrontAccounting (not required)
+- FR-1406: Map trades to GL accounts
+
+Technical Requirements:
+- TR-600-606: FrontAccountingIntegrator specification
+- TR-804: Performance (< 10 sec per trade sync)
+
+GL Account Mapping:
+- Cash: 1060 (Cash in Bank)
+- Investments: 1500 (Investment Securities)
+- Realized Gain/Loss: 8200
+- Unrealized Gain/Loss: 8210
+- Commission Expense: 5800
+- Dividend Income: 8100
+
+Journal Entry Examples:
+BUY:
+  DR Investment Securities    $10,000
+  DR Commission Expense       $10
+      CR Cash in Bank                 $10,010
+
+SELL:
+  DR Cash in Bank            $15,000
+  DR Commission Expense       $10
+      CR Investment Securities        $10,000
+      CR Realized Gain/Loss           $5,010
+
+MTM Adjustment:
+  DR Investment Securities    $1,000
+      CR Unrealized Gain/Loss         $1,000
+
+Dependencies:
+- DEP-105: FrontAccounting 2.4+ (optional - low priority)
+
+Implementation:
+- Optional integration (system works without FA)
+- Automatic journal entry generation
+- Sync status tracking in database
+- Error handling and retry logic
+- Balance sheet and P&L reporting support
 """
 
 import requests
