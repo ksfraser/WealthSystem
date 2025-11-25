@@ -234,4 +234,70 @@ if __name__ == "__main__":
             'python_path' => $this->pythonPath
         ];
     }
+    
+    /**
+     * Analyze stock using Python AI analysis module
+     * 
+     * @param array $stockData Stock data including symbol, price_data, fundamentals
+     * @return array Analysis results
+     */
+    public function analyzeStock(array $stockData): array
+    {
+        $pythonScript = dirname(__DIR__, 2) . '/python_analysis/analysis.py';
+        
+        if (!file_exists($pythonScript)) {
+            return [
+                'success' => false,
+                'error' => 'Python analysis module not found: ' . $pythonScript
+            ];
+        }
+        
+        try {
+            $jsonInput = json_encode($stockData);
+            
+            $command = sprintf(
+                '%s "%s" analyze %s 2>&1',
+                $this->pythonPath,
+                $pythonScript,
+                escapeshellarg($jsonInput)
+            );
+            
+            exec($command, $output, $returnCode);
+            
+            if ($returnCode !== 0) {
+                return [
+                    'success' => false,
+                    'error' => 'Python execution failed: ' . implode("\n", $output)
+                ];
+            }
+            
+            $outputJson = implode("\n", $output);
+            $result = json_decode($outputJson, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return [
+                    'success' => false,
+                    'error' => 'Invalid JSON response from Python'
+                ];
+            }
+            
+            if (isset($result['error'])) {
+                return [
+                    'success' => false,
+                    'error' => $result['error']
+                ];
+            }
+            
+            return [
+                'success' => true,
+                'data' => $result
+            ];
+            
+        } catch (\Exception $e) {
+            return [
+                'success' => false,
+                'error' => 'Python integration error: ' . $e->getMessage()
+            ];
+        }
+    }
 }
