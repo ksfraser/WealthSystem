@@ -1,0 +1,205 @@
+@startuml Bridge_Pattern_Implementation
+
+!define RECTANGLE class
+
+skinparam packageStyle rectangle
+skinparam backgroundColor #FEFEFE
+skinparam roundcorner 10
+
+title Bridge Pattern: New MVC ↔ Legacy DAO Integration
+
+skinparam class {
+    BackgroundColor<<New>> #C8E6C9
+    BackgroundColor<<Bridge>> #FFE082
+    BackgroundColor<<Legacy>> #CFD8DC
+    BorderColor<<New>> #388E3C
+    BorderColor<<Bridge>> #F57C00
+    BorderColor<<Legacy>> #546E7A
+}
+
+package "New MVC Layer" <<New>> {
+    interface RepositoryInterface <<New>> {
+        +findById(id): ?ModelInterface
+        +findBy(criteria): array
+        +create(data): ModelInterface
+        +update(id, data): bool
+        +delete(id): bool
+    }
+    
+    interface PortfolioRepositoryInterface <<New>> {
+        +getPortfolioByUserId(userId): array
+        +getHoldings(userId): array
+        +updateHolding(userId, symbol, data): bool
+    }
+    
+    interface UserRepositoryInterface <<New>> {
+        +findByUsername(username): ?User
+        +authenticate(username, password): bool
+    }
+}
+
+package "Bridge Implementation" <<Bridge>> {
+    class PortfolioRepository <<Bridge>> {
+        -MicroCapPortfolioDAO portfolioDAO
+        -CommonDAO commonDAO
+        --Public Methods--
+        +getPortfolioByUserId(userId): array
+        +getHoldings(userId): array
+        +updateHolding(userId, symbol, data): bool
+        --Bridge Methods--
+        -delegateToLegacy()
+        -transformData()
+    }
+    
+    class UserRepository <<Bridge>> {
+        -UserAuthDAO authDAO
+        --Public Methods--
+        +findByUsername(username): ?User
+        +authenticate(username, password): bool
+        --Bridge Methods--
+        -mapToModel(array): User
+        -validateAccess()
+    }
+    
+    class BankAccountRepository <<Bridge>> {
+        -CommonDAO commonDAO
+        --Public Methods--
+        +findByUserId(userId): array
+        +create(data): BankAccount
+        --Bridge Methods--
+        -buildQuery()
+        -mapToModel(array): BankAccount
+    }
+}
+
+package "Legacy DAO Layer" <<Legacy>> {
+    class MicroCapPortfolioDAO <<Legacy>> {
+        -CommonDAO commonDAO
+        +getPortfolio(userId): array
+        +loadFromCSV(): array
+        +updatePortfolio(userId, data): bool
+        +calculateMetrics(portfolio): array
+    }
+    
+    class UserAuthDAO <<Legacy>> {
+        -CommonDAO commonDAO
+        +getUserByUsername(username): array
+        +validateCredentials(username, password): bool
+        +createUser(userData): int
+        +updateUser(userId, data): bool
+    }
+    
+    class CommonDAO <<Legacy>> {
+        -PDO connection
+        +query(sql, params): array
+        +execute(sql, params): bool
+        +insert(table, data): int
+        +update(table, data, where): bool
+        +delete(table, where): bool
+    }
+    
+    class DynamicStockDataAccess <<Legacy>> {
+        -CommonDAO commonDAO
+        +getPrices(symbols): array
+        +getHistoricalData(symbol, start, end): array
+        +saveStockData(symbol, data): bool
+    }
+}
+
+' Relationships - Interfaces
+RepositoryInterface <|-- PortfolioRepositoryInterface
+RepositoryInterface <|-- UserRepositoryInterface
+
+' Bridge Implementation
+PortfolioRepositoryInterface <|.. PortfolioRepository : "implements"
+UserRepositoryInterface <|.. UserRepository : "implements"
+RepositoryInterface <|.. BankAccountRepository : "implements"
+
+' Bridge to Legacy
+PortfolioRepository --> MicroCapPortfolioDAO : "delegates to"
+PortfolioRepository --> CommonDAO : "uses"
+UserRepository --> UserAuthDAO : "delegates to"
+BankAccountRepository --> CommonDAO : "delegates to"
+
+' Legacy Dependencies
+MicroCapPortfolioDAO --> CommonDAO : "uses"
+UserAuthDAO --> CommonDAO : "uses"
+DynamicStockDataAccess --> CommonDAO : "uses"
+
+note top of RepositoryInterface
+  **New MVC Interfaces**
+  - Clean abstractions
+  - Testable with mocks
+  - SOLID principles
+  - Type-safe contracts
+end note
+
+note right of PortfolioRepository
+  **Bridge Pattern Benefits:**
+  
+  1. **No Breaking Changes**
+     - Existing DAOs untouched
+     - Continue working as before
+  
+  2. **Gradual Migration**
+     - Can migrate piece by piece
+     - Test incrementally
+  
+  3. **Best of Both Worlds**
+     - New: Clean interfaces
+     - Old: Proven functionality
+  
+  4. **Data Transformation**
+     - Legacy array → Model objects
+     - Normalize data structures
+  
+  5. **Additional Features**
+     - Can add caching
+     - Can add validation
+     - Can add logging
+end note
+
+note bottom of CommonDAO
+  **Legacy Layer Preserved**
+  - Existing code continues working
+  - No rewrite required
+  - Proven reliability
+  - Comprehensive functionality
+end note
+
+' Example Implementation Note
+note as ExampleCode
+  **Example Bridge Implementation:**
+  
+  ```php
+  class PortfolioRepository implements PortfolioRepositoryInterface
+  {
+      private MicroCapPortfolioDAO $portfolioDAO;
+      
+      public function getPortfolioByUserId(int $userId): array
+      {
+          // Delegate to existing DAO
+          $legacyData = $this->portfolioDAO->getPortfolio($userId);
+          
+          // Transform to new format if needed
+          return $this->transformToNewFormat($legacyData);
+      }
+      
+      public function getHoldingsWithCurrentPrices(int $userId): array
+      {
+          // NEW functionality on top of legacy
+          $holdings = $this->portfolioDAO->getPortfolio($userId);
+          $prices = $this->marketData->getCurrentPrices(...);
+          
+          return array_map(function($holding) use ($prices) {
+              $holding['current_price'] = $prices[$holding['symbol']];
+              $holding['current_value'] = 
+                  $holding['shares'] * $holding['current_price'];
+              return $holding;
+          }, $holdings);
+      }
+  }
+  ```
+end note
+
+@enduml

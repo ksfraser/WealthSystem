@@ -1,0 +1,154 @@
+@startuml Request_Response_Lifecycle
+
+!define RECTANGLE class
+
+skinparam backgroundColor #FEFEFE
+skinparam roundcorner 10
+
+title HTTP Request/Response Lifecycle with Symfony Integration
+
+participant "PHP Globals" as Globals
+participant "Application" as App
+participant "Router" as Router
+participant "Middleware" as Middleware
+participant "Controller" as Controller
+participant "Service" as Service
+participant "Repository" as Repo
+participant "Symfony Response" as Response
+participant "Browser" as Browser
+
+== Request Creation ==
+
+Globals -> App : $_GET, $_POST, $_SERVER, $_FILES, $_COOKIE
+activate App
+
+App -> App : Request::fromGlobals()
+note right
+  **Symfony HTTP Foundation**
+  Creates Request from PHP superglobals
+  - Query parameters (ParameterBag)
+  - Request data (ParameterBag)
+  - Files (FileBag)
+  - Cookies (ParameterBag)
+  - Headers (HeaderBag)
+end note
+
+== Routing ==
+
+App -> Router : dispatch(Request)
+activate Router
+
+Router -> Router : findRoute(method, uri)
+note right
+  Pattern matching:
+  /dashboard → DashboardController
+  /api/data → API handler
+  /portfolio/{id} → with params
+end note
+
+== Middleware Chain ==
+
+Router -> Middleware : handle(Request, next)
+activate Middleware
+
+loop For each middleware
+    Middleware -> Middleware : process(Request)
+    note right
+      Examples:
+      - Authentication
+      - CORS headers
+      - Rate limiting
+      - Logging
+    end note
+end
+
+Middleware -> Controller : next(Request)
+deactivate Middleware
+
+== Controller Processing ==
+
+activate Controller
+
+Controller -> Controller : before(Request)
+note right: Pre-processing hook
+
+Controller -> Service : businessLogic()
+activate Service
+
+Service -> Repo : getData()
+activate Repo
+Repo --> Service : data
+deactivate Repo
+
+Service -> Service : processData()
+Service --> Controller : result
+deactivate Service
+
+Controller -> Controller : process(Request)
+note right
+  Choose response type:
+  - view() → HTML
+  - json() → JSON
+  - redirect() → Redirect
+end note
+
+== Response Creation ==
+
+alt HTML Response
+    Controller -> Response : Response::html(content)
+    Response --> Controller : HtmlResponse
+else JSON Response
+    Controller -> Response : Response::json(data)
+    Response --> Controller : JsonResponse
+else Redirect Response
+    Controller -> Response : Response::redirect(url)
+    Response --> Controller : RedirectResponse
+end
+
+Controller -> Controller : after(Request, Response)
+note right: Post-processing hook
+
+Controller --> Router : Response
+deactivate Controller
+
+Router --> App : Response
+deactivate Router
+
+== Response Sending ==
+
+App -> Response : send()
+activate Response
+
+Response -> Response : sendHeaders()
+note right
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  X-Custom-Header: value
+end note
+
+Response -> Response : sendContent()
+note right
+  Output the response body
+  (HTML, JSON, etc.)
+end note
+
+Response --> Browser : HTTP Response
+deactivate Response
+
+deactivate App
+
+== Browser Rendering ==
+
+Browser -> Browser : Parse and Render
+
+note over Globals, Browser
+  **Key Benefits of Symfony Integration:**
+  1. Standardized request/response handling
+  2. Rich feature set (files, sessions, cookies)
+  3. Battle-tested security
+  4. PSR-7 compatible
+  5. Easy testing with createFromGlobals()
+  6. No reinventing the wheel!
+end note
+
+@enduml
