@@ -253,16 +253,22 @@ if __name__ == "__main__":
         }
         
         try {
-            $jsonInput = json_encode($stockData);
+            // Write JSON to temporary file to avoid shell escaping issues on Windows
+            $tempFile = tempnam(sys_get_temp_dir(), 'stock_analysis_') . '.json';
+            file_put_contents($tempFile, json_encode($stockData));
             
+            // Call Python to read from file
             $command = sprintf(
-                '%s "%s" analyze %s 2>&1',
+                '%s "%s" analyze-file "%s" 2>&1',
                 $this->pythonPath,
                 $pythonScript,
-                escapeshellarg($jsonInput)
+                $tempFile
             );
             
             exec($command, $output, $returnCode);
+            
+            // Clean up temp file
+            @unlink($tempFile);
             
             if ($returnCode !== 0) {
                 return [
@@ -271,13 +277,29 @@ if __name__ == "__main__":
                 ];
             }
             
-            $outputJson = implode("\n", $output);
-            $result = json_decode($outputJson, true);
+            // Filter out warnings/stderr lines
+            $jsonOutput = '';
+            foreach ($output as $line) {
+                $line = trim($line);
+                if ($line && $line[0] === '{') {
+                    $jsonOutput = $line;
+                    break;
+                }
+            }
+            
+            if (empty($jsonOutput)) {
+                return [
+                    'success' => false,
+                    'error' => 'No JSON output from Python: ' . implode("\n", $output)
+                ];
+            }
+            
+            $result = json_decode($jsonOutput, true);
             
             if (json_last_error() !== JSON_ERROR_NONE) {
                 return [
                     'success' => false,
-                    'error' => 'Invalid JSON response from Python'
+                    'error' => 'Invalid JSON response from Python: ' . $jsonOutput
                 ];
             }
             

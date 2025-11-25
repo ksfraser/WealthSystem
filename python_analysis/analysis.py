@@ -672,28 +672,53 @@ def main():
     
     Usage:
         python analysis.py analyze '{"symbol": "AAPL", "price_data": [...], "fundamentals": {...}}'
+        python analysis.py analyze-file /path/to/data.json
     """
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 2:
         print(json.dumps({
-            'error': 'Usage: python analysis.py <command> <json_data>',
-            'available_commands': ['analyze']
+            'error': 'Usage: python analysis.py <command> [<json_data_or_file>]',
+            'available_commands': ['analyze', 'analyze-file']
         }))
         sys.exit(1)
     
     command = sys.argv[1]
     
     try:
-        data = json.loads(sys.argv[2])
-    except json.JSONDecodeError as e:
-        print(json.dumps({'error': f'Invalid JSON: {str(e)}'}))
-        sys.exit(1)
-    
-    if command == 'analyze':
+        if command == 'analyze-file':
+            # Read JSON from file
+            if len(sys.argv) < 3:
+                print(json.dumps({'error': 'Usage: python analysis.py analyze-file <file_path>'}))
+                sys.exit(1)
+            
+            file_path = sys.argv[2]
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+        
+        elif command == 'analyze':
+            # Read JSON from command line argument
+            if len(sys.argv) < 3:
+                print(json.dumps({'error': 'Usage: python analysis.py analyze <json_data>'}))
+                sys.exit(1)
+            
+            data = json.loads(sys.argv[2])
+        
+        else:
+            print(json.dumps({'error': f'Unknown command: {command}'}))
+            sys.exit(1)
+        
+        # Perform analysis
         analyzer = StockAnalyzer(data.get('scoring_weights'))
         result = analyzer.analyze_stock(data)
         print(json.dumps(result))
-    else:
-        print(json.dumps({'error': f'Unknown command: {command}'}))
+    
+    except json.JSONDecodeError as e:
+        print(json.dumps({'error': f'Invalid JSON: {str(e)}'}))
+        sys.exit(1)
+    except FileNotFoundError as e:
+        print(json.dumps({'error': f'File not found: {str(e)}'}))
+        sys.exit(1)
+    except Exception as e:
+        print(json.dumps({'error': f'Unexpected error: {str(e)}'}))
         sys.exit(1)
 
 
