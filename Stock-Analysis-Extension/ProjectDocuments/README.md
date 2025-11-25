@@ -1,15 +1,27 @@
 # Project Documentation
-## Stock Analysis Extension
+## Stock Analysis Project
 
-**Version:** 1.0  
+**Version:** 2.0 (Architecture Updated)  
 **Last Updated:** November 25, 2025  
-**Status:** Complete
+**Status:** Requirements Complete, Implementation Mapping Needs Update
+
+---
+
+## ⚠️ Important: Architecture Change (Nov 25, 2025)
+
+These requirements apply to the **entire Stock Analysis Project**:
+- **PHP MVC Application** (`app/`) - Implements most requirements (portfolio, trades, DB, UI)
+- **Python AI Module** (`python_analysis/`) - Implements AI/analysis calculations only
+
+The code-to-requirements mapping in traceability documents needs updating to reflect that most implementation is now in PHP, not Python.
+
+See: [../MIGRATION_NOTES.md](../MIGRATION_NOTES.md) and [../../ARCHITECTURE.md](../../ARCHITECTURE.md)
 
 ---
 
 ## Overview
 
-This directory contains all project documentation for the Stock Analysis Extension, organized by functional area following industry-standard practices for Business Analysis, Architecture, Design, Quality Assurance, and Traceability.
+This directory contains all project documentation for the Stock Analysis system, organized by functional area following industry-standard practices for Business Analysis, Architecture, Design, Quality Assurance, and Traceability.
 
 ---
 
