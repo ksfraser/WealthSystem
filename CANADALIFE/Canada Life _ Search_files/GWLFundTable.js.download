@@ -1,0 +1,939 @@
+﻿///<reference path="/js/jquery-1.10.2.min.js"/>
+///<reference path="/js/Datatables/jquery.dataTables.js"/>
+///<reference path="/Controlls/GWL.Master"/>
+///<reference path="/js/AngularJs.js"/>
+///<reference path="GWLFundSearchPage.js"/>
+///<reference path="/js/GWLModels/GWLModels.js"/>
+
+
+$(window).on('beforeunload', function (e) {
+    SavePageState();
+});
+
+//$(window).resize(function () {
+//    responsiveTable();
+//});
+
+var tableApi;
+
+var languageModel;
+
+var switched = false;
+
+var tableData;
+
+GetFilterState();
+
+function DocumentReady(scope, compile) {
+    languageModel = scope.languageModel;
+    $('#AddToFavouritesButton').on('click', viewFavouriteList)
+    $('#clear_favourite_button').on('click', clearFavouriteList);
+
+    initialize_fund_table(scope, compile);
+    tableApi = $("#fund_table").DataTable();
+    switchColumns(LocalModelWrapper.LocalModel.SelectedColumnIndex, scope, compile);
+
+    //add a placeholder in bteween table header and footer before data is fully loaded.
+    $('#fund_table tbody').append('<tr id="dummytr"><td id="dummytd" colspan="' + tableApi.columns().header().length + '" style="height:470px;text-align:center;vertical-align:middle;font-size:20px;">'
+        + '<div id="warningGradientOuterBarG">'
+        + '<div id="warningGradientFrontBarG" class="warningGradientAnimationG">'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '</div>'
+        + '</div></td></tr>');
+}
+
+function initialize_fund_table(scope, compile) {
+    var temp = FilterWrapper.Filter;
+
+    table = $('#fund_table').dataTable({
+        serverSide: true
+        , processing: true
+        //, retrieve: true
+        , search: { "sSearch": JSON.stringify(FilterWrapper.Filter) }
+        , fixedHeader: false
+        , stateSave: true
+        , stateDuration: -1
+        , stateSaveCallback: function (settings, data) {
+            data.search = FilterWrapper.Filter;
+            // columns objects are too long to be saved as cookie
+            data.columns = null;
+            var value = JSON.stringify(data)
+            $.cookie('tableState', value);
+
+        }, stateLoadCallback: function (settings) {
+            var item = $.cookie('tableState');
+            if (item != undefined)
+                return JSON.parse($.cookie('tableState'))
+            else
+                return null;
+        }
+        , ajax: {
+            url: "api/FundList",
+            data: function (d) {
+                delete d.columns;
+            },
+            dataSrc: function (json) {
+                if (json.d != null) {
+                    json = json.d;
+                }
+
+                if (json.hasError) {
+                    if (json.errorType == 'timeout') {
+                        bootbox.alert({
+                            message: languageModel.RetryInNSeconds.replace('[N]', "5"),
+                            callback: function () {
+                                window.location.reload();
+                            }
+                        })
+                    }
+                    else {
+                        window.location.href = '/Error.aspx';
+                    }
+
+                    return false;
+                }
+
+                asOfDate = moment(json.asOfDate).locale(LanguageState.State).format(LanguageState.State == 'en' ? "MMMM DD, YYYY" : "DD MMMM YYYY");
+
+                for (i = 0; i < json.fundList.length; i++) {
+                    var item = json.fundList[i];
+
+                    //to add 'checked' as an new property to the item;
+                    item.checked = false;
+                    var temp = {};
+                    temp.name = item.FundName;
+                    temp.id = item.InstrumentID;
+                    item.FundName = temp;
+                }
+
+                scope.$digest();
+
+                tableData = json.fundList;
+
+                return json.fundList;
+
+            },
+            error: function () {
+                window.location.href = '/Error.aspx';
+            }
+        }
+        , destroy: true,
+        paging: true,
+        pagingType: "input",
+        autoWidth: false,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, 75, 100, 5000], [10, 25, 50, 75, 100, languageModel.All]],
+        dom: '<"top"r>t<"bottom"pl><"clear">'
+        , aoColumns: [
+            { name: "ID", data: "InstrumentID", title: "ID", visible: false, orderable: false }
+            , { name: "checked", data: "checked", title: languageModel.th_Favourites, width: "100px", class: "text-centered", orderable: false, class: 'col_Favourite' }
+            , { name: "FundName", data: "FundName", title: languageModel.th_FundName + "<span class='sort-arrows'></span>", orderable: true, class: 'col_fundName' }
+
+            , { name: "fldAsatdate", data: "NAVPSAsAtDate", title: languageModel.th_AsAtDate + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], class: 'asatdate_Column', visible: false }
+            , { name: "Nav", data: "CurrentDailyNAVPS", title: languageModel.th_Price + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], class: 'numeric_Column' }
+            , { name: "fld1DayChange", data: "CurrentPennyChangeDay", title: languageModel.th_fld1DayChange + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "AssetClass", data: "AssetClassName", title: languageModel.Asset_Class + "<span class='sort-arrows'></span>", width: "190px", orderable: true, class: 'assetClass_Column' }
+
+
+            , { name: "OneMonth", data: "Return1Mth", title: languageModel.th_OneMonth + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "ThreeMonth", data: "Return3Mth", title: languageModel.th_ThreeMonth + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "SixMonth", data: "Return6Mth", title: languageModel.th_SixMonth + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "YTD", data: "ReturnYTD", title: languageModel.th_YTDPercentage + "<span class='sort-arrows'></span>", width: "115px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "ShortInception", data: "ReturnInception", title: languageModel.th_InceptionPercent + "<span class='sort-arrows'></span>", width: "115px", class: "noWrap numeric_Column", orderable: true, orderSequence: ["desc", "asc"], visible: false }
+
+            , { name: "fld1Yr", data: "Return1Yr", title: languageModel.th_fld1Year + "<span class='sort-arrows'></span>", width: "80px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fld3Yr", data: "Return3Yr", title: languageModel.th_fld3Year + "<span class='sort-arrows'></span>", width: "80px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fld5Yr", data: "Return5Yr", title: languageModel.th_fld5Year + "<span class='sort-arrows'></span>", width: "80px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fld10Yr", data: "Return10Yr", title: languageModel.th_fld10Year + "<span class='sort-arrows'></span>", width: "80px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fld15Yr", data: "Return15Yr", title: languageModel.th_fld15Year + "<span class='sort-arrows'></span>", width: "80px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "Inception", data: "ReturnInception", title: languageModel.th_Inception + "<span class='sort-arrows'></span>", width: "150px", class: "noWrap", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+
+            , { name: "fldReturn10YrCalendar", data: "Return10YrCalendar", title: (moment(asOfDate).year() - 10).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn9YrCalendar", data: "Return9YrCalendar", title: (moment(asOfDate).year() - 9).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn8YrCalendar", data: "Return8YrCalendar", title: (moment(asOfDate).year() - 8).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn7YrCalendar", data: "Return7YrCalendar", title: (moment(asOfDate).year() - 7).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn6YrCalendar", data: "Return6YrCalendar", title: (moment(asOfDate).year() - 6).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn5YrCalendar", data: "Return5YrCalendar", title: (moment(asOfDate).year() - 5).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn4YrCalendar", data: "Return4YrCalendar", title: (moment(asOfDate).year() - 4).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn3YrCalendar", data: "Return3YrCalendar", title: (moment(asOfDate).year() - 3).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn2YrCalendar", data: "Return2YrCalendar", title: (moment(asOfDate).year() - 2).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "fldReturn1YrCalendar", data: "Return1YrCalendar", title: (moment(asOfDate).year() - 1).toString() + "<span class='sort-arrows'></span>", width: "55px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+
+            , { name: "QuartileRankingYTD", data: "QuartileRankingYTD", title: languageModel.th_YTD + "<span class='sort-arrows'></span>", width: "10.3%", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "QuartileRanking1Yr", data: "QuartileRanking1Yr", title: languageModel.th_fld1Year + "<span class='sort-arrows'></span>", width: "8%", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "QuartileRanking3Yr", data: "QuartileRanking3Yr", title: languageModel.th_fld3Year + "<span class='sort-arrows'></span>", width: "8%", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "QuartileRanking5Yr", data: "QuartileRanking5Yr", title: languageModel.th_fld5Year + "<span class='sort-arrows'></span>", width: "8%", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "QuartileRanking10Yr", data: "QuartileRanking10Yr", title: languageModel.th_fld10Year + "<span class='sort-arrows'></span>", width: "8%", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+            , { name: "QuartileRanking15Yr", data: "QuartileRanking15Yr", title: languageModel.th_fld15Year + "<span class='sort-arrows'></span>", width: "8%", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'numeric_Column' }
+
+            , { name: "FE", data: "FundCodeFE", title: languageModel.th_FEL + "<span class='sort-arrows'></span>", width: "130px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'fundCodeFE_Column' }
+            , { name: "BE", data: "FundCodeBE", title: languageModel.th_DSC + "<span class='sort-arrows'></span>", width: "130px", orderable: true, orderSequence: ["desc", "asc"], visible: false }
+            , { name: "CB2", data: "FundCodeCB2", title: languageModel.th_CB2 + "<span class='sort-arrows'></span>", width: "130px", orderable: true, orderSequence: ["desc", "asc"], visible: false }
+            , { name: "CB4", data: "FundCodeCB4", title: (_BrandCode == "CL" ? languageModel.th_CB4 : _BrandCode == "CLMF" ? languageModel.th_LSC + "^" : languageModel.th_LSC) + "<span class='sort-arrows'></span>", width: "130px", orderable: true, orderSequence: ["desc", "asc"], visible: false }
+
+            , { name: "NL", data: "FundCodeNL", title: languageModel.th_NL + "<span class='sort-arrows'></span>", width: "130px", orderable: true, orderSequence: ["desc", "asc"], visible: false }
+            , { name: "FEEstate", data: "FundCodeEP", title: languageModel.th_EstateProtection + "<span class='sort-arrows'></span>", width: "130px", class: "noWrap", orderable: true, orderSequence: ["desc", "asc"], visible: false, }
+
+            , { name: "EffectiveDate", data: "EffectiveDate", title: languageModel.th_Effectivedate + "<span class='sort-arrows'></span>", width: "275px", orderable: true, orderSequence: ["desc", "asc"], visible: false, class: 'fundCodeFE_Column' }
+            , { name: "MER", data: "MER", title: (_BrandCode == "GWL" || _BrandCode == "LL" || _BrandCode == "CL" ? "<span tabindex='0' class='merPop'>" + languageModel.th_MER + "*" + "<span class='sr-only'>" + languageModel.MERDisclaimer +"</span>" + "<span class='sort-arrows'></span></span>" : "<span>" + languageModel.th_MER + "<span class='sort-arrows'></span></span>"),
+                width: "275px", orderable: true, orderSequence: ["desc", "asc"], visible: false }
+            , { name: "ActionColumn", data: "ActionColumn", title: languageModel.th_PDFs, width: "110px", orderable: false, visible: true, class: "col_fundFact" }
+            , { name: "Display7DaysYield", data: "Display7DaysYield", Display7DaysYield: "Display7DaysYield", visible: false, orderable: false }
+            
+
+            //, { data: "FundType.Name", title: "Fund Type Name", width: "30%", orderable: false }
+        ]
+
+        , columnDefs: [{
+            targets: [1]
+            , render: function (data, type, full, meta) {
+
+                if (data == true)
+                    return '<a href="#" class="itemcheckbox"><span class="sr-only">' + $("#fund_table").data("add") + '</span></a>';
+                else
+                    return '<a href="#" class="itemcheckbox"><span class="sr-only">' + $("#fund_table").data("add") + '</span></a>';
+            }
+        }, {
+            targets: [2]
+            , render: function (data, type, full, meta) {
+                if (data)
+                    return '<a class="fundLinks" href="FundInfoPage.aspx?InstrumentID=' + data.id + '&tabID=0" data-id="' + data.id + '">' + data.name + '</a>';
+                else
+                    return '';
+            }
+        }, {
+            targets: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41]
+            , render: function (data, type, full, meta) {
+
+                if (data == null || data == "NULL" || data.length == 0) {
+                    return '-';
+                }
+                else if (meta.col == 3 || meta.col == 40) {
+                    data = LanguageState.State == 'fr' ? moment(data).format("YYYY-MM-DD") : moment(data).format("MM/DD/YYYY");
+                    return data;
+                }
+                else {
+                    if ($.isNumeric(data)) {
+                        if (meta.col == 4 || meta.col == 5 || meta.col == 41)
+                            data = data.toFixed(2);
+                        else {
+                            if (meta.col >= 28 && meta.col <= 33)
+                                data = data.toFixed(0)
+                            else
+                                data = full.Display7DaysYield == true ? data.toFixed(2) : full.IsSegFund == true ? data.toFixed(2) : data.toFixed(1)
+                        }
+                        if (LanguageState.State == 'fr')
+                            data = data.toString().replace(".", ",")
+                    }
+
+                    return data;
+                }
+            }
+        }, {
+            targets: [42], render: function (data, type, full, meta) {  
+                let fundProfileLink = '<a href="/FundReport.ashx?id=' + full.InstrumentID.toString() + '&language=' + LanguageState.State + '"  target="_blank" class="doc-link" title="' + languageModel.FundProfile + '">' +
+                                            '<img class="icon-svg" src="/images/gwl_icons/PDF-Default-Icon.svg" />' +
+                                            '<span>' + languageModel.MonthlyProfile + '</span>' +
+                                        '</a>';
+
+                let fundFactLink = "";
+
+
+                if (_BrandCode == "CLMF" || _BrandCode == "QU" || _BrandCode == "PW") {
+                    if (full.FactSheetUrl1) {
+                        fundFactLink = '<a href="/' + CLMFFundFactFolder + '/' + LanguageState.State + '/' + full.FactSheetUrl1 + '" target="_blank" class="doc-link" title="' + languageModel.FundFact + '">' +
+                                            '<img class="icon-svg" src="/images/gwl_icons/Document-Default-Icon.svg" />' +
+                                            '<span>' + languageModel.FundFact + '</span>' +
+                                        '</a>';
+                    }
+                }
+                else if (full.FactSheetUrl2) {
+                    fundFactLink = '<a href="#" class="ffPopUp doc-link" role="button" data-container="body" data-toggle="popover" data-placement="left" data-content="<div><a id=&quot;stdSeries&quot; href=&quot;' + full.FactSheetUrl1 + '&quot; target=&quot;_blank&quot;>' + languageModel.StandardSeries + '</a></div><div><a id=&quot;estateProtection&quot; href=&quot;' + full.FactSheetUrl2 + '&quot;  target=&quot;_blank&quot;>' + languageModel.EstateProtection + '</a></div>" title="' + languageModel.SelectFundFact + '">' +
+                                        '<img class="icon-svg" src="/images/gwl_icons/Document-Default-Icon.svg" />' +
+                                        '<span>' + languageModel.FundFact + '</span>' +
+                                    '</a>';
+                }
+                else if (full.FactSheetUrl1) {
+                    fundFactLink = '<a id="IID' + full.InstrumentID + '" href="' + full.FactSheetUrl1 + '" target="_blank" class="doc-link" title="' + languageModel.FundFact + '">' +
+                                        '<img class="icon-svg" src="/images/gwl_icons/Document-Default-Icon.svg" />' +
+                                        '<span>' + languageModel.FundFact + '</span>' +
+                                    '</a>';
+                }
+
+                return fundFactLink + fundProfileLink;
+
+            }
+        }]
+
+        , order: [[2, "asc"]]
+
+        , fnServerParams: function (data) {
+            data['order'].forEach(function (items, index) {
+                data['order'][index]['column'] = data['columns'][items.column]['data'].toString();
+            });
+        }
+        , rowCallback: function (row, data, dataIndex, displayIndexFull) {
+
+            if (JSON.stringify(data) != "undefined") {
+
+                var rowId = data.InstrumentID
+
+                var index = $.inArray(rowId, FilterWrapper.Filter.SelectedInstrumentIDList);
+
+                if (index !== -1) {
+                    $(row).addClass('selected');
+                    $(row).find("a.itemcheckbox span").first().html($("#fund_table").data("remove"));
+                }
+            }
+
+        }
+        , drawCallback: function (oSettings) {
+            fund_table_drawcallback(oSettings, scope, compile);
+        }
+        , preDrawCallback: fund_table_preDrawCallback
+        , initComplete: fund_table_initComplete
+        , language: {
+            search: "Search By ID/FundName: "
+            , processing: ""
+            , lengthMenu: languageModel.EntriesPerPage + " _MENU_"
+            , paginate: {
+                next: "",
+                previous: "",
+                first: languageModel.First,
+                last: languageModel.Last,
+                of: languageModel.Of
+            },
+            aria: {
+                sortAscending: languageModel.SortAscending,
+                sortDescending: languageModel.SortDescending
+            }
+            , zeroRecords: languageModel.NoMatchingRecords
+        }
+    });
+}
+
+function fund_table_initComplete() {
+    $('#fund_table_processing').append('<div id="warningGradientOuterBarG"><div id="warningGradientFrontBarG" class="warningGradientAnimationG">'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '<div class="warningGradientBarLineG"></div>'
+        + '</div>'
+        + '</div>');
+
+    $(".paginate_input").prop("id", "paginate_input");
+    $("#fund_table_paginate").prepend("<label class='sr-only' for='paginate_input'>Page</label>");
+}
+
+function fund_table_drawcallback(oSettings, scope, compile) {
+
+    scope.fundCount = oSettings._iRecordsDisplay;
+    scope.AsOfDate = asOfDate;
+    scope.$digest();
+
+    $('#search_button').off().on('click', searchHandler);
+    $('#searchBox').keypress(function (e) {
+        e.stopPropagation();
+        if (e.which == 13)
+            searchHandler();
+    });
+
+    $('.itemcheckbox').off().on('click', function (e) {
+        e.preventDefault();
+
+        var row = $(this).closest('tr').get(0);
+
+        if (!$(row).hasClass('selected')) {
+            $(row).addClass("selected");
+            $(this).find("span").html($("#fund_table").data("remove"));
+        }
+        else {
+            $(row).removeClass("selected");
+            $(this).find("span").html($("#fund_table").data("add"));
+        }
+
+        var data = table.fnGetData(row);
+
+        var rowid = data.InstrumentID
+
+        var index = $.inArray(rowid, FilterWrapper.Filter.SelectedInstrumentIDList);
+        if (index == -1) {
+            FilterWrapper.Filter.SelectedInstrumentIDList.push(rowid);
+
+        } else if (!this.checked && index != -1) {
+            FilterWrapper.Filter.SelectedInstrumentIDList.splice(index, 1);
+        }
+        scope.$digest();
+
+        e.stopPropagation();
+    });
+
+    $('.fundLinks').off().on('click', function (e) {
+        var fundID = parseInt($(this).attr("data-id"));
+        LocalModelWrapper.LocalModel.selectedFundID = fundID;
+        e.stopPropagation();
+    });
+
+    $(".ffPopUp").popover({ trigger: "click", html: true, animation: false })
+        .on("click", function (e) {
+            var _this = this;
+            $(_this).data("last-eventtype", e.type);
+            $(_this).popover("show");
+
+            $(".popover").on("mouseleave", function () {
+                $(_this).popover('hide');
+            });
+
+            $("#estateProtection").on("keydown", function (e) {
+                if (e.which == 9 && !e.shiftKey) {
+                    $(_this).focus();
+                    $(_this).popover("hide");
+                }
+
+            });
+        })
+        .on("mouseleave", function () {
+            var _this = this;
+            setTimeout(function () {
+                if (!$(".popover:hover").length) {
+                    $(_this).popover("hide");
+                }
+            }, 300);
+        })
+        .on('shown.bs.popover', function (e) {
+            $("#stdSeries").focus();
+        });
+
+    CompileFundFactUrlEventHandler(scope, compile);
+
+    /*responsiveTable();*/
+
+    $(".merPop").popover({ trigger: "hover focus", placement: "Top", content: languageModel.MERDisclaimer });
+}
+
+function fund_table_preDrawCallback() {
+
+}
+
+var delay = (function () {
+    var timer = 0;
+    return function (callback, ms) {
+        clearTimeout(timer);
+        timer = setTimeout(callback, ms);
+    };
+})();
+
+function searchHandler() {
+    FilterWrapper.Filter.SearchString = $('#searchBox').val().trim();
+    searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+}
+
+function viewFavouriteList(e) {
+    e.preventDefault();
+
+    if (FilterWrapper.Filter.SearchType == "Filter") {
+        if (FilterWrapper.Filter.SelectedInstrumentIDList.length > 0)
+            FilterWrapper.Filter.SearchType = "Favorite";
+    }
+    else {
+        FilterWrapper.Filter.SearchType = "Filter";
+    }
+
+    scope.$digest();
+}
+
+function clearFavouriteList(e) {
+    e.preventDefault();
+    bootbox.confirm({
+        message: languageModel.AreYouSure,
+        buttons: {
+            confirm: {
+                label: languageModel.Yes,
+                className: 'btn-success'
+            },
+            cancel: {
+                label: languageModel.No,
+                className: 'btn-outline'
+            }
+        },
+        callback: function (result) {
+            if (result) {
+                e.preventDefault();
+                FilterWrapper.Filter.SelectedInstrumentIDList = [];
+                FilterWrapper.Filter.SearchType = "Filter";
+                table.fnClearTable(true);
+                if (FilterWrapper.Filter.SearchType != "Filter")
+                    resetFilter();
+                scope.$digest();
+
+            } else {
+                return;
+            }
+        }
+    });
+}
+
+function switchColumns(columnsID, scope, compile) {
+    columnsID = columnsID.toString();
+    switchColumnsPostBack(columnsID, scope, compile);
+}
+
+function switchColumnsPostBack(columnsID, scope, compile) {
+    if (!tableApi)
+        return;
+    var columnsCount = tableApi.columns().header().length;
+    for (var i = 3; i < columnsCount; i++) {
+
+        var columnSettings = tableApi.settings()[0].aoColumns[i];
+
+        var columnName = columnSettings.name;
+
+        var columnVisible = columnSettings.bVisible;
+
+        if (columnName != "ActionColumn" && columnVisible)
+            tableApi.column(i).visible(false, false);
+    }
+    switch (columnsID) {
+        case "1":
+            $(tableApi.column('fldAsatdate:name').header()).width('115px');
+            $(tableApi.column('Nav:name').header()).width('115px');
+            $(tableApi.column('fld1DayChange:name').header()).width('115px');
+            $(tableApi.column('AssetClass:name').header()).width('190px');
+
+            tableApi.column('fldAsatdate:name').visible(true, false);
+            tableApi.column('Nav:name').visible(true, false);
+            tableApi.column('fld1DayChange:name').visible(true, false);
+            tableApi.column('AssetClass:name').visible(true, false);
+            tableApi.column('ActionColumn:name').visible(true, false);
+
+            tableApi.column('CB2:name').visible(false, false);
+
+            break;
+        case "2":
+            $(tableApi.column('OneMonth:name').header()).width('115px');
+            $(tableApi.column('ThreeMonth:name').header()).width('115px');
+            $(tableApi.column('SixMonth:name').header()).width('115px');
+            $(tableApi.column('YTD:name').header()).width('115px');
+            $(tableApi.column('ShortInception:name').header()).width('115px');
+
+            tableApi.column('OneMonth:name').visible(true, false);
+            tableApi.column('ThreeMonth:name').visible(true, false);
+            tableApi.column('SixMonth:name').visible(true, false);
+            tableApi.column('YTD:name').visible(true, false);
+            tableApi.column('ShortInception:name').visible(true, false);
+            tableApi.column('ActionColumn:name').visible(true, false);
+
+            break;
+        case "3":
+            $(tableApi.column('fld1Yr:name').header()).width('80px');
+            $(tableApi.column('fld3Yr:name').header()).width('80px');
+            $(tableApi.column('fld5Yr:name').header()).width('80px');
+            $(tableApi.column('fld10Yr:name').header()).width('80px');
+            $(tableApi.column('fld15Yr:name').header()).width('80px');
+            $(tableApi.column('Inception:name').header()).width('150px');
+
+            tableApi.column('fld1Yr:name').visible(true, false);
+            tableApi.column('fld3Yr:name').visible(true, false);
+            tableApi.column('fld5Yr:name').visible(true, false);
+            tableApi.column('fld10Yr:name').visible(true, false);
+            tableApi.column('fld15Yr:name').visible(true, false);
+            tableApi.column('Inception:name').visible(true, false);
+            tableApi.column('ActionColumn:name').visible(true, false);
+
+            break;
+        case "4":
+            $(tableApi.column('fldReturn10YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn9YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn8YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn7YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn6YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn5YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn4YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn3YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn2YrCalendar:name').header()).width('55px');
+            $(tableApi.column('fldReturn1YrCalendar:name').header()).width('55px');
+
+            tableApi.column('fldReturn10YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn9YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn8YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn7YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn6YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn5YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn4YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn3YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn2YrCalendar:name').visible(true, false);
+            tableApi.column('fldReturn1YrCalendar:name').visible(true, false);
+            tableApi.column('ActionColumn:name').visible(true, false);
+
+            break;
+        case "6":
+            if (_BrandCode == "QU" || _BrandCode == "PW" || _BrandCode == "CLMF") {
+                $(tableApi.column('FE:name').header()).width('130px');
+                $(tableApi.column('BE:name').header()).width('130px');
+                $(tableApi.column('CB4:name').header()).width('130px');
+                $(tableApi.column('NL:name').header()).width('130px');
+            }
+            else if (_BrandCode == "CL") {
+                $(tableApi.column('FE:name').header()).width('130px');
+                $(tableApi.column('BE:name').header()).width('130px');
+                $(tableApi.column('CB2:name').header()).width('130px');
+                $(tableApi.column('CB4:name').header()).width('130px');
+                $(tableApi.column('NL:name').header()).width('130px');
+                $(tableApi.column('FEEstate:name').header()).width('130px');
+
+                tableApi.column('CB2:name').visible(true, false);
+                tableApi.column('FEEstate:name').visible(true, false);
+            }
+            else {
+                $(tableApi.column('FE:name').header()).width('130px');
+                $(tableApi.column('BE:name').header()).width('130px');
+                $(tableApi.column('CB4:name').header()).width('130px');
+                $(tableApi.column('NL:name').header()).width('130px');
+                $(tableApi.column('FEEstate:name').header()).width('130px');
+
+                tableApi.column('FEEstate:name').visible(true, false);
+            }
+            tableApi.column('FE:name').visible(true, false);
+            tableApi.column('BE:name').visible(true, false);
+            tableApi.column('CB4:name').visible(true, false);
+            tableApi.column('NL:name').visible(true, false);
+            tableApi.column('ActionColumn:name').visible(false, false);
+            break;
+        case "7":
+            $(tableApi.column('EffectiveDate:name').header()).width('275px');
+            $(tableApi.column('MER:name').header()).width('275px');
+
+            tableApi.column('EffectiveDate:name').visible(true, false);
+            tableApi.column('MER:name').visible(true, false);
+            tableApi.column('ActionColumn:name').visible(true, false);
+            break;
+    }
+
+    CompileFundFactUrlEventHandler(scope, compile);
+
+    $('td.dataTables_empty').attr('colspan', 30);
+}
+
+function searchDataAndDrawTable(requestMessage) {
+    var searchedTable = $('#fund_table').DataTable().search(requestMessage, false, false);
+
+    if (searchedTable) {
+        searchedTable.draw();
+    }
+}
+
+function DrawTableWithOutRefresh() {
+    $('#fund_table').DataTable().draw(false);
+}
+
+function GetFilterState() {
+    var assetClassList = getParameterByName("AC");
+    var portfolioManagerID = getParameterByName("PM");
+    var searchString = getParameterByName("TXT");
+    var portfolioSolutionTypeIDList = getParameterByName("PS");
+    var generationIDList = getParameterByName("G");
+    var seriesList = getParameterByName("S");
+    var selectedShareClassIDList = getParameterByName("SC");
+    var isEstateProtection = getParameterByName("EP");
+
+    var isAbovePeerGroup = getParameterByName("APG");
+    var isCorporate = getParameterByName("C");
+    var isPathways = getParameterByName("P");
+    var returnPeriod = getParameterByName("RP");
+    var returnMin = getParameterByName("RMIN");
+    var returnMax = getParameterByName("RMAX");
+
+    if (assetClassList != null || portfolioManagerID != null || searchString != null ||
+        portfolioSolutionTypeIDList != null || generationIDList != null || seriesList != null ||
+        selectedShareClassIDList != null || isEstateProtection != null || isAbovePeerGroup != null || isCorporate != null || isPathways != null ||
+        returnPeriod != null || returnMin != null || returnMax != null) {
+        //clear all filter cookies
+        $.removeCookie("SelectedAssetClassIDList");
+        $.removeCookie("PortfolioManagerID");
+        $.removeCookie("SearchType");
+        $.removeCookie("SearchString");
+        $.removeCookie("PortfolioSolutionTypeIDList");
+        $.removeCookie("GenerationIDList");
+        $.removeCookie("SeriesList");
+        $.removeCookie("SelectedShareClassIDList");
+        $.removeCookie("IsEstateProtection");
+        $.removeCookie("IsAbovePeerGroup");
+        $.removeCookie("IsCorporate");
+        $.removeCookie("IsPathwaysOnly");
+        $.removeCookie("ReturnPeriod");
+        $.removeCookie("ReturnMin");
+        $.removeCookie("ReturnMax");
+
+        //Asset Class
+        if (assetClassList != null) {
+            let assetClassListArray = $.map(assetClassList.split(','), function (value) {
+                return parseInt(value, 10);
+            });
+
+            $.cookie("SelectedAssetClassIDList", JSON.stringify(assetClassListArray));
+            FilterWrapper.Filter.SelectedAssetClassIDList = assetClassListArray;
+        }
+
+        //Portfolio Management
+        if (portfolioManagerID != null) {
+            $.cookie("PortfolioManagerID", JSON.stringify(portfolioManagerID));
+            FilterWrapper.Filter.PortfolioManagerID = portfolioManagerID;
+        }
+
+        //Text Search
+        if (searchString != null) {
+            $.cookie("SearchString", JSON.stringify(searchString));
+            FilterWrapper.Filter.SearchString = searchString;
+        }
+
+        //Portfolio solution
+        if (portfolioSolutionTypeIDList != null) {
+            let portfolioSolutionTypeIDListArray = $.map(portfolioSolutionTypeIDList.split(','), function (value) {
+                return parseInt(value, 10);
+            });
+
+            $.cookie("PortfolioSolutionTypeIDList", JSON.stringify(portfolioSolutionTypeIDListArray));
+            FilterWrapper.Filter.PortfolioSolutionTypeIDList = portfolioSolutionTypeIDListArray;
+        }
+
+        //Generation
+        if (generationIDList != null) {
+            let generationIDListArray = $.map(generationIDList.split(','), function (value) {
+                return parseInt(value, 10);
+            });
+
+            $.cookie("GenerationIDList", JSON.stringify(generationIDListArray));
+            FilterWrapper.Filter.GenerationIDList = generationIDListArray;
+        }
+
+        //Series
+        if (seriesList != null) {
+            let seriesListArray = $.map(seriesList.split(','), function (value) {
+                return value;
+            });
+
+            $.cookie("SeriesList", JSON.stringify(seriesListArray));
+            FilterWrapper.Filter.SeriesList = seriesListArray;
+        }
+
+        //Share Class
+        if (selectedShareClassIDList != null) {
+            let selectedShareClassIDListArray = $.map(selectedShareClassIDList.split(','), function (value) {
+                return parseInt(value, 10);
+            });
+
+            $.cookie("SelectedShareClassIDList", JSON.stringify(selectedShareClassIDListArray));
+            FilterWrapper.Filter.SelectedShareClassIDList = selectedShareClassIDListArray;
+        }
+
+        //Estate Protection
+        if (isEstateProtection != null) {
+            $.cookie("IsEstateProtection", JSON.stringify(isEstateProtection));
+            FilterWrapper.Filter.IsEstateProtection = (isEstateProtection === 'true');
+        }
+
+        //Above Peer Group
+        if (isAbovePeerGroup != null) {
+            $.cookie("IsAbovePeerGroup", JSON.stringify(isAbovePeerGroup));
+            FilterWrapper.Filter.IsAbovePeerGroup = (isAbovePeerGroup === 'true');
+        }
+
+        //Corporate
+        if (isCorporate != null) {
+            $.cookie("IsCorporate", JSON.stringify(isCorporate));
+            FilterWrapper.Filter.IsCorporate = (isCorporate === 'true');
+        }
+
+        //Pathways Only
+        if (isPathways != null) {
+            $.cookie("IsPathwaysOnly", JSON.stringify(isPathways));
+            FilterWrapper.Filter.IsPathwaysOnly = (isPathways === 'true');
+        }
+
+        //Return Min
+        if (returnMin != null) {
+            $.cookie("ReturnMin", JSON.stringify(returnMin));
+            FilterWrapper.Filter.ReturnMin = returnMin;
+        }
+
+        //Return Max
+        if (returnMax != null) {
+            $.cookie("ReturnMax", JSON.stringify(returnMax));
+            FilterWrapper.Filter.ReturnMax = returnMax;
+        }
+
+        //Return Period
+        if (returnPeriod != null) {
+            $.cookie("ReturnPeriod", JSON.stringify(returnPeriod));
+            FilterWrapper.Filter.ReturnPeriod = returnPeriod;
+        }
+
+        return;
+    }
+
+    var value = $.cookie("favouriteList");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.SelectedInstrumentIDList = sessionValue;
+    }
+
+    value = $.cookie("SelectedAssetClassIDList");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.SelectedAssetClassIDList = sessionValue;
+    }
+
+    value = $.cookie("PortfolioManagerID");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.PortfolioManagerID = sessionValue;
+    }
+
+    value = $.cookie("SearchType");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.SearchType = sessionValue;
+    }
+
+    value = $.cookie("SearchString");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.SearchString = sessionValue;
+    }
+
+    value = $.cookie("PortfolioSolutionTypeIDList");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.PortfolioSolutionTypeIDList = sessionValue;
+    }
+
+    value = $.cookie("GenerationIDList");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.GenerationIDList = sessionValue;
+    }
+
+    value = $.cookie("SeriesList");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.SeriesList = sessionValue;
+    }
+
+    value = $.cookie("SelectedShareClassIDList");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.SelectedShareClassIDList = sessionValue;
+    }
+
+    value = $.cookie("IsEstateProtection");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.IsEstateProtection = sessionValue;
+    }
+
+    value = $.cookie("IsAbovePeerGroup");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.IsAbovePeerGroup = sessionValue;
+    }
+
+    value = $.cookie("IsCorporate");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.IsCorporate = sessionValue;
+    }
+
+    value = $.cookie("IsPathwaysOnly");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.IsPathwaysOnly = sessionValue;
+    }
+
+    value = $.cookie("ReturnPeriod");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.ReturnPeriod = sessionValue;
+    }
+
+    value = $.cookie("ReturnMin");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.ReturnMin = sessionValue;
+    }
+
+    value = $.cookie("ReturnMax");
+    if (value != undefined) {
+        var sessionValue = JSON.parse(value);
+        FilterWrapper.Filter.ReturnMax = sessionValue;
+    }
+}
+
+//function responsiveTable() {
+//    var isFirstTime = true;
+
+//    if (($(window).width() < 767)) {
+
+//        if (switched) {
+//            tableApi.fixedHeader.disable();
+//            isFirstTime = false;
+//        }
+//        switched = true;
+//        $("table.responsive").each(function (i, element) {
+//            if (!isFirstTime) {
+//                unsplitTable($(element));
+//            }
+//            splitTable($(element));
+//        });
+//        return true;
+//    } else if (switched && ($(window).width() > 767)) {
+//        tableApi.fixedHeader.enable();
+//        switched = false;
+//        $("table.responsive").each(function (i, element) {
+//            unsplitTable($(element));
+//        });
+//    }
+//}
+
+//function splitTable(original) {
+//    original.wrap("<div class='table-wrapper' />");
+
+//    var copy = original.clone();
+//    copy.find("td:not(:nth-child(2)), th:not(:nth-child(2))").css("display", "none");
+//    copy.removeClass("responsive");
+
+//    original.closest(".table-wrapper").append(copy);
+//    copy.wrap("<div class='pinned' />");
+//    original.wrap("<div class='scrollable' />");
+//}
+
+//function unsplitTable(original) {
+//    original.closest(".table-wrapper").find(".pinned").remove();
+//    original.unwrap();
+//    original.unwrap();
+//}
+
+function CompileFundFactUrlEventHandler(scope, compile) {
+    var resource_fundfact = $('.resource_fundfact');
+
+    if (resource_fundfact.length > 0) {
+        resource_fundfact.each(function () {
+            var events = $._data(this, 'events');
+            if (events && events.click)
+                return;  // return if click event is already bound.
+            var content = $(this)
+            compile(content)(scope);
+        });
+    }
+}
+
+function getParameterByName(name) {
+    var match = RegExp('[?&]' + name + '=([^&]*)', 'i').exec(window.location.search);
+    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+}

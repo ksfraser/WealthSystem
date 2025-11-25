@@ -1,0 +1,75 @@
+
+
+.dataTable tbody td
+{
+   /*disable userselect*/  
+  -webkit-user-select: none;  
+  -moz-user-select: none;    
+  -ms-user-select: none;      
+  user-select: none;
+  cursor:pointer;   
+}
+
+.dataTable thead th {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    position: relative;
+   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#006ba0+0,258baa+48,006ba0+51,4abde8+100 */
+}
+
+.dataTable .sorting_asc .sort-arrows {
+	background: url('/images/gwl_icons/sort-ascending.svg') no-repeat ;
+    margin-left:2px;
+}
+
+.dataTable .sorting_desc .sort-arrows {
+	background: url('/images/gwl_icons/sort-descending.svg') no-repeat;
+     margin-left:2px;
+}
+
+.dataTable .sorting .sort-arrows {
+	background: url('/Images/gwl_icons/unsorted.svg') no-repeat;
+     margin-left:2px;
+}
+
+.dataTables_paginate {
+ display:inline-block;
+ font-size:14px;
+}
+
+@media(min-width:768px) {
+.dataTables_paginate {
+        
+}
+}
+@media(max-width:767px) {
+.dataTables_paginate {
+    padding-left:10px;
+}
+}
+
+.sort-arrows {
+	display: inline-block;
+	width: 10px;
+	height: 12px;
+	margin: 0 0 0 3px;
+	vertical-align: -2px;
+	background-repeat: no-repeat;
+}
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Misc
+ */
+.dataTables_scroll {
+	clear: both;
+}
+
+.dataTables_scrollBody {
+	*margin-top: -1px;
+	-webkit-overflow-scrolling: touch;
+}
+
+
+

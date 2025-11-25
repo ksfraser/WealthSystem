@@ -1,0 +1,314 @@
+﻿///<reference path="/js/jquery-1.10.2.min.js"/>
+///<reference path="/js/Datatables/jquery.dataTables.js"/>
+///<reference path="/Controlls/GWL.Master"/>
+///<reference path="/js/AngularJs.js"/>
+///<reference path="GWLFundSearchPage.js"/>
+///<reference path="/js/GWLModels/GWLModels.js"/>
+///<reference path="GWLFundTable.js"/>
+
+//var ng_app = angular.module("Angular_App", []);
+
+ng_app.controller("Angular_Ctrl", ["$scope", "$window", "$document", "$compile", "$http", "PopUpFundFactURLListByInstrumentID", function ($scope, $window, $document, $compile, $http, PopUpFundFactURLListByInstrumentID) {
+    MasterScopeController($scope, $window);
+    $scope.filterModel = $window.FilterWrapper;
+    $scope.localModelWrapper = $window.LocalModelWrapper
+    $scope.fundCount = 0;
+    $scope.ManagementOptions = LocalModelWrapper.LocalModel.ManagementOptions;
+    LocalModelWrapper.LocalModel.ManagementDefault.PortfolioManagerName = $scope.languageModel.Choose;
+    $scope.Management = LocalModelWrapper.LocalModel.ManagementDefault;
+    $scope.ViewFavouritesButtonText = $scope.languageModel.ViewFavourites;
+    $document.ready(function () {
+        DocumentReady($scope, $compile);
+    });
+
+    $http({
+        method: 'GET',
+        url: "api/PortfolioManagers",
+
+    }).then(function (result) {
+        // use angular.toJson to get rid of $$hashkey in the object.
+        $scope.ManagementOptions = JSON.parse(angular.toJson([$scope.Management].concat(result.data != null ? result.data : result)));
+        $scope.Management = $scope.ManagementOptions.filter(function (obj) { return obj.PortfolioManagerID == FilterWrapper.Filter.PortfolioManagerID })[0];
+    });
+
+    $scope.checkBoxOnClick = function (checked) {
+        checked = !check;
+    }
+    LocalModelWrapper.LocalModel.ARTimePeriodOptions[0].name = $scope.languageModel.Choose;
+    LocalModelWrapper.LocalModel.ARTimePeriodOptions[1].name = $scope.languageModel._1Yr;
+    LocalModelWrapper.LocalModel.ARTimePeriodOptions[2].name = $scope.languageModel._3Yrs;
+    LocalModelWrapper.LocalModel.ARTimePeriodOptions[3].name = $scope.languageModel._5Yrs;
+    LocalModelWrapper.LocalModel.ARTimePeriodOptions[4].name = $scope.languageModel._10Yrs;
+
+    $scope.ARTimePeriodOptions = LocalModelWrapper.LocalModel.ARTimePeriodOptions;
+    $scope.ARTimePeriod = $scope.ARTimePeriodOptions.filter(function (obj) { return obj.id == FilterWrapper.Filter.ReturnPeriod })[0];
+
+    $scope.ParentTabSelectedStyle = function (index) {
+        return LocalModelWrapper.LocalModel.SelectedParentTabIndexStyle === index;
+    };
+    $scope.PerformanceColumnSelectedStyle = function (index) {
+        return LocalModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle === index;
+    };
+
+    $scope.favouriteButtonDisabled = function () {
+
+        if (FilterWrapper.Filter.SelectedInstrumentIDList.length == 0 && !FilterWrapper.Filter.SearchType == "Favorite")
+            return true;
+        else
+            return false;
+    }
+
+    $scope.hasFavoriteSelected = function () {
+        return FilterWrapper.Filter.SelectedInstrumentIDList.length > 0;
+    }
+
+    $scope.AssetClassSelected = function (index) {
+        var localIndex = $.inArray(index, FilterWrapper.Filter.SelectedAssetClassIDList);
+        if (localIndex == -1 || FilterWrapper.Filter.SelectedAssetClassIDList.length === 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    $scope.seriesSelected = function (index) {
+        var localIndex = $.inArray(index, FilterWrapper.Filter.SeriesList);
+        if (localIndex == -1 || FilterWrapper.Filter.SeriesList.length === 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    $scope.portfolioSolutionSelected = function (index) {
+        var localIndex = $.inArray(index, FilterWrapper.Filter.PortfolioSolutionTypeIDList);
+        if (localIndex == -1 || FilterWrapper.Filter.PortfolioSolutionTypeIDList.length === 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+    $scope.generationIDSelected = function (index) {
+        var localIndex = $.inArray(index, FilterWrapper.Filter.GenerationIDList);
+        if (localIndex == -1 || FilterWrapper.Filter.GenerationIDList.length === 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    $scope.seventyFiveChecked = function (index) {
+        var localIndex = $.inArray(index, FilterWrapper.Filter.SelectedShareClassIDList);
+        if (localIndex == -1 || FilterWrapper.Filter.SelectedShareClassIDList.length === 0) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    $scope.PopupFundFactUrl = function (e) {
+        e.preventDefault();
+         var target = e.currentTarget
+         var InstrumentID = $(target).attr('instrumentID');
+
+        var width = 160;
+        var leftOffset = -165;
+        if ($scope.languageState.State == 'fr') {
+            width = 200;
+            leftOffset = -205
+        }
+
+        PopUpFundFactURLListByInstrumentID(InstrumentID, $scope, $(target), leftOffset, -4, width);
+
+    }
+
+    $scope.IsPopedUp = function (instrumentID) {
+        return instrumentID == $scope.AcitvePopUpInstrumentID;
+    }
+
+
+    $scope.$watch('localModelWrapper.LocalModel.SelectedParentTabIndexStyle', function (newVal, oldVal) {
+
+        $('.sub_tabs').css("display", "none");
+        if (newVal == 1) {
+            $('.sub_tabs').css("display", "none");
+        } else if (newVal == 2) {
+            $('#sub_tabs').css("display", "inline-block");
+        }
+        $.cookie("SelectedParentTabIndexStyle", JSON.stringify(newVal));
+
+    }, true);
+
+    $scope.$watch('localModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            $.cookie("SelectedPerformanceColumnIndexStyle", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('localModelWrapper.LocalModel.FilterCounterDisplay', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            $.cookie("FilterCounterDisplay", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('localModelWrapper.LocalModel.SelectedColumnIndex', function (newVal, oldVal) {
+        if (tableApi != null) {
+            switchColumns(newVal, $scope, $compile);
+            $.cookie("SelectedColumnIndex", JSON.stringify(newVal));
+        }
+
+
+    }, true);
+
+    $scope.$watch('filterModel.Filter.SearchString', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            $.cookie("SearchString", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.SelectedAssetClassIDList', function (newVal, oldVal) {
+        setCounterList($scope);
+        if (newVal != oldVal) {
+            $.cookie("SelectedAssetClassIDList", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.SeriesList', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("SeriesList", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.PortfolioSolutionTypeIDList', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("PortfolioSolutionTypeIDList", JSON.stringify(newVal));
+        }
+
+    }, true);
+
+    $scope.$watch('filterModel.Filter.GenerationIDList', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("GenerationIDList", JSON.stringify(newVal));
+        }
+
+    }, true);
+
+    $scope.$watch('filterModel.Filter.SelectedInstrumentIDList', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            var expDate = new Date();
+            expDate.setTime(expDate.getTime() + (365 * 24 * 60 * 60 * 1000));
+            $.cookie("favouriteList", JSON.stringify(newVal), { expires: expDate });
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.SearchType', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+
+            if (newVal == "Favorite") {
+                if (FilterWrapper.Filter.SelectedInstrumentIDList.length == 0)
+                    return;
+                $scope.ViewFavouritesButtonText = $scope.languageModel.Favourites;
+                resetFilterForFavourite();
+            } else {
+                $scope.ViewFavouritesButtonText = $scope.languageModel.ViewFavourites;
+                FilterWrapper.Filter.SearchString = "";
+            }
+            searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+            $.cookie("SearchType", JSON.stringify(newVal));
+        }
+
+
+    }, true);
+
+    $scope.$watch('filterModel.Filter.SelectedShareClassIDList', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("SelectedShareClassIDList", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('Management', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            FilterWrapper.Filter.PortfolioManagerID = newVal.PortfolioManagerID;
+            setCounterList($scope);
+            $.cookie("PortfolioManagerID", JSON.stringify(FilterWrapper.Filter.PortfolioManagerID));
+        }
+    }, true);
+
+    $scope.$watchGroup(['ARTimePeriod', 'filterModel.Filter.ReturnMin', 'filterModel.Filter.ReturnMax'], function (newVals, oldVals, scope) {
+        if (newVals != oldVals) {
+            FilterWrapper.Filter.ReturnPeriod = newVals[0].id;
+            LocalModelWrapper.LocalModel.ARTimePeriod = newVals[0];
+            setCounterList($scope);
+            $.cookie("ReturnPeriod", JSON.stringify(FilterWrapper.Filter.ReturnPeriod));
+            $.cookie("ReturnMin", JSON.stringify(FilterWrapper.Filter.ReturnMin));
+            $.cookie("ReturnMax", JSON.stringify(FilterWrapper.Filter.ReturnMax));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.IsEstateProtection', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("IsEstateProtection", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.IsCorporate', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("IsCorporate", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.IsAbovePeerGroup', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("IsAbovePeerGroup", JSON.stringify(newVal));
+        }
+    }, true);
+
+    $scope.$watch('filterModel.Filter.IsPathwaysOnly', function (newVal, oldVal) {
+        if (newVal != oldVal) {
+            setCounterList($scope);
+            $.cookie("IsPathwaysOnly", JSON.stringify(newVal));
+        }
+    }, true);
+
+}]);
+
+function setCounterList($scope) {
+    var ManagerSelected = $scope.Management.PortfolioManagerID != 0;
+    var ARTimePeriodSelected = $scope.ARTimePeriod.id != "default";
+
+    LocalModelWrapper.LocalModel.FilterCounter =
+        FilterWrapper.Filter.SelectedAssetClassIDList.length
+        + FilterWrapper.Filter.PortfolioSolutionTypeIDList.length
+        + FilterWrapper.Filter.SelectedShareClassIDList.length
+        + FilterWrapper.Filter.SeriesList.length
+        + FilterWrapper.Filter.GenerationIDList.length
+        + (ManagerSelected ? 1 : 0)
+        + (ARTimePeriodSelected ? 1 : 0)
+        + (FilterWrapper.Filter.IsEstateProtection ? 1 : 0)
+        + (FilterWrapper.Filter.IsCorporate ? 1 : 0)
+        + (FilterWrapper.Filter.IsAbovePeerGroup ? 1 : 0)
+        + (FilterWrapper.Filter.IsPathwaysOnly ? 1 : 0);
+
+    LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+
+}
+

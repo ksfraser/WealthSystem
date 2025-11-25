@@ -1,0 +1,509 @@
+﻿///<reference path="/js/jquery-1.10.2.min.js"/>
+///<reference path="/js/Datatables/jquery.dataTables.js"/>
+///<reference path="/Controlls/GWL.Master"/>
+///<reference path="/js/AngularJs.js"/>
+///<reference path="GWLFundTable.js"/>
+///<reference path="/js/GWLModels/GWLModels.js"/>
+
+
+$(function () {
+    LocalModelWrapper.LocalModel.CurrentPage = "FundSearchPage";
+
+    $(document).on('mouseup', function (e) {
+
+        var filterPanel = $('#filter_container');
+        var menuDiv = $('#filter_menu_switch');
+
+        if (filterPanel.hasClass('hideContainer') || menuDiv.is(e.target) || menuDiv.has(e.target).length != 0)
+            return;
+        if (!filterPanel.is(e.target) && filterPanel.has(e.target).length === 0) {
+            filterClose();
+        }
+    });
+
+    $(document).on('mouseup', function (e) {
+        var container = $(".inner_menu_gwl");
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target) && container.has(e.target).length === 0) {
+
+            var filterContainer = $("#filter_container");
+
+            if (filterContainer.has(e.target).length === 0) {
+                LocalModelWrapper.LocalModel.SelectedFilterMenuIndex = -1;
+                LocalModelWrapper.LocalModel.ActiveFilterMenuIndex = -1;
+                scope.$digest();
+            }
+            container.each(function () {
+                if (!$(this).is($(e.target).siblings('ul'))) {
+                    $(this).addClass("fadedOut");
+                }
+            })
+
+        }
+    });
+      
+    $('.tabs_li').off().on('click', function (e) {
+        e.preventDefault();
+        var selectedParentTabId = parseInt($(this).attr("style-id"));
+        LocalModelWrapper.LocalModel.SelectedParentTabIndexStyle = selectedParentTabId;
+
+        switch (selectedParentTabId) {
+            case 1:
+                LocalModelWrapper.LocalModel.SelectedColumnIndex = 1;
+                break;
+            case 2:
+                LocalModelWrapper.LocalModel.SelectedColumnIndex = 2;
+                LocalModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle = 1;
+                break;
+            case 3:
+                LocalModelWrapper.LocalModel.SelectedColumnIndex = 6;
+                LocalModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle = 5;
+                break;
+            default:
+        }
+        scope.$digest();
+    });
+
+    $('.column_switcher').on('click', function (e, param) {
+        e.stopPropagation();      
+        var columnsID = parseInt($(this).attr("idx"));
+        var styleID = parseInt($(this).attr("style-id"));
+        if (columnsID >= 2)
+        {
+            LocalModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle = styleID;
+        }
+  
+        LocalModelWrapper.LocalModel.SelectedColumnIndex = columnsID;
+        scope.$digest();    
+    });
+
+    $('.assetClassList').off().on('change', function () {
+        var ID = parseInt($(this).val());
+        setSelectionList(ID, FilterWrapper.Filter.SelectedAssetClassIDList)
+        resetFilterForPanel();
+        scope.$digest();
+
+    });
+
+    $('.seriesList').off().on('change', function () {
+        var ID = $(this).val();
+        setSelectionList(ID, FilterWrapper.Filter.SeriesList)
+        resetFilterForPanel();
+        scope.$digest();
+    });
+
+    $('.portfolioSolutionList').off().on('change', function () {
+        var ID = parseInt($(this).val());
+        setSelectionList(ID, FilterWrapper.Filter.PortfolioSolutionTypeIDList);
+        resetFilterForPanel();
+        scope.$digest();
+    });
+
+    $('.generationIDList').off().on('change', function () {
+        var ID = parseInt($(this).val());
+        setSelectionList(ID, FilterWrapper.Filter.GenerationIDList);
+        resetFilterForPanel();
+        scope.$digest();
+    });
+
+    $('.SharedClassList').off().on('change', function () {
+        var ID = parseInt($(this).val());
+        setSelectionList(ID, FilterWrapper.Filter.SelectedShareClassIDList);
+        resetFilterForPanel();
+        scope.$digest();
+    });
+  
+    $('#btn_apply_filter').off().on('click', function (e) {
+        e.preventDefault();
+        LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+        scope.$digest();          
+        searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter))
+        filterClose();
+    });
+
+    $("#AddToFavouritesButton").on("keyup", function (e) {
+        if (e.which == 9 && !e.shiftKey) {
+            filterClose();
+        }
+    });
+
+    $('#estate_Protection').on('focus', function (e) {
+        e.preventDefault();
+        $(this).parent().addClass("show");
+    });
+    $('#estate_Protection').on('blur', function (e) {
+        e.preventDefault();
+        $(this).parent().removeClass("show");
+    });
+
+    $('#filter_menu_switch').on('click', function (e) {
+        e.preventDefault();
+        filterToggle();        
+    });
+
+    $('#btn_clear_all_filter').on('click', function (e) {
+        e.preventDefault();
+        resetFilter();
+        clearAllFilterItems();
+        scope.$digest();
+        searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+    });
+
+    $('#BackToList_fs').on('click', function (e) {
+        e.preventDefault();
+        FilterWrapper.Filter.SearchType = 'Filter';
+        scope.$digest();
+    });
+
+
+    $('#btn_Performance_PDF').off().on('click', function (e) {
+        e.preventDefault();
+
+        let ul = $("ul.perfSubTabs")[0];
+        let liList = $(ul).find("li");
+        let selectTab = 0;
+        for (var i = 0; i < liList.length; i++) {
+            let li = liList[i];
+            let a = $(li).find("a")[0];
+            if (a.classList.value.indexOf("active") != -1)
+            {
+                selectTab = i;
+                break;
+            }
+        }
+        
+        let thList = $("#fund_table thead th");
+        let sortID = 1;
+        let sortColumn = "FundName";
+        let sortDir = "aescending";
+        for (var i = 0; i < thList.length; i++) {
+            let th = thList[i];
+            if (th.ariaSort != null) {
+                sortID = i;
+                sortDir = th.ariaSort;
+                break;
+            }
+        }
+
+        switch (selectTab) {
+            case 0:
+                switch (sortID) {
+                    case 1:
+                        sortColumn = "FundName";
+                        break;
+                    case 2:
+                        sortColumn = "Return1Mth";
+                        break;
+                    case 3:
+                        sortColumn = "Return3Mth";
+                        break;
+                    case 4:
+                        sortColumn = "Return6Mth";
+                        break;
+                    case 5:
+                        sortColumn = "ReturnYTD";
+                        break;
+                    case 6:
+                        sortColumn = "ReturnInception";
+                        break;
+                }
+                break;
+            case 1:
+                switch (sortID) {
+                    case 1:
+                        sortColumn = "FundName";
+                        break;
+                    case 2:
+                        sortColumn = "Return1Yr";
+                        break;
+                    case 3:
+                        sortColumn = "Return3Yr";
+                        break;
+                    case 4:
+                        sortColumn = "Return5Yr";
+                        break;
+                    case 5:
+                        sortColumn = "Return10Yr";
+                        break;
+                    case 6:
+                        sortColumn = "Return15Yr";
+                        break;
+                    case 7:
+                        sortColumn = "ReturnInception";
+                        break;
+                }
+                break;
+            case 2:
+                switch (sortID) {
+                    case 1:
+                        sortColumn = "FundName";
+                        break;
+                    case 2:
+                        sortColumn = "Return10YrCalendar";
+                        break;
+                    case 3:
+                        sortColumn = "Return9YrCalendar";
+                        break;
+                    case 4:
+                        sortColumn = "Return8YrCalendar";
+                        break;
+                    case 5:
+                        sortColumn = "Return7YrCalendar";
+                        break;
+                    case 6:
+                        sortColumn = "Return6YrCalendar";
+                        break;
+                    case 7:
+                        sortColumn = "Return5YrCalendar";
+                        break;
+                    case 8:
+                        sortColumn = "Return4YrCalendar";
+                        break;
+                    case 9:
+                        sortColumn = "Return3YrCalendar";
+                        break;
+                    case 10:
+                        sortColumn = "Return2YrCalendar";
+                        break;
+                    case 11:
+                        sortColumn = "Return1YrCalendar";
+                        break;
+                }
+                break;
+            case 3:
+                switch (sortID) {
+                    case 1:
+                        sortColumn = "FundName";
+                        break;
+                    case 2:
+                        sortColumn = "QuartileRankingYTD";
+                        break;
+                    case 3:
+                        sortColumn = "QuartileRanking1Yr";
+                        break;
+                    case 4:
+                        sortColumn = "QuartileRanking3Yr";
+                        break;
+                    case 5:
+                        sortColumn = "QuartileRanking5Yr";
+                        break;
+                    case 6:
+                        sortColumn = "QuartileRanking10Yr";
+                        break;
+                    case 7:
+                        sortColumn = "QuartileRanking15Yr";
+                        break;
+                }
+                break;
+        }
+
+        if (sortDir == "descending") {
+            sortDir = "DESC";
+        }
+        else {
+            sortDir = "ASC";
+        }
+   
+        let filter = JSON.stringify(FilterWrapper.Filter);
+        let url = "/PdfReports/FundPerformance/?searchFilter=" + filter + "&BC=" + getCookie("BC") + "&OrderBy=" + sortColumn + "&orderByDirection=" + sortDir + "&language=" + LanguageState.State;
+        window.open(url, "_blank");
+    });
+
+    $('#btn_FundCodesAnMER_PDF').off().on('click', function (e) {
+        e.preventDefault();
+
+        let ul = $("ul.perfSubTabs")[1];
+        let liList = $(ul).find("li");
+        let selectTab = 0;
+        for (var i = 0; i < liList.length; i++) {
+            let li = liList[i];
+            let a = $(li).find("a")[0];
+            if (a.classList.value.indexOf("active") != -1) {
+                selectTab = i;
+                break;
+            }
+        }
+
+        let thList = $("#fund_table thead th");
+        let sortID = 1;
+        let sortColumn = "FundName";
+        let sortDir = "aescending";
+        for (var i = 0; i < thList.length; i++) {
+            let th = thList[i];
+            if (th.ariaSort != null) {
+                sortID = i;
+                sortDir = th.ariaSort;
+                break;
+            }
+        }
+
+        switch (selectTab) {
+            case 0:
+                switch (getCookie("BC")) {
+                    case "CL":
+                        switch (sortID) {
+                            case 1:
+                                sortColumn = "FundName";
+                                break;
+                            case 2:
+                                sortColumn = "FundCodeFE";
+                                break;
+                            case 3:
+                                sortColumn = "FundCodeBE";
+                                break;
+                            case 4:
+                                sortColumn = "FundCodeCB2";
+                                break;
+                            case 5:
+                                sortColumn = "FundCodeCB4";
+                                break;
+                            case 6:
+                                sortColumn = "FundCodeNL";
+                                break;
+                            case 7:
+                                sortColumn = "FundCodeEP";
+                                break;
+                        }
+                        break;
+                    case "GWL":
+                    case "LL":
+                        switch (sortID) {
+                            case 1:
+                                sortColumn = "FundName";
+                                break;
+                            case 2:
+                                sortColumn = "FundCodeFE";
+                                break;
+                            case 3:
+                                sortColumn = "FundCodeBE";
+                                break;
+                            case 4:
+                                sortColumn = "FundCodeCB4";
+                                break;
+                            case 5:
+                                sortColumn = "FundCodeNL";
+                                break;
+                            case 6:
+                                sortColumn = "FundCodeEP";
+                                break;
+                        };
+                        break;
+                    case "QU":
+                    case "PW":
+                    case "CLMF":
+                        switch (sortID) {
+                            case 1:
+                                sortColumn = "FundName";
+                                break;
+                            case 2:
+                                sortColumn = "FundCodeFE";
+                                break;
+                            case 3:
+                                sortColumn = "FundCodeBE";
+                                break;
+                            case 4:
+                                sortColumn = "FundCodeCB4";
+                                break;
+                            case 5:
+                                sortColumn = "FundCodeNL";
+                                break;
+                        };
+                        break;
+                }
+                break;
+            case 1:
+                switch (sortID) {
+                    case 1:
+                        sortColumn = "FundName";
+                        break;
+                    case 2:
+                        sortColumn = "EffectiveDate";
+                        break;
+                    case 3:
+                        sortColumn = "MER";
+                        break;
+                }
+                break;
+        }
+
+        if (sortDir == "descending") {
+            sortDir = "DESC";
+        }
+        else {
+            sortDir = "ASC";
+        }
+
+        let filter = JSON.stringify(FilterWrapper.Filter);
+        let url = "/PdfReports/FundCodesAndMER/?searchFilter=" + filter + "&BC=" + getCookie("BC") + "&OrderBy=" + sortColumn + "&orderByDirection=" + sortDir + "&language=" + LanguageState.State;
+        window.open(url, "_blank");
+    });
+
+    function filterClose() {
+        //$('#filter_container').animate({ height: "toggle", "padding-top": "0px" }, 300);
+        $.when(hideMenuContainer()).done(function () {
+            $('#filter_container_wrapper').fadeOut(1);
+            LocalModelWrapper.LocalModel.SelectedFilterMenuIndex = -1;
+            scope.$digest();
+        });        
+    }
+
+    function filterToggle() {
+        
+        if ($('#filter_container').hasClass('showContainer')) {
+            $.when(hideMenuContainer()).done(function () {
+                LocalModelWrapper.LocalModel.SelectedFilterMenuIndex = -1;
+                scope.$digest();
+                $('#filter_container_wrapper').fadeOut(500);
+            });                     
+        }
+        else {
+            $.when($('#filter_container_wrapper').fadeIn(1)).done(function () { 
+                showMenuContainer()
+                LocalModelWrapper.LocalModel.SelectedFilterMenuIndex = 5;
+                scope.$digest();
+            });
+           
+        }     
+    }
+
+    $('#btnBackFromFav').on('click', viewFavouriteList)
+});
+
+function showMenuContainer() {
+    $('#filter_container').removeClass('hideContainer').addClass('showContainer');
+    $("#filter_li").addClass("show");
+}
+
+function hideMenuContainer() {
+    $('#filter_container').removeClass('showContainer').addClass('hideContainer');
+    $("#filter_li").removeClass("show");
+}
+
+function copyArray(array) {
+    var copy = [];
+    for (var i = 0; i < array.length; i++)
+    {
+        copy.push(array[i]);
+    }
+    return copy;
+}
+
+ function setSelectionList(id, list){
+    var index = $.inArray(id, list);
+    if (index == -1) {
+        list.push(id);
+    }
+    else {
+        list.splice(index, 1);
+    }
+}
+
+
+
+
+
+
+
+
+
+

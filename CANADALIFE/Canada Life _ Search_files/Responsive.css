@@ -1,0 +1,181 @@
+﻿ 
+@media (min-width: 768px) {   
+   #fund_table td.col_fundName,#fund_table th.col_fundName {
+   cursor:pointer;
+   padding-left:2px;
+   padding-right:0px;
+}
+
+   #mainMenu ul #filter_li {
+   float:right;
+   height:60px;
+   }
+
+   #mainMenu ul ul#AssetClassDropDown {
+    width:360px;
+}
+
+   #mainMenu ul ul#AssetClassDropDown li{
+    width:50%;
+}
+
+    #mainMenu ul ul {
+    position:absolute;
+	top:60px;
+	left:0;  
+    }
+
+    #sub_tabs {
+       position:absolute;
+       width:800px;
+       left:0px;
+       top:60px;
+    }
+
+    .tabs_li {
+      margin-right:10px; 
+      padding: 4px 10px;
+    }
+
+    .sub_tabs div.subColumnBorder {
+        border-right:solid 1px black;
+        padding:0px 15px;
+        padding-top:0px;
+        height:14px;
+    }
+
+}
+
+@media (max-width: 900px) { 
+    #mainMenu ul #filter_li {
+        float:left;
+    }
+}
+
+/* Landscape phones and down */
+@media (max-width:768px) {
+    body {
+        overflow-x: hidden;
+    }
+  
+
+    #mainMenu ul li {
+        width: 100%;
+    }
+
+   #mainMenu ul #filter_li {
+      float:left;
+      width:100%;
+   }
+
+    #mainMenu ul ul#AssetClassDropDown li {
+        width: 100%;
+    }
+
+    #mainMenu ul ul {
+        position: static;
+        top: 0px;
+        left: 0;
+        width: 100%;
+    }
+
+    #mainMenu ul ul li {
+        width:100%;
+    }
+
+    table.responsive {
+        margin-bottom: 0;
+    }
+
+    .pinned {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #fff;
+        width: 65%;
+        overflow: hidden;
+        overflow-x: scroll;
+        border-right: 1px solid #ccc;
+    }
+
+        .pinned table {
+            border-right: none;
+            border-left: none;
+            width: 100%;
+        }
+
+            .pinned table th, .pinned table td {
+                white-space: nowrap;
+            }
+
+        .pinned td:last-child {
+            border-bottom: 0;
+        }
+
+    .scrollable table th, .scrollable table td {
+        white-space: nowrap;
+    }
+
+    div.table-wrapper {
+        position: relative;
+        margin-bottom: 5px;
+        overflow: hidden;
+    }
+
+        div.table-wrapper div.scrollable table {
+            margin-left: 0px;
+        }
+
+        div.table-wrapper div.scrollable {
+            overflow: scroll;
+            overflow-y: hidden;
+            margin-left: 65%;
+        }
+
+    table.responsive td, table.responsive th {
+        position: relative;
+        overflow: hidden;
+    }
+
+        table.responsive th:nth-child(2), table.responsive td:nth-child(2), table.responsive td:nth-child(2), table.responsive.pinned td {
+            display: none;
+        }
+
+    .paginate_button.first {
+        display: none;
+    }
+
+    .paginate_button.last {
+        display: none;
+    }
+
+    #fund_table_length {
+        display: none;
+    }
+
+
+    #fund_table td.col_fundName, #fund_table th.col_fundName {
+        cursor: pointer;
+        padding-left: 4px;
+        min-width: 200px;
+    }
+
+
+
+    #sub_tabs {
+      position:relative;
+      top:10px;
+      width:100%;
+      overflow:hidden;
+
+    }
+
+    .sub_tabs div.subColumnBorder {
+       padding-left:15px;
+       padding-right:5px;
+       margin-top:0px;
+       height:30px;
+       padding-top:5px;
+       border-right:none;
+    }
+}

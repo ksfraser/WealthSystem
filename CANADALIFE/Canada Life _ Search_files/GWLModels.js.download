@@ -1,0 +1,170 @@
+﻿var table;
+
+var asOfDate;
+
+var ng_app;
+
+var scope;
+
+var _BrandCode = $.cookie('BC');
+
+var sharedClasses_currentPage = [];
+
+var Filter = {
+    SearchType:'Filter',
+    SearchString: '',
+    SelectedInstrumentIDList: [],
+    SelectedAssetClassIDList: [],
+    PortfolioSolutionTypeIDList: [],
+    GenerationIDList: [],
+    SeriesList: [],
+    SelectedShareClassIDList: [],
+    IsEstateProtection: false,
+    IsAbovePeerGroup: false,
+    IsCorporate: false,
+    IsPathwaysOnly: false,
+    PortfolioManagerID: 0,
+    ReturnPeriod:'default',
+    ReturnMin:null,
+    ReturnMax:null
+}
+
+var LocalModel = {
+     SelectedFilterMenuIndex: -1
+    , ActiveFilterMenuIndex: -1
+    , SelectedColumnIndex:1
+    , SelectedParentTabIndexStyle:1
+    , SelectedPerformanceColumnIndexStyle:1
+    , FilterCounter: 0
+    , FilterCounterDisplay:0
+    , CurrentPage: "FundSearchPage"
+    , selectedFundID: -1
+    , ManagementOptions: {}
+    , Management: {}
+    , ManagementDefault:
+     {
+            PortfolioManagerID: 0,
+            PortfolioManagerName: "Choose"
+     }
+    , ARTimePeriodOptions: [
+      { name: 'Choose', id: 'default' },
+      { name: '1 yr', id: '1Yr' },
+      { name: '3 yrs', id: '3Yr' },
+      { name: '5 yrs', id: '5Yr' },
+      { name: '10 yrs', id: '10Yr' }
+    ]
+}
+
+
+var FilterWrapper = {
+    Filter: Filter
+}
+
+var LocalModelWrapper = {
+    LocalModel:LocalModel
+}
+
+function getItemsFromCookie(itemName) {
+
+    var item = $.cookie(itemName);
+    if (item && item != "undefined")
+        return JSON.parse(item);
+}
+
+var FundInfo = {
+     fundName: "GWL Advanced Income Portfolio (PSG) 100/100 (PS1)"
+    , fundCategory: "Global Equity Balanced"
+    , asOfDate: {}
+    , addedToFavourites: false
+    , selectedGrowthTimePeriod: "All"
+    , InteractiveChartMode: "10kGrowth"
+    , FavouriteList: []
+    , FundListToCompare:[]
+}
+
+Date.prototype.MMddyyyy = function () {
+    var MM = this.getMonth() + 1; // getMonth() is zero-based
+    var dd = this.getDate();
+
+    return [(MM > 9 ? '' : '0') + MM,
+            (dd > 9 ? '' : '0') + dd,
+            this.getFullYear()
+    ].join('/');
+};
+
+Date.prototype.addMonths = function (months) {
+    var dat = new Date(this.valueOf());
+    dat.setMonth(dat.getMonth() + months);
+    return dat;
+}
+
+
+var FundHistoryFilter = {
+    InstrumentID: 1
+    , selectedTabIndex: 0
+    , SelectedTimePeriod: '1Mth'
+    , SelectedInterval: 'Daily'
+    , StartDate: new Date().addMonths(-3)
+    , EndDate: new Date()
+    , SelectionMode: "TimePeriod"
+}
+
+var InteractiveChartFilter = {
+    //InstrumentID: FundHistoryFilter.InstrumentID,
+    SelectedTimePeriod: 'All'
+    , StartDate: null
+    , EndDate: null
+    , SelectionMode: "TimePeriod"
+    , ChartType: "Performance"
+    , InactiveChartType: "Price"
+    , NoDataAvailable: false
+    , lastCorrectStartDate:null
+    , lastCorrectEndDate:null
+}
+
+var NAVPSPerformanceSummary =
+{
+    InstrumentID:null,
+    StartDate:null,
+    EndDate:null,
+    NAVPSDate:null,
+    NAVPS:null,
+    Growth:null,
+    GrowthOfTenThousand:null
+}
+
+
+function resetFilter() {
+    FilterWrapper.Filter.SearchString = '';
+    FilterWrapper.Filter.SearchType = "Filter";
+    FilterWrapper.Filter.SelectedAssetClassIDList = [];
+    FilterWrapper.Filter.SelectedShareClassIDList = [];
+    FilterWrapper.Filter.PortfolioSolutionTypeIDList = [];
+}
+
+function resetFilterForPanel() {
+    FilterWrapper.Filter.SearchType = "Filter";
+    FilterWrapper.Filter.SearchString = ''
+}
+
+function resetFilterForNav() {
+    FilterWrapper.Filter.SearchType = "Filter";
+    FilterWrapper.Filter.SearchString = ''
+}
+
+function resetFilterForFavourite() {
+    FilterWrapper.Filter.SearchType = "Favorite";
+    FilterWrapper.Filter.SearchString = ''
+}
+
+function resetLocalModel() {
+
+
+    LocalModelWrapper.LocalModel.SelectedColumnIndex = 1;
+    LocalModelWrapper.LocalModel.SelectedParentTabIndexStyle = 1;
+    LocalModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle = 1;
+    LocalModelWrapper.LocalModel.CurrentPage = "FundSearchPage";
+    LocalModelWrapper.LocalModel.selectedFundID = -1;
+    }
+
+

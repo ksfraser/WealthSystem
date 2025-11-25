@@ -99,7 +99,8 @@ class ServiceContainer
             'App\\Services\\Interfaces\\PortfolioServiceInterface',
             function($container) {
                 $portfolioRepo = $container->get('App\\Repositories\\Interfaces\\PortfolioRepositoryInterface');
-                return new PortfolioService($portfolioRepo);
+                $marketDataService = $container->get('App\\Services\\Interfaces\\MarketDataServiceInterface');
+                return new PortfolioService($portfolioRepo, $marketDataService);
             },
             true // singleton
         );
@@ -109,6 +110,15 @@ class ServiceContainer
             function($container) {
                 $authService = $container->get('App\\Services\\Interfaces\\AuthenticationServiceInterface');
                 return new NavigationService($authService);
+            },
+            true // singleton
+        );
+        
+        // Bind market data service
+        $container->bind(
+            'App\\Services\\Interfaces\\MarketDataServiceInterface',
+            function($container) {
+                return new \App\Services\MarketDataService();
             },
             true // singleton
         );

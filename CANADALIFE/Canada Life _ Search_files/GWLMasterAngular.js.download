@@ -1,0 +1,178 @@
+﻿///<reference path="/js/jquery-1.10.2.min.js"/>
+///<reference path="/js/Datatables/jquery.dataTables.js"/>
+///<reference path="/Controlls/GWL.Master"/>
+///<reference path="/js/AngularJs.js"/>
+///<reference path="GWLFundSearchPage.js"/>
+///<reference path="/js/GWLModels/GWLModels.js"/>
+
+ng_app = angular.module("Angular_App", ['ngSanitize']);
+
+ng_app.directive('fundFactPopup', function () {
+    return {
+        restrict: 'EA',
+        scope: {
+            headerLabel: "@headerLabel",
+            fundFactUrlList: "=urlList",
+            acitve:"=active",
+        },
+        templateUrl: "/Views/fundFactView.html",
+        controller: ['$scope', '$element', function ($scope, $element) {
+            $scope.close = function (event) {
+                $scope.acitve = -1;
+            }
+        }]
+    }
+});
+
+ng_app.factory('PopUpFundFactURLListByInstrumentID', ['$filter', '$http', function ($filter, $http) {
+
+    return function (InstrumentID, $scope, eventTarget, leftOffset, rightOffset, width) {
+      
+     var urlCount = $(eventTarget).attr('urlcount');
+        // open a new tab before ajax call to avoid the browser pop-up block.
+      if(urlCount=="1")
+      var newWindow = window.open('', '_blank');
+
+        $http({
+            method: 'POST',
+            url: "api/FundFactUrl",
+            data: {
+                instrumentID: InstrumentID
+            }
+        }).then(function (result) {
+            var resultData = result.data != null ? result.data : result;
+            
+            if (resultData.length == 0)
+            {
+                //do nothing
+            }
+            else if (resultData.length == 1) {
+                newWindow.location.href = resultData[0].URLAddress;
+                $scope.AcitvePopUpInstrumentID = -1;
+            }
+            else {
+                $scope.AcitvePopUpInstrumentID = InstrumentID;
+                $scope.CurrentFundFactUrlList = resultData;
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
+                $('#fundFactView').css({
+                    'display': 'block',
+                    'left': $(eventTarget).offset().left + leftOffset,
+                    'top': $(eventTarget).offset().top + rightOffset,
+                    'width':width+'px'
+                });
+
+                setTimeout(function () {
+                    $("#fundFactView a").first().focus();
+                }, 3000);
+                
+            }
+        });
+
+    }
+
+}]);
+
+function MasterScopeController($scope, $window) {
+
+    $scope.languageModel = $window.LanguageState.State=='en'?$window.LanguageModel.English:$window.LanguageModel.French;
+    $scope.languageState = $window.LanguageState;
+
+    $scope.CurrentFundFactUrlList = [];
+
+    $scope.AcitvePopUpInstrumentID = -1;
+
+    $scope.MenuSelectedStyle = function (index) {
+        return LocalModelWrapper.LocalModel.SelectedFilterMenuIndex === index;
+    };
+    $scope.MenuActiveStyle = function (index) {
+        return LocalModelWrapper.LocalModel.ActiveFilterMenuIndex === index;
+    }
+    $scope.IsEstateProtection = function (index) {
+        return FilterWrapper.Filter.IsEstateProtection;
+    }
+    $scope.IsPathwaysOnly = function (index) {
+        return FilterWrapper.Filter.IsPathwaysOnly;
+    }
+    $scope.hideAdvancedFilterCounter = function () {
+        return LocalModelWrapper.LocalModel.FilterCounterDisplay == 0;
+    }
+
+    $scope.IsInFavoriteView = function (index) {
+        return FilterWrapper.Filter.SearchType === "Favorite" && LocalModelWrapper.LocalModel.CurrentPage === "FundSearchPage";
+    };
+
+    $scope.ContactUsLink = function () {
+       
+        var brandCode = $.cookie("BC");
+        var url;
+
+        if (LanguageState.State == 'en') {
+            switch (brandCode) {
+
+                case "GWL":
+                    url = 'https://www.greatwestlife.com/common/contact/wealth-management.html';
+                    break;
+                case "CL":
+                case "PW":
+                    url = 'https://www.canadalife.com/contact-us/investments.html?ids=retirement-and-invention-products';
+                    break;
+                case "LL":
+                    url = 'https://www.londonlife.com/contact-us/wealth-management.html';
+                    break;
+                case "QU":
+                    url = 'https://www.quadrusinvestmentservices.com/quadrus-group-of-funds/contact-us.html';
+                    break;
+                default:
+                    url = 'https://www.greatwestlife.com/common/contact/wealth-management.html';
+            }
+            
+        } else {
+            switch (brandCode) {
+
+                case "GWL":
+                    url = 'https://www.greatwestlife.com/fr/commun/pour-nous-joindre/gestion-du-patrimoine.html';
+                    break;
+                case "CL":
+                case "PW":
+                    url = 'https://www.canadalife.com/fr/communiquez-avec-nous/placements.html';
+                    break;
+                case "LL":
+                    url = 'https://www.londonlife.com/fr/pour-nous-joindre/gestion-du-patrimoine.html';
+                    break;
+                case "QU":
+                    url = 'https://www.quadrusinvestmentservices.com/fr/quadrus-group-of-funds/communiquez-avec-nous.html';
+                    break;
+                default:
+                    url = 'https://www.greatwestlife.com/fr/commun/pour-nous-joindre/gestion-du-patrimoine.html';
+            }
+           
+        }
+
+        return url;
+        
+    }
+ 
+    $scope.$watch('languageState.State', function (newVal, oldVal) {
+
+            if (newVal == "en") {
+                $scope.languageModel = $window.LanguageModel.English;
+            }
+            else if (newVal == "fr") {
+                $scope.languageModel = $window.LanguageModel.French;
+            }
+            if(newVal!=oldVal)
+            FilterWrapper.Filter.SearchString = "";        
+    }, true);
+
+    $scope.$watch('AcitvePopUpInstrumentID', function (newVal, oldVal) {
+
+        if (newVal != oldVal) {
+            if (newVal == -1) {
+                $('#fundFactView').css('display', 'none');
+            }
+        }
+    }, true);
+
+};

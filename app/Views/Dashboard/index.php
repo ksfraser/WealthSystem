@@ -9,6 +9,22 @@
                 </button>
             </div>
             <div class="card-body">
+                <?php if (isset($error_message)): ?>
+                    <div class="alert alert-warning">
+                        <h5>Data Loading Issue</h5>
+                        <p><?php echo htmlspecialchars($error_message); ?></p>
+                        <?php if (isset($debug_info)): ?>
+                            <hr>
+                            <small class="text-muted">
+                                <strong>Debug Info:</strong><br>
+                                File: <?php echo htmlspecialchars($debug_info['file']); ?><br>
+                                Line: <?php echo htmlspecialchars($debug_info['line']); ?><br>
+                                Error: <?php echo htmlspecialchars($debug_info['error']); ?>
+                            </small>
+                        <?php endif; ?>
+                    </div>
+                <?php endif; ?>
+                
                 <?php if (isset($portfolioData) && is_array($portfolioData)): ?>
                     <div class="row">
                         <div class="col-md-3">
@@ -42,7 +58,15 @@
                     </div>
                 <?php else: ?>
                     <div class="text-center py-4">
-                        <p class="text-muted">No portfolio data available</p>
+                        <p class="text-muted">No portfolio data available - checking data sources...</p>
+                        <div class="alert alert-info">
+                            <strong>Expected Data Sources:</strong>
+                            <ul class="text-left mb-0">
+                                <li>Scripts and CSV Files/chatgpt_portfolio_update.csv</li>
+                                <li>DynamicStockDataAccess database tables</li>
+                                <li>Python trading_script.py integration</li>
+                            </ul>
+                        </div>
                         <a href="/bank-import" class="btn btn-primary">Import Bank Data</a>
                     </div>
                 <?php endif; ?>

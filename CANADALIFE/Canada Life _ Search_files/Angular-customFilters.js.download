@@ -1,0 +1,65 @@
+﻿///<reference path="/js/AngularJs.js"/>
+///<reference path="/js/GWLModels/GWLModels.js"/>
+///<reference path="/js/jquery-1.10.2.min.js"/>
+///<reference path="/js/GWLMasterPage/GWLMasterAngular.js"/>
+
+
+ng_app.filter('customNumber', function ($filter) {
+
+    return function (input, decimalPlace) {
+        // Ensure that we are working with a number
+        if (input===null || input===undefined) {
+            return '-';
+        } else {
+            if (!isNaN(input))
+                return $filter('number')(input, decimalPlace);
+            else {
+                return input;
+            }
+        }
+    }
+})
+
+ng_app.filter('customCurrency', function ($filter) {
+ 
+    return function (input,symbol,decimalPlace) {
+        // Ensure that we are working with a number
+        if (isNaN(input)) {
+            return input;
+        } else {
+
+            // Check if optional parameters are passed, if not, use the defaults
+            var symbol = symbol || '$';
+            var decimalPlace = decimalPlace === undefined ? 2 : decimalPlace;
+
+            // Perform the operation to set the symbol in the right location
+            if (LanguageState.State === 'en') {
+                return symbol + $filter('number')(input,decimalPlace);
+            } else {
+                return $filter('number')(input, decimalPlace) +' '+symbol;
+            }
+        }
+    }
+})
+
+ng_app.filter('customPercentage', function ($filter) {
+
+    return function (input, symbol, decimalPlace) {
+        // Ensure that we are working with a number
+        if (isNaN(input)) {
+            return input;
+        } else {
+
+            // Check if optional parameters are passed, if not, use the defaults
+            var symbol = symbol || '%';
+            var decimalPlace = decimalPlace === undefined ? 2 : decimalPlace;
+
+            // Perform the operation to set the symbol in the right location
+            if (LanguageState.State === 'en') {
+                return $filter('number')(input*100, decimalPlace)+symbol;
+            } else {
+                return $filter('number')(input*100, decimalPlace) + ' ' + symbol;
+            }
+        }
+    }
+})

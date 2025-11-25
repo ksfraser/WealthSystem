@@ -1,0 +1,254 @@
+﻿///<reference path="/js/jquery-1.10.2.min.js"/>
+///<reference path="/js/Datatables/jquery.dataTables.js"/>
+///<reference path="/Controlls/GWL.Master"/>
+///<reference path="/js/AngularJs.js"/>
+///<reference path="/js/GWLModels/GWLModels.js"/>
+///<reference path="/js/FundSearchPage/GWLFundSearchPage.js"/>
+
+// register onLoad event with anonymous function
+window.onload = function (e) {
+    var evt = e || window.event,// define event (cross browser)
+        imgs,                   // images collection
+        i;                      // used in local loop
+    // if preventDefault exists, then define onmousedown event handlers
+    if (evt.preventDefault) {
+        // collect all images on the page
+        imgs = document.getElementsByTagName('img');
+        // loop through fetched images
+        for (i = 0; i < imgs.length; i++) {
+            // and define onmousedown event handler
+            imgs[i].onmousedown = disableDragging;
+        }
+    }
+
+};
+
+// disable image dragging
+function disableDragging(e) {
+    e.preventDefault();
+}
+
+var doc = document.documentElement;
+doc.setAttribute('data-useragent', navigator.userAgent);
+
+GetPageState();
+
+$(function () {
+    scope = angular.element($('body')).scope();
+
+    $(document).on('mouseup', function (e) {
+
+        var fundFactUrlView = $('#fundFactView');
+
+        if (!fundFactUrlView.is(e.target) && fundFactUrlView.has(e.target).length === 0) {
+            scope.AcitvePopUpInstrumentID = -1;
+            scope.$digest();
+
+        }
+    });
+
+    if (sessionStorage.getItem("languageState") != null)
+        LanguageState.State = JSON.parse(sessionStorage.getItem("languageState"));
+  
+    var MenuItemsLevel1 = $('#mainMenu>ul>li>a');
+
+    $(MenuItemsLevel1).on("click", function (e) {
+        e.preventDefault();
+        var index =  parseInt($(this).attr("data-index"));
+        LocalModelWrapper.LocalModel.SelectedFilterMenuIndex = index;
+        LocalModelWrapper.LocalModel.ActiveFilterMenuIndex = index;
+        scope.$digest();
+
+        $('.inner_menu_gwl').each(function () {
+            if (!$(this).is($(e.target).siblings('ul')))
+                $(this).addClass("fadedOut");
+        })
+
+        if ($(this).siblings('ul').hasClass("fadedOut"))
+            $(this).siblings('ul').removeClass("fadedOut");
+           
+        else {
+            $(this).siblings('ul').addClass("fadedOut");
+        }
+
+        if (LocalModelWrapper.LocalModel.CurrentPage == "FundInfoPage") {
+            return;
+        }
+   
+    });
+
+    $('#btnBackToList').on("click", function (e) {
+        e.preventDefault();
+        //go back to previous page with refresh
+        window.location.href = "/default.aspx"      
+    });
+
+    $('#btnBack').on("click", function (e) {
+        e.preventDefault();
+        switch (LocalModelWrapper.LocalModel.CurrentPage) {
+            case "FundInfoPage":
+                window.location.href = "/FundInfoPage.aspx?InstrumentID=" + LocalModelWrapper.LocalModel.selectedFundID + "&tabID=" + FundHistoryFilter.selectedTabIndex;
+                break;
+            case "FundSearchPage":
+                window.location.href = "/default.aspx";
+                break;
+            default:
+                window.location.href = "/default.aspx";
+        }
+    });
+
+    $(".menuItemL2").on("click", function (e) {
+        e.preventDefault();
+        if (LocalModelWrapper.LocalModel.CurrentPage == "FundInfoPage")
+        {
+            window.location.href="/Default.aspx";
+            return;
+        }
+
+        $('.inner_menu_gwl').addClass("fadedOut");
+      
+        var parentList = $(this).parent().parents("li");
+
+        clearAllFilterItems();
+        FilterWrapper.Filter.SearchType = "Favorite";
+        var parentIndex =  parseInt($(this).parent().parent().attr('data-index'));
+        LocalModelWrapper.LocalModel.ActiveFilterMenuIndex = -1;
+        LocalModelWrapper.LocalModel.SelectedFilterMenuIndex = -1;
+        FilterByNav(parseInt($(this).attr('data-index')), parentIndex);
+        if ($(this).parent().parent().attr('data-index') != 1) {
+            LocalModelWrapper.LocalModel.SelectedFundCodeColumnIndex = 6;
+        }
+        scope.$digest();
+        LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+        scope.$digest();
+        searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+    });
+
+    $('#estate_Protection').on('click', function (e) {
+        e.preventDefault();
+        clearAllFilterItems();
+        FilterWrapper.Filter.IsEstateProtection = !FilterWrapper.Filter.IsEstateProtection;
+        FilterWrapper.Filter.SelectedShareClassIDList = [2];
+        scope.$digest();
+        LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+        scope.$digest();
+        searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+    });
+
+    $('#pathways_Funds').on('click', function (e) {
+        e.preventDefault();
+        clearAllFilterItems();
+        FilterWrapper.Filter.IsPathwaysOnly = !FilterWrapper.Filter.IsPathwaysOnly;
+        scope.$digest();
+        LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+        scope.$digest();
+        searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+    });
+
+
+    $('#languageSwitch').on('click', function (e) {
+        e.preventDefault();       
+        if (LanguageState.State === "en") {
+            LanguageState.State = "fr";
+           
+            if (window.location.href.toLowerCase().indexOf('language=') != -1  )
+                window.history.replaceState('SelectedLanguage', 'language', window.location.href.replace(/language=(en|fr)/i, 'language=fr'));
+            else
+            $.cookie("language", 'fr');
+        }
+        else {
+            LanguageState.State = "en";
+            if (window.location.href.toLowerCase().indexOf('language=') != -1 )
+                window.history.replaceState('SelectedLanguage', 'language', window.location.href.replace(/language=(en|fr)/i, 'language=en'));
+            else
+            $.cookie("language", 'en');
+        }
+        scope.$digest();
+
+        window.location.reload(false);
+    
+    });     
+});
+
+function clearAllFilterItems() {
+    FilterWrapper.Filter.SelectedAssetClassIDList = [];
+    FilterWrapper.Filter.SeriesList = [];
+    FilterWrapper.Filter.PortfolioSolutionTypeIDList = [];
+    FilterWrapper.Filter.SelectedShareClassIDList = [];
+    FilterWrapper.Filter.GenerationIDList = [];
+    FilterWrapper.Filter.PortfolioManagerID = 0;
+    scope.Management = scope.ManagementOptions.filter(function (obj) { return obj.PortfolioManagerID == 0 })[0];;
+    FilterWrapper.Filter.IsEstateProtection = false;
+    FilterWrapper.Filter.IsAbovePeerGroup = false;
+    FilterWrapper.Filter.IsCorporate = false;
+    FilterWrapper.Filter.IsPathwaysOnly = false;
+    FilterWrapper.Filter.SearchType = "Filter";
+    FilterWrapper.Filter.ReturnPeriod = "default";
+    FilterWrapper.Filter.ReturnMin = null;
+    FilterWrapper.Filter.ReturnMax = null;
+    scope.ARTimePeriod = LocalModelWrapper.LocalModel.ARTimePeriodOptions.filter(function (obj) { return obj.id == 'default' })[0];
+    scope.$digest();
+    LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+}
+
+function FilterByNav(filterKey, parentKey) {
+
+    resetFilter();
+    FilterWrapper.Filter.SearchType = "Filter";
+    if (parentKey == 1) {
+        FilterWrapper.Filter.SelectedShareClassIDList.push(filterKey);
+    }
+    else if (parentKey == 2)
+        FilterWrapper.Filter.SelectedAssetClassIDList.push(filterKey);
+    else if (parentKey == 3)
+        FilterWrapper.Filter.PortfolioSolutionTypeIDList.push(filterKey);
+    else if (parentKey == 4) {
+        if (filterKey == 1)
+            estateProtection75100Selected();
+        else if (filterKey == 2)
+            estateProtectionGeneration1Selected();
+    } else if (parentKey == 6) {
+
+        FilterWrapper.Filter.GenerationIDList.push(filterKey);
+    }
+
+}
+
+function estateProtection75100Selected(){
+    clearAllFilterItems();
+    FilterWrapper.Filter.IsEstateProtection = true;
+    FilterWrapper.Filter.SelectedShareClassIDList = [2];
+    scope.$digest();
+    LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+    scope.$digest();
+    searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+}
+
+function estateProtectionGeneration1Selected(){
+    clearAllFilterItems();
+    FilterWrapper.Filter.IsEstateProtection = true;
+    FilterWrapper.Filter.GenerationIDList = [2];
+    scope.$digest();
+    LocalModelWrapper.LocalModel.FilterCounterDisplay = JSON.parse(JSON.stringify(LocalModelWrapper.LocalModel.FilterCounter));
+    scope.$digest();
+    searchDataAndDrawTable(JSON.stringify(FilterWrapper.Filter));
+}
+
+function SavePageState() {
+    $.cookie("LocalModel", JSON.stringify(LocalModelWrapper.LocalModel));
+}
+
+function GetPageState() {
+    if (getItemsFromCookie("LocalModel")) {
+        LocalModelWrapper.LocalModel = getItemsFromCookie("LocalModel");
+    }    
+    if (getItemsFromCookie("FundHistoryFilter")) {
+        FundHistoryFilter = getItemsFromCookie("FundHistoryFilter");
+    }
+    if (getItemsFromCookie("SelectedParentTabIndexStyle"))
+        LocalModelWrapper.LocalModel.SelectedParentTabIndexStyle = getItemsFromCookie("SelectedParentTabIndexStyle");
+    if (getItemsFromCookie("FilterCounterDisplay"))
+        LocalModelWrapper.LocalModel.FilterCounterDisplay = getItemsFromCookie("FilterCounterDisplay");
+    if (getItemsFromCookie("SelectedPerformanceColumnIndexStyle"))
+        LocalModelWrapper.LocalModel.SelectedPerformanceColumnIndexStyle = getItemsFromCookie("SelectedPerformanceColumnIndexStyle");
+}
