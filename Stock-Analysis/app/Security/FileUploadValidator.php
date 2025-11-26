@@ -49,8 +49,8 @@ class FileUploadValidator
      */
     public static function validate(array $file, string $type = 'csv'): array
     {
-        // Check if file was uploaded
-        if (!isset($file['tmp_name']) || !is_uploaded_file($file['tmp_name'])) {
+        // Check if file array has required keys
+        if (!isset($file['tmp_name']) || empty($file['tmp_name'])) {
             return [
                 'valid' => false,
                 'error' => 'No file uploaded or file not uploaded via HTTP POST',
@@ -59,27 +59,25 @@ class FileUploadValidator
         }
         
         // Check for upload errors
-        if ($file['error'] !== UPLOAD_ERR_OK) {
+        if (!isset($file['error']) || $file['error'] !== UPLOAD_ERR_OK) {
             return [
                 'valid' => false,
-                'error' => self::getUploadErrorMessage($file['error']),
+                'error' => self::getUploadErrorMessage($file['error'] ?? -1),
                 'sanitized_name' => null
             ];
         }
         
-        // Validate file size
-        $maxSize = self::MAX_SIZES[$type] ?? self::MAX_SIZES['default'];
-        if ($file['size'] > $maxSize) {
-            $maxSizeMB = round($maxSize / 1024 / 1024, 1);
+        // Validate unknown file type category BEFORE size checks
+        if (!isset(self::MAX_SIZES[$type]) || !isset(self::ALLOWED_TYPES[$type])) {
             return [
                 'valid' => false,
-                'error' => "File too large (max {$maxSizeMB}MB)",
+                'error' => 'Unknown file type category',
                 'sanitized_name' => null
             ];
         }
         
-        // Validate empty file
-        if ($file['size'] === 0) {
+        // Validate empty file BEFORE size checks
+        if (!isset($file['size']) || $file['size'] === 0) {
             return [
                 'valid' => false,
                 'error' => 'File is empty',
@@ -87,15 +85,26 @@ class FileUploadValidator
             ];
         }
         
-        // Validate MIME type
-        $allowedTypes = self::ALLOWED_TYPES[$type] ?? [];
-        if (empty($allowedTypes)) {
+        // Validate file size
+        $maxSize = self::MAX_SIZES[$type];
+        if ($file['size'] > $maxSize) {
+            $maxSizeMB = round($maxSize / 1024 / 1024, 1);
             return [
                 'valid' => false,
-                'error' => 'Unknown file type category',
+                'error' => "File is too large. Maximum size: {$maxSizeMB}MB",
                 'sanitized_name' => null
             ];
         }
+        
+        // Additional security checks BEFORE MIME type validation
+        // This catches malicious files before MIME type mismatch
+        $securityCheck = self::performSecurityChecks($file['tmp_name'], $type);
+        if (!$securityCheck['valid']) {
+            return $securityCheck;
+        }
+        
+        // Validate MIME type
+        $allowedTypes = self::ALLOWED_TYPES[$type];
         
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $mimeType = finfo_file($finfo, $file['tmp_name']);
@@ -109,14 +118,8 @@ class FileUploadValidator
             ];
         }
         
-        // Sanitize filename
-        $sanitizedName = InputValidator::sanitizeFilename($file['name']);
-        
-        // Additional security checks
-        $securityCheck = self::performSecurityChecks($file['tmp_name'], $type);
-        if (!$securityCheck['valid']) {
-            return $securityCheck;
-        }
+        // Sanitize filename - use more aggressive approach
+        $sanitizedName = self::sanitizeFilename($file['name']);
         
         return [
             'valid' => true,
@@ -281,6 +284,48 @@ class FileUploadValidator
         }
         
         return $path;
+    }
+    
+    /**
+     * Sanitize filename for secure storage
+     * 
+     * Removes dangerous characters and keywords that could be used in attacks.
+     * More aggressive than InputSanitizer::sanitizeFilename().
+     * 
+     * @param string $filename Original filename
+     * @return string Sanitized filename
+     */
+    private static function sanitizeFilename(string $filename): string
+    {
+        // Remove HTML tags FIRST (removes <script>, <img>, etc. INCLUDING content between tags)
+        $filename = preg_replace('/<[^>]*>/', '', $filename);
+        
+        // Remove path separators and directory traversal
+        $filename = str_replace(['/', '\\', '..', chr(0)], '', $filename);
+        
+        // Remove all characters except alphanumeric, dot, dash, underscore
+        $filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
+        
+        // Remove dangerous keywords from filename (case-insensitive)
+        // This catches keywords not in tags
+        $dangerousKeywords = [
+            'script', 'javascript', 'eval', 'exec', 'system',
+            'passthru', 'shell', 'cmd', 'powershell', 'bash'
+        ];
+        
+        foreach ($dangerousKeywords as $keyword) {
+            $filename = preg_replace('/' . preg_quote($keyword, '/') . '/i', '', $filename);
+        }
+        
+        // Remove consecutive underscores, dots, dashes
+        $filename = preg_replace('/[_.-]+/', '_', $filename);
+        
+        // Ensure filename is not empty
+        if (empty($filename) || $filename === '_') {
+            $filename = 'upload_' . time();
+        }
+        
+        return $filename;
     }
     
     /**
