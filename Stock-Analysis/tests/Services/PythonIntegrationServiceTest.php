@@ -18,7 +18,9 @@ class PythonIntegrationServiceTest extends TestCase
     {
         // Use a valid Python path for testing
         $this->testPythonPath = 'python'; // or 'python3' on some systems
-        $this->service = new PythonIntegrationService($this->testPythonPath);
+        
+        // Service now uses dependency injection - create with default dependencies
+        $this->service = new PythonIntegrationService();
     }
     
     protected function tearDown(): void
