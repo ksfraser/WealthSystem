@@ -1,0 +1,112 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  db:
+    image: mysql:8.0
+    container_name: stock-analysis-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      MYSQL_DATABASE: stock_analysis
+      MYSQL_USER: stock_app
+      MYSQL_PASSWORD: ${MYSQL_APP_PASSWORD:-changeme}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "3306:3306"
+    networks:
+      - stock-analysis-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Stock Analysis Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: stock-analysis-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Database
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: stock_analysis
+      DB_USERNAME: stock_app
+      DB_PASSWORD: ${MYSQL_APP_PASSWORD:-changeme}
+      
+      # Application
+      APP_ENV: production
+      APP_DEBUG: false
+      APP_ROOT: /var/www/stock-analysis
+      
+      # Python
+      PYTHON_PATH: /var/www/stock-analysis/venv/bin/python
+      
+      # Run migrations on startup
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      
+      # API Keys (optional)
+      ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY:-}
+      YAHOO_FINANCE_API_KEY: ${YAHOO_FINANCE_API_KEY:-}
+    volumes:
+      # Application code (for development)
+      - ./app:/var/www/stock-analysis/app
+      - ./web_ui:/var/www/stock-analysis/web_ui
+      - ./api:/var/www/stock-analysis/api
+      - ./python_analysis:/var/www/stock-analysis/python_analysis
+      - ./scripts:/var/www/stock-analysis/scripts
+      
+      # Persistent data
+      - app_data:/var/www/stock-analysis/data
+      - app_logs:/var/www/stock-analysis/logs
+      - app_uploads:/var/www/stock-analysis/uploads
+    ports:
+      - "8080:80"
+    networks:
+      - stock-analysis-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # phpMyAdmin (optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: stock-analysis-phpmyadmin
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+    ports:
+      - "8081:80"
+    networks:
+      - stock-analysis-network
+    profiles:
+      - tools
+
+networks:
+  stock-analysis-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  app_data:
+    driver: local
+  app_logs:
+    driver: local
+  app_uploads:
+    driver: local

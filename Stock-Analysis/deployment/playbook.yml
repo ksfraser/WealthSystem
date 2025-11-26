@@ -1,0 +1,388 @@
+# Stock Analysis Application - Ansible Deployment
+# Deploys PHP/Python application to Docker container
+
+---
+- name: Deploy Stock Analysis Application
+  hosts: stockanalysis
+  become: yes
+  vars:
+    app_name: stock-analysis
+    app_user: www-data
+    app_root: /var/www/{{ app_name }}
+    php_version: "8.2"
+    python_version: "3.11"
+    mysql_root_password: "{{ lookup('env', 'MYSQL_ROOT_PASSWORD') | default('changeme', true) }}"
+    mysql_database: stock_analysis
+    mysql_user: stock_app
+    mysql_password: "{{ lookup('env', 'MYSQL_APP_PASSWORD') | default('changeme', true) }}"
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    # ===== SYSTEM PACKAGES =====
+    
+    - name: Install system dependencies
+      apt:
+        name:
+          - software-properties-common
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - git
+          - unzip
+        state: present
+
+    # ===== APACHE INSTALLATION =====
+    
+    - name: Install Apache2
+      apt:
+        name:
+          - apache2
+          - apache2-utils
+        state: present
+
+    - name: Enable Apache modules
+      apache2_module:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - rewrite
+        - ssl
+        - headers
+        - proxy
+        - proxy_http
+      notify: restart apache
+
+    # ===== PHP INSTALLATION =====
+    
+    - name: Add PHP repository
+      apt_repository:
+        repo: ppa:ondrej/php
+        state: present
+        update_cache: yes
+
+    - name: Install PHP and extensions
+      apt:
+        name:
+          - php{{ php_version }}
+          - php{{ php_version }}-cli
+          - php{{ php_version }}-common
+          - php{{ php_version }}-mysql
+          - php{{ php_version }}-xml
+          - php{{ php_version }}-xmlrpc
+          - php{{ php_version }}-curl
+          - php{{ php_version }}-gd
+          - php{{ php_version }}-imagick
+          - php{{ php_version }}-mbstring
+          - php{{ php_version }}-zip
+          - php{{ php_version }}-opcache
+          - php{{ php_version }}-intl
+          - php{{ php_version }}-bcmath
+          - php{{ php_version }}-json
+          - libapache2-mod-php{{ php_version }}
+        state: present
+
+    - name: Configure PHP settings
+      ini_file:
+        path: /etc/php/{{ php_version }}/apache2/php.ini
+        section: PHP
+        option: "{{ item.option }}"
+        value: "{{ item.value }}"
+      loop:
+        - { option: 'memory_limit', value: '512M' }
+        - { option: 'upload_max_filesize', value: '64M' }
+        - { option: 'post_max_size', value: '64M' }
+        - { option: 'max_execution_time', value: '300' }
+        - { option: 'max_input_time', value: '300' }
+        - { option: 'date.timezone', value: 'America/New_York' }
+        - { option: 'display_errors', value: 'Off' }
+        - { option: 'log_errors', value: 'On' }
+      notify: restart apache
+
+    # ===== COMPOSER INSTALLATION =====
+    
+    - name: Download Composer installer
+      get_url:
+        url: https://getcomposer.org/installer
+        dest: /tmp/composer-installer.php
+        mode: '0755'
+
+    - name: Install Composer globally
+      command: php /tmp/composer-installer.php --install-dir=/usr/local/bin --filename=composer
+      args:
+        creates: /usr/local/bin/composer
+
+    # ===== PYTHON INSTALLATION =====
+    
+    - name: Add deadsnakes PPA for Python
+      apt_repository:
+        repo: ppa:deadsnakes/ppa
+        state: present
+        update_cache: yes
+
+    - name: Install Python and pip
+      apt:
+        name:
+          - python{{ python_version }}
+          - python{{ python_version }}-venv
+          - python{{ python_version }}-dev
+          - python3-pip
+        state: present
+
+    - name: Create symbolic link for python
+      file:
+        src: /usr/bin/python{{ python_version }}
+        dest: /usr/bin/python
+        state: link
+        force: yes
+
+    # ===== MYSQL INSTALLATION =====
+    
+    - name: Install MySQL server
+      apt:
+        name:
+          - mysql-server
+          - mysql-client
+          - python3-pymysql
+        state: present
+
+    - name: Start MySQL service
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Set MySQL root password
+      mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        host: localhost
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+
+    - name: Create application database
+      mysql_db:
+        name: "{{ mysql_database }}"
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+
+    - name: Create application database user
+      mysql_user:
+        name: "{{ mysql_user }}"
+        password: "{{ mysql_password }}"
+        priv: "{{ mysql_database }}.*:ALL"
+        host: localhost
+        state: present
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+
+    # ===== APPLICATION DEPLOYMENT =====
+    
+    - name: Create application directory
+      file:
+        path: "{{ app_root }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0755'
+
+    - name: Clone or update application repository
+      git:
+        repo: https://github.com/proteusbr1/TradingStrategies.git
+        dest: "{{ app_root }}"
+        version: main  # or TradingStrategies branch
+        force: yes
+      become_user: "{{ app_user }}"
+      when: deploy_from_git | default(false)
+
+    - name: Copy application files from local
+      synchronize:
+        src: ../Stock-Analysis/
+        dest: "{{ app_root }}"
+        delete: yes
+        recursive: yes
+      when: not (deploy_from_git | default(false))
+
+    - name: Set ownership of application files
+      file:
+        path: "{{ app_root }}"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        recurse: yes
+
+    - name: Install PHP dependencies with Composer
+      composer:
+        command: install
+        working_dir: "{{ app_root }}"
+        no_dev: yes
+        optimize_autoloader: yes
+      become_user: "{{ app_user }}"
+
+    - name: Create Python virtual environment
+      command: python{{ python_version }} -m venv {{ app_root }}/venv
+      args:
+        creates: "{{ app_root }}/venv"
+      become_user: "{{ app_user }}"
+
+    - name: Install Python dependencies
+      pip:
+        requirements: "{{ app_root }}/requirements.txt"
+        virtualenv: "{{ app_root }}/venv"
+        virtualenv_python: python{{ python_version }}
+      become_user: "{{ app_user }}"
+      when: requirements_file.stat.exists
+
+    - name: Check if requirements.txt exists
+      stat:
+        path: "{{ app_root }}/requirements.txt"
+      register: requirements_file
+
+    - name: Install core Python packages
+      pip:
+        name:
+          - pandas
+          - numpy
+          - ta
+          - requests
+          - python-dotenv
+        virtualenv: "{{ app_root }}/venv"
+      become_user: "{{ app_user }}"
+
+    # ===== APPLICATION CONFIGURATION =====
+    
+    - name: Create .env file from template
+      template:
+        src: env.j2
+        dest: "{{ app_root }}/.env"
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0600'
+
+    - name: Create logs directory
+      file:
+        path: "{{ app_root }}/logs"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0755'
+
+    - name: Create data directories
+      file:
+        path: "{{ app_root }}/{{ item }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0755'
+      loop:
+        - data
+        - temp
+        - uploads
+
+    - name: Set permissions on writable directories
+      file:
+        path: "{{ app_root }}/{{ item }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: '0775'
+        recurse: yes
+      loop:
+        - logs
+        - data
+        - temp
+        - uploads
+
+    # ===== APACHE CONFIGURATION =====
+    
+    - name: Create Apache virtual host configuration
+      template:
+        src: vhost.conf.j2
+        dest: /etc/apache2/sites-available/{{ app_name }}.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart apache
+
+    - name: Enable virtual host
+      command: a2ensite {{ app_name }}.conf
+      args:
+        creates: /etc/apache2/sites-enabled/{{ app_name }}.conf
+      notify: restart apache
+
+    - name: Disable default site
+      command: a2dissite 000-default.conf
+      args:
+        removes: /etc/apache2/sites-enabled/000-default.conf
+      notify: restart apache
+
+    # ===== DATABASE MIGRATION =====
+    
+    - name: Run database migrations
+      command: php {{ app_root }}/scripts/migrate.php
+      become_user: "{{ app_user }}"
+      when: run_migrations | default(false)
+
+    # ===== CRON JOBS =====
+    
+    - name: Setup cron job for data synchronization
+      cron:
+        name: "Stock data sync"
+        minute: "0"
+        hour: "*/6"
+        user: "{{ app_user }}"
+        job: "cd {{ app_root }} && php scripts/sync-market-data.php >> logs/sync.log 2>&1"
+        state: present
+
+    # ===== FIREWALL =====
+    
+    - name: Install UFW
+      apt:
+        name: ufw
+        state: present
+
+    - name: Configure UFW defaults
+      ufw:
+        direction: "{{ item.direction }}"
+        policy: "{{ item.policy }}"
+      loop:
+        - { direction: 'incoming', policy: 'deny' }
+        - { direction: 'outgoing', policy: 'allow' }
+
+    - name: Allow SSH
+      ufw:
+        rule: allow
+        port: '22'
+        proto: tcp
+
+    - name: Allow HTTP
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+
+    - name: Allow HTTPS
+      ufw:
+        rule: allow
+        port: '443'
+        proto: tcp
+
+    - name: Enable UFW
+      ufw:
+        state: enabled
+
+  handlers:
+    - name: restart apache
+      service:
+        name: apache2
+        state: restarted
+
+    - name: restart mysql
+      service:
+        name: mysql
+        state: restarted

@@ -1,0 +1,81 @@
+# Apache Virtual Host for Stock Analysis Application
+<VirtualHost *:80>
+    ServerName {{ app_domain | default('localhost') }}
+    ServerAdmin admin@{{ app_domain | default('localhost') }}
+    
+    DocumentRoot {{ app_root }}/web_ui
+    
+    <Directory {{ app_root }}/web_ui>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+        
+        # Enable PHP
+        <FilesMatch \.php$>
+            SetHandler application/x-httpd-php
+        </FilesMatch>
+        
+        # Disable directory listing
+        Options -Indexes
+        
+        # Security headers
+        Header always set X-Content-Type-Options "nosniff"
+        Header always set X-Frame-Options "SAMEORIGIN"
+        Header always set X-XSS-Protection "1; mode=block"
+        Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    </Directory>
+    
+    # API endpoint
+    Alias /api {{ app_root }}/api
+    <Directory {{ app_root }}/api>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    
+    # Deny access to sensitive directories
+    <DirectoryMatch "{{ app_root }}/(config|scripts|vendor|tests|database|deployment)">
+        Require all denied
+    </DirectoryMatch>
+    
+    # Deny access to hidden files
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+    
+    # Deny access to composer files
+    <FilesMatch "(composer\.json|composer\.lock|\.env)">
+        Require all denied
+    </FilesMatch>
+    
+    # Logging
+    ErrorLog ${APACHE_LOG_DIR}/{{ app_name }}-error.log
+    CustomLog ${APACHE_LOG_DIR}/{{ app_name }}-access.log combined
+    
+    # Enable mod_rewrite
+    RewriteEngine On
+    
+    # Redirect API requests
+    RewriteCond %{REQUEST_URI} ^/api/
+    RewriteRule ^api/(.*)$ {{ app_root }}/api/$1 [L]
+    
+    # Set environment variables
+    SetEnv APP_ENV {{ app_env | default('production') }}
+    SetEnv APP_ROOT {{ app_root }}
+    SetEnv PYTHON_PATH {{ app_root }}/venv/bin/python
+</VirtualHost>
+
+# SSL Configuration (uncomment when SSL is configured)
+# <VirtualHost *:443>
+#     ServerName {{ app_domain | default('localhost') }}
+#     ServerAdmin admin@{{ app_domain | default('localhost') }}
+#     
+#     DocumentRoot {{ app_root }}/web_ui
+#     
+#     SSLEngine on
+#     SSLCertificateFile /etc/ssl/certs/{{ app_name }}.crt
+#     SSLCertificateKeyFile /etc/ssl/private/{{ app_name }}.key
+#     
+#     # Include same directory configuration as above
+#     # ...
+# </VirtualHost>
