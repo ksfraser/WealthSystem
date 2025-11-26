@@ -16,8 +16,10 @@
         "symfony/http-client": "^6.4",
         "symfony/http-foundation": "^6.0",
         "symfony/password-hasher": "^7.3",
+        "symfony/process": "^6.4",
         "symfony/security-core": "^7.3",
-        "symfony/security-csrf": "^6.0"
+        "symfony/security-csrf": "^6.0",
+        "symfony/validator": "^7.3"
     },
     "require-dev": {
         "phpdocumentor/phpdocumentor": "^3.8",
@@ -32,7 +34,7 @@
     "Ksfraser\\LLM\\": "src/Ksfraser/LLM/",
     "Ksfraser\\CLI\\": "src/CLI/",
     "Services\\Calculators\\": "src/Services/Calculators/",
-    "App\\": "web_ui/"
+    "App\\": ["web_ui/", "app/"]
         }
     },
     "autoload-dev": {
