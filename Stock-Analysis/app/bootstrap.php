@@ -22,6 +22,24 @@ spl_autoload_register(function ($class) {
 use App\Core\ServiceContainer;
 use App\Core\Router;
 use App\Core\Request;
+use App\Security\SessionManager;
+
+// Initialize secure session management
+SessionManager::start();
+
+// Set security headers
+header('X-Frame-Options: DENY');
+header('X-Content-Type-Options: nosniff');
+header('X-XSS-Protection: 1; mode=block');
+header('Referrer-Policy: strict-origin-when-cross-origin');
+
+// Strict Transport Security for HTTPS
+if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+    header('Strict-Transport-Security: max-age=31536000; includeSubDomains');
+}
+
+// Content Security Policy (adjust as needed for your application)
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;");
 
 // Bootstrap the service container
 $container = ServiceContainer::bootstrap();
