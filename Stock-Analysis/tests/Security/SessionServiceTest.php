@@ -13,18 +13,14 @@ class SessionServiceTest extends TestCase
 {
     protected function setUp(): void
     {
-        // Clear any existing session
-        if (SessionService::get()->isStarted()) {
-            SessionService::get()->clear();
-        }
+        // Reset singleton for each test
+        SessionService::reset();
     }
     
     protected function tearDown(): void
     {
         // Clean up session after each test
-        if (SessionService::get()->isStarted()) {
-            SessionService::get()->clear();
-        }
+        SessionService::reset();
     }
     
     /**
@@ -240,8 +236,7 @@ class SessionServiceTest extends TestCase
         // Authenticate as user 2
         SessionService::setAuthenticated(2, ['name' => 'User Two', 'role' => 'user']);
         
-        $session = SessionService::get();
-        $userData = $session->get('user_data');
+        $userData = SessionService::getUserData();
         
         // Should only have User Two's data
         $this->assertEquals('User Two', $userData['name']);
