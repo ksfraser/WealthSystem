@@ -1,0 +1,14 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Login Failed</title>
+  <meta http-equiv="refresh" content="10;$target">
+  <link rel="stylesheet" type="text/css" href="$stylesheet">
+  <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+</head>
+<body>
+<table align="center">
+  <tr><td><img src="images/padlock.png"></td><td><div class="error">Invalid username or password.</div><br><a href="$target">Try Again</a></td></tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,280 @@
+TSSTOCKS(1)							   TSSTOCKS(1)
+
+
+
+NAME
+       tsstocks - simulate the optimal gains of multiple stock investments
+
+SYNOPSIS
+       tsstocks [-f] [-p n] [-P m] [-t] [-v] filename ...
+
+DESCRIPTION
+       Tsstocks  is for simulating the optimal gains of multiple stock invest-
+       ments. The program decides which of all available stocks to  invest  in
+       at  any single time, by calculating the instantaneous Shannon probabil-
+       ity of all stocks, and using an approximation to statistical estimation
+       techniques to estimate the accuracy of the calculated Shannon probabil-
+       ity.
+
+       One of the implications of considering stock  prices  to  have  fractal
+       characteristics,  ie.,  random  walk or Brownian motion, is that future
+       prices can not be predicted from  past  stock  price  performance.  The
+       Shannon probability of a stock price time series is the likelihood that
+       a stocks price will increase in the next time interval. It is typically
+       0.51,  on  a  day  to day bases, (although, occasionally, it will be as
+       high as 0.6) What this means, for a typical stock, is that 51%  of  the
+       time,  a  stock's  price  will  increase,  and  49% of the time it will
+       decrease-and there is no possibility of determining which  will	occur-
+       only the probability.
+
+       However,  another implication of considering stock prices to have frac-
+       tal characteristics is that there are statistical optimizations to max-
+       imize  portfolio performance. The Shannon probability, P, is related to
+       the volatility of a stock's price, (measured as the root mean square of
+       the  normalized	increments  of the stock's price time series,) rms, by
+       rms = 2P - 1. Also, the average of the  normalized  increments  is  the
+       growth  in  the	stock's  price, and is equal to the square of the rms.
+       Unfortunately, the measurements of avg and rms must be made over a long
+       period  of time, to construct a very large data set for analytical pur-
+       poses do to the necessary accuracy requirements. Statistical estimation
+       techniques are usually employed to quantitatively determine the size of
+       the data set for a given analytical accuracy.
+
+       There are several techniques used to optimize stock  portfolio  perfor-
+       mance.  Since the volatility of an individual stock price, rms, is con-
+       sidered to have a Gaussian distribution, the volatilities add root mean
+       square. What this means is that if the portfolio consists of 10 stocks,
+       concurrently, with each stock representing 10% of the  portfolio,  then
+       the  volatility	of  the portfolio will be decreased by a factor of the
+       square root of 10, (assuming all stocks are  statistically  identical.)
+       Further,  since it is assumed that the stocks are statistically identi-
+       cal, the average growth of the stocks adds linearly in  the  portfolio,
+       ie.,  it  would not make any difference, from a portfolio growth stand-
+       point, whether the portfolio consisted of 1 stock, or 10 stocks.   This
+       indicates  that	control of stock portfolio volatility can be an "engi-
+       neered solution." (In reality, of course, the stocks are not  statisti-
+       cally  identical,  but the volatilities still add root mean square. The
+       growth of the portfolio	would  be  less,  since  it  was  not  totally
+       invested  in  the  stock with the highest growth rate-this would be the
+       cost of managing the volatility risk.)
+
+       Now consider "timing the market." If a stock's price has fractal  char-
+       acteristics,  this  is impossible, (at least more than 51% of the time,
+       on average, for most stocks.) Attempting to do so,  say	by  selling  a
+       stock for the speculative reason that the stocks price will decrease in
+       the future, will result in selling a stock that 51% of the  time  would
+       increase  in value in the future, and 49% of the time would decrease in
+       value. Of course, holding a stock would have  the  same	probabilities,
+       also.
+
+       If  a  stock's  price  is  fractal,  it	will, over time, exhibit price
+       increases, and decreases, that have a range that is proportional to the
+       square  root  of  time, and a probable duration that is proportional to
+       the reciprocal of the square root of time. In point of  fact,  measure-
+       ments  on these characteristics in stock pro forma for the past century
+       offer compelling evidence that stock prices exhibit fractal  character-
+       istics.	 These	increases and decreases in stock price over time would
+       lead to the intuitive presumption that a "buy low and sell high" strat-
+       egy  could  be  implemented.  Unfortunately, if stock prices are indeed
+       fractal in nature, that is not the case, because no  matter  what  time
+       scale  you  use,  the  characteristics  are  invariant, (ie., on a time
+       scale-be it by the tick, by the day, by the month, or by  the  year-the
+       range  and  duration phenomena is still the same, ie., made up of "long
+       term" increases and decreases, that have no predictive qualities, other
+       than probabilistic.)
+
+       The  issue  with  attempting to "time the market" is that if you sell a
+       stock to avoid an intuitively expected price decrease, (which  will  be
+       correct,  49% of the time, typically,) then you will, also, give up the
+       chance of the stock price increasing, (which will  happen  51%  of  the
+       time.)  However, there is an alternative, and that would be to sell the
+       stock, and invest in another stock, (which would also have a 51% chance
+       of increasing in price, on the average-a kind of "hedging" strategy.)
+
+       To  implement such a strategy, one would never sell a stock for a stock
+       with a smaller Shannon  probability,  without  compelling  reasons.  In
+       point  of  fact, it would probably be, at least heuristically, the best
+       strategy to always be invested in  the  stocks  with  the  most	recent
+       largest Shannon probability, the assumption being that during the peri-
+       ods when a stock's price is increasing, the short term  "instantaneous"
+       average	Shannon  probability will be larger than the long term average
+       Shannon probability. (Not that this will always be true-only 51% of the
+       time, for an average stock, will it succeed in the next time interval.)
+       This will require specialized filtering, (to "weight" the  most	recent
+       instantaneous Shannon probability more than the least recent,) and sta-
+       tistical estimation (to determine the accuracy of  the  measurement  of
+       the  Shannon  probability,  upon  which the decision will be made as to
+       which stocks are in the portfolio at any instant in time.)
+
+       This decision would be based on the normalized increments,
+
+	   V(t) - V(t - 1)
+	   ---------------
+	      V(t - 1)
+
+       of the time series, which, when averaged over  a  "sufficiently	large"
+       number  of  increments,	is the mean of the normalized increments, avg.
+       The term "sufficiently large"  must  be	analyzed  quantitatively.  For
+       example,  the following table is the statistical estimate for a Shannon
+       probability, P, of a time series, vs, the number of  records  required,
+       based on a mean of the normalized increments = 0.04:
+
+	    P	   avg	       e       c     n
+	   0.51   0.0004    0.0396  0.7000  27
+	   0.52   0.0016    0.0384  0.7333  33
+	   0.53   0.0036    0.0364  0.7667  42
+	   0.54   0.0064    0.0336  0.8000  57
+	   0.55   0.0100    0.0300  0.8333  84
+	   0.56   0.0144    0.0256  0.8667  135
+	   0.57   0.0196    0.0204  0.9000  255
+	   0.58   0.0256    0.0144  0.9333  635
+	   0.59   0.0324    0.0076  0.9667  3067
+	   0.60   0.0400    0.0000  1.0000  infinity
+
+       where  avg  is the average of the normalized increments, e is the error
+       estimate in avg, c is the confidence level of the error estimate, and n
+       is  the	number	of  records required for that confidence level in that
+       error estimate.	What this table means is that if a step function, from
+       zero  to  0.04,	(corresponding	to  a  Shannon probability of 0.6,) is
+       applied to the system, then after 27 records, we would be 70% confident
+       that  the error level was not greater than 0.0396, or avg was not lower
+       than 0.0004, which corresponds to an effective Shannon  probability  of
+       0.51.  Note  that if many iterations of this example of 27 records were
+       performed, then 30% of the time, the average of the time  series,  avg,
+       would be less than 0.0004, and 70% greater than 0.0004. This means that
+       the the Shannon probability, 0.6, would have to be reduced by a	factor
+       of  0.85  to  accommodate the error created by an insufficient data set
+       size to get the effective Shannon probability of 0.51. Since  half  the
+       time  the error would be greater than 0.0004, and half less, the confi-
+       dence level would be 1 - ((1 - 0.85) * 2) = 0.7,  meaning  that	if  we
+       measured a Shannon probability of 0.6 on only 27 records, we would have
+       to use an effective Shannon probability of 0.51,  corresponding	to  an
+       avg  of	0.0004.  For 33 records, we would use an avg of 0.0016, corre-
+       sponding to a Shannon probability of 0.52, and so on.
+
+       The table above was made by iterating the tsstatest(1) program, and can
+       be  approximated by a single pole low pass recursive discreet time fil-
+       ter[1], with the pole frequency at 0.00045 times the time  series  sam-
+       pling frequency. The accuracy of the approximation is about +/- 10% for
+       the first 260  samples,	with  the  approximation  accuracy  prediction
+       becoming optimistic thereafter, ie., about +30%.
+
+       A  pole	frequency of 0.033 seems a good approximation for working with
+       the root mean square of the normalized increments,  with  a  reasonable
+       approximation to about 5-10 time units.
+
+       The  "instantaneous,"  weighted,  and  statistically  estimated Shannon
+       probability, P, can be determined by dividing the filtered rms  by  the
+       filtered avg, adding unity, and dividing by two.
+
+       (Note:  there is some possibility of operating on the absolute value of
+       the normalized increments, which is a close approximation to  the  root
+       mean square of the normalized increments. Another possibility is to use
+       trading volumes to calculate the instantaneous value  for  the  average
+       and  root  mean	square	of the increments as in the tsshannonvolume(1)
+       program.  Also, another reasonable statistical  estimate  approximation
+       is  Pest  =  0.5  +  (1 - 1 / sqrt(n)) * ((2 * Pmeas) - 1) * 0.5, where
+       Pmeas is the measured Shannon probability over n many records, and Pest
+       is  the	Shannon  probability that should be used do to the uncertainty
+       created by an inadequate data set size.)
+
+       The advantage of the discreet time recursive single pole filter approx-
+       imation is that it requires only 3 lines of code in the implementation-
+       two for initialization, and one in the calculation construct.
+
+       The single pole low pass filter is implemented from the following  dis-
+       crete time equation:
+
+	   v	  = I * k2 + v	* k1
+	    n + 1	      n
+
+       where  I  is  the value of the current sample in the time series, v are
+       the value of the output time series, and k1 and k2 are constants deter-
+       mined from the following equations:
+
+		 -2 * p * pi
+	   k1 = e
+
+       and
+
+	   k2 = 1 - k1
+
+       where p is a constant that determines the frequency of the pole-a value
+       of unity places the pole at the sample frequency of the time series.
+
+       The input file structure is a text file consisting of records, in  tem-
+       poral  order,  one  record  per	time series sample.  Blank records are
+       ignored, and comment records are signified by a '#'  character  as  the
+       first  non  white space character in the record. Data records must con-
+       tain at least one field, which is the data value of the sample, but may
+       contain	many fields-if the record contains many fields, then the first
+       field is regarded as the sample's time, and the last field as the  sam-
+       ple's value at that time.
+
+       [1]  This  program  is  based on "An Analog, Discrete Time, Single Pole
+       Filter," John Conover, Fairchild  Journal  of  Semiconductor  Progress,
+       July/August, 1978, Volume 6, Number 4, pp. 11.
+
+OPTIONS
+       -f     Alternate output format.
+
+       -p n   Average pole frequency.
+
+       -P m   Root mean square pole frequency.
+
+       -t     Sample's time will be included in the output time series.
+
+       -v     Print the version and copyright banner of the program.
+
+       filename ...
+	      Input filenames.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),   tshcalc(1),	tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),	tsrmswindow(1),     tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),	tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),  tstradesim(1),  tsrunlength(1),  tsunshannon(1),   tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 		   TSSTOCKS(1)

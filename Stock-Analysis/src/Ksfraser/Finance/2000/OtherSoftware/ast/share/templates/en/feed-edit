@@ -1,0 +1,28 @@
+<form method="POST" action="$save_page">
+  <table width="60%" class="awf_form">
+    <tr>
+      <th>Edit Feed</th>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="feed.feed_name" value="$feed.feed_name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Url:</b>&nbsp;<span class="awf_small">* You can use &#36;symbol, or &#36;ysymbol in the url.</span></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="feed.url" value="$feed.url" class="awf_inputtext awf_wide_input"></td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+    </tr>
+    <tr>
+      <td><select name="feed.market"><option value="-1">All Markets</option>$market_options</select></td>
+    </tr>
+    <tr>
+      <td align="center"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

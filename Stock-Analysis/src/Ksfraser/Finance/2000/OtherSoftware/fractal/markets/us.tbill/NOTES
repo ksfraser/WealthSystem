@@ -1,0 +1,44 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for us.tbill
+#
+# Make a cumulative product of a time series, printing each element to
+# stdout-each element is is divided by 10, to convert percent to
+# fraction, and divided by 12, to convert yearly rate to monthly rate,
+# and added to 1.0 to make the return factor, then multiplied by the
+# cumulative product to get the next cumulative product
+#
+# A data file was made by running:
+#
+# awk -f ../Master/cumulativeproduct < data.original > data
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/09 00:55:06 $
+# $Id: NOTES,v 0.0 2006/01/09 00:55:06 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/09 00:55:06  john
+# Initial version
+#
+#
+awk -f ../Master/cumulativeproduct < data.original > data

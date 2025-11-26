@@ -1,0 +1,320 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: tables.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: tables.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{{\market}, normalized increments}
+        \label{\SETLABEL:TSA}
+
+        The data in table~\ref{\SETLABEL:INC} is condensed from
+        Section~\ref{\SETLABELREF:TSA}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, normalized increments]
+                        {{\market}, normalized increments.}
+                    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|} \hline
+                        \multicolumn{5}{|c|}{Normalized}                                                                                  & \multicolumn{5}{|c|}{Normalized Absolute Value}\\ \hline
+                        Mean                & Standard              & rms                & \multicolumn{2}{|c|}{Least Squares}            & Mean                   & Standard                 & rms                & \multicolumn{2}{|c|}{Least Squares} \\ \cline{4-5}\cline{9-10}
+                        \hspace{0.01in}     & deviation             & \hspace{0.01in}    & Constant                & Slope                & \hspace{0.01in}        & deviation                & \hspace{0.01in}    & Constant                   & Slope \\ \hline\hline
+                        {\datafractionmean} & {\datafractionstddev} & {\datafractionrms} & {\datafractionconstant} & {\datafractionslope} & {\datafractionabsmean} & {\datafractionabsstddev} & {\datafractionrms} & {\datafractionabsconstant} & {\datafractionabsslope} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:INC}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, Logarithmic Returns, in Bits}
+        \label{\SETLABEL:LR}
+
+        The data in table~\ref{\SETLABEL:RET} is condensed from
+        Section~\ref{\SETLABELREF:FS}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, Logarithmic Returns, in
+                        Bits]{{\market}, Logarithmic Returns, in Bits.}
+                    \begin{tabular}{|c|c|c|c|} \hline
+                        \multicolumn{2}{|c|}{Calculated from Table~\ref{\SETLABEL:INC}} & \multicolumn{2}{|c|}{From program:}\\ \hline
+                        Mean                    & Least squares                       & {\it tslsq}\/              & {\it tslogreturns}\/ \\ \hline\hline
+                        {\datafractionmeanbits} & {\datafractionconstantbits} & {\datatslsqepbits} & {\logreturns} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:RET}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, Shannon probabilities}
+        \label{\SETLABEL:MAXSHANNON}
+
+        The data in table~\ref{\SETLABEL:SHANNON} is condensed from
+        sections~\ref{\SETLABELREF:FS}
+        and~\ref{\SETLABELREF:MAXSHANNON}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, Shannon
+                        probabilities]{{\market}, Shannon
+                        probabilities.}
+                    \begin{tabular}{|c|c|c|c|} \hline
+                        \multicolumn{3}{|c|}{Maximum} & \multicolumn{1}{|c|}{Operational}\\ \hline
+                        Fraction of         & $\frac{\frac{\mbox{\scriptsize{mean}}}{\mbox{\scriptsize{rms}}} + 1}{2}$ & \multicolumn{2}{|c|}{From program:}\\ \cline{3-4}
+                        positive increments & \hspace{0.01in}                                                          & {\it tsshannonmax}\/    & {\it tsshannon}\/ \\ \hline\hline
+                        {\pmax}             & {\avgrms}                                                                & {\shannonmax}   & {\shannonlogreturns} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:SHANNON}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, Logistic Analysis}
+        \label{\SETLABEL:LAA}
+
+        The data in table~\ref{\SETLABEL:LA} is condensed from
+        Section~\ref{\SETLABELREF:LA}\footnote{Note that there are
+        numerical stability issues with the methodology used to derive
+        the constants---if the non-linear term, $b$, was greater than
+        zero, it was set to zero to produce the graphs in
+        Section~\ref{\SETLABELREF:LA}.}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, Logistic Analysis.]
+                        {{\market}, Logistic Analysis, $x_t = x_{t - 1}\left(a + b \cdot x_{t - 1}\right)$.}
+                    \begin{tabular}{|c|c|} \hline
+                        $a$ & $b$\\ \hline\hline
+                        {\datafractionconstant} & {\datafractionslope}\\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:LA}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, Hurst Coefficients and H  Parameters}
+        \label{\SETLABEL:HCHP}
+
+        The data in table~\ref{\SETLABEL:H} is condensed from
+        Section~\ref{\SETLABELREF:H}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, Hurst Coefficients and H
+                        Parameters]{{\market}, Hurst Coefficients and
+                        H Parameters.}
+                    \begin{tabular}{|c|c|c|c|} \hline
+                        \multicolumn{2}{|c|}{Hurst Coefficients} & \multicolumn{2}{|c|}{H Parameters}\\ \hline
+                        Near term   & Far term    & Near term   & Far term \\ \hline\hline
+                        {\thurstlow} & {\thurstall} & {\thcalclow} & {\thcalcall} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:H}
+                \end{center}
+            \end{table}
+        \end{small}
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, Hurst Coefficients and H
+                        Parameters]{{\market}, Hurst Coefficients and
+                        H Parameters, as a Derivative.}
+                    \begin{tabular}{|c|c|c|c|} \hline
+                        \multicolumn{2}{|c|}{Hurst Coefficients} & \multicolumn{2}{|c|}{H Parameters}\\ \hline
+                        Near term    & Far term     & Near term    & Far term \\ \hline\hline
+                        {\hurstlow} & {\hurstall} & {\hcalclow} & {\hcalcall} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:TH}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, verification of the increments}
+        \label{\SETLABEL:VI1}
+
+        The data in table~\ref{\SETLABEL:COMP} is condensed from
+        Section~\ref{\SETLABELREF:QVA}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, verification of
+                        the increments]{{\market}, verification the of
+                        the increments, the mean, $\sigma$ is the
+                        standard deviation from
+                        table~\ref{\SETLABEL:INC},
+                        {\datafractionstddev}, and $P$ is the maximum
+                        Shannon probability from
+                        table~\ref{\SETLABEL:SHANNON}, {\pmax}. In
+                        principle, the values should equate.}
+                    \begin{tabular}{|c|c|c|} \hline
+                        Mean                & $\mbox{rms} (2P - 1)$ & $\frac{{\sigma}(2P - 1)}{2\sqrt{P(P - 1)}} $ \\ \hline\hline
+                        {\datafractionmean} & {\rmsp}               & {\sigmap} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:COMP}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, verification of the increments}
+        \label{\SETLABEL:VI2}
+
+        The data in table~\ref{\SETLABEL:ABS} is condensed from
+        Section~\ref{\SETLABELREF:QVA}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, verification of
+                        the increments]{{\market}, verification the of
+                        increments. In principle, the mean of the
+                        absolute value of the increments and the root
+                        mean square of the increments should
+                        equate\footnote{The absolute value of the
+                        normalized increments, when averaged, is
+                        related to the root mean square of the
+                        increments by a constant. If the normalized
+                        increments are a fixed increment, the constant
+                        is unity. If the normalized increments have a
+                        Gaussian distribution, the constant is
+                        $\approx 0.8$ depending on the accuracy of of
+                        ``fit'' to a Gaussian distribution.}.}
+                    \begin{tabular}{|c|c|} \hline
+                        Mean of the               & rms \\
+                        absolute value            & \hspace{0.01in} \\ \hline\hline
+                        {\datafractionabsmean}    & {\datafractionrms} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:ABS}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, $\chi^2$ values of the increments}
+        \label{\SETLABEL:XSQ}
+
+        The data in table~\ref{\SETLABEL:XSQT} is condensed from
+        Section~\ref{\SETLABELREF:NH}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, $\chi^2$ values of
+                        the increments]{{\market}, $\chi^2$ values of
+                        the increments. In principle, if the
+                        distribution of the normalized increments is a
+                        Gaussian distribution, the $\chi^2$ value will
+                        be significantly less than the critical
+                        value.}
+                    \begin{tabular}{|c|c|} \hline
+                        $\chi^2$      & Critical Value \\ \hline\hline
+                        {\chisquared} & {\critical} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:XSQT}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, time series data, empirical and simulated}
+        \label{\SETLABEL:SIM}
+
+        The data in table~\ref{\SETLABEL:ES} is condensed from
+        Section~\ref{\SETLABELREF:TSUNFAIRBROWNIAN}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, time series data, empirical
+                        and simulated]{{\market}, time series data,
+                        empirical and simulated, analysis of the
+                        normalized increments.}
+                    \begin{tabular}{|c|c|c|c|} \hline
+                        \multicolumn{2}{|c|}{Empirical} & \multicolumn{2}{|c|}{Simulated}\\ \hline
+                        Mean                & Standard              & Mean               & Standard \\
+                        \hspace{0.01in}     & deviation             & \hspace{0.01in}    & deviation \\ \hline\hline
+                        {\datafractionmean} & {\datafractionstddev} & {\tsunfairbrownianfractionmean} & {\tsunfairbrownianfractionstddev} \\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:ES}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, number of participating companies}
+        \label{\SETLABEL:QNC}
+
+        The data in table~\ref{\SETLABEL:NC} is condensed from
+        Section~\ref{\SETLABELREF:QNC}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, number of participating
+                        companies] {{\market}, number of participating
+                        companies.}
+                    \begin{tabular}{|c|c|} \hline
+                        Number & Shannon probability\\ \hline
+                        {\ncompanies} & {\pncompanies}\\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:NC}
+                \end{center}
+            \end{table}
+        \end{small}
+
+    \subsection{{\market}, Shannon probability optimizations}
+        \label{\SETLABEL:SPO}
+
+        The data in table~\ref{\SETLABEL:SP} is condensed from
+        Section~\ref{\SETLABELREF:QNC}.
+
+        \begin{small}
+            \begin{table}[ht]
+                \begin{center}
+                    \caption[{\market}, Shannon probability
+                         optimizations] {{\market}, Shannon
+                         probability optimization.}
+                    \begin{tabular}{|c|c|} \hline
+                        optimize capital growth & optimize market growth\\ \hline
+                        {\avgrms} & {\pncompanies}\\ \hline
+                    \end{tabular}
+                    \label{\SETLABEL:SP}
+                \end{center}
+            \end{table}
+        \end{small}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

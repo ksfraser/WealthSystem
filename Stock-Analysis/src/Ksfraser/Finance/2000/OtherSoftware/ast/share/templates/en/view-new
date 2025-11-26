@@ -1,0 +1,22 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+    <tr>
+      <th>Create New View</th>
+    </tr>
+    <tr>
+      <td><b>View Name:</b></td>
+    </tr> 
+    <tr>
+      <td><input type="text" name="view.name" value="$view.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Description:</b>&nbsp;<span class="awf_small">(optional)</span></td>
+    </tr> 
+    <tr>
+      <td><input type="text" name="view.description" value="$view.description" class="awf_inputtext awf_wide_input"></td>
+    </tr>
+    <tr>
+      <td><input type="submit" value="Create">
+    </tr>
+  </table>
+</form>

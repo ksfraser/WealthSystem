@@ -1,0 +1,51 @@
+<form method="POST" action="$save_page">
+  <table class="awf_form">
+    <tr>
+      <td><b>Market Id:</b></td>
+      <td>$market.marketid</td>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+      <td><input type="text" name="market.name" value="$market.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Market Key:</b></td>
+      <td><input type="text" name="market.market_key" value="$market.market_key" class="awf_inputtext"><img src="images/help_small.png" alt="help" $tooltip.market_key></td>
+    </tr> 
+    <tr>
+      <td><b>Globe Investor Sufix:</b></td>
+      <td><input type="text" name="market.globe_sufix" value="$market.globe_sufix" class="awf_inputtext"><img src="images/help_small.png" alt="help" $tooltip.market_globe_suffix></td>
+    </tr>
+    <tr>
+      <td><b>BigCharts Prefix:</b></td>
+      <td><input type="text" name="market.bigchart_prefix" value="$market.bigchart_prefix" class="awf_inputtext"><img src="images/help_small.png" alt="help" $tooltip.market_big_charts></td>
+    </tr>
+    <tr>
+      <td><b>Yahoo Symbol:</b></td>
+      <td><input type="text" name="market.yahoo_symbol" value="$market.yahoo_symbol" class="awf_inputtext"><img src="images/help_small.png" alt="help" $tooltip.market_yahoo_symbol></td>
+    </tr>
+    <tr>
+      <td><b>Market Time-zone:</b></td>
+      <td><select name="market.timezone" class="awf_inputtext">$timezone_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Market Open:</b></td>
+      <td><select name="market.open_hour" class="awf_inputtext">$openhour_options</select>&nbsp;<select name="market.open_min">$openmin_options</select>&nbsp; minutes</td>
+    </tr>
+    <tr>
+      <td><b>Market Close:</b></td>
+      <td><select name="market.close_hour" class="awf_inputtext">$closehour_options</select>&nbsp;<select name="market.close_min">$closemin_options</select>&nbsp; minutes</td>
+    </tr>
+    <tr>
+      <td><b>Symbol File:</b></td>
+      <td><select name="market.symbol_file" class="awf_inputtext">$symbolfile_options</select><img src="images/help_small.png" alt="help" $tooltip.market_symbol_file></td>
+    </tr>
+    <tr>
+      <td><b>Currency:</b></td>
+      <td><select name="market.currency_id" class="awf_inputtext">$currency_options</select></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

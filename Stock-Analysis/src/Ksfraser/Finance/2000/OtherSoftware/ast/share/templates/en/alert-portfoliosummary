@@ -1,0 +1,26 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="alert.type" value="$alert.type">
+  <input type="hidden" name="alert.market" value="0">
+  <table class="awf_form">
+    <tr>
+      <th colspan="3">Portfolio Summary Alert</th>
+    </tr>
+    <tr>
+      <td><b>Send To:</b></td>
+      <td><select name="alert.emailid" class="awf_inputtext">$email_options</select></td>
+    </tr>
+    <tr>
+        <td colspan="2">Portfolio</td><td><select name="alert.symbol">$portfolio_options</select></td>
+    </tr>
+    <tr>
+      <td colspan="2">Send the portfolio summary at </td><td>$hour_options : $min_options</td>
+    </tr>
+    <tr>
+      <td><b>Comment:</b></td>
+      <td colspan="2"><input type="text" maxlength="254" name="alert.comment" value="$alert.comment" class="awf_inputtext awf_wide_input"><div class="awf_small">(Sent with message of alert)</div></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><input type="submit" value="Continue"></td>
+    </tr>
+  </table>
+</form>

@@ -1,0 +1,1653 @@
+checklistcheck.id: 1000001
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Touch Spacing
+checklistcheck.description: Positive if touches are spaced 29 days or more apart on average.
+%%
+checklistcheck.id: 1000002
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Number of Touches
+checklistcheck.description: Positive if there are more than 4 touches.
+%%
+checklistcheck.id: 1000003
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Trend line Length
+checklistcheck.description: Positive if the trend line is longer than 139 days.
+%%
+checklistcheck.id: 1000004
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Aspect Ratio
+checklistcheck.description: If the downward angle is between 52 and 90 degrees, it is negative, between 12 and 42 is neutral and between 0 and 12 is positive.
+%%
+checklistcheck.id: 1000005
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000006
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest or lowest third of its yearly range. Negative if price is in middle third.
+%%
+checklistcheck.id: 1000007
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gap on breakout. Negative if no price gap.
+%%
+checklistcheck.id: 1000008
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Negative if market is rising, positive if market is falling.
+%%
+checklistcheck.id: 1000009
+checklistcheck.checklisttypeid: 1000001
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or large caps, negative for mid caps.
+%%
+#############################################################################
+# Start of:         Up Trend line Breakout (Bearish)
+#############################################################################
+checklistcheck.id: 1000010
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Touch Spacing
+checklistcheck.description: Positive if touches are spaced 28 days or more apart on average.
+%%
+checklistcheck.id: 1000011
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Trend line Length
+checklistcheck.description: Positive if the trend line is longer than 137 days.
+%%
+checklistcheck.id: 1000012
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Aspect Ratio
+checklistcheck.description: If the downward angle is between 48 and 90 degrees, it is negative, between 24 and 48 is neutral and between 0 and 24 is positive.
+%%
+checklistcheck.id: 1000013
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000014
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000015
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the bottom 2/3 of the yearly price range. Negative if the price is in the top 1/3 of the yearly price range.
+%%
+checklistcheck.id: 1000016
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if market is rising, negative if market is falling.
+%%
+checklistcheck.id: 1000017
+checklistcheck.checklisttypeid: 1000002
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or large caps, negative for mid caps.
+%%
+#############################################################################
+# Start of:         Broadening Top
+#############################################################################
+checklistcheck.id: 1000018
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Positive if pattern length is 3 months or longer, otherwise negative.
+%%
+checklistcheck.id: 1000019
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Positive if pattern length is 3 months to 6 months, otherwise negative.
+%%
+checklistcheck.id: 1000019
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Positive if there is a horizontal consolidation region before the pattern, otherwise negative.
+%%
+checklistcheck.id: 1000020
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the top third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000021
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the bottom third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000022
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 18% of the breakout price.
+%%
+checklistcheck.id: 1000023
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 18% of the breakout price.
+%%
+checklistcheck.id: 1000024
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive if volume is rising, negative if volume is falling.
+%%
+checklistcheck.id: 1000025
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, negative if breakout volume below average volume.
+%%
+checklistcheck.id: 1000026
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, negative if breakout volume below average volume.
+%%
+checklistcheck.id: 1000027
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Partial Decline
+checklistcheck.description: Positive if there is a partial decline, otherwise negative.
+%%
+checklistcheck.id: 1000028
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Partial Rise
+checklistcheck.description: Positive if there is a partial rise, otherwise negative.
+%%
+checklistcheck.id: 1000029
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is rising, otherwise negative.
+%%
+checklistcheck.id: 1000030
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is rising, otherwise negative.
+%%
+checklistcheck.id: 1000031
+checklistcheck.checklisttypeid: 1000003
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or large caps, negative for mid caps.
+%%
+checklistcheck.id: 1000032
+checklistcheck.checklisttypeid: 1000004
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Diamonds
+#############################################################################
+checklistcheck.id: 1000033
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short term (less than 3 months), negative for longer than 3 months.
+%%
+checklistcheck.id: 1000034
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000035
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the top third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000036
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 13% of the breakout price.
+%%
+checklistcheck.id: 1000037
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs and is not predicted.
+%%
+checklistcheck.id: 1000038
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Negative if price gap on breakout. Positive if no price gap.
+%%
+checklistcheck.id: 1000039
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is rising, otherwise negative.
+%%
+checklistcheck.id: 1000040
+checklistcheck.checklisttypeid: 1000005
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Double Bottom
+#############################################################################
+checklistcheck.id: 1000041
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short term (less than 6 months), negative for longer than 6 months.
+%%
+checklistcheck.id: 1000042
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for long term (more than 3 months), negative for shorter than 3 months.
+%%
+checklistcheck.id: 1000043
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short term (less than 3 months), negative for longer than 3 months.
+%%
+checklistcheck.id: 1000044
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short term (less than 3 months), or long term (more than 6 months). Negative for 3 to 6 months.
+%%
+checklistcheck.id: 1000045
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Base Type
+checklistcheck.description: Positive if the pattern has flat base, otherwise negative.
+%%
+checklistcheck.id: 1000046
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Base Type
+checklistcheck.description: Positive if the pattern has flat base, otherwise negative.
+%%
+checklistcheck.id: 1000047
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Base Type
+checklistcheck.description: Positive if the pattern has flat base, otherwise negative.
+%%
+checklistcheck.id: 1000048
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Base Type
+checklistcheck.description: Positive if the pattern has flat base, otherwise negative.
+%%
+checklistcheck.id: 1000049
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000050
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Positive if there is a horizontal consolidation region before the pattern, otherwise negative.
+%%
+checklistcheck.id: 1000051
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000052
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000053
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the bottom third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000054
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the bottom or top third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000055
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the middle third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000056
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the bottom or top third of its yearly range, otherwise negative.
+%%
+checklistcheck.id: 1000057
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 18% of the breakout price.
+%%
+checklistcheck.id: 1000058
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 17% of the breakout price.
+%%
+checklistcheck.id: 1000059
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 18% of the breakout price.
+%%
+checklistcheck.id: 1000060
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is shorter than 16% of the breakout price.
+%%
+checklistcheck.id: 1000061
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive if volume is falling, negative if volume is rising.
+%%
+checklistcheck.id: 1000062
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive if volume is falling, negative if volume is rising.
+%%
+checklistcheck.id: 1000063
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive if volume is falling, negative if volume is rising.
+%%
+checklistcheck.id: 1000064
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive if volume is rising, negative if volume is falling.
+%%
+checklistcheck.id: 1000065
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, negative if breakout volume below average volume.
+%%
+checklistcheck.id: 1000066
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, negative if breakout volume below average volume.
+%%
+checklistcheck.id: 1000067
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is below average, negative if breakout volume above average volume.
+%%
+checklistcheck.id: 1000068
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, negative if breakout volume below average volume.
+%%
+checklistcheck.id: 1000069
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative.
+%%
+checklistcheck.id: 1000070
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative.
+%%
+checklistcheck.id: 1000071
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative.
+%%
+checklistcheck.id: 1000072
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative.
+%%
+checklistcheck.id: 1000073
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000074
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000075
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000076
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000077
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gaps upward on breakout. Negative if price does not gap.
+%%
+checklistcheck.id: 1000078
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Negative if price gap on breakout. Positive if no price gap.
+%%
+checklistcheck.id: 1000079
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gaps upward on breakout. Negative if price does not gap.
+%%
+checklistcheck.id: 1000080
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gaps upward on breakout. Negative if price does not gap.
+%%
+checklistcheck.id: 1000081
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is rising, otherwise negative.
+%%
+checklistcheck.id: 1000082
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is falling, otherwise negative.
+%%
+checklistcheck.id: 1000083
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is falling, otherwise negative.
+%%
+checklistcheck.id: 1000084
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is rising, otherwise negative.
+%%
+checklistcheck.id: 1000085
+checklistcheck.checklisttypeid: 1000006
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+checklistcheck.id: 1000086
+checklistcheck.checklisttypeid: 1000007
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+checklistcheck.id: 1000087
+checklistcheck.checklisttypeid: 1000008
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for mid caps, neutral for large caps.
+%%
+checklistcheck.id: 1000088
+checklistcheck.checklisttypeid: 1000009
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Double Top
+#############################################################################
+checklistcheck.id: 1000089
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for intermediate term (3 to 6 months), negative otherwise.
+%%
+checklistcheck.id: 1000090
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short to intermediate term (0 to 6 months), negative otherwise.
+%%
+checklistcheck.id: 1000091
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short to intermediate term (0 to 6 months), negative otherwise.
+%%
+checklistcheck.id: 1000092
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Trend Length
+checklistcheck.description: Positive for short term (0 to 3 months), negative otherwise.
+%%
+checklistcheck.id: 1000093
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000094
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000095
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000096
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000097
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest third of its yearly range. Negative if price is in the lowest or middle third.
+%%
+checklistcheck.id: 1000098
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest or middle third of its yearly range. Negative if price is in the lowest third.
+%%
+checklistcheck.id: 1000099
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest third of its yearly range. Negative if price is in the lowest or middle third.
+%%
+checklistcheck.id: 1000100
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest third of its yearly range. Negative if price is in the lowest or middle third.
+%%
+checklistcheck.id: 1000101
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 17% of the breakout price.
+%%
+checklistcheck.id: 1000102
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 16% of the breakout price.
+%%
+checklistcheck.id: 1000103
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 17% of the breakout price.
+%%
+checklistcheck.id: 1000104
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 18% of the breakout price.
+%%
+checklistcheck.id: 1000105
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is rising, negative if volume is declining.
+%%
+checklistcheck.id: 1000106
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is rising, negative if volume is declining.
+%%
+checklistcheck.id: 1000107
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000108
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000109
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000110
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000111
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000112
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000113
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000114
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000115
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000116
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000117
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs if prices breakout downward and then climb above the double top high. Score negative if a bear trap occurs, positive if it does not.
+%%
+checklistcheck.id: 1000118
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs if prices breakout downward and then climb above the double top high. Score negative if a bear trap occurs, positive if it does not.
+%%
+checklistcheck.id: 1000119
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs if prices breakout downward and then climb above the double top high. Score negative if a bear trap occurs, positive if it does not.
+%%
+checklistcheck.id: 1000120
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs if prices breakout downward and then climb above the double top high. Score negative if a bear trap occurs, positive if it does not.
+%%
+checklistcheck.id: 1000121
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gaps upward on breakout. Negative if price does not gap.
+%%
+checklistcheck.id: 1000122
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gaps upward on breakout. Negative if price does not gap.
+%%
+checklistcheck.id: 1000123
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Negative if price gap on breakout. Positive if no price gap.
+%%
+checklistcheck.id: 1000124
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gaps upward on breakout. Negative if price does not gap.
+%%
+checklistcheck.id: 1000125
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is falling, otherwise negative.
+%%
+checklistcheck.id: 1000126
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is falling, otherwise negative.
+%%
+checklistcheck.id: 1000127
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is falling, otherwise negative.
+%%
+checklistcheck.id: 1000128
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is falling, otherwise negative.
+%%
+checklistcheck.id: 1000129
+checklistcheck.checklisttypeid: 1000010
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for mid or large caps.
+%%
+checklistcheck.id: 1000130
+checklistcheck.checklisttypeid: 1000011
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+checklistcheck.id: 1000131
+checklistcheck.checklisttypeid: 1000012
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for mid caps, neutral for large caps.
+%%
+checklistcheck.id: 1000132
+checklistcheck.checklisttypeid: 1000013
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for mid caps, negative for small caps or large caps.
+%%
+#############################################################################
+# Start of:         Head-and-Shoulders Bottom
+#############################################################################
+checklistcheck.id: 1000133
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Positive if pattern length is 3 months or less, neutral if the pattern is 3 to 6 months and negative if the pattern is longer than 6 months.
+%%
+checklistcheck.id: 1000134
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Flat Base
+checklistcheck.description: Positive if the base (top of pattern) is flat, otherwise negative.
+%%
+checklistcheck.id: 1000135
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000136
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Necklines
+checklistcheck.description: Positive if the neckline (the peaks on either side of the head) are downward sloping, otherwise negative.
+%%
+checklistcheck.id: 1000137
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Shoulder Lows
+checklistcheck.description: Positive if the left shoulder has a higher low than the right, or if both shoulders are equal. Negative otherwise.
+%%
+checklistcheck.id: 1000138
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Shoulder Volume
+checklistcheck.description: Positive right shoulder has a higher volume than the left shoulder. Negative if the left shoulder has a higher volume than the right.
+%%
+checklistcheck.id: 1000139
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if the current price is in the top third of its yearly range, negative if it is in the middle third and neutral if it is in the bottom third.
+%%
+checklistcheck.id: 1000140
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 20% of the breakout price.
+%%
+checklistcheck.id: 1000141
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Negative if volume is rising, positive if volume is falling.
+%%
+checklistcheck.id: 1000142
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, negative if breakout volume below average volume.
+%%
+checklistcheck.id: 1000143
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when the price returns to the breakout price with in 30 days of the breakout. Score positive if no throwback occurs. Negative if a throwback occurs.
+%%
+checklistcheck.id: 1000144
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise less than 10% on the breakout and then fall below the formation low. Score negative if a bull trap occurs. Positive if there is no bull trap.
+%%
+checklistcheck.id: 1000145
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Positive if the market is rising, otherwise negative.
+%%
+checklistcheck.id: 1000146
+checklistcheck.checklisttypeid: 1000014
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or large caps, negative for mid caps.
+%%
+#############################################################################
+# Start of:         Head-and-Shoulders Top
+#############################################################################
+checklistcheck.id: 1000147
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Positive if pattern length is 3 months or less, negative if the pattern is longer than 3 months.
+%%
+checklistcheck.id: 1000148
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000149
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Necklines
+checklistcheck.description: Positive if the neckline (the peaks on either side of the head) are upward sloping or horizontal, otherwise negative.
+%%
+checklistcheck.id: 1000150
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Shoulder Lows
+checklistcheck.description: Positive if the left shoulder has a higher low than the right, neutral if both shoulders are equal. Negative otherwise.
+%%
+checklistcheck.id: 1000151
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 17% of the breakout price.
+%%
+checklistcheck.id: 1000152
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive if volume is rising, negative if volume is falling.
+%%
+checklistcheck.id: 1000153
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Pullback
+checklistcheck.description: A pullback occurs when the price returns to the breakout price with in 30 days of the breakout. Score positive if no pullback occurs. Negative if a pullback occurs.
+%%
+checklistcheck.id: 1000154
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs if prices falls less than 10% on the breakout and then rises above the formation high. Score negative if a bear trap occurs. Positive if there is no bear trap.
+%%
+checklistcheck.id: 1000155
+checklistcheck.checklisttypeid: 1000015
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or large caps, negative for mid caps.
+%%
+#############################################################################
+# Start of:         Rectangle
+#############################################################################
+checklistcheck.id: 1000156
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is between 0 and 6 months long, otherwise negative.
+%%
+checklistcheck.id: 1000157
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Partial Decline
+checklistcheck.description: A partial decline occurs if the last zag in the rectangle does not travel the full distance. Score positive if no partial decline occurs. Score negative if a partial decline occurs.
+%%
+checklistcheck.id: 1000158
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the rectangle occurs in the bottom 2/3 of the yearly price range. Score negative if it occurs in the top third of the yearly price range.
+%%
+checklistcheck.id: 1000159
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000160
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 11% of the breakout price.
+%%
+checklistcheck.id: 1000161
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative.
+%%
+checklistcheck.id: 1000162
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise less than 10% on the breakout and then fall below the formation low. Score negative if a bull trap occurs. Positive if there is no bull trap.
+%%
+checklistcheck.id: 1000163
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gap on breakout. Negative if no price gap.
+%%
+checklistcheck.id: 1000164
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Negative if market is rising, positive if market is falling.
+%%
+checklistcheck.id: 1000165
+checklistcheck.checklisttypeid: 1000016
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative large caps, neutral for mid caps.
+%%
+#############################################################################
+# Start of:         Ascending Scallops
+#############################################################################
+checklistcheck.id: 1000166
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is between 0 and 3 months long, otherwise negative.
+%%
+checklistcheck.id: 1000167
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000168
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is between 0 and 3 months long, otherwise negative.
+%%
+checklistcheck.id: 1000169
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000170
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the scallop occurs in the bottom 2/3 of the yearly price range. Score negative if it occurs in the top third of the yearly price range.
+%%
+checklistcheck.id: 1000171
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the scallop occurs in the top 1/3 or bottom 1/3 of the yearly price range. Score negative if it occurs in the middle third of the yearly price range.
+%%
+checklistcheck.id: 1000172
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Scallop
+checklistcheck.description: Positive if height is taller than 20% of the breakout price.
+%%
+checklistcheck.id: 1000173
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Scallop
+checklistcheck.description: Positive if height is taller than 18% of the breakout price.
+%%
+checklistcheck.id: 1000174
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000175
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000176
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000177
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000178
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000179
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs and is not predicted.
+%%
+checklistcheck.id: 1000180
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Negative if market is rising, positive if market is falling.
+%%
+checklistcheck.id: 1000181
+checklistcheck.checklisttypeid: 1000017
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for mid caps or large caps.
+%%
+checklistcheck.id: 1000182
+checklistcheck.checklisttypeid: 1000018
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Descending Scallops
+#############################################################################
+checklistcheck.id: 1000183
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is 3 months long or longer, otherwise negative.
+%%
+checklistcheck.id: 1000184
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is between 0 and 3 months long, otherwise negative.
+%%
+checklistcheck.id: 1000185
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the scallop occurs in the bottom 1/3 of the yearly price range. Score negative if it occurs in the top 2/3 of the yearly price range.
+%%
+checklistcheck.id: 1000186
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the scallop occurs in the top 2/3 of the yearly price range. Score neutral if it occurs in the bottom third of the yearly price range.
+%%
+checklistcheck.id: 1000187
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Scallop
+checklistcheck.description: Positive if height is taller than 24% of the breakout price.
+%%
+checklistcheck.id: 1000189
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Scallop
+checklistcheck.description: Positive if height is taller than 12% of the breakout price.
+%%
+checklistcheck.id: 1000190
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000191
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000192
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000193
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs.
+%%
+checklistcheck.id: 1000194
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Gap
+checklistcheck.description: Positive if price gaps up on breakout, negative if it does not.
+%%
+checklistcheck.id: 1000195
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Gap
+checklistcheck.description: Positive if price gaps down on breakout, negative if it does not.
+%%
+checklistcheck.id: 1000196
+checklistcheck.checklisttypeid: 1000019
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for large caps and neutral for mid caps.
+%%
+checklistcheck.id: 1000197
+checklistcheck.checklisttypeid: 1000020
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Ascending Triangles
+#############################################################################
+checklistcheck.id: 1000198
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 3 months long, otherwise negative.
+%%
+checklistcheck.id: 1000199
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 3 months long, otherwise negative.
+%%
+checklistcheck.id: 1000200
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000201
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000202
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the triangle occurs in the top 1/3 of the yearly price range. Score negative if it occurs in the bottom 2/3 of the yearly price range.
+%%
+checklistcheck.id: 1000203
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the triangle occurs in the top 2/3 of the yearly price range. Score neutral if it occurs in the bottom third of the yearly price range.
+%%
+checklistcheck.id: 1000204
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Triangle
+checklistcheck.description: Positive if height is taller than 10% of the breakout price.
+%%
+checklistcheck.id: 1000205
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Triangle
+checklistcheck.description: Positive if height is taller than 11% of the breakout price.
+%%
+checklistcheck.id: 1000206
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is increasing, negative if volume is declining.
+%%
+checklistcheck.id: 1000207
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000208
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000209
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback does not occur, otherwise negative.
+%%
+checklistcheck.id: 1000210
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000211
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000212
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs and is not predicted.
+%%
+checklistcheck.id: 1000213
+checklistcheck.checklisttypeid: 1000021
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for large caps and neutral for mid caps.
+%%
+checklistcheck.id: 1000214
+checklistcheck.checklisttypeid: 1000022
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for mid caps, negative for large caps, neutral for small caps.
+%%
+#############################################################################
+# Start of:         Descending Triangles
+#############################################################################
+checklistcheck.id: 1000215
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 6 months long, otherwise negative.
+%%
+checklistcheck.id: 1000216
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 6 months long, otherwise negative.
+%%
+checklistcheck.id: 1000217
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Positive if there is a horizontal consolidation region before the pattern, otherwise negative.
+%%
+checklistcheck.id: 1000218
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Positive if there is a horizontal consolidation region before the pattern, otherwise negative.
+%%
+checklistcheck.id: 1000219
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the triangle occurs in the bottom 1/3 of the yearly price range. Score neutral if it occurs in the middle third of the yearly price range, score negative if the triangle occurs in the lowest 1/3 of the yearly range.
+%%
+checklistcheck.id: 1000220
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Triangle
+checklistcheck.description: Positive if height is taller than 12% of the breakout price.
+%%
+checklistcheck.id: 1000221
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Triangle
+checklistcheck.description: Positive if height is taller than 11% of the breakout price.
+%%
+checklistcheck.id: 1000222
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is increasing, negative if volume is declining.
+%%
+checklistcheck.id: 1000223
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is declining, negative if volume is increasing.
+%%
+checklistcheck.id: 1000224
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000225
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback does not occur, otherwise negative.
+%%
+checklistcheck.id: 1000226
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000227
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000228
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs and is not predicted.
+%%
+checklistcheck.id: 1000229
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gap on breakout. Negative if no price gap.
+%%
+checklistcheck.id: 1000230
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Negative if market is rising, positive if market is falling.
+%%
+checklistcheck.id: 1000231
+checklistcheck.checklisttypeid: 1000023
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for large caps or mid caps.
+%%
+checklistcheck.id: 1000232
+checklistcheck.checklisttypeid: 1000024
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for mid caps and small caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Symmetric Triangles
+#############################################################################
+checklistcheck.id: 1000233
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 3 months long, or negative if longer than 6 months.
+%%
+checklistcheck.id: 1000234
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Price Trend Leading to Pattern
+checklistcheck.description: Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 3 months long, otherwise negative.
+%%
+checklistcheck.id: 1000235
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000236
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000237
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the triangle occurs in the bottom or top 1/3 of the yearly price range, score negative if the triangle occurs in the middle 1/3 of the yearly range.
+%%
+checklistcheck.id: 1000238
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Score positive if the triangle occurs in the top 1/3 of the yearly price range, score negative if the triangle occurs in the top 1/3 of the yearly range, otherwise score neutral.
+%%
+checklistcheck.id: 1000239
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Triangle
+checklistcheck.description: Positive if height is taller than 16% of the breakout price.
+%%
+checklistcheck.id: 1000240
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Triangle
+checklistcheck.description: Positive if height is taller than 14% of the breakout price.
+%%
+checklistcheck.id: 1000241
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Positive is volume is increasing, negative if volume is declining.
+%%
+checklistcheck.id: 1000242
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000243
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Positive if breakout volume is above average, otherwise negative.
+%%
+checklistcheck.id: 1000244
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback does not occur, otherwise negative.
+%%
+checklistcheck.id: 1000245
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Pullbacks
+checklistcheck.description: A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive.
+%%
+checklistcheck.id: 1000246
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000247
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Bear Trap
+checklistcheck.description: A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs and is not predicted.
+%%
+checklistcheck.id: 1000248
+checklistcheck.checklisttypeid: 1000026
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gap on breakout. Negative if no price gap.
+%%
+checklistcheck.id: 1000249
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Negative if market is rising, positive if market is falling.
+%%
+checklistcheck.id: 1000250
+checklistcheck.checklisttypeid: 1000025
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or mid caps, negative for large caps.
+%%
+#############################################################################
+# Start of:         Tripple Bottom
+#############################################################################
+checklistcheck.id: 1000251
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Trend Formation Length
+checklistcheck.description: Positive if trend formation (up trend before the pattern) is longer than 6 months, otherwise negative.
+%%
+checklistcheck.id: 1000252
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Flat Base
+checklistcheck.description: Positive score for a flat base, negative score otherwise.
+%%
+checklistcheck.id: 1000253
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000254
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Higher Right Bottoms
+checklistcheck.description: Score positive if right bottom is higher than 2nd bottom.
+%%
+checklistcheck.id: 1000255
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest third of its yearly range. Negative if price is in the lowest or middle third.
+%%
+checklistcheck.id: 1000256
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Throwback
+checklistcheck.description: A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative.
+%%
+checklistcheck.id: 1000257
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Bull Trap
+checklistcheck.description: A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive.
+%%
+checklistcheck.id: 1000258
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps or large caps, negative for mid caps.
+%%
+#############################################################################
+# Start of:         Tripple Top
+#############################################################################
+checklistcheck.id: 1000259
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Trend Formation Length
+checklistcheck.description: Positive if trend formation (down trend before the pattern) is between 3 and 6 months, neutral if it is less than 3 months and otherwise negative.
+%%
+checklistcheck.id: 1000260
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Consolidation Region
+checklistcheck.description: Negative if there is a horizontal consolidation region before the pattern, otherwise positive.
+%%
+checklistcheck.id: 1000261
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Yearly Price Range
+checklistcheck.description: Positive if price is in the highest third of its yearly range. Negative if price is in the lowest or middle third.
+%%
+checklistcheck.id: 1000262
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Tall or Short Pattern
+checklistcheck.description: Positive if height is taller than 20% of the breakout price.
+%%
+checklistcheck.id: 1000263
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Higher Right Top
+checklistcheck.description: Score positive if right bottom is lower than 2nd bottom.
+%%
+checklistcheck.id: 1000264
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Volume Trend
+checklistcheck.description: Score positive if the volume trend is rising, score negative if the volume trend is declining.
+%%
+checklistcheck.id: 1000265
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Breakout Volume
+checklistcheck.description: Score positive if the break out volume is above average, score negative if the break out volume is below average.
+%%
+checklistcheck.id: 1000266
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Gaps
+checklistcheck.description: Positive if price gap on breakout. Negative if no price gap.
+%%
+checklistcheck.id: 1000267
+checklistcheck.checklisttypeid: 1000028
+checklistcheck.type: 1
+checklistcheck.name: Market Trend
+checklistcheck.description: Negative if market is rising, positive if market is falling.
+%%
+checklistcheck.id: 1000258
+checklistcheck.checklisttypeid: 1000027
+checklistcheck.type: 1
+checklistcheck.name: Market Capitalization
+checklistcheck.description: Positive for small caps, negative for large caps, neutral for mid caps.
+%%

@@ -1,0 +1,125 @@
+.TH TSINSTANT 1 "January 10, 2006"
+.SH NAME
+tsinstant \- take the instantaneous fraction of change of a time series
+.SH SYNOPSIS
+.nf
+tsinstant [-a] [-r] [-s] [-t] [-u] [-v] [filename]
+.fi
+.SH DESCRIPTION
+Tsinstant is for finding the instantaneous fraction of
+change in a time series. The value of a sample in the time
+series is subtracted from the previous sample in the time
+series, and divided by the value of the previous
+sample. For Brownian motion, random walk fractals, the
+absolute value of the instantaneous fraction of change is
+also the root mean square of the instantaneous fraction of
+change, (the absolute value of the normalized increments,
+when averaged, is related to the root mean square of the
+increments by a constant. If the normalized increments are
+a fixed increment, the constant is unity. If the
+normalized increments have a Gaussian distribution, the
+constant is ~0.8 depending on the accuracy of of "fit" to
+a Gaussian distribution). Squaring this value is the
+average of the instantaneous fraction of change, and
+adding unity to the absolute value of the instantaneous
+fraction of change, and dividing by two, is the Shannon
+probability of the instantaneous fraction of change. The
+values are printed to stdout.
+
+For fractional Brownian motion time series, substantial
+filtering will be required of the output time series. The
+programs tspole(1) and tsavgwindow(1) may be used, perhaps
+in a cascade fashion, to implement a filtering technique,
+which potentially could be used in an adaptive
+computational system. Markov techniques may also be
+applicable. Note that in fractal time series, the short
+term correlation, say less than three time units as a
+typical value, is quite high-this can be verified by the
+tshurst(1) program, eg., filtering, to find the average
+value, over a few time units, may be an advantageous
+strategy in adaptive computational control systems.
+
+The input file structure is a text file consisting of
+records, in temporal order, one record per time series
+sample.  Blank records are ignored, and comment records
+are signified by a '#' character as the first non white
+space character in the record. Data records must contain
+at least one field, which is the data value of the sample,
+but may contain many fields-if the record contains many
+fields, then the first field is regarded as the sample's
+time, and the last field as the sample's value at that
+time.
+.SH OPTIONS
+.TP
+.B -a
+Print the instantaneous average of the increment.
+.TP
+.B -r
+Print the instantaneous root mean square of the increment.
+.TP
+.B -s
+Print the instantaneous Shannon probability of the increment.
+.TP
+.B -t
+Sample's time will be included in the output time series.
+.TP
+.B -u
+Print the instantaneous sign of the unity of the increment.
+.TP
+.B -v
+Print the version and copyright banner of the program.
+.TP
+.B filename
+Input filename.
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsderivative(1), tshcalc(1), tshurst(1), tsintegrate(1),
+tslogreturns(1), tslsq(1), tsnormal(1), tsshannon(1),
+tsblack(1), tsbrownian(1), tsdlogistic(1), tsfBm(1),
+tsfractional(1), tsgaussian(1), tsintegers(1),
+tslogistic(1), tspink(1), tsunfairfractional(1),
+tswhite(1), tscoin(1), tsunfairbrownian(1), tsfraction(1),
+tsshannonmax(1), tschangewager(1), tssample(1), tsrms(1),
+tscoins(1), tsavg(1), tsXsquared(1), tsstockwager(1),
+tsshannonwindow(1), tsmath(1), tsavgwindow(1), tspole(1),
+tsdft(1), tsbinomial(1), tsdeterministic(1), tsnumber(1),
+tsrmswindow(1), tsshannonstock(1), tsmarket(1),
+tsstock(1), tsstatest(1), tsunfraction(1),
+tsshannonaggregate(1), tsinstant(1), tsshannonvolume(1),
+tsstocks(1), tsshannonfundamental(1), tstrade(1),
+tstradesim(1), tsrunlength(1), tsunshannon(1),
+tsrootmean(1), tsrunmagnitude(1), tskurtosis(1),
+tskurtosiswindow(1), tsrootmeanscale(1),
+tsscalederivative(1), tsgain(1), tsgainwindow(1)
+tscauchy(1), tslognormal(1), tskalman(1), tsroot(1),
+tslaplacian(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+----------------------------------------------------------------------
+.fi

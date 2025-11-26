@@ -1,0 +1,85 @@
+<form method="POST" action="$save_page" id="portfolio">
+  <input type="hidden" name="awf_setvar" id="awf_setvar" value="false">
+  <table width="60%" class="awf_form" id="page1">
+    <tr>
+      <th colspan="3">Edit Portfolio</th>
+    </tr>
+    <tr><td colspan="3" align="left"><ul class="awf_tabbed_selector"><li class="awf_tabbed_selected"><a href="#">Security Information</a></li><li><a href="#" onclick="javascript:document.getElementById('page1').style.display='none';document.getElementById('page2').style.cssText='awf_form';document.getElementById('page2').style.width='60%';">Stop Loss &amp; Target</a></li></ul></td></tr>
+    <tr>
+      <td><b>Ticker Symbol:</b></td>
+      <td colspan="2"><input type="text" name="portfolio.symbol" value="$portfolio.symbol" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td colspan="2"><select name="portfolio.market" onchange="javascript:document.getElementById('portfolio').action='';document.getElementById('awf_setvar').value='true';document.getElementById('portfolio').submit();">$market_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Portfolio:</b></td>
+      <td colspan="2"><select name="portfolio.portfolio_id">$portfolio_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Sector:</b></td>
+      <td colspan="2"><select name="portfolio.sector">$sector_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+      <td><input type="text" name="portfolio.name" value="$portfolio.name" class="awf_inputtext"></td>
+      <td><small>(leave blank to auto-detect)</small></td>
+    </tr>
+    <tr>
+      <td><b>Date Added:</b></td>
+      <td colspan="2"><select name="portfolio.date-month">$month_options</select>/<select name="portfolio.date-day">$day_options</select>/<select name="portfolio.date-year">$year_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Risk Rating:</b></td>
+      <td colspan="2"><select name="portfolio.rating">$rating_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Category:</b></td>
+      <td><input type="text" name="portfolio.category" value="$portfolio.category" class="awf_inputtext"></td>
+      <td><img src="images/help_small.png" alt="help" $tooltip.portfolio_category></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+    <table width="60%" class="awf_form" id="page2" style="display: none">
+    <tr>
+      <th colspan="3">Edit Portfolio</th>
+    </tr>
+    <tr><td colspan="3" align="left"><ul class="awf_tabbed_selector"><li><a href="#" onclick="javascript:document.getElementById('page2').style.display='none';document.getElementById('page1').style.cssText='awf_form';document.getElementById('page1').style.width='60%';">Security Information</a></li><li class="awf_tabbed_selected"><a href="#">Stop Loss &amp; Target</a></li></ul></td></tr>
+    <tr>
+      <td><b>Target Price:</b></td>
+      <td><input type="text" name="portfolio.target_price" value="$portfolio.target_price_foreign" class="awf_inputtext"></td>
+      <td><img src="images/help_small.png" alt="help" $tooltip.targetprice></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input type="checkbox" name="set_target_price_alert">&nbsp;Set Alert at this target price.</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><b>Stop Loss:</b></td>
+      <td><input type="text" name="portfolio.stoploss_price_foreign" value="$portfolio.stoploss_price_foreign" class="awf_inputtext" id="stopprice" $stoploss_price_disabled></td>
+      <td><img src="images/help_small.png" alt="help" $tooltip.stoploss></td>
+    </tr>
+    <tr>
+      <td>or as percentage:</td>
+      <td><input type="text" name="portfolio.stoploss_percent" value="$portfolio.stoploss_percent" class="awf_inputtext">&nbsp;%</td>
+      <td>(loss as a percentage of current price e.g. 10% means the current price less 10%)</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input type="checkbox" name="trailing_stop_loss" onclick="javascript:document.getElementById('stopprice').value='0.00';document.getElementById('stopprice').disabled=true" $trailing_stop_loss_checked>&nbsp;Trailing stop loss</td>
+      <td><img src="images/help_small.png" alt="help" $tooltip.trailing_stoploss></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td><input type="checkbox" name="set_stoploss_alert">&nbsp;Set Alert for stop loss</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

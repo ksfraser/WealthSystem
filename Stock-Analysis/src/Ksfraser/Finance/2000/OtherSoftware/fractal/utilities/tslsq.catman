@@ -1,0 +1,343 @@
+TSLSQ(1)                                                              TSLSQ(1)
+
+
+
+NNAAMMEE
+       tslsq - make a least squares fit time series from a time series
+
+SSYYNNOOPPSSIISS
+       tslsq [-c start] [-e] [-f n] [-i] [-L] [-l] [-m n] [-o]
+             [-p] [-R] [-S] [-s] [-t] [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tslsq is for making a least squares fit time series from a time series.
+
+       The form of the best fit is b + at, for linear least squares fit,  e^(b
+       +  at), w^(x + t), or 2^(y + zt) for exponential least squares fit, c /
+       (1 + e^(-(b + at))) for the logistic least squares fit, sqrt (b  +  at)
+       for  the square root fit, log (b + at) for the natural logarithmic fit,
+       and and (b + at)^2 for the square law fit.  (The logistic fit should be
+       regarded as an experimental algorithm, and use should be attempted only
+       with a thorough and meticulous verification of the results.)
+
+       The input file structure is a text file consisting of records, in  tem-
+       poral  order,  one  record  per  time series sample.  Blank records are
+       ignored, and comment records are signified by a ’#’  character  as  the
+       first  non  white space character in the record. Data records must con-
+       tain at least one field, which is the data value of the sample, but may
+       contain  many fields-if the record contains many fields, then the first
+       field is regarded as the sample’s time, and the last field as the  sam-
+       ple’s value at that time.
+
+       Note: The derivation for exponential least squares fit is:
+
+               1) input the value of the time series for each
+               time interval, value(t), and store the log of the
+               value, ie.:
+
+                   y[t] = log (value(t));
+
+               2) compute the least squares fit to y[t], a + bt,
+               then:
+
+                   log (y[t]) = b + at
+
+               3) exponentiate the values in y[t]:
+
+                   fit (t) = exp (b) * exp (at)
+
+                           = exp (b + at)
+
+               where fit (t) is the least squares exponential fit
+
+           Note: The derivation for power least squares fit is:
+
+               1) compute the least squares fit, as above
+
+               2) since exp (b + at) = pow (exp (a), (b / a) +
+               t),
+
+                   fit (t) = pow (x, y + t)
+
+               where x = exp (a), and y = b / a, and fit is the
+               least squares power fit, and is identical to the
+               least squares exponential fit, above, but is
+               expedient in financial calculations
+
+           Note: The derivation for the binary least squares fit
+           is:
+
+               1) compute the least squares fit, as above
+
+               2) since exp (b + at) = pow (2, x), where
+
+                   b + at = x log (2)
+
+                   fit (t) = pow (2, x)
+
+               where (b / log (2)) + ((a / log (2)) * t), and fit
+               is the least squares binary fit, and is identical
+               to the least squares exponential fit, above, but
+               is expedient in financial calculations
+
+       Note: The derivation for logistic least squares fit is:
+
+           As references on the logistic function, see, "The Art
+           of Modeling Dynamic Systems", Foster Morrison, John
+           Wiley & Sons, New York, New York, 1991, pp 100, or,
+           "Predictions", Theodore Modis, Simon & Schuster, New
+           York, New York, 1992, pp 229.
+
+           As a reference on Newton-Raphson Method of root
+           finding, see "Numerical Recipes in C: The Art of
+           Scientific Computing," William H. Press, Brian
+           P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+           Cambridge University Press, New York, 1988, ISBN
+           0-521-35465-X, pp 270,
+
+                             c
+           1) n(t) = -------------------
+                     1 + exp (-(b + at))
+
+                                      c
+           2) 1 + exp (-(b + at)) = ------
+                                     n(t)
+
+                                 c
+           3) exp (-(b + at)) = ---- - 1
+                                n(t)
+
+                                 c - n(t)
+           4) exp (-(b + at)) = ---------
+                                  n(t)
+
+                               n(t)
+           4) exp (b + at) = --------
+                             c - n(t)
+
+           5) ln (n(t)) - ln (c - n(t)) = b + at
+
+           which can be used for a least squares approximation of
+           b + at, and for Newton-Raphson’s Method of finding the
+           roots:
+
+           6) F(a) = ln (n(t)) - ln (c - n(t)) - b - at = 0
+
+           7) F(b) = ln (n(t)) - ln (c - n(t)) - b - at = 0
+
+           8) F(c) = ln (n(t)) - ln (c - n(t)) - b - at = 0
+
+              dF(a)
+           9) ----- = - t
+               da
+
+               dF(b)
+           10) ----- = - 1
+                da
+
+               dF(c)        1
+           11) ----- = - --------
+                dc       c - n(t)
+
+           12) a    = a  + [ln (n(t)) - ln (c  - n(t)) -
+                n+1    n                     n
+
+                      b - at][t]
+
+           13) b    = b  + [ln (n(t)) - ln (c  - n(t)) - b - at]
+                n+1    n                     n
+
+           or
+
+           14) b   - b  = [ln (n(t)) - ln (c  - n(t)) - b - at]
+                n+1   n                     n
+
+                          F(c)
+           15) c   = c  - -----
+                n+1   n   dF(c)
+                          -----
+                           dc
+
+                   = c  + [ln (n(t)) - ln (c  - n(t)) - b - at] *
+                      n                     n
+
+                     [c  - n(t)]
+                       n
+
+           therefore, by combining equations 14) and 15)
+
+           16) c    = c  + [b    - b ][c  - n(t)]
+                n+1    n     n+1    n   n
+
+           which is a statement of how c changes for changes in b
+           in the process of convergence for the Newton-Raphson’s
+           Method of finding the roots, which leads to the
+           strategy for the iterative loop use
+
+               1) ln (n(t)) - ln (c  - n(t)) = b + at
+                                   n
+
+               to find the least squares fit for b and at, using
+               the original data for n(t), and the iteration
+               value for c , and then
+                          n
+
+               2) c    = c  + [b    - b ][c  - n(t)]
+                   n+1    n     n+1    n   n
+
+               to find the next value of c    for the next
+                                          n+1
+
+               iteration of equation 1), using the differences in
+               b, and the original data for n(t)-if b    - b  is
+                                                     n+1    n
+
+               sufficiently small, convergence has has been
+               attained, and the iterations are finished, with
+               the values of a, b, and c
+
+           note that the average of the term c  - n(t) is
+                                              n
+
+                       1
+           c  - n(t) = - [c  - n(t ) + c  - n(t ) + c  - n(t ) +
+            n          t   n      0     n      2     n      3
+
+                       ... + c  - n(t )]
+                              n      n
+
+                               k
+                            1 ---
+                     = c  + - \   (n(t))
+                        n   k /
+                              ---
+                              t = 0
+
+           where k is the number of samples in the time series
+
+           note that an initial estimate of c must be made-an
+           appropriate choice is that maximum value of n(t), plus
+           a sufficiently large amount to protect the log()
+           function in equation 1) for the initial iteration, as
+           a reasonable choice, since
+
+                c             (-(b + at))
+               ---- = 1 + exp
+               n(t)
+
+               and both b and a are zero,
+
+                c             0
+               ---- = 1 + exp
+               n(t)
+
+               or
+
+               c = 2n(t)
+
+               where n(t) is taken as the maximum n(t) in the
+               time series, or
+
+                        |
+               c = 2n(t)|
+                        | max
+
+               unfortunately, if the time series data set
+               constitutes the rising exponential section of the
+               logistic function, this assumption can cause the
+               iterations to converge to a larger value of c
+
+           note, additionally, that since the derivative of a
+           time series is straight forward, ie., subtract the nth
+           value from the n plus one value, that additional
+           information is available
+
+OOPPTTIIOONNSS
+       --cc ssttaarrtt
+              Start value in logistic fit.
+
+       --ee     Use exponential fit of the form, e^(b + at) = x^(y + t) = 2^(p +
+              qt).
+
+       --ff nn   Increase c by n under floating point exception in  the  logistic
+              fit.
+
+       --ii     Print convergence information to stderr in logistic fit.
+
+       --LL     Use natural logarithm fit of the form, ln (b + at).
+
+       --ll     Use logistic fit of the form, c / (1 + e^(-(b + at))).
+
+       --mm nn   Where n is 0, 1, 2, 3, 4, or 5 = convergence  method in logistic
+              fit.
+
+       --oo     Subtract the least squares fit from the output time series.
+
+       --pp     Output only the formula for the least square fit.
+
+       --RR     Use square root fit of the form, sqrt (b + at).
+
+       --SS     Use square law fit of the form, (b + at)^2.
+
+       --ss     Scale the output to the  magnitude  of  the  least  squares  fit
+              (implies -o).
+
+       --tt     Sample’s time will be included in the output time series.
+
+       --vv     Print the version and copyright banner of the program.
+
+       ffiilleennaammee
+              Input filename.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.  The
+       logistic fit should be regarded as an experimental algorithm,  and  use
+       should be attempted only with a thorough and meticulous verification of
+       the results.
+
+SSEEEE AALLSSOO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1), tsstockwager(1), tsshannonwindow(1),  tsmath(1),  tsavg-
+       window(1),   tspole(1),  tsdft(1),  tsbinomial(1),  tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),     tsshannonstock(1),     tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),    tsscalederivative(1),    tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 17, 2006                       TSLSQ(1)

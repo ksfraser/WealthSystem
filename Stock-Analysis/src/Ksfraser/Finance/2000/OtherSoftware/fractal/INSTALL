@@ -1,0 +1,42 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+This directory is the top level directory for "Notes on the Fractal
+Analysis of Various Market Segments in the North American Electronics
+Industry." This file explains how to reconstruct and install the
+necessary programs and data for the documenation in the "doc"
+directory.
+
+If a manual top down compile is necessary:
+
+    1) cd simulation; make; cd ..
+    2) cd utilities; make; cd test; make; cd ../../
+    3) cd simulation/test; make; cd ../../
+    4) cd markets; make; cd ..
+    5) cd doc/graphics; make; cd ../../
+    6) cd doc; make; cd ..
+    7) cd doc; make fractal.ps; cd ..
+
+The documentation will require that all market data be
+compiled in the ../markets directory, and, additionally all programs
+and test cases be compiled in the ../simulation, ../simulation/test,
+../utilities, and ../utilities/test.

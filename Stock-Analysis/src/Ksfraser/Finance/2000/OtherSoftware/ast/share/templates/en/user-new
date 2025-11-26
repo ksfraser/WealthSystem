@@ -1,0 +1,22 @@
+<form method="POST" action="$save_page">
+  <table align="center" class="awf_form">
+    <tr>
+      <th colspan="2">Editing User</th>
+    </tr>
+    <tr>
+      <td><b>Username:</b></td>
+      <td><input type="text" class="awf_inputtext" name="user.username" value="$user.username"></td>
+    </tr>
+    <tr>
+      <td><b>Full Name:</b></td>
+      <td><input type="text" class="awf_inputtext" name="user.fullname" value="$user.fullname"></td>
+    </tr> 
+    <tr>
+      <td><b>Email Address:</b></td>
+      <td><input type="text" class="awf_inputtext awf_wide_input" name="email"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

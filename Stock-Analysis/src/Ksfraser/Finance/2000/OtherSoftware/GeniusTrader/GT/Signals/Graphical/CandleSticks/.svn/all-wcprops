@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/geniustrader/!svn/ver/526/trunk/GT/Signals/Graphical/CandleSticks
+END
+BearishEngulfingLine.pm
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Graphical/CandleSticks/BearishEngulfingLine.pm
+END
+BullishHarami.pm
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svnroot/geniustrader/!svn/ver/526/trunk/GT/Signals/Graphical/CandleSticks/BullishHarami.pm
+END
+BullishEngulfingLine.pm
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Graphical/CandleSticks/BullishEngulfingLine.pm
+END
+Hammer.pm
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Graphical/CandleSticks/Hammer.pm
+END
+InvertedHammer.pm
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Graphical/CandleSticks/InvertedHammer.pm
+END
+BearishHarami.pm
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svnroot/geniustrader/!svn/ver/524/trunk/GT/Signals/Graphical/CandleSticks/BearishHarami.pm
+END
+GravestoneDoji.pm
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Graphical/CandleSticks/GravestoneDoji.pm
+END

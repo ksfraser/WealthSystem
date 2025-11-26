@@ -1,0 +1,160 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: verification.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: verification.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Qualitative Verification of Fixed Increment Approximation Analysis}
+        \label{\SETLABEL:QVA}
+
+        \subidx{\market}{verification of analysis}
+        \subidx{verification}{analysis}
+        \subidx{analysis}{verification}
+        \subidx{quality}{of analysis}
+        \subidx{verification}{of methodology}
+        \subidx{methodology}{verification of}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+
+        This section evaluates various values based on the ``average''
+        of the normalized increments presented in
+        Figure~\ref{\SETLABEL:TFA}. These values are an approximation
+        to a, probably, complex process with a distribution shown in
+        Figure~\ref{\SETLABEL:TF}. These values will be used in a
+        fixed increment Brownian fractal analysis of the {\market},
+        and may, or may not, provide adequate accuracy for
+        projections.
+
+        The data in this section is presented in tabular form in
+        sections~\ref{\SETLABELREF:VI1} and~\ref{\SETLABELREF:VI2}.
+        As a subjective evaluation of the ``quality'' of the analysis
+        of the {\market}, from Chapter~\ref{methodology},
+        Equation~\ref{metricvalues1}, and using the mean and root mean
+        square values of the normalized increments of the time series
+        data presented in Figure~\ref{\SETLABEL:TS} from
+        Figure~\ref{\SETLABEL:TF}, and the Shannon probability as
+        calculated by counting the total number of {\timescale}s that
+        the {\market} movement was positive, as presented in
+        Section~\ref{\SETLABEL:MAXSHANNON}:
+
+        \begin{eqnarray}
+                  P & \approx & \frac{\frac{avg}{rms} + 1}{2}\\
+            {\pmax} & \approx & \frac{\frac{\datafractionmean}{\datafractionrms} + 1}{2}\\
+            {\pmax} & \approx & {\avgrms}
+            \label{\SETLABEL:AVGS}
+        \end{eqnarray}
+
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \noindent and comparing these values to the Shannon
+        probability, as found by the {\it tsshannonmax}\/ program, which
+        iterates for a maximum:
+
+        \begin{eqnarray}
+            {\pmax} \approx {\avgrms} \approx {\shannonmax}
+        \end{eqnarray}
+
+        \subidx{logarithmic}{returns}
+        \subidx{returns}{logarithmic}
+        In addition, the different methods of calculating the
+        logarithmic returns, presented in Section~\ref{\SETLABEL:FS},
+        should be compared. The four methods used were the mean of
+        Figure~\ref{\SETLABEL:TF}, the constant in the least squares
+        approximation to Figure~\ref{\SETLABEL:TF}, the least squares
+        exponential approximation to Figure~\ref{\SETLABEL:TS}, and
+        the logarithmic returns of Figure~\ref{\SETLABEL:TS}, derived
+        as the mean of the logarithms of the quotients of the
+        increments. The values for each of the methods are,
+        respectively:
+
+        \begin{equation}
+            \datafractionmeanbits \approx \datafractionconstantbits \approx \datatslsqepbits \approx \logreturns
+        \end{equation}
+
+        It is implied in Section~\ref{\SETLABEL:FS},
+        Subsection~\ref{\SETLABEL:SP} and in
+        Section~\ref{\SETLABEL:TSUNFAIRBROWNIAN} that, a Brownian
+        motion with fixed increments fractal may ``model'' the
+        {\market}. Using Equation~\ref{stddev9} from
+        Chapter~\ref{general}, Section~\ref{abmfi}:
+
+        \begin{eqnarray}
+                                    rms \left(2P - 1\right) & \approx & \frac{\sigma \left(2P - 1\right)}{2 \sqrt{P\left(1 - P\right)}}\\
+            \datafractionrms \left(2 \cdot \pmax - 1\right) & \approx & \frac{\datafractionstddev \left(2 \cdot \pmax - 1\right)}{2\sqrt{\pmax \left(1 - \pmax\right)}}\\
+                       \datafractionrms \cdot \twopminusone & \approx & \datafractionstddev \cdot \twopx\\
+                                                      \rmsp & \approx & \sigmap
+        \end{eqnarray}
+
+        \noindent and, equating to the mean:
+
+        \begin{equation}
+            \datafractionmean \approx \rmsp \approx \sigmap
+        \end{equation}
+
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \noindent where, as in Equation~\ref{\SETLABEL:AVGS} using the
+        mean, root mean square, and standard deviation values of the
+        normalized increments of the time series data presented in
+        Figure~\ref{\SETLABEL:TS} from Figure~\ref{\SETLABEL:TF}, and
+        the Shannon probability as calculated by counting the total
+        number of {\timescale}s that the {\market} movement was
+        positive, as presented in Section~\ref{\SETLABEL:MAXSHANNON}.
+
+        As a final qualitative comparison, the absolute value of the
+        normalized increments should be the same as the root mean
+        square value\footnote{The absolute value of the normalized
+        increments, when averaged, is related to the root mean square
+        of the increments by a constant. If the normalized increments
+        are a fixed increment, the constant is unity. If the
+        normalized increments have a Gaussian distribution, the
+        constant is $\approx 0.8$ depending on the accuracy of of
+        ``fit'' to a Gaussian distribution.}, where the absolute value
+        is presented in Figure~\ref{\SETLABEL:TFA}, and the root mean
+        square value is presented in Figure~\ref{\SETLABEL:TF}:
+
+        \begin{equation}
+            \datafractionabsmean \approx \datafractionrms
+        \end{equation}
+
+        Note, that if the {\market} could be ``modeled'' as a Brownian
+        motion with fixed increments fractal, then the standard
+        deviation of the absolute value of the normalized increments
+        of the time series data presented in Figure~\ref{\SETLABEL:TS}
+        from Figure~\ref{\SETLABEL:TF} should be zero. It is
+        $\datafractionabsstddev$.
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

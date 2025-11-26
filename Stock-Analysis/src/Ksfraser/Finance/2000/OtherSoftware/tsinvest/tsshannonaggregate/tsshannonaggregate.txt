@@ -1,0 +1,155 @@
+TSSHANNONAGGREGATE(1)					 TSSHANNONAGGREGATE(1)
+
+
+
+NAME
+       tsshannonaggregate - Calculate the aggregate Shannon probability
+
+SYNOPSIS
+       tsshannonaggregate [-p] [-v] Probability_1 Probability_2 ...
+
+DESCRIPTION
+       Tsshannonaggregate is for calculating the aggregate Shannon probability
+       of many concurrent Shannon probabilities.
+
+       Consider gambling on two unfair coin tossing games, at the  same  time,
+       one  game  having a Shannon probability of 0.55, and the other having a
+       Shannon probability of 0.65. Assuming that the coins in both games  are
+       tossed  concurrently  for each iteration of the game, the combinatorics
+       of the possible outcomes of wins and losses in each iteration are:
+
+	   outcomes probability fraction    average
+
+	   ll:	    0.157500  * -0.400000 = -0.063000
+	   wl:	    0.192500  * -0.200000 = -0.038500
+	   lw:	    0.292500  *  0.200000 =  0.058500
+	   ww:	    0.357500  *  0.400000 =  0.143000
+
+       where 'l' is a loss, and 'w' is a win, and the  probability  is	calcu-
+       lated  by multiplying the individual probabilities of a loss or win for
+       the respective coins, ie., for both coins to win, the probability would
+       be  0.55 * 0.65 = 0.3575.  (1 - P is used for the probability of a loss
+       for each coin.) The fraction is the fraction of	capital  waged	on  an
+       individual  game, and is computed as optimal, from the equation 2P - 1,
+       where P is the Shannon probability of the individual unfair coin and is
+       either  0.55  or  0.65.	The  average is computed as the product of the
+       probability and the fraction.
+
+       What this means is that 35.75% of the time, a win-win outcome  will  be
+       observed  in  the  iterated  games, and 15.75% of the time, a lose-lose
+       outcome will be observed. The amount won in the win-win	scenario  will
+       be  the sum of the fractions wagered on each coin, which is (2 * 0.55 -
+       1) + (2 * 0.65 - 1) = 0.1 + 0.3 = 0.4. The product of this fraction and
+       probability  is	the  contribution over many plays to the capital do to
+       this outcome. Summing these averages for the different outcomes is  the
+       average	over  many  plays of the capital growth by playing both games,
+       and is numerically identical to the sum of the average of  the  normal-
+       ized increments of both games.
+
+       Since the average and root mean square of the normalized increments are
+       related by:
+
+	   rms = sqrt (average)
+
+       squaring the average will be the root mean  square  of  the  normalized
+       increments, or:
+
+	   Average  rms      Shannon probability
+
+	   0.100000 0.316228 0.658114
+
+       where the Shannon probability, P, is computed by:
+
+	       rms + 1	 1.316228
+	   P = ------- = -------- = 0.658114
+		  2	    2
+
+       The  implication  is  that the two concurrent unfair coin tossing games
+       could be "modeled" as a single  game  with  a  Shannon  probability  of
+       0.658114.
+
+       Although  it is generally more expedient just to sum, root mean square,
+       the individual root mean square of the normalized  increments  of  each
+       game,  (where f = rms = 2P - 1,) and then compute the Shannon probabil-
+       ity by:
+
+				     2			 2
+	       sqrt (((2 * 0.55) - 1)  + ((2 * 0.65) - 1))  + 1
+	   P = ------------------------------------------------
+				     2
+
+			2      2
+	       sqrt (0.1  + 0.3 )  + 1	   sqrt (0.01 + 0.09) + 1
+	     = -----------------------	 = ----------------------
+			  2			      2
+
+	       sqrt (0.1) + 1	0.316227766 + 1   1.316227766
+	     = -------------- = --------------- = -----------
+		     2		       2	       2
+
+	     = 0.658113883
+
+       this program does it with combinatorics.
+
+OPTIONS
+       Probability_1
+	      First Shannon probability.
+
+       Probability_2
+	      Second Shannon probability.
+
+       -p     Verbose print.
+
+       -v     Print the version and copyright banner of the program.
+
+
+       WARNINGS
+
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1), tsstockwager(1), tsshannonwindow(1),  tsmath(1),	tsavg-
+       window(1),   tspole(1),	tsdft(1),  tsbinomial(1),  tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),	   tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 18, 2006 	 TSSHANNONAGGREGATE(1)

@@ -1,0 +1,28 @@
+<table class="awf_form" width="100%">
+  <tr>
+    <th colspan="5"><b>$name</b></th>
+    <td><a href="javascript:ast_popup('$worksheet_page',400,100);"><img src="images/worksheet.png" alt="worksheet">&nbsp;Add to Worksheet</a></td>
+    <td><a href="$news_page"><img src="images/news.png" alt="news">&nbsp;News</a></td>
+  </tr>
+  <tr>
+    <td><span class="awf_small"><b>Last Price:</b></span></td>
+    <td><span class="awf_small"><b>Change:</b></span></td>
+    <td><span class="awf_small"><b>Change %:</b></span></td>
+    <td><span class="awf_small"><b>PE Ratio:</b></span></td>
+    <td><span class="awf_small"><b>Yield:</b></span></td>
+    <td><a href="javascript:ast_popup('$note_page',700,400);" $tooltip.notes><img src="images/memo.png" alt="memo">&nbsp;Take Memo</a> [<a href="javascript:ast_popup('$noteview_page',700,400);">View]</a></td>
+    <td><a href="$alerts_page"><img src="images/alerts.png" alt="alerts">&nbsp;Alerts</a></td>
+  </tr>
+  <tr>
+    <td><span class="awf_colour_$colour"><h2>$rtquote.price</h2></span></td>
+    <td><span class="awf_colour_$colour"><h2>$rtquote.change</h2></span></td>
+    <td><span class="awf_colour_$colour"><h2>$changep %</h2></span></td>
+    <td><h2>$pe_ratio</h2></td>
+    <td><h2>$yield %</h2></td>
+    <td><a href="$patterns_page"><img src="images/pattern.png" alt="patterns">&nbsp;Pattern Scanner</a></td>
+    <td><a href="$splits_page"><img src="images/splits.png" alt="splits">&nbsp;Splits</a></td>
+  </tr>
+  <tr>
+    <td colspan="7"><span id="ast_chart_info">(hover over the chart to display price information)</span></td>
+  </tr>
+</table><br>

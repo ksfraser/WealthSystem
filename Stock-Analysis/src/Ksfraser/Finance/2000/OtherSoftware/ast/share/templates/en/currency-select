@@ -1,0 +1,13 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+     <tr>
+      <th class="awf_column_heading"><b>Select your default currency:</b></th>
+    </tr>
+    <tr>
+      <td><select name="currency">$currency_options</select></td>
+    </tr>
+    <tr>
+      <td align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

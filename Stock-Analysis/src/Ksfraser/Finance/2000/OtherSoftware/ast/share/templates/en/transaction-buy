@@ -1,0 +1,49 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="transaction.type" value="1">
+  <input type="hidden" name="transaction.price2" value="0">
+  <input type="hidden" name="transaction.portfolio_id" value="$portfolio_id">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Buy Shares</th>
+    </tr>
+    <tr>
+      <td><b>Buy Shares In:</b></td>
+      <td>$company_name</td>
+    </tr>
+    <tr>
+      <td><b>Purchase Date:</b></td>
+      <td><select name="transaction.date-month">$month_options</select>/<select name="transaction.date-day">$day_options</select>/<select name="transaction.date-year">$year_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Number Of Shares:</b></td>
+      <td><input name="transaction.quantity" value="$transaction.quantity" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Price Paid:</b></td>
+      <td><input name="transaction.price" value="$transaction.price" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Currency:</b></td>
+      <td><select name="transaction.currency_id">$currency_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Exchange Rate:</b></td>
+      <td><input name="transaction.exchange_rate" value="$transaction.exchange_rate" class="awf_inputtext">&nbsp;<span class="awf_small">Leave zero or blank to automatically detect</span></td>
+    </tr>
+    <tr>
+      <td><b>Commission:</b></td>
+      <td><input name="transaction.commission" value="$transaction.commission" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Decision Date:</b></td>
+      <td><select name="transaction.dec_date-month">$dec_month_options</select>/<select name="transaction.dec_date-day">$dec_day_options</select>/<select name="transaction.dec_date-year">$dec_year_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Decision Price:</b></td>
+      <td><input name="transaction.dec_price" value="$transaction.dec_price" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Buy">
+    </tr>
+  </table>
+</form>

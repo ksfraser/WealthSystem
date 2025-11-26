@@ -1,0 +1,97 @@
+AST Installation
+------------------------------------------------------------------------------
+
+1. Automatic Installation
+
+   On most systems AST can be installed by running install.pl. You must 
+install gnuplot separately. install.pl will compile ast, install it, modify 
+your crontab and setup apache.
+
+2. Manual Installation
+
+   You may want to perform the manual installation if the install.pl script 
+doesn't work for you (e.g. if you don't use apache) or if you want to
+understand how AST is setup. You also need to follow this method if you
+want to use different configure options than the install.pl script selects
+for you The following programs are required to compile AST:
+
+TA-lib (http://ta-lib.org)
+libxml2 (libxml2-dev on debian, libxml2-devel on Suse/Red Hat)
+curl (libcurl3-dev on debian, curl-devel on Suse/Red Hat)
+gnuplot
+gd (libgd2-dev on debian, gdlib-devel on Suse/Red Hat)
+zlib (optional)
+mhash (optional)
+sendmail (runtime dependancy, install by default on most systems)
+
+The sources for AST are in the src directory. Configure accepts the following
+options:
+
+--disable-nls	Disable National Language Support (Translations)
+--enable-sql	Enables SQL support, for quotes
+--enable-import Enables importing database from AST-0.1.9
+--without-zlib	Disables compression support (if zlib is not installed)
+--without-mhash Disables support for mhash (requires GNU crypt instead)
+
+You probably also want to set your CXXFLAGS for some optimization. Once you
+have selected all of your options, go into the src and run configure:
+
+cd src
+CXXFLAGS="-O2 -g0 -march=pentium4" ./configure --without-mhash --disable-nls
+
+Then make ast and copy it into the root directory.
+
+make -j3
+strip src/ast
+cp src/ast ../
+
+The next thing you need to do is locate your web root.
+Here is a list of common webroots:
+
+DISTRIBUTION		WEB ROOT
+Gentoo Linux		/var/www/localhost/htdocs
+SUSE Linux 9, 10	/srv/www/htdocs
+Ubuntu, Debian		/var/www
+Fedora, Red Hat		/var/www/html
+
+You can also use the cgi-bin in your home directory (~/public_html/cgi-bin).
+ If you are using a hosting provider, you will want to use your cgi-bin 
+directory.
+
+Once you have determined your web root, copy all files from the AST tarball 
+(including your compiled ast executable) into a directory in your webroot.
+
+mkdir -p /var/www/localhost/htdocs/ast
+cp -R * /var/www/localhost/htdocs/ast/
+
+You need to make AST setuid some user, because it will be run by many different
+users and the files need to be compatible with each other. Using your web 
+server user id is probably the best way to do it. If you are using apache, 
+you can find this in the configuration file, the settings User and Group. If 
+you are using your public_html directory this is already done for you.
+
+cd /var/www/localhost/htdocs/ast
+chown apache:apache ast
+chmod 6755 ast
+
+Finally you need to make your new directory able to execute CGI scripts. If 
+you are using apache, you should add this to your configuration file:
+
+<Directory "/var/www/localhost/htdocs/ast">
+    AllowOverride All
+    Options ExecCGI
+    SetHandler cgi-script
+    DirectoryIndex ast
+</Directory>
+
+To make these settings take effect, you must restart the web server:
+
+/etc/init.d/apache2 restart
+
+The last thing you need to do is load up the crontab file which will execute scheduled events:
+
+crontab /var/www/localhost/htdocs/ast/share/example/crontab
+
+Make sure to merge these files if you already have something in your crontab!
+
+Enjoy!

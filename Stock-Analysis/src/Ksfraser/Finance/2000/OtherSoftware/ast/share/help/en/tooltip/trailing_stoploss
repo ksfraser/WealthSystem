@@ -1,0 +1,2 @@
+@caption Trailing Stop Loss
+A trailing stop loss is a percent stop loss that only moves up. A 10% trailing stop loss will always be set at 10% below the highest close the security has had.

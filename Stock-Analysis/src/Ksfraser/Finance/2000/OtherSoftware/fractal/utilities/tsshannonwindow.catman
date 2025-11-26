@@ -1,0 +1,297 @@
+TSSHANNONWINDOW(1)                                          TSSHANNONWINDOW(1)
+
+
+
+NNAAMMEE
+       tsshannonwindow  -  find  the  windowed  Shannon  probability of a time
+       series
+
+SSYYNNOOPPSSIISS
+       tsshannonwindow [-a] [-b] [-c] [-d] [-e] [-f] [-g] [-h]
+                       [-t] [-v] [-w size] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsshannonwindow is for finding the windowed Shannon  probability  of  a
+       time  series.   The  Shannon probability is calculated by the following
+       method:
+
+           1) For each sample in the time series:
+
+               a) Find the value of the sample’s normalized
+               increment by subtracting the previous value of the
+               time series from the current value of the time
+               series, and then dividing this value of the
+               increment by the previous value in the time
+               series, (note that this is similar to the
+               procedure used by the program tsfraction(1)).
+
+               b) Find the running value of the root mean square
+               of a window of the normalized increments, (note
+               that this is similar to the procedure used by the,
+               program tsrmswindow(1)).
+
+               c) Find the running value of the average of a
+               window of the normalized increments, (note that
+               this is similar to the procedure used by the
+               program tsavgwindow(1)).
+
+           2) Compute the Shannon probability of the windows by
+           eight methods:
+
+               a) using the formula:
+
+                       avg
+                       --- + 1
+                       rms
+                   P = -------
+                          2
+
+               b) using the formula:
+
+                       rms + 1
+                   P = -------
+                          2
+
+               c) using the formula:
+
+                       sqrt (avg) + 1
+                   P = --------------
+                             2
+
+               d) by taking the absolute value of the normalized
+               increments and using the formula:
+
+                       abs + 1
+                   P = -------
+                          2
+
+                   (Note that the absolute value of the
+                   normalized increments, when averaged, is
+                   related to the root mean square of the
+                   increments by a constant. If the normalized
+                   increments are a fixed increment, the constant
+                   is unity. If the normalized increments have a
+                   Gaussian distribution, the constant is ~0.8
+                   depending on the accuracy of of "fit" to a
+                   Gaussian distribution. This formula assumes a
+                   fixed increment fractal.)
+
+               e) counting the up movements in the window of the
+               time series, and considering adjacent elements
+               from the time series with equal magnitude as an up
+               movement.
+
+               f) counting the up movements in the window of the
+               time series, and considering adjacent elements
+               from the time series with equal magnitude as a
+               down movement.
+
+               g) finding an exponential least squares fit of the
+               values of the time series in a window, and
+               iteratively calculating the Shannon probability
+               from the least squares fit variable using
+               Newton-Raphson method for finding the roots of a
+               function.
+
+               h) finding the logarithmic returns of the values
+               of the time series in a window, and iteratively
+               calculating the Shannon probability from the least
+               squares fit variable using Newton-Raphson method
+               for finding the roots of a function.
+
+       Where P is the Shannon probability, avg is the  running  average  of  a
+       window  of the normalized increments, and, rms is the running root mean
+       square of a window of the increments.  The Shannon probability  of  the
+       windows of the increments is a time series that is printed to stdout.
+
+       The  input file structure is a text file consisting of records, in tem-
+       poral order, one record per time  series  sample.   Blank  records  are
+       ignored,  and  comment  records are signified by a ’#’ character as the
+       first non white space character in the record. Data records  must  con-
+       tain at least one field, which is the data value of the sample, but may
+       contain many fields-if the record contains many fields, then the  first
+       field  is regarded as the sample’s time, and the last field as the sam-
+       ple’s value at that time.
+
+       Note: The derivation for exponential least squares fit is:
+
+           1) input the value of the time series for each time
+           interval, value(t), and store the log of the value,
+           ie.:
+
+               y[t] = log (value(t));
+
+           2) compute the least squares fit to y[t], a + bt,
+           then:
+
+               log (y[t]) = b + at
+
+           3) exponentiate the values in y[t]:
+
+               fit (t) = exp (b) * exp (at)
+
+                       = exp (b + at)
+
+       where fit (t) is the least squares exponential fit.
+
+       Note: The derivation for exponential least squares fit is:
+
+           1) y[t] = exp (k1 + k2t)
+
+           2) s[t] = log (exp (k1 + k2t) / exp (k1 + k2 (t - 1)))
+
+                   = log (exp (k1 + k2t - k1 - k2t + k2))
+
+                   = log (exp (k2))
+
+                   = k2
+
+           And for the binary least squares fit, letting k = k2:
+
+           1) compute the least squares fit, as above
+
+           2) exp (xt) = pow (2, kt)
+
+           3) pow (a, t) = pow (2, kt)
+
+           4) a = pow (2, k)
+
+           5) k * log (2) = log (a)
+
+           6) k = log (a) / log (2)
+
+       Note: The derivation for calculating the Shannon probability, given the
+       Shannon  information  capacity,  where  the information capacity is the
+       exponent derived from the least squares fit to the values of  the  time
+       series,  divided by the natural logarithm of two. See "Fractals, Chaos,
+       Power Laws," Manfred Schroeder, W. H. Freeman and  Company,  New  York,
+       New  York,  1991,  ISBN  0-7167-2136-8, pp 128 and pp 151. Uses Newton-
+       Raphson method for an iterative solution for the probability, p.
+
+       As a reference on Newton-Raphson Method of root finding, see "Numerical
+       Recipes in C: The Art of Scientific Computing," William H. Press, Brian
+       P. Flannery, Saul A. Teukolsky, William T. Vetterling,  Cambridge  Uni-
+       versity Press, New York, 1988, ISBN 0-521-35465-X, pp 270.
+
+       Derivation, starting with Schroeder, pp 151:
+
+           C(p) = 1 + p ln (p) + (1 - p) ln (1 - p)
+                          2                2
+
+           C(p) = 1 + p (ln (p) / ln (2)) +
+
+                  (1 - p) (ln (1 - p) / ln (2))
+
+           C(p) = [1 / ln (2)] [ln (2) + p ln (p) +
+
+                  (1 - p) ln (1 - p)]
+
+           C(p) = [1 / ln (2)] [ ln (2) + p ln (p) +
+
+                  ln (1 - p) - p ln (1 - p)]
+
+           dC(p)
+           ---- = [1 / ln (2)] [1 + ln (p) - (1 / (1 - p)) -
+           dp
+
+                  {ln (1 - p) - (p / (1 - p))}]
+
+                = [1 / ln (2)] [1 + ln (p) - (1 / (1 - p)) -
+
+                  ln (1 - p) + (p / (1 - p))]
+
+                = [1 / ln (2)] [ln (p) - ln (1 - p) +
+
+                  (p / (1 - p)) - (1 / (1 - p))]
+
+                = [1 / ln (2)] [1 + ln (p) - ln (1 - p) +
+
+                  ((p - 1) / (1 - p))]
+
+                = [1 / ln (2)] [1 + ln (p) - ln (1 - p) - 1]
+
+                = [1 / ln (2)] [ln (p) - ln (1 - p)]
+
+
+OOPPTTIIOONNSS
+       --aa     Shannon probability = ((avg / rms) + 1) / 2.
+
+       --bb     Shannon probability = (rms + 1) / 2.
+
+       --cc     Shannon probability = (sqrt (avg) + 1) / 2.
+
+       --dd     Shannon probability = (abs + 1) / 2.
+
+       --ee     Shannon  probability = number of up movements (equal = up), ie.,
+              adjacent values in the time series of equal  magnitude  will  be
+              considered an up movement.
+
+       --ff     Shannon  probability  =  number  of up movements (equal = down),
+              ie., adjacent values in the time series of equal magnitude  will
+              be considered a down movement.
+
+       --gg     Shannon probability = iterated exponential least squares fit.
+
+       --hh     Shannon probability = iterated mean of logarithmic returns.
+
+       --tt     Sample’s time will be included in the output time series.
+
+       --vv     Print the version and copyright banner of the program.
+
+       --ww ssiizzee
+              Specifies the window size for the running average.
+
+       ffiilleennaammee
+              Input filename.
+
+WWAARRNNIINNGGSS
+       There  is little or no provision for handling numerical exceptions.  In
+       particular, the algorithms that use iterated means should  be  regarded
+       as fragile.
+
+SSEEEE AALLSSOO
+       tsderivative(1),   tshcalc(1),   tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),     tsrmswindow(1),     tsshannonstock(1),    tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),  tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),     tstradesim(1),     tsrunlength(1),      tsunshannon(1),
+       tsrootmean(1),  tsrunmagnitude(1),  tskurtosis(1), tskurtosiswindow(1),
+       tsrootmeanscale(1),  tsscalederivative(1),  tsgain(1),  tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 17, 2006             TSSHANNONWINDOW(1)

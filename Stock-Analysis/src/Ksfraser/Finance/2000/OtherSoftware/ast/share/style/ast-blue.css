@@ -1,0 +1,556 @@
+
+BODY
+{
+  font-family: Geneva, Arial, Helvetica, sans-serif;
+  background-color: #efefef;
+  padding: 0;
+  margin: 0;
+}
+
+HTML
+{
+  padding: 0;
+  margin: 0;
+}
+
+TABLE.awf_table
+{
+  font: normal 76%/150% Geneva, Arial, Helvetica, sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 0 0 0;
+  color: #000;
+  padding: 0 0 0 0;
+}
+
+TABLE.awf_table TR TD
+{
+  padding: 0.5em 0.5em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+TABLE.awf_table TR TD.awf_numeric
+{
+  text-align: right;
+}
+
+TH.awf_column_heading
+{
+  font-size: 1.2em;
+  color: #fff;
+  padding: 0.5em 0.5em;
+  border: 1px solid #fff;
+  border-width: 1px 1px;
+  background: #45A4E4;
+  text-decoration: none;
+}
+
+TH.awf_column_heading A, TH.awf_column_heading A:hover, TH.awf_column_heading A:visited
+{ 
+  color: #fff;
+  background: #45A4E4;
+  text-decoration: none;
+}
+
+TABLE.awf_table TR.awf_odd_row TD
+{
+  border-color: #fff;
+  background: #C1D1F0;
+}
+
+TABLE.awf_table TR.awf_total TD
+{
+  background: #45A4E4;
+}
+
+TABLE.awf_table TR.awf_even_row TD
+{
+  border-color: #fff;
+  background: #DDE6F7;
+}
+
+TABLE.awf_table TR.awf_deleted TD
+{
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+TABLE.awf_table tr:hover td, TABLE.awf_table tr:hover td a
+{
+  color: #D50000;
+}
+
+TABLE.awf_form
+{
+  font: normal 76%/150% Geneva, Arial, Helvetica, sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #000;
+  background: #FFF;
+  border-color: #f00;
+  margin: auto auto;
+}
+
+TABLE.awf_form TR TD
+{
+  padding: 0.1em 0.1em;
+  vertical-align: middle;
+  border-color: #fff;
+  background: #E2EFFF;
+}
+
+TABLE.awf_form TR TH
+{
+  font-size: 1.2em;
+  color: #fff;
+  padding: 0.5em 0.5em;
+  border: 1px solid #fff;
+  border-width: 1px 1px;
+  background: #45A4E4;
+}
+
+INPUT.awf_inputtext
+{
+  width: 18em;
+  border: 1px solid #698ed1;
+  background: #CFD9FF;
+}
+
+INPUT.awf_inputnum
+{
+  width: 4.5em;
+  border: 1px solid #698ed1;
+  background: #CFD9FF;
+  text-align: right;
+}
+
+INPUT.awf_inputtextshort
+{
+  width: 6em;
+  border: 1px solid #698ed1;
+  background: #CFD9FF;
+  text-align: center;
+}
+
+INPUT.awf_inputtext:hover 
+{
+    background: #fff;
+}
+
+TABLE.awf_form TR TD INPUT.awf_wide_input
+{
+  width: 40em;
+}
+
+IMG
+{
+  border: none;
+}
+
+a img{border:0 solid #f00;}
+
+.awf_horiz_navmenu{position:absolute; top:47px; right:13px; color:#fff; font-size:.9em; font-weight:bold;}
+.awf_horiz_navmenu a{color:#fff; padding:0 .25em .1em .5em; text-decoration:none;}
+.awf_horiz_navmenu a:hover{color:#bdf; text-decoration:underline;}
+
+.awf_horiz_navmenu a.awf_left{border-right:1px solid #147;}
+.awf_horiz_navmenu a.awf_middle{border-left:1px solid #8ae; border-right:1px solid #147;}
+.awf_horiz_navmenu a.awf_right{border-left:1px solid #8ae; margin-left:1px;}
+
+.awf_dot_div{font-size:.1em; height:1px; line-height:0; padding:0; margin:0; background:url(images/dots.png) 0 50% repeat-x;}
+
+#awf_title
+{
+  position:absolute;
+  top:30px;
+  left:131px;
+  color:#fff;
+  font-size:21px;
+  font-weight:bold;
+  font-family:arial,verdana,helvetica,sans-serif;
+}
+
+#awf_logo_text
+{
+  position:absolute;
+  top:3px;
+  left:432px;
+  color:#C1D1F0;
+  font-size:30px;
+  font-weight:bold;
+  font-family:arial,verdana,helvetica,sans-serif;
+}
+
+#awf_author_text
+{
+  position:absolute;
+  top:26px;
+  left:500px;
+  color:#C1D1F0;
+  font-size:18px;
+  font-weight:bold;
+  font-family:arial,verdana,helvetica,sans-serif;
+}
+
+.awf_small
+{
+  font-size: 0.5em;
+}
+
+TABLE.ast_body
+{
+  float: left;
+}
+
+TABLE.ast_body TR TD
+{
+  vertical-align: top;
+  text-align: left;
+}
+
+#container
+{
+background-color: #fff;
+color: #333;
+border: 1px solid gray;
+line-height: 130%;
+}
+
+#top
+{
+  position:absolute;
+  top:0;
+  left:0;
+  height:70px;
+  width:100%;
+  color:#fff;
+  background:#4477bb;
+  z-index:1;
+  padding:0;
+  margin:0;
+}
+
+#leftnav{ 
+position:absolute; 
+top:70px; 
+left:0; 
+color:#000; 
+background:#fff; 
+padding:5px; 
+margin:0; 
+width:150px; 
+}
+
+#leftnav A
+{
+  text-decoration: none;
+/*   color: #fff; */
+  font-size: 0.8em;
+  font-weight: bolder;
+}
+
+#leftnav{color:#000; text-decoration:none; border-bottom:1px solid #ccc;} 
+#leftnav a:hover{text-decoration:none; color:#000; background:#eee;} 
+#leftnav a.active:hover{text-decoration:none; color:#000; background:#fff;}
+
+.awf_link_level1 a, .awf_link_level2 a
+{
+  display:block; 
+  margin:0; 
+  padding:2px 0 2px 0; 
+  border-top:1px solid #fff;
+  color: #fff;
+} 
+
+.awf_link_level1 a{padding-left:12px;color:#fff; background:#45A4E4;} 
+.awf_link_level2 a{padding-left:24px;color:#fff} 
+
+
+.awf_link_level2 a, a.open
+{
+  color:#333; 
+  background:#C1D1F0;
+} 
+
+a.active
+{
+  color:#000; 
+  background:#fff;
+} 
+
+#content
+{
+margin:60px 0 0 170px; 
+color:#000; 
+background:#fff; 
+}
+
+#footer
+{
+display: block;
+clear: both;
+margin: 3em 0 0 170px;
+padding: .5em;
+color: #333;
+text-align: center;
+}
+
+UL.awf_tabbed_selector
+{
+  height: 20px;
+  margin: 0;
+  width: 100%
+}
+
+UL.awf_tabbed_selector LI
+{
+  margin: 0; 
+  padding: 0;
+  display: inline;
+  list-style-type: none;
+  font-size: 0.8em;
+}
+
+UL.awf_tabbed_selector LI A:link, UL.awf_tabbed_selector LI A:visited
+{
+  float: left;
+  background: #f3f3f3;
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: bold;
+  padding: 2px 10px 2px 10px;
+  margin-right: 4px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #666;
+}
+
+UL.awf_tabbed_selector LI.awf_tabbed_selected A:link, UL.awf_tabbed_selector LI.awf_tabbed_selected A:visited
+{
+  border-bottom: 1px solid #fff;
+  background: #fff;
+  color: #000;
+}
+
+UL.awf_tabbed_selector LI A:hover
+{
+  background: #fff;
+}
+
+IMG.ast_chart
+{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+UL.awf_news
+{
+  width: 100%;
+  margin: 0 0;
+  padding: 0 0;
+}
+
+UL LI.ast_news_article
+{
+  display: block;
+  margin: 0 0;
+  padding: 0 0;
+}
+
+UL LI.ast_news_article UL
+{
+  display: block;
+  list-style-type: none;
+  background-color: #DDE6F7;
+  margin: 1em 1em;
+  padding: 0 0;
+}
+
+UL LI.ast_news_article UL LI.ast_news_headline
+{
+  background-color: #006EA8;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-weight:bold;
+  margin-top: 1em;
+}
+
+UL LI.ast_news_article UL LI.ast_news_headline A
+{
+  text-decoration: none;
+  color: white;
+}
+
+UL LI.ast_news_article UL LI.ast_news_desc
+{
+  font-style: italic;
+}
+
+.awf_colour_green
+{
+  FONT-WEIGHT: bolder;
+  COLOR: rgb(0,128,0);
+}
+
+.awf_colour_red
+{
+  FONT-WEIGHT: bolder;
+  COLOR: rgb(255,0,0);
+}
+
+.awf_colour_blue
+{
+  FONT-WEIGHT: bolder;
+  COLOR: rgb(0,0,192);
+}
+
+.awf_colour_orange
+{
+  FONT-WEIGHT: bolder;
+  COLOR: #c60;
+}
+
+.awf_colour_yellow
+{
+  font-weight: bolder;
+  color: #ff0;
+}
+
+.awf_colour_purple
+{
+  font-weight: bolder;
+  color: #606;
+}
+
+.awf_colour_grey
+{
+  font-weight: bolder;
+  color: #ccc;
+}
+
+.awf_colour_white
+{
+  font-weight: bolder;
+  color: #fff;
+}
+
+.awf_colour_black
+{
+  font-weight: bolder;
+  color: #000;
+}
+
+.ast_note
+{
+  background-color: #FFFF00;
+  margin-bottom: 1em;
+}
+
+.ast_note div.ast_note_subject
+{
+  background-color: #FFE32F;
+}
+
+.ast_note_public
+{
+  background-color: #99FF66;
+  margin-bottom: 1em;
+}
+
+.ast_note_public div.ast_note_subject
+{
+  background-color: #669900;
+}
+
+.ast_note_public_self
+{
+  background-color: #FF9999;
+  margin-bottom: 1em;
+}
+
+.ast_note_public_self div.ast_note_subject
+{
+  background-color: #CC0000;
+}
+
+.ast_note_subject
+{
+  width: 100%;
+  float: left;
+  font-weight: bolder;
+}
+
+.ast_note_header
+{
+  font-size: 0.6em;
+  font-weight: bolder;
+  font-size: 0.8em;
+  font-family: monospace;
+}
+
+.ast_note_creator
+{
+  font-size: 0.8em;
+  font-family: monospace;
+}
+
+.ast_note_body
+{
+  font-style: italic;
+  padding-top: 0.25em;
+  padding-bottom: 0.25em;
+}
+
+.awf_error
+{
+  font-weight: bolder;
+  color: #f00;
+}
+
+.awf_total_label
+{
+  font-weight: bolder;
+  color: #ccc;
+  padding-left: 1em;
+  font-size: 0.8em;
+}
+
+DIV.awf_dropmenu
+{
+  border:1px solid #0000CC;
+  background-color:#E2EFFF;
+  position:absolute;
+  width: 600px;
+}
+
+UL.awf_dropmenu
+{
+  width: 400px;
+  margin: 0 0;
+  padding: 0 0;
+}
+
+UL.awf_dropmenu LI
+{
+  display: block;
+  list-style-type: none;
+  height: 1em;
+  margin: 0 0;
+  padding: 0 0;
+  white-space: nowrap;
+}
+
+.awf_selectiontext
+{
+  display: inline;
+  font-weight: bolder;
+  width: 60px;
+}
+
+.awf_dropmenu_col2
+{
+  position: absolute;
+  left: 60px;
+}

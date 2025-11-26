@@ -1,0 +1,25 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Checklist Type</th>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+      <td><input type="text" class="awf_inputtext" name="checklisttype.name" value="$checklisttype.name"></td>
+    </tr>
+    <tr>
+      <td><b>Description:</b></td>
+      <td><input type="text" class="awf_inputtext awf_wide_input" name="checklisttype.description" value="$checklisttype.description"></td>
+    </tr>
+    <tr>
+      <td><b>Type:</b></td>
+      <td>
+        <input type="radio" name="checklisttype.type" value="1" $type1_checked>&nbsp;Checked / Unchecked&nbsp;<img src="images/help_small.png" $tooltip.checklisttype1><br>
+        <input type="radio" name="checklisttype.type" value="2" $type2_checked>&nbsp;Positive / Neutral / Negative&nbsp;<img src="images/help_small.png" $tooltip.checklisttype2><br>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

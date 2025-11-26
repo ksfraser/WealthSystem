@@ -1,0 +1,413 @@
+Symbol	Description
+CL	Crude Oil
+CL.C	Crude Oil Continuation
+CLF07	Crude Oil {Jan 07}
+CLF08	Crude Oil {Jan 08}
+CLF09	Crude Oil {Jan 09}
+CLF10	Crude Oil {Jan 10}
+CLF11	Crude Oil {Jan 11}
+CLG07	Crude Oil {Feb 07}
+CLG08	Crude Oil {Feb 08}
+CLG09	Crude Oil {Feb 09}
+CLG10	Crude Oil {Feb 10}
+CLG11	Crude Oil {Feb 11}
+CLH07	Crude Oil {Mar 07}
+CLH08	Crude Oil {Mar 08}
+CLH09	Crude Oil {Mar 09}
+CLH10	Crude Oil {Mar 10}
+CLH11	Crude Oil {Mar 11}
+CLJ06	Crude Oil {Apr 06}
+CLJ07	Crude Oil {Apr 07}
+CLJ08	Crude Oil {Apr 08}
+CLJ09	Crude Oil {Apr 09}
+CLJ10	Crude Oil {Apr 10}
+CLJ11	Crude Oil {Apr 11}
+CLK06	Crude Oil {May 06}
+CLK07	Crude Oil {May 07}
+CLK08	Crude Oil {May 08}
+CLK09	Crude Oil {May 09}
+CLK10	Crude Oil {May 10}
+CLK11	Crude Oil {May 11}
+CLM06	Crude Oil {Jun 06}
+CLM07	Crude Oil {Jun 07}
+CLM08	Crude Oil {Jun 08}
+CLM09	Crude Oil {Jun 09}
+CLM10	Crude Oil {Jun 10}
+CLM11	Crude Oil {Jun 11}
+CLN06	Crude Oil {Jul 06}
+CLN07	Crude Oil {Jul 07}
+CLN08	Crude Oil {Jul 08}
+CLN09	Crude Oil {Jul 09}
+CLN10	Crude Oil {Jul 10}
+CLN11	Crude Oil {Jul 11}
+CLQ06	Crude Oil {Aug 06}
+CLQ07	Crude Oil {Aug 07}
+CLQ08	Crude Oil {Aug 08}
+CLQ09	Crude Oil {Aug 09}
+CLQ10	Crude Oil {Aug 10}
+CLQ11	Crude Oil {Aug 11}
+CLU06	Crude Oil {Sep 06}
+CLU07	Crude Oil {Sep 07}
+CLU08	Crude Oil {Sep 08}
+CLU09	Crude Oil {Sep 09}
+CLU10	Crude Oil {Sep 10}
+CLU11	Crude Oil {Sep 11}
+CLV06	Crude Oil {Oct 06}
+CLV07	Crude Oil {Oct 07}
+CLV08	Crude Oil {Oct 08}
+CLV09	Crude Oil {Oct 09}
+CLV10	Crude Oil {Oct 10}
+CLV11	Crude Oil {Oct 11}
+CLX06	Crude Oil {Nov 06}
+CLX07	Crude Oil {Nov 07}
+CLX08	Crude Oil {Nov 08}
+CLX09	Crude Oil {Nov 09}
+CLX10	Crude Oil {Nov 10}
+CLX11	Crude Oil {Nov 11}
+CLZ06	Crude Oil {Dec 06}
+CLZ07	Crude Oil {Dec 07}
+CLZ08	Crude Oil {Dec 08}
+CLZ09	Crude Oil {Dec 09}
+CLZ10	Crude Oil {Dec 10}
+CLZ11	Crude Oil {Dec 11}
+CLZ12	Crude Oil {Dec 12}
+F0.C	Heating Oil/Crude Continuation
+F0F07	Heating Oil/Crude {Jan 07}
+F0G07	Heating Oil/Crude {Feb 07}
+F0H07	Heating Oil/Crude {Mar 07}
+F0J06	Heating Oil/Crude {Apr 06}
+F0J07	Heating Oil/Crude {Apr 07}
+F0K06	Heating Oil/Crude {May 06}
+F0K07	Heating Oil/Crude {May 07}
+F0M06	Heating Oil/Crude {Jun 06}
+F0M07	Heating Oil/Crude {Jun 07}
+F0N06	Heating Oil/Crude {Jul 06}
+F0N07	Heating Oil/Crude {Jul 07}
+F0Q06	Heating Oil/Crude {Aug 06}
+F0Q07	Heating Oil/Crude {Aug 07}
+F0U06	Heating Oil/Crude {Sep 06}
+F0U07	Heating Oil/Crude {Sep 07}
+F0V06	Heating Oil/Crude {Oct 06}
+F0V07	Heating Oil/Crude {Oct 07}
+F0X06	Heating Oil/Crude {Nov 06}
+F0X07	Heating Oil/Crude {Nov 07}
+F0Z06	Heating Oil/Crude {Dec 06}
+F5.C	Unleaded/Crude Continuation
+F5F07	Unleaded/Crude {Jan 07}
+F5J06	Unleaded/Crude {Apr 06}
+F5K06	Unleaded/Crude {May 06}
+F5M06	Unleaded/Crude {Jun 06}
+F5N06	Unleaded/Crude {Jul 06}
+F5Q06	Unleaded/Crude {Aug 06}
+F5U06	Unleaded/Crude {Sep 06}
+F5V06	Unleaded/Crude {Oct 06}
+F5X06	Unleaded/Crude {Nov 06}
+F5Z06	Unleaded/Crude {Dec 06}
+GRH06	GasOil {Mar 06}
+GRJ06	GasOil {Apr 06}
+GRK06	GasOil {May 06}
+GRM06	GasOil {Jun 06}
+GRN06	GasOil {Jul 06}
+GRQ06	GasOil {Aug 06}
+GRU06	GasOil {Sep 06}
+GRV06	GasOil {Oct 06}
+GRX06	GasOil {Nov 06}
+GRZ06	GasOil {Dec 06}
+HO	Heating Oil
+HO.C	Heating Oil Continuation
+HOF07	Heating Oil {Jan 07}
+HOG07	Heating Oil {Feb 07}
+HOH07	Heating Oil {Mar 07}
+HOJ06	Heating Oil {Apr 06}
+HOJ07	Heating Oil {Apr 07}
+HOK06	Heating Oil {May 06}
+HOK07	Heating Oil {May 07}
+HOM06	Heating Oil {Jun 06}
+HOM07	Heating Oil {Jun 07}
+HON06	Heating Oil {Jul 06}
+HON07	Heating Oil {Jul 07}
+HOQ06	Heating Oil {Aug 06}
+HOQ07	Heating Oil {Aug 07}
+HOU06	Heating Oil {Sep 06}
+HOU07	Heating Oil {Sep 07}
+HOV06	Heating Oil {Oct 06}
+HOV07	Heating Oil {Oct 07}
+HOX06	Heating Oil {Nov 06}
+HOX07	Heating Oil {Nov 07}
+HOZ06	Heating Oil {Dec 06}
+HU	Gasoline Unleaded
+HU.C	Gasoline Unleaded Continuation
+HUF07	Gasoline Unleaded {Jan 07}
+HUJ06	Gasoline Unleaded {Apr 06}
+HUK06	Gasoline Unleaded {May 06}
+HUM06	Gasoline Unleaded {Jun 06}
+HUN06	Gasoline Unleaded {Jul 06}
+HUQ06	Gasoline Unleaded {Aug 06}
+HUU06	Gasoline Unleaded {Sep 06}
+HUV06	Gasoline Unleaded {Oct 06}
+HUX06	Gasoline Unleaded {Nov 06}
+HUZ06	Gasoline Unleaded {Dec 06}
+JM.C	PJM Monthly Continuation
+JMF07	PJM Monthly {Jan 07}
+JMF08	PJM Monthly {Jan 08}
+JMF09	PJM Monthly {Jan 09}
+JMG07	PJM Monthly {Feb 07}
+JMG08	PJM Monthly {Feb 08}
+JMG09	PJM Monthly {Feb 09}
+JMH06	PJM Monthly {Mar 06}
+JMH07	PJM Monthly {Mar 07}
+JMH08	PJM Monthly {Mar 08}
+JMH09	PJM Monthly {Mar 09}
+JMJ06	PJM Monthly {Apr 06}
+JMJ07	PJM Monthly {Apr 07}
+JMJ08	PJM Monthly {Apr 08}
+JMJ09	PJM Monthly {Apr 09}
+JMK06	PJM Monthly {May 06}
+JMK07	PJM Monthly {May 07}
+JMK08	PJM Monthly {May 08}
+JMK09	PJM Monthly {May 09}
+JMM06	PJM Monthly {Jun 06}
+JMM07	PJM Monthly {Jun 07}
+JMM08	PJM Monthly {Jun 08}
+JMM09	PJM Monthly {Jun 09}
+JMN06	PJM Monthly {Jul 06}
+JMN07	PJM Monthly {Jul 07}
+JMN08	PJM Monthly {Jul 08}
+JMN09	PJM Monthly {Jul 09}
+JMQ06	PJM Monthly {Aug 06}
+JMQ07	PJM Monthly {Aug 07}
+JMQ08	PJM Monthly {Aug 08}
+JMQ09	PJM Monthly {Aug 09}
+JMU06	PJM Monthly {Sep 06}
+JMU07	PJM Monthly {Sep 07}
+JMU08	PJM Monthly {Sep 08}
+JMU09	PJM Monthly {Sep 09}
+JMV06	PJM Monthly {Oct 06}
+JMV07	PJM Monthly {Oct 07}
+JMV08	PJM Monthly {Oct 08}
+JMV09	PJM Monthly {Oct 09}
+JMX06	PJM Monthly {Nov 06}
+JMX07	PJM Monthly {Nov 07}
+JMX08	PJM Monthly {Nov 08}
+JMX09	PJM Monthly {Nov 09}
+JMZ06	PJM Monthly {Dec 06}
+JMZ07	PJM Monthly {Dec 07}
+JMZ08	PJM Monthly {Dec 08}
+JMZ09	PJM Monthly {Dec 09}
+NG	Natural Gas
+NG.C	Natural Gas Continuation
+NGF07	Natural Gas {Jan 07}
+NGF08	Natural Gas {Jan 08}
+NGF09	Natural Gas {Jan 09}
+NGF10	Natural Gas {Jan 10}
+NGF11	Natural Gas {Jan 11}
+NGG07	Natural Gas {Feb 07}
+NGG08	Natural Gas {Feb 08}
+NGG09	Natural Gas {Feb 09}
+NGG10	Natural Gas {Feb 10}
+NGG11	Natural Gas {Feb 11}
+NGH07	Natural Gas {Mar 07}
+NGH08	Natural Gas {Mar 08}
+NGH09	Natural Gas {Mar 09}
+NGH10	Natural Gas {Mar 10}
+NGH11	Natural Gas {Mar 11}
+NGJ06	Natural Gas {Apr 06}
+NGJ07	Natural Gas {Apr 07}
+NGJ08	Natural Gas {Apr 08}
+NGJ09	Natural Gas {Apr 09}
+NGJ10	Natural Gas {Apr 10}
+NGJ11	Natural Gas {Apr 11}
+NGK06	Natural Gas {May 06}
+NGK07	Natural Gas {May 07}
+NGK08	Natural Gas {May 08}
+NGK09	Natural Gas {May 09}
+NGK10	Natural Gas {May 10}
+NGK11	Natural Gas {May 11}
+NGM06	Natural Gas {Jun 06}
+NGM07	Natural Gas {Jun 07}
+NGM08	Natural Gas {Jun 08}
+NGM09	Natural Gas {Jun 09}
+NGM10	Natural Gas {Jun 10}
+NGM11	Natural Gas {Jun 11}
+NGN06	Natural Gas {Jul 06}
+NGN07	Natural Gas {Jul 07}
+NGN08	Natural Gas {Jul 08}
+NGN09	Natural Gas {Jul 09}
+NGN10	Natural Gas {Jul 10}
+NGN11	Natural Gas {Jul 11}
+NGQ06	Natural Gas {Aug 06}
+NGQ07	Natural Gas {Aug 07}
+NGQ08	Natural Gas {Aug 08}
+NGQ09	Natural Gas {Aug 09}
+NGQ10	Natural Gas {Aug 10}
+NGQ11	Natural Gas {Aug 11}
+NGU06	Natural Gas {Sep 06}
+NGU07	Natural Gas {Sep 07}
+NGU08	Natural Gas {Sep 08}
+NGU09	Natural Gas {Sep 09}
+NGU10	Natural Gas {Sep 10}
+NGU11	Natural Gas {Sep 11}
+NGV06	Natural Gas {Oct 06}
+NGV07	Natural Gas {Oct 07}
+NGV08	Natural Gas {Oct 08}
+NGV09	Natural Gas {Oct 09}
+NGV10	Natural Gas {Oct 10}
+NGV11	Natural Gas {Oct 11}
+NGX06	Natural Gas {Nov 06}
+NGX07	Natural Gas {Nov 07}
+NGX08	Natural Gas {Nov 08}
+NGX09	Natural Gas {Nov 09}
+NGX10	Natural Gas {Nov 10}
+NGX11	Natural Gas {Nov 11}
+NGZ06	Natural Gas {Dec 06}
+NGZ07	Natural Gas {Dec 07}
+NGZ08	Natural Gas {Dec 08}
+NGZ09	Natural Gas {Dec 09}
+NGZ10	Natural Gas {Dec 10}
+NGZ11	Natural Gas {Dec 11}
+PA	Palladium
+PA.C	Palladium Continuation
+PAH06	Palladium {Mar 06}
+PAM06	Palladium {Jun 06}
+PAM07	Palladium {Jun 07}
+PAU06	Palladium {Sep 06}
+PAZ06	Palladium {Dec 06}
+PL	Platinum
+PL.C	Platinum Continuation
+PLJ06	Platinum {Apr 06}
+PLN06	Platinum {Jul 06}
+PLV06	Platinum {Oct 06}
+PN	Propane
+PN.C	Propane Continuation
+PNF07	Propane {Jan 07}
+PNG07	Propane {Feb 07}
+PNH07	Propane {Mar 07}
+PNJ06	Propane {Apr 06}
+PNJ07	Propane {Apr 07}
+PNK06	Propane {May 06}
+PNK07	Propane {May 07}
+PNM06	Propane {Jun 06}
+PNM07	Propane {Jun 07}
+PNN06	Propane {Jul 06}
+PNN07	Propane {Jul 07}
+PNQ06	Propane {Aug 06}
+PNQ07	Propane {Aug 07}
+PNU06	Propane {Sep 06}
+PNV06	Propane {Oct 06}
+PNX06	Propane {Nov 06}
+PNZ06	Propane {Dec 06}
+QBJ06	Brent Crude emiNY {Apr 06}
+QBK06	Brent Crude emiNY {May 06}
+QBM06	Brent Crude emiNY {Jun 06}
+QBN06	Brent Crude emiNY {Jul 06}
+QBQ06	Brent Crude emiNY {Aug 06}
+QBU06	Brent Crude emiNY {Sep 06}
+QG.C	Natural Gas emiNY Continuation
+QGJ06	Natural Gas emiNY {Apr 06}
+QGK06	Natural Gas emiNY {May 06}
+QGM06	Natural Gas emiNY {Jun 06}
+QGN06	Natural Gas emiNY {Jul 06}
+QHJ06	Heating Oil emiNY {Apr 06}
+QHK06	Heating Oil emiNY {May 06}
+QHM06	Heating Oil emiNY {Jun 06}
+QHN06	Heating Oil emiNY {Jul 06}
+QL.C	Coal Futures Continuation
+QLF07	Coal Futures {Jan 07}
+QLF08	Coal Futures {Jan 08}
+QLG07	Coal Futures {Feb 07}
+QLG08	Coal Futures {Feb 08}
+QLH07	Coal Futures {Mar 07}
+QLH08	Coal Futures {Mar 08}
+QLJ06	Coal Futures {Apr 06}
+QLJ07	Coal Futures {Apr 07}
+QLJ08	Coal Futures {Apr 08}
+QLK06	Coal Futures {May 06}
+QLK07	Coal Futures {May 07}
+QLK08	Coal Futures {May 08}
+QLM06	Coal Futures {Jun 06}
+QLM07	Coal Futures {Jun 07}
+QLM08	Coal Futures {Jun 08}
+QLN06	Coal Futures {Jul 06}
+QLN07	Coal Futures {Jul 07}
+QLN08	Coal Futures {Jul 08}
+QLQ06	Coal Futures {Aug 06}
+QLQ07	Coal Futures {Aug 07}
+QLQ08	Coal Futures {Aug 08}
+QLU06	Coal Futures {Sep 06}
+QLU07	Coal Futures {Sep 07}
+QLU08	Coal Futures {Sep 08}
+QLV06	Coal Futures {Oct 06}
+QLV07	Coal Futures {Oct 07}
+QLV08	Coal Futures {Oct 08}
+QLX06	Coal Futures {Nov 06}
+QLX07	Coal Futures {Nov 07}
+QLX08	Coal Futures {Nov 08}
+QLZ06	Coal Futures {Dec 06}
+QLZ07	Coal Futures {Dec 07}
+QLZ08	Coal Futures {Dec 08}
+QM.C	Crude Oil emiNY Continuation
+QMJ06	Crude Oil emiNY {Apr 06}
+QMK06	Crude Oil emiNY {May 06}
+QMM06	Crude Oil emiNY {Jun 06}
+QMN06	Crude Oil emiNY {Jul 06}
+QUJ06	Gas. Unleaded emiNY {Apr 06}
+QUK06	Gas. Unleaded emiNY {May 06}
+QUM06	Gas. Unleaded emiNY {Jun 06}
+RBF07	Gasoline RBOB {Jan 07}
+RBG07	Gasoline RBOB {Feb 07}
+RBH07	Gasoline RBOB {Mar 07}
+RBJ06	Gasoline Blendstock {Apr 06}
+RBJ07	Gasoline RBOB {Apr 07}
+RBK06	Gasoline Blendstock {May 06}
+RBK07	Gasoline RBOB {May 07}
+RBM06	Gasoline RBOB {Jun 06}
+RBN06	Gasoline RBOB {Jul 06}
+RBQ06	Gasoline RBOB {Aug 06}
+RBU06	Gasoline RBOB {Sep 06}
+RBV06	Gasoline RBOB {Oct 06}
+RBX06	Gasoline RBOB {Nov 06}
+RBZ06	Gasoline RBOB {Dec 06}
+RTF07	Gasoline RBOB (E) {Jan 07}
+RTM06	Gasoline RBOB (E) {Jun 06}
+RTN06	Gasoline RBOB (E) {Jul 06}
+RTQ06	Gasoline RBOB (E) {Aug 06}
+RTU06	Gasoline RBOB (E) {Sep 06}
+RTV06	Gasoline RBOB (E) {Oct 06}
+RTX06	Gasoline RBOB (E) {Nov 06}
+RTZ06	Gasoline RBOB (E) {Dec 06}
+SC	Brent Crude Oil
+SC.C	Brent Crude Oil Continuation
+SCF07	Brent Crude Oil {Jan 07}
+SCG07	Brent Crude Oil {Feb 07}
+SCH07	Brent Crude Oil {Mar 07}
+SCJ06	Brent Crude Oil {Apr 06}
+SCJ07	Brent Crude Oil {Apr 07}
+SCK06	Brent Crude Oil {May 06}
+SCK07	Brent Crude Oil {May 07}
+SCM06	Brent Crude Oil {Jun 06}
+SCM07	Brent Crude Oil {Jun 07}
+SCN06	Brent Crude Oil {Jul 06}
+SCQ06	Brent Crude Oil {Aug 06}
+SCU06	Brent Crude Oil {Sep 06}
+SCV06	Brent Crude Oil {Oct 06}
+SCX06	Brent Crude Oil {Nov 06}
+SCZ06	Brent Crude Oil {Dec 06}
+SCZ07	Brent Crude Oil {Dec 07}
+WSF07	Crude Oil (E) {Jan 07}
+WSG07	Crude Oil (E) {Feb 07}
+WSH07	Crude Oil (E) {Mar 07}
+WSM07	Crude Oil (E) {Jun 07}
+WSN06	Crude Oil (E) {Jul 06}
+WSQ06	Crude Oil (E) {Aug 06}
+WSU06	Crude Oil (E) {Sep 06}
+WSV06	Crude Oil (E) {Oct 06}
+WSX06	Crude Oil (E) {Nov 06}
+WSZ06	Crude Oil (E) {Dec 06}
+WSZ07	Crude Oil (E) {Dec 07}
+WSZ08	Crude Oil (E) {Dec 08}
+WSZ10	Crude Oil (E) {Dec 10}
+WSZ11	Crude Oil (E) {Dec 11}
+X0	Crude 24-Mon Strip
+X3	Nat Gas 12-Mon Strip
+X4	Nat Gas 24-Mon Strip
+X9	Crude 12-Mon Strip

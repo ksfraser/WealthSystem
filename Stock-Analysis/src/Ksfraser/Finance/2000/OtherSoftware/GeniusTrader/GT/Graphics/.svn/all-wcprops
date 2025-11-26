@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/geniustrader/!svn/ver/686/trunk/GT/Graphics
+END
+Axis.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/Axis.pm
+END
+Object.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/686/trunk/GT/Graphics/Object.pm
+END
+Scale.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/Scale.pm
+END
+DataSource.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource.pm
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/TODO
+END
+Driver.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/475/trunk/GT/Graphics/Driver.pm
+END
+TODO.en
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/671/trunk/GT/Graphics/TODO.en
+END
+Zone.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/467/trunk/GT/Graphics/Zone.pm
+END
+Graphic.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/Graphic.pm
+END
+DESIGN
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DESIGN
+END
+DESIGN.en
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/671/trunk/GT/Graphics/DESIGN.en
+END
+Tools.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/582/trunk/GT/Graphics/Tools.pm
+END

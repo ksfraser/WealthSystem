@@ -1,0 +1,545 @@
+################################
+# TORONTO STOCK EXCHANGE SECTORS:
+################################
+sector.sectorid: 100001
+sector.market: 0
+sector.symbol: ^GSPTTMN
+sector.name: Canadian Mining Index
+%%
+sector.sectorid: 100002
+sector.market: 0
+sector.symbol: ^GSPTTCD
+sector.name: Consumer Discreet
+%%
+sector.sectorid: 100003
+sector.market: 0
+sector.symbol: ^GSPTTCS
+sector.name: Consumer Staples
+%%
+sector.sectorid: 100004
+sector.market: 0
+sector.symbol: ^SPTTEN
+sector.name: Energy
+%%
+sector.sectorid: 100005
+sector.market: 0
+sector.symbol: ^SPTTFS
+sector.name: Financials
+%%
+sector.sectorid: 100006
+sector.market: 0
+sector.symbol: ^SPTTGD
+sector.name: Gold
+%%
+sector.sectorid: 100007
+sector.market: 0
+sector.symbol: ^GSPTTHC
+sector.name: Health Care
+%%
+sector.sectorid: 100008
+sector.market: 0
+sector.symbol: ^GSPTTIN
+sector.name: Industrials
+%%
+sector.sectorid: 100009
+sector.market: 0
+sector.symbol: ^SPTTTK
+sector.name: Information Technology
+%%
+sector.sectorid: 100010
+sector.market: 0
+sector.symbol: ^GSPTTMT
+sector.name: Materials
+%%
+sector.sectorid: 100011
+sector.market: 0
+sector.symbol: ^GSPTTRE
+sector.name: Real Estate
+%%
+sector.sectorid: 100012
+sector.market: 0
+sector.symbol: ^GSPTTTS
+sector.name: Telecommunications
+%%
+sector.sectorid: 100013
+sector.market: 0
+sector.symbol: ^GSPTTUT
+sector.name: Utilities
+%%
+sector.sectorid: 100014
+sector.market: 0
+sector.symbol: ^SPTSEM
+sector.name: S&P/TSX Midcap
+%%
+sector.sectorid: 100015
+sector.market: 0
+sector.symbol: ^SPTSES
+sector.name: S&P/TSX Smallcap
+%%
+sector.sectorid: 100016
+sector.market: 0
+sector.symbol: ^GSPTSE
+sector.name: S&P/TSX 300
+%%
+sector.sectorid: 100017
+sector.market: 0
+sector.symbol: ^SPTSE
+sector.name: S&P/TSX 60
+%%
+sector.sectorid: 100018
+sector.market: 0
+sector.symbol: ^GSPTSE
+sector.name: Manufacturing
+%%
+sector.sectorid: 100019
+sector.market: 0
+sector.symbol: ^GSPTSE
+sector.name: Resources
+%%
+####################################
+# AUSTRALIAN STOCK EXCHANGE SECTORS:
+####################################
+sector.sectorid: 100033
+sector.market: 7
+sector.symbol: ^AXDJ
+sector.name: Consumer Discrete
+%%
+sector.sectorid: 100034
+sector.market: 7
+sector.symbol: ^AXSJ
+sector.name: Comsumer Staples
+%%
+sector.sectorid: 100035
+sector.market: 7
+sector.symbol: ^AXEJ
+sector.name: Energy
+%%
+sector.sectorid: 100036
+sector.market: 7
+sector.symbol: ^AXFJ
+sector.name: Financials
+%%
+sector.sectorid: 100037
+sector.market: 7
+sector.symbol: ^AXHJ
+sector.name: Health Care
+%%
+sector.sectorid: 100038
+sector.market: 7
+sector.symbol: ^AXNJ
+sector.name: Industrials
+%%
+sector.sectorid: 100039
+sector.market: 7
+sector.symbol: ^AXIJ
+sector.name: Information Technology
+%%
+sector.sectorid: 100040
+sector.market: 7
+sector.symbol: ^AXMJ
+sector.name: Materials
+%%
+sector.sectorid: 100041
+sector.market: 7
+sector.symbol: ^AXTJ
+sector.name: Telecommunications
+%%
+sector.sectorid: 100042
+sector.market: 7
+sector.symbol: ^AXUJ
+sector.name: Utilities
+%%
+################################
+# LONDON STOCK EXCHANGE SECTORS:
+################################
+sector.sectorid: 100043
+sector.market: 6
+sector.symbol: ^FTUB0500
+sector.name: Oil & Gas
+%%
+sector.sectorid: 100044
+sector.market: 6
+sector.symbol: ^FTUB1300
+sector.name: Chemicals
+%%
+sector.sectorid: 100045
+sector.market: 6
+sector.symbol: ^FTUB1700
+sector.name: Basic Resources
+%%
+sector.sectorid: 100046
+sector.market: 6
+sector.symbol: ^FTUB2300
+sector.name: Construction & Materials
+%%
+sector.sectorid: 100047
+sector.market: 6
+sector.symbol: ^FTUB2700
+sector.name: Industrial Goods & Services
+%%
+sector.sectorid: 100048
+sector.market: 6
+sector.symbol: ^FTUB3300
+sector.name: Automobiles & Parts
+%%
+sector.sectorid: 100049
+sector.market: 6
+sector.symbol: ^FTUB3500
+sector.name: Food & Beverage
+%%
+sector.sectorid: 100050
+sector.market: 6
+sector.symbol: ^FTUB3700
+sector.name: Personal & Household Goods
+%%
+sector.sectorid: 100051
+sector.market: 6
+sector.symbol: ^FTUB4500
+sector.name: Health Care
+%%
+sector.sectorid: 100052
+sector.market: 6
+sector.symbol: ^FTUB5300
+sector.name: Retail
+%%
+sector.sectorid: 100053
+sector.market: 6
+sector.symbol: ^FTUB5500
+sector.name: Media
+%%
+sector.sectorid: 100054
+sector.market: 6
+sector.symbol: ^FTUB5700
+sector.name: Travel & Leisure
+%%
+sector.sectorid: 100055
+sector.market: 6
+sector.symbol: ^FTUB6500
+sector.name: Telecommunications
+%%
+sector.sectorid: 100056
+sector.market: 6
+sector.symbol: ^FTUB7500
+sector.name: Utilities
+%%
+sector.sectorid: 100057
+sector.market: 6
+sector.symbol: ^FTUB8300
+sector.name: Banks
+%%
+sector.sectorid: 100058
+sector.market: 6
+sector.symbol: ^FTUB8500
+sector.name: Insurance
+%%
+sector.sectorid: 100059
+sector.market: 6
+sector.symbol: ^FTUB8700
+sector.name: Financial Services
+%%
+sector.sectorid: 100060
+sector.market: 6
+sector.symbol: ^FTUB9500
+sector.name: Technology
+%%
+################################
+# NASDAQ SECTORS:
+################################
+sector.sectorid: 100020
+sector.market: 1
+sector.symbol: ^IXBK
+sector.name: Banks
+%%
+sector.sectorid: 100021
+sector.market: 1
+sector.symbol: ^IXFN
+sector.name: Financials
+%%
+sector.sectorid: 100022
+sector.market: 1
+sector.symbol: ^IXID
+sector.name: Industrials
+%%
+sector.sectorid: 100023
+sector.market: 1
+sector.symbol: ^IXIS
+sector.name: Insurance
+%%
+sector.sectorid: 100024
+sector.market: 1
+sector.symbol: ^IXK
+sector.name: Computers
+%%
+sector.sectorid: 100025
+sector.market: 1
+sector.symbol: ^IXTR
+sector.name: Transportation
+%%
+sector.sectorid: 100026
+sector.market: 1
+sector.symbol: ^IXUT
+sector.name: Telecommunications
+%%
+sector.sectorid: 100027
+sector.market: 1
+sector.symbol: ^NBI
+sector.name: Biotechnology
+%%
+sector.sectorid: 100061
+sector.market: 1
+sector.symbol: ^DJG
+sector.name: Gold Mining
+%%
+sector.sectorid: 100066
+sector.market: 1
+sector.symbol: ^DJUSNC
+sector.name: Consumer Goods
+%%
+sector.sectorid: 100067
+sector.market: 1
+sector.symbol: ^DJUSCY
+sector.name: Consumer Services
+%%
+sector.sectorid: 100069
+sector.market: 1
+sector.symbol: ^GSPE
+sector.name: Energy
+%%
+sector.sectorid: 100072
+sector.market: 1
+sector.symbol: ^IXHC
+sector.name: Health Care
+%%
+sector.sectorid: 100079
+sector.market: 1
+sector.symbol: ^DJUSBMT
+sector.name: Materials
+%%
+sector.sectorid: 100080
+sector.market: 1
+sector.symbol: ^DJUSRE
+sector.name: Real Estate
+%%
+sector.sectorid: 100087
+sector.market: 1
+sector.symbol: ^DUX
+sector.name: Utilities
+%%
+sector.sectorid: 100090
+sector.market: 1
+sector.symbol: ^DJABAS
+sector.name: Resources
+%%
+################################
+# NEW YORK STOCK EXCHANGE SECTORS:
+################################
+sector.sectorid: 100028
+sector.market: 3
+sector.symbol: ^NYE
+sector.name: Energy
+%%
+sector.sectorid: 100029
+sector.market: 3
+sector.symbol: ^NYK
+sector.name: Financials
+%%
+sector.sectorid: 100030
+sector.market: 3
+sector.symbol: ^NYP
+sector.name: Health Care
+%%
+sector.sectorid: 100064
+sector.market: 3
+sector.symbol: ^DJUSNC
+sector.name: Consumer Goods
+%%
+sector.sectorid: 100065
+sector.market: 3
+sector.symbol: ^DJUSCY
+sector.name: Consumer Services
+%%
+sector.sectorid: 100074
+sector.market: 3
+sector.symbol: ^DJUSIN
+sector.name: Industrials
+%%
+sector.sectorid: 100075
+sector.market: 3
+sector.symbol: ^DJUSCR
+sector.name: Computer Hardware
+%%
+sector.sectorid: 100076
+sector.market: 3
+sector.symbol: ^DJUSDV
+sector.name: Computer Service
+%%
+sector.sectorid: 100078
+sector.market: 3
+sector.symbol: ^DJUSBMT
+sector.name: Materials
+%%
+sector.sectorid: 100081
+sector.market: 3
+sector.symbol: ^DJUSRE
+sector.name: Real Estate
+%%
+sector.sectorid: 100084
+sector.market: 3
+sector.symbol: ^DJUSTL
+sector.name: Telecommunications
+%%
+sector.sectorid: 100086
+sector.market: 3
+sector.symbol: ^DUX
+sector.name: Utilities
+%%
+sector.sectorid: 100089
+sector.market: 3
+sector.symbol: ^DJABAS
+sector.name: Resources
+%%
+################################
+# AMEX SECTORS:
+################################
+sector.sectorid: 100031
+sector.market: 2
+sector.symbol: ^XIT
+sector.name: Information Technology
+%%
+sector.sectorid: 100032
+sector.market: 2
+sector.symbol: ^XCI
+sector.name: Computer Technology
+%%
+sector.sectorid: 100062
+sector.market: 2
+sector.symbol: ^IXY
+sector.name: Consumer Discrete
+%%
+sector.sectorid: 100063
+sector.market: 2
+sector.symbol: ^IXR
+sector.name: Consumer Staples
+%%
+sector.sectorid: 100068
+sector.market: 2
+sector.symbol: ^MEB
+sector.name: Energy
+%%
+sector.sectorid: 100070
+sector.market: 2
+sector.symbol: ^IXM
+sector.name: Financials
+%%
+sector.sectorid: 100071
+sector.market: 2
+sector.symbol: ^IXV
+sector.name: Health Care
+%%
+sector.sectorid: 100073
+sector.market: 2
+sector.symbol: ^XID
+sector.name: Industrials
+%%
+sector.sectorid: 100077
+sector.market: 2
+sector.symbol: ^IXB
+sector.name: Materials
+%%
+sector.sectorid: 100082
+sector.market: 2
+sector.symbol: ^DJUSRE
+sector.name: Real Estate
+%%
+sector.sectorid: 100083
+sector.market: 2
+sector.symbol: ^DVT
+sector.name: Telecommunications
+%%
+sector.sectorid: 100085
+sector.market: 2
+sector.symbol: ^UUO
+sector.name: Utilities
+%%
+sector.sectorid: 100088
+sector.market: 2
+sector.symbol: ^XNA
+sector.name: Resources
+%%
+###########################
+# TSX VENTURE:
+# NB: TSV doesn't have any index so
+#     these are just copied from TSX
+###########################
+sector.sectorid: 100091
+sector.market: 5
+sector.symbol: ^GSPTTCD
+sector.name: Consumer Discret
+%%
+sector.sectorid: 100092
+sector.market: 5
+sector.symbol: ^GSPTTCS
+sector.name: Consumer Staples
+%%
+sector.sectorid: 100093
+sector.market: 5
+sector.symbol: ^SPTTEN
+sector.name: Energy
+%%
+sector.sectorid: 100094
+sector.market: 5
+sector.symbol: ^SPTTFS
+sector.name: Financials
+%%
+sector.sectorid: 100095
+sector.market: 5
+sector.symbol: ^SPTTGD
+sector.name: Gold
+%%
+sector.sectorid: 100096
+sector.market: 5
+sector.symbol: ^GSPTTHC
+sector.name: Health Care
+%%
+sector.sectorid: 100097
+sector.market: 5
+sector.symbol: ^GSPTTIN
+sector.name: Industrials
+%%
+sector.sectorid: 100098
+sector.market: 5
+sector.symbol: ^SPTTTK
+sector.name: Information Technology
+%%
+sector.sectorid: 100099
+sector.market: 5
+sector.symbol: ^GSPTTMT
+sector.name: Materials
+%%
+sector.sectorid: 100100
+sector.market: 5
+sector.symbol: ^GSPTTRE
+sector.name: Real Estate
+%%
+sector.sectorid: 100101
+sector.market: 5
+sector.symbol: ^GSPTTTS
+sector.name: Telecommunications
+%%
+sector.sectorid: 100102
+sector.market: 5
+sector.symbol: ^GSPTTUT
+sector.name: Utilities
+%%
+sector.sectorid: 100103
+sector.market: 5
+sector.symbol: ^GSPTSE
+sector.name: Manufacturing
+%%
+sector.sectorid: 100104
+sector.market: 5
+sector.symbol: ^GSPTSE
+sector.name: Resources
+%%
+
+## NEXT INDEX: 100105

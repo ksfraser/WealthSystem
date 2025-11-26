@@ -1,0 +1,8 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="gamerule.ruletype" value="1">
+<table class="awf_form" width="80%">
+    <tr><th colspan="2">Minimum Price Rule</th></tr>
+    <tr><td><b>Min Price:</b></td><td><input type="text" class="awf_inputtext" name="min_price" value="1.0"></td></tr>
+    <tr><td colspan="2"><input type="submit" value="Save"></td></tr>
+</table>
+</form>

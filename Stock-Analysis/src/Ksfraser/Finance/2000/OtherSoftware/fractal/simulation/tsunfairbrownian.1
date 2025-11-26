@@ -1,0 +1,93 @@
+.TH TSUNFAIRBROWNIAN 1 "January 27, 2006"
+.SH NAME
+tsunfairbrownian \- unfair returns of a time series
+.SH SYNOPSIS
+.nf
+tsunfairbrownian [-d] [-f fraction] [-i value]
+                 [-p probability] [-t] [-v] [filename]
+.fi
+.SH DESCRIPTION
+Tsunfairbrownian is for generating unfair returns of a time
+series. The idea is to produce the returns of a time series which is
+weighted unfairly, by a Shannon probability, p, or alternately, a
+fraction of reserves to be wagered on each time increment. The input
+time series is presumed to have a Brownian distribution. The main
+function of this program is regression scenario verification-given an
+empirical time series, a Shannon probability, or a "wager" fraction,
+(which were probably derived from the program tsshannon,) speculative
+market pro forma performance can be analyzed. The cumulative sum
+process is Brownian in nature.
+.SH OPTIONS
+.TP
+.B -d
+The input file is a derivative instead of an integral.
+.TP
+.B -f fraction
+Fraction of reserves to be wagered, (0 <= fraction <= 1).
+.TP
+.B -i value
+Initial value of output time series (ie., initial reserves).
+.TP
+.B -p probability
+Shannon probability, (0.5 <= probability <= 1.0).
+.TP
+.B -t
+Sample's time will be included in the output time series.
+.TP
+.B -v
+Print the version and copyright banner of the program.
+.TP
+.B filename
+Input filename.
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsderivative(1), tshcalc(1), tshurst(1), tsintegrate(1),
+tslogreturns(1), tslsq(1), tsnormal(1), tsshannon(1),
+tsblack(1), tsbrownian(1), tsdlogistic(1), tsfBm(1),
+tsfractional(1), tsgaussian(1), tsintegers(1),
+tslogistic(1), tspink(1), tsunfairfractional(1),
+tswhite(1), tscoin(1), tsunfairbrownian(1), tsfraction(1),
+tsshannonmax(1), tschangewager(1), tssample(1), tsrms(1),
+tscoins(1), tsavg(1), tsXsquared(1), tsstockwager(1),
+tsshannonwindow(1), tsmath(1), tsavgwindow(1), tspole(1),
+tsdft(1), tsbinomial(1), tsdeterministic(1), tsnumber(1),
+tsrmswindow(1), tsshannonstock(1), tsmarket(1),
+tsstock(1), tsstatest(1), tsunfraction(1),
+tsshannonaggregate(1), tsinstant(1), tsshannonvolume(1),
+tsstocks(1), tsshannonfundamental(1), tstrade(1),
+tstradesim(1), tsrunlength(1), tsunshannon(1),
+tsrootmean(1), tsrunmagnitude(1), tskurtosis(1),
+tskurtosiswindow(1), tsrootmeanscale(1),
+tsscalederivative(1), tsgain(1), tsgainwindow(1)
+tscauchy(1), tslognormal(1), tskalman(1), tsroot(1),
+tslaplacian(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+----------------------------------------------------------------------
+.fi

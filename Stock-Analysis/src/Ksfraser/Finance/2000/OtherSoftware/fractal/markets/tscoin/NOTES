@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for tscoin. The data from files in the
+# ../computer.office ../electronic.components.production
+# ../electronic.components.shipments ../information.systems directories
+# were averaged and found to be:
+#
+#     data.tslogreturns-p.tsshannon.returns, 0.0145 ~ 0.015
+#     data.tslogreturns-p.tsshannon.probability, 0.5698 ~ 0.6
+#     data.tsshannonmax-p.max, 0.70 ~ 0.7000
+#     data.tsfraction.tsnormal-p.stddev, 0.0278 ~ 0.03
+#     data.tsfraction.tsrms-p, 0.02992 ~ 0.03
+#
+# A data file was made by running:
+#
+# ../../simulation/tscoin -p 0.6 300 > data
+#
+# where the -p argument was from
+# data.tslogreturns-p.tsshannon.probability
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/15 04:57:47 $
+# $Id: NOTES,v 0.0 2006/01/15 04:57:47 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/15 04:57:47  john
+# Initial version
+#
+#
+../../simulation/tscoin -p 0.6 300 > data

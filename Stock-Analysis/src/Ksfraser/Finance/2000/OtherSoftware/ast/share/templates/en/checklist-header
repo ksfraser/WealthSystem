@@ -1,0 +1,3 @@
+<form method="post" action="$save_page">
+<h2>$name</h2>
+$description<br><br>

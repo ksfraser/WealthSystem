@@ -1,0 +1,525 @@
+market.flags: 0
+market.marketid: TSX
+market.name: Toronto Stock Exchange
+market.market_key: .TO
+market.globe_sufix: -T
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GSPTSE
+market.symbol_file: TSX
+market.currency_id: CAD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: America/Toronto
+%%
+market.flags: 0
+market.marketid: NASD
+market.name: Nasdaq
+market.market_key: 
+market.globe_sufix: -Q
+market.bigchart_prefix: 
+market.yahoo_symbol: ^IXIC
+market.symbol_file: NASDAQ
+market.currency_id: USD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: America/New_York
+%%
+market.flags: 0
+market.marketid: AMEX
+market.name: American Stock Exchange
+market.market_key: 
+market.globe_sufix: -A
+market.bigchart_prefix: 
+market.yahoo_symbol: ^XAX
+market.symbol_file: AMEX
+market.currency_id: USD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: America/New_York
+%%
+market.flags: 0
+market.marketid: NYSE
+market.name: New York Stock Exchange
+market.market_key: 
+market.globe_sufix: -N
+market.bigchart_prefix: 
+market.yahoo_symbol: ^NYA
+market.symbol_file: NYSE
+market.currency_id: USD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: America/New_York
+%%
+market.flags: 1
+market.marketid: HKSE
+market.name: Hong Kong Stock Exchange
+market.market_key: .HK
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^HSI
+market.symbol_file: HKSE
+market.currency_id: HKD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Asia/Hong_Kong
+%%
+market.flags: 0
+market.marketid: TSX-V
+market.name: TSX Venture
+market.market_key: .V
+market.globe_sufix: -X
+market.bigchart_prefix: 
+market.yahoo_symbol: ^SPCDNX
+market.symbol_file: VSE
+market.currency_id: CAD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: America/Toronto
+%%
+market.flags: 1
+market.marketid: LSE
+market.name: London Stock Exchange
+market.market_key: .L
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^FTSE
+market.symbol_file: LSE
+market.currency_id: GBP
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/London
+%%
+market.flags: 1
+market.marketid: ASX
+market.name: Australian Stock Exchange
+market.market_key: .AX
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^AXJO
+market.symbol_file: ASX
+market.currency_id: AUD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Africa/Abidjan
+%%
+market.flags: 1
+market.marketid: OTCBB
+market.name: OTC BB
+market.market_key: .OB
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: 
+market.symbol_file: OTCBB
+market.currency_id: USD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: America/New_York
+%%
+market.flags: 1
+market.marketid: MLSE
+market.name: Milan Stock Exchange
+market.market_key: .MI
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^SPMIB
+market.symbol_file: MLSE
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Rome
+%%
+market.flags: 1
+market.marketid: SGX
+market.name: Singapore Stock Exchange
+market.market_key: .SI
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^STI
+market.symbol_file: SGX
+market.currency_id: SGD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Asia/Singapore
+%%
+market.flags: 1
+market.marketid: SAX
+market.name: Stockholm Stock Exchange
+market.market_key: .ST
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^OMXSPI
+market.symbol_file: SAX
+market.currency_id: SEK
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Stockholm
+%%
+market.flags: 1
+market.marketid: BSE
+market.name: Bombay Stock Exchange
+market.market_key: .BO
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^CRSLDX
+market.symbol_file: BSE
+market.currency_id: INR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: posix/Mideast
+%%
+market.flags: 1
+market.marketid: BOV
+market.name: Sao Paolo Stock Exchange
+market.market_key: .SA
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^BVSP
+market.symbol_file: BOVESPA
+market.currency_id: BRL
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Brazil/Acre
+%%
+market.flags: 1
+market.marketid: OSE
+market.name: Oslo Stock Exchange
+market.market_key: .OL
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: 
+market.symbol_file: OSE
+market.currency_id: NOK
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Oslo
+%%
+market.flags: 1
+market.marketid: MSE
+market.name: Madrid Stock Exchange
+market.market_key: .MC
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^SMSI
+market.symbol_file: MSE
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Madrid
+%%
+market.flags: 1
+market.marketid: CSE
+market.name: Copenhagen Stock Exchange
+market.market_key: .CO
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: OMXC20.CO
+market.symbol_file: CSE
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Copenhagen
+%%
+market.flags: 1
+market.marketid: BRU
+market.name: Euronext Brussels
+market.market_key: .BR
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^BFX
+market.symbol_file: EURONEXT-BRU
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Brussels
+%%
+market.flags: 1
+market.marketid: AMS
+market.name: Euronext Amsterdam
+market.market_key: .AS
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^AEX
+market.symbol_file: EURONEXT-AMS
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Amsterdam
+%%
+market.flags: 1
+market.marketid: PAR
+market.name: Euronext Paris
+market.market_key: .PA
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^FCHI
+market.symbol_file: EURONEXT-PAR
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Paris
+%%
+market.flags: 1
+market.marketid: LIS
+market.name: Euronext Lisbon
+market.market_key: .LS
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: PSI.NX
+market.symbol_file: EURONEXT-LIS
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Lisbon
+%%
+market.flags: 1
+market.marketid: JSE
+market.name: Jakarta Stock Exchange
+market.market_key: .JK
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^JKSE
+market.symbol_file: JSE
+market.currency_id: IDR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Asia/Jakarta
+%%
+market.flags: 1
+market.marketid: NSI
+market.name: National Stock Exchange of India
+market.market_key: .NS
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^BSESN
+market.symbol_file: NSE_INDIA
+market.currency_id: INR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: posix/Indian
+%%
+market.flags: 1
+market.marketid: KOSDA
+market.name: KOSDAQ
+market.market_key: .KQ
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^KS11
+market.symbol_file: KOSDAQ
+market.currency_id: KRW
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Asia/Seoul
+%%
+market.flags: 1
+market.marketid: KOREA
+market.name: Korea Stock Exchange
+market.market_key: .KS
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^KS11
+market.symbol_file: KOREA
+market.currency_id: KRW
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Asia/Seoul
+%%
+market.flags: 1
+market.marketid: TSE
+market.name: Taiwan Stock Exchange
+market.market_key: .TW
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^TWII
+market.symbol_file: TSE
+market.currency_id: TWD
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Asia/Taipei
+%%
+market.flags: 1
+market.marketid: BERLN
+market.name: Berlin Stock Exchange
+market.market_key: .BE
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: BERLIN
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: DUS
+market.name: Dusseldorf Stock Exchange
+market.market_key: .DU
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: DUSSELDORF
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: FRANK
+market.name: Frankfurt Stock Exchange
+market.market_key: .F
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: FRANKFURT
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: HAMB
+market.name: Hamburg Stock Exchange
+market.market_key: .HM
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: HAMBURG
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: MUNIC
+market.name: Munich Stock Exchange
+market.market_key: .MU
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: MUNICH
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: STG
+market.name: Stuttgart Stock Exchange
+market.market_key: .SG
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: STUTTGART
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 4
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: XETRA
+market.name: XETRA Stock Exchange
+market.market_key: .DE
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^GDAXI
+market.symbol_file: XETRA
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Berlin
+%%
+market.flags: 1
+market.marketid: BARC
+market.name: Barcelona Stock Exchange
+market.market_key: .BC
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^SMSI
+market.symbol_file: BARCELONA
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Madrid
+%%
+market.flags: 1
+market.marketid: BILBA
+market.name: Bilbao Stock Exchange
+market.market_key: .BI
+market.globe_sufix: 
+market.bigchart_prefix: 
+market.yahoo_symbol: ^SMSI
+market.symbol_file: BILBAO
+market.currency_id: EUR
+market.open_hour: 9
+market.open_min: 30
+market.close_hour: 16
+market.close_min: 0
+market.timezone: Europe/Madrid
+%%

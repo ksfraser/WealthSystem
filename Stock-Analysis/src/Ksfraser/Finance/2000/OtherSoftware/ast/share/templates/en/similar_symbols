@@ -1,0 +1,21 @@
+<script type="text/javascript">
+  function choose_symbol(s)
+  {
+    document.getElementById('selected_symbol').value = s;
+    document.getElementById('symbolfrm').submit();
+  }
+  function do_search()
+  {
+    document.getElementById('selected_symbol').value = '$symbol';
+    document.getElementById('symbol_search').value='true';
+    document.getElementById('symbolfrm').submit();
+  }
+</script>
+The symbol '$symbol' you entered is not valid. Maybe you would like one of the following:<br>
+<form method="post" action="$appname" id="symbolfrm">
+  $fields
+  <input type="hidden" name="selected_symbol" id="selected_symbol" value="">
+  <input type="hidden" name="symbol_search" id="symbol_search" value="">
+  $ssymbols
+  <a href="#" onclick="javascript:do_search();"><img src="images/find.png" alt="find">&nbsp;Search by Company Name</a>
+</form>

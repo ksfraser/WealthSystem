@@ -1,0 +1,128 @@
+TSLOGRETURNS(1) 					       TSLOGRETURNS(1)
+
+
+
+NAME
+       tslogreturns - take the logarithmic returns of a time series
+
+SYNOPSIS
+       tslogreturns [-p] [-t] [-v] [filename]
+
+DESCRIPTION
+       Tslogreturns is for taking the logarithmic returns of of a time series.
+       The value of a sample in the time series is divided by the value of the
+       previous  sample  in the time series, and the logarithm of the quotient
+       is printed to stdout.
+
+       The form of the best fit is e^(at) for exponential least  squares  fit,
+       or x^(t) for power least squares fit, or 2^(bt) for binary fit.
+
+       The  input file structure is a text file consisting of records, in tem-
+       poral order, one record per time  series  sample.   Blank  records  are
+       ignored,  and  comment  records are signified by a '#' character as the
+       first non white space character in the record. Data records  must  con-
+       tain at least one field, which is the data value of the sample, but may
+       contain many fields-if the record contains many fields, then the  first
+       field  is regarded as the sample's time, and the last field as the sam-
+       ple's value at that time.
+
+       Note: The derivation for exponential least squares fit is:
+
+	   1) y[t] = exp (k1 + k2t)
+
+	   2) s[t] = log (exp (k1 + k2t) / exp (k1 + k2 (t - 1)))
+
+		   = log (exp (k1 + k2t - k1 - k2t + k2))
+
+		   = log (exp (k2))
+
+		   = k2
+
+       Note: The derivation for power least squares fit is:
+
+	   1) compute the least squares fit, as above
+
+	   2) exp (xt) = pow (a, t)
+
+	   3) xt = log (pow (a, t))
+
+		 = t log (a)
+
+	   4) x = log (a)
+
+	   5) a = exp (x)
+
+       Note: The derivation for the binary least squares fit is:
+
+	   1) compute the least squares fit, as above
+
+	   2) exp (xt) = pow (2, kt)
+
+	   3) pow (a, t) = pow (2, kt)
+
+	   4) a = pow (2, k)
+
+	   5) k * log (2) = log (a)
+
+	   6) k = log (a) / log (2)
+
+OPTIONS
+       -p     Output only the returns formula of the form, e^(at)  =  x^(t)  =
+	      2^(qt).
+
+       -t     Sample's time will be included in the output time series.
+
+       -v     Print the version and copyright banner of the program.
+
+       filename
+	      Input filename.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),   tshcalc(1),	tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),	tsrmswindow(1),     tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),	tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),  tstradesim(1),  tsrunlength(1),  tsunshannon(1),   tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 	       TSLOGRETURNS(1)

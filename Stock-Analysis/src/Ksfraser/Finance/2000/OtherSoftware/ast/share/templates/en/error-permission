@@ -1,0 +1,14 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Advanced Stock Tracker - Permission Error</title>
+  <link rel="stylesheet" type="text/css" href="$stylesheet">
+  <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+</head>
+<body>
+<table border="0" align="center" class="awf_form">
+<tr><th colspan="2"><h2>Incorrect Permissions</h2></td></tr>
+<tr><td><img src="images/padlock.png" alt="error"></td><td><div class="error">You do not have permission to access this page.</div><br>
+</td></tr></table>
+</body>
+</html>

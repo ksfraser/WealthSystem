@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop
+END
+SAR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/SAR.pm
+END
+VAR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/VAR.pm
+END
+BasedOnIndicators.pm
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/BasedOnIndicators.pm
+END
+KeepRunUp.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/KeepRunUp.pm
+END
+ExtremePrices.pm
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/ExtremePrices.pm
+END
+Fixed.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/Fixed.pm
+END
+Breakeven.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Stop/Breakeven.pm
+END

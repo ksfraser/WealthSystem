@@ -1,0 +1,14 @@
+1. Merge the sample crontab in ${MY_INSTALLDIR}/share/example/crontab with your existing crontab (crontab -l to view, crontab -e to edit). If your crontab is blank, you can replace it with the sample:
+   crontab ${MY_INSTALLDIR}/share/example/crontab # THIS WILL OVERWRITE YOUR EXISTING CRONTAB
+
+2. Modify the apache2 configuration (/etc/apache/httpd.conf) and add:
+
+<Directory "${MY_INSTALLDIR}">
+	   AllowOverride All
+	   Options ExecCGI
+	   SetHandler cgi-script
+	   DirectoryIndex ast
+</Directory>
+
+3. Log into webpage at
+http://${VHOST_HOSTNAME}/${VHOST_APPDIR}/ast

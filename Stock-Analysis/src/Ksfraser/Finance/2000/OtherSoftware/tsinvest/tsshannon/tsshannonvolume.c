@@ -1,0 +1,1089 @@
+/*
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+tsshannonvolume.c for finding the fundamental Shannon probability
+of a time series, given a stocks value, and the number of shares
+traded, in each time interval.  The value of a sample in the time
+series is divided by the volume, and added to the cumulative sum of
+the samples, and the square of the value, after dividing by the
+volume, is added to the sum of the squares to make a new time series
+by dividing both the cumulative sum and the square root of the sum of
+the squares by the number of samples for each sample. The new time
+series is printed to stdout. The time series printed to stdout is a
+tab delimited table of:
+
+    1) The average of a normalized increment, avg, and is computed by:
+
+              v  - v
+               t    t - 1   1
+        avg = ----------- * -
+                v           N
+                 t - 1
+
+    where N is the trading volume, at time t.
+
+    2) The root mean square of the normalized increment, rms, and is
+    computed by:
+
+                            2
+               [v  - v     ]
+           2   [ t    t - 1]   1
+        rms  = [-----------] * -
+               [  v        ]   N
+               [   t - 1   ]
+
+    where N is the trading volume, at time t.
+
+    3) The Shannon probability, P, as computed by:
+
+            avg
+            --- + 1
+            rms
+        P = -------
+               2
+
+    4) The Shannon probability, P, as computed by:
+
+            sqrt (avg) + 1
+        P = --------------
+                  2
+
+    5) The Shannon probability, P, as computed by:
+
+            rms + 1
+        P = -------
+               2
+
+Note: Conceptually, this program is used to ``adjust'' the Shannon
+probability of a stock by considering the volumes of trade in a time
+interval. The program should be regarded as experimental, and used
+with caution.
+
+The input file structure is a text file consisting of records, in
+temporal order, one record per time series sample.  Blank records are
+ignored, and comment records are signified by a '#' character as the
+first non white space character in the record. Data records must
+contain at least two fields, which is the data value of the sample,
+followed by the volume of the sample, but may contain many more
+fields-if the record contains many more fields, then the first field
+is regarded as the sample's time, and the next to the last field the
+value, with the last field as the sample's volume at that time.
+
+Note that since the average of the normalized increments of a time
+sampled time series goes up linearly on the number of samples in a
+sampled interval, and the root mean square of the normalized
+increments goes up with the square root of the of the number of
+samples in a sampled interval, it would be reasonable to assume that
+that the average of the normalized increments would go up linearly
+with the trading volume of a stock, and the root mean square would to
+go up with the square root of the trading volume.
+
+If we consider capital, V, invested in a savings account, and
+calculate the growth of the capital over time:
+
+    V(t) = V(t - 1)(1 + a(t))........................(1.1)
+
+where a(t) is the interest rate at time t, (usually a constant[1].)
+In equities, a(t) is not constant, and varies, perhaps being negative
+at certain times, (meaning that the value of the equity decreased.)
+This fluctuation in an equity's value can be represented by modifying
+a(t) in Equation 1.1:
+
+    a(t)  = f(t) * F(T)..............................(1.2)
+
+where the product f * F is the fluctuation in the equity's value at
+time t.  An equity's value, over time, is similar to a simple tossed
+coin game [Sch91, pp. 128], where f(t) is the fraction of a gambler's
+capital wagered on a toss of the coin, at time t, and F(t) is a random
+variable[2], signifying whether the game was a win, or a loss, ie.,
+whether the gambler's capital increased or decreased, and by how much.
+The amount the gambler's capital increased or decreased is f(t) *
+F(t).
+
+In general, F(t) is a function of a random variable, with an average,
+over time, of avgf, and a root mean square value, rmsf, of unity.
+Note that for simple, time invariant, compound interest, F(t) has an
+average and root mean square, both being unity, and f(t) is simply the
+interest rate, which is assumed to be constant. For a simple, single
+coin game, F(t) is a fixed increment, (ie., either +1 or -1,) random
+generator.  From an analytical perspective, it would be advantageous
+to measure the the statistical characteristics of the generator.
+Substituting Equation 1.2 into Equation 1.1[3]:
+
+
+    V(t) = V(t - 1)(1 + f(t) * F(t))................(1.3)
+
+and subtracting V(t - 1) from both sides:
+
+
+    V(t) - V(t - 1) = V(t - 1) (1 + f(t) * F(t)) -
+
+    V(t - 1)........................................(1.4)
+
+and dividing both sides by V(t - 1):
+
+    V(t) - V(t - 1)
+    --------------- =
+        V(t - 1)
+
+    V(t - 1) (1 + f(t) * F(t)) - V(t - 1)
+    -------------------------------------...........(1.5)
+                 V(t - 1)
+
+and combining:
+
+    V(t) - V(t - 1)
+    --------------- =
+        V(t - 1)
+
+    (1 + f(t) * F(t) ) - 1 = f(t) * F(t)............(1.6)
+
+We now have a "prescription," or process, for calculating the
+characteristics of the random process that determines an equity's
+value.  That process is, for each unit of time, subtract the value of
+the of the equity at the previous time from the value of the equity at
+the current time, and divide this by the value of the equity at the
+previous time. The root mean square[4] of these values are the root
+mean square of the random process.  The average of these values are
+the average of the random process, avgf.  The root mean square of
+these values can be calculated by any convenient means, and will be
+represented by rms. The average of these values can be found by any
+convenient means, and will be represented by avg[5].  Therefore, if
+f(t) = f, and does not vary over time:
+
+    rms = f.........................................(1.7)
+
+which, if there are sufficiently many samples, is a metric of the
+equity value's "volatility," and:
+
+
+    avg = f * F(t)..................................(1.8)
+
+and if there are sufficiently many samples, the average of F(t) is
+simply avgf, or:
+
+    avg = f * avgf..................................(1.9)
+
+which is a metric on the equity value's rate of "growth." Note that
+this is the "effective" compound interest rate from Equation 1.1.
+Equations 1.7 and 1.9 are important equations, since they can be used
+in portfolio management.  For example, Equation 1.7 states that the
+volatility of the capital invested in many equities, simultaneously,
+is calculated as the root mean square of the individual volatility of
+the equities.  Equation 1.9 states that the growths in the same equity
+values add together linearly[6].  Dividing Equation 1.9 by Equation
+1.7 results in the two f's canceling, or:
+
+    avg
+    --- = avgf.....................................(1.10)
+    rms
+
+There may be analytical advantages to "model" avg as a simple tossed
+coin game, (either played with a single coin, or multiple coins, ie.,
+many coins played at one time, or a single coin played many times[7].)
+The number of wins minus the number of losses, in many iterations of a
+single coin tossing game would be:
+
+    P - (1 - P) = 2P - 1...........................(1.11)
+
+where P is the probability of a win for the tossed coin.  (This
+probability is traditionally termed, the "Shannon probability" of a
+win.) Note that from the definition of F(t) above, that P = avgf. For
+a fair coin, (ie., one that comes up with a win 50% of the time,) P =
+0.5, and there is no advantage, in the long run, to playing the game.
+However, if P > 0.5, then the optimal fraction of capital wagered on
+each iteration of the single coin tossing game, f, would be 2P - 1.
+Note that if multiple coins were used for each iteration of the game,
+we would expect that the volatility of the gambler's capital to
+increase as the square root of the number of coins used, and the
+growth to increase linearly with the number of coins used,
+irregardless of whether many coins were tossed at once, or one coin
+was tossed many times, (ie., our random generator, F(t) would assume a
+binomial distribution and if the number of coins was very large, then
+F(t) would assume, essentially, a Gaussian distribution.)  Many
+equities have a Gaussian distribution for the random process, F(t).
+It may be advantageous to determine the Shannon probability to analyze
+equity investment strategies.  From Equation 1.10:
+
+    avg
+    --- = avgf = 2P - 1............................(1.12)
+    rms
+
+or:
+
+    avg
+    --- + 1 = 2P...................................(1.13)
+    rms
+
+and:
+
+        avg
+        --- + 1
+        rms
+    P = -------....................................(1.14)
+           2
+
+where only the average and root mean square of the normalized
+increments need to be measured, using the "prescription" or process
+outlined above.
+
+Interestingly, what Equation 1.12 states is that the "best" equity
+investment is not, necessarily, the equity that has the largest
+average growth, avgf.  The best equity investment is the equity that
+has the largest growth, while simultaneously having the smallest
+volatility.  In point of fact, the optimal decision criteria is to
+choose the equity that has the largest ratio of growth to volatility,
+where the volatility is measured by computing the root mean square of
+the normalized increments, and the growth is computed by averaging the
+normalized increments.
+
+We now have a "first order prescription" that enables us to analyze
+fluctuations in equity values, although we have not explained why
+equity values fluctuate.  For a formal presentation on the subject,
+see the bibliography in [Art95] which, also, offers non-mathematical
+insight into the explanation.
+
+Consider a very simple equity market, with only two people holding
+equities. Equity value "arbitration" (ie., how equity values are
+determined,) is handled by one person posting (to a bulletin board,) a
+willingness to sell a given number of stocks at a given price, to the
+other person.  There is no other communication between the two
+people. If the other person buys the stock, then that is the value of
+the stock at that time.  Obviously, the other person will not buy the
+stock if the price posted is too high-even if ownership of the stock
+is desired.  For example, the other person could simply decide to wait
+in hopes that a favorable price will be offered in the future.  So the
+stock seller must not post a price that the other person would
+consider too high, and the other person would not buy at the price if
+it is reasoned that the seller's pricing strategy will be to lower the
+offering price in the future, which would be a reasonable deduction if
+the posted price is considered too high.  What this means is that the
+seller must consider not only the behavior of the other person, but
+what the other person thinks the seller's behavior will be, ie., the
+seller must base the pricing strategy on the seller's pricing
+strategy. Such convoluted logical processes are termed "self
+referential," and the implication is that the market can never operate
+in a consistent fashion that can be the subject of deductive analysis
+[Pen89, pp. 101][8].  As pointed out by [Art95, Abstract], these types
+of indeterminacies pervade economics[9].  What the two players do, in
+absence of a deductively consistent and complete theory of the market,
+is to rely on inductive reasoning. They form subjective expectations
+or hypotheses about how the market operates.  These expectations and
+hypothesis are constantly formulated and changed, in a world that
+forms from others' subjective expectations. What this means is that
+equity values will fluctuate as the expectations and hypothesis
+concerning the future of equity values change[10]. The fluctuations
+created by these indeterminacies in the equity market are represented
+by the term f(t) * F(t) in Equation 1.3, and since there are many such
+indeterminacies, we would anticipate F(t) to have a Gaussian
+distribution.  This is a rather interesting conclusion, since
+analyzing the actions of aggregately many "agents," each operating on
+subjective hypothesis in a market that is deductively indeterminate,
+can result in a system that can not only be analyzed, but optimized.
+The only remaining derivation is to show that the optimal wagering
+strategy is, as cited above:
+
+    f = rms = 2P - 1...............................(1.15)
+
+where f is the fraction of a gambler's capital wagered on each toss of
+a coin that has a Shannon probability, P, of winning.  Following
+[Rez94, pp. 450], consider that the gambler has a private wire into
+the future who places wagers on the outcomes of a game of chance.  We
+assume that the side information which he receives has a probability,
+P, of being true, and of 1 - P, of being false.  Let the original
+capital of gambler be V(0), and V(n) his capital after the n'th wager.
+Since the gambler is not certain that the side information is entirely
+reliable, he places only a fraction, f, of his capital on each wager.
+Thus, subsequent to n many wagers, assuming the independence of
+successive tips from the future, his capital is:
+
+                   w        l
+    V(n)  = (1 + f)  (1 - f) V (0).................(1.16)
+
+where w is the number of times he won, and l = n - w, the number of
+times he lost. These numbers are, in general, values taken by two
+random variables, denoted by W and L. According to the law of large
+numbers:
+
+                  1
+    lim           - W = P..........................(1.17)
+    n -> infinity n
+
+
+                  1
+    lim           - L = q = 1 - P..................(1.18)
+    n -> infinity n
+
+The problem with which the gambler is faced is the determination of f
+leading to the maximum of the average exponential rate of growth of
+his capital. That is, he wishes to maximize the value of:
+
+                      1    V(n)
+    G = lim           - ln ----....................(1.19)
+        n -> infinity n    V(0)
+
+with respect to f, assuming a fixed original capital and specified P:
+
+                      W              L
+    G = lim           - ln (1 + f) + - ln (1 - f)..(1.20)
+        n -> infinity n              n
+
+or:
+
+
+    G = P ln (1 + f) + q ln (1 - f)................(1.21)
+
+which, by taking the derivative with respect to f, and equating to
+zero, can be shown to have a maxima when:
+
+    dG           P - 1        1 - P
+    -- = P(1 + f)      (1 - f)      -
+    df
+
+                  1 - P - 1
+    (1 - P)(1 - f)          (1 + f)P = 0...........(1.22)
+
+combining terms:
+
+
+                P - 1        1 - P
+    0 = P(1 + f)      (1 - f)      -
+
+                  P         P
+    (1 - P)(1 - f)  (1 + f ) ......................(1.23)
+
+and splitting:
+
+            P - 1        1 - P
+    P(1 + f)      (1 - f)      =
+
+                  P        P
+    (1 - P)(1 - f)  (1 + f) .......................(1.24)
+
+then taking the logarithm of both sides:
+
+    ln (P) + (P - 1) ln (1 + f) + (1 - P) ln (1 - f) =
+
+    ln (1 - P) - P ln (1 - f) + P ln (1 + f).......(1.25)
+
+and combining terms:
+
+    (P - 1) ln (1 + f) - P ln (1 + f) +
+
+    (1 - P) ln (1 - f) + P ln (1 - f) =
+
+    ln (1 - P) - ln (P)............................(1.26)
+
+or:
+
+    ln (1 - f) - ln (1 + f) =
+
+    ln (1 - P)  - ln (P)...........................(1.27)
+
+and performing the logarithmic operations:
+
+       1 - f      1 - P
+    ln ----- = ln -----............................(1.28)
+       1 + f        P
+
+and exponentiating:
+
+    1 - f   1 - P
+    ----- = -----..................................(1.29)
+    1 + f     P
+
+which reduces to:
+
+    P(1 - f) = (1 - P)(1 + f)......................(1.30)
+
+and expanding:
+
+    P - Pf = 1 - Pf - P + f........................(1.31)
+
+or:
+
+    P = 1 - P + f..................................(1.32)
+
+and, finally:
+
+    f = 2P - 1.....................................(1.33)
+
+Footnotes:
+
+[1] For example, if a = 0.06, or 6%, then at the end of the first time
+interval the capital would have increased to 1.06 times its initial
+value.  At the end of the second time interval it would be (1.06),
+and so on.  What Equation 1.1 states is that the way to get the value,
+V in the next time interval is to multiply the current value by
+1.06. Equation 1.1 is nothing more than a "prescription," or a process
+to make an exponential, or "compound interest" mechanism. In general,
+exponentials can always be constructed by multiplying the current
+value of the exponential by a constant, to get the next value, which
+in turn, would be multiplied by the same constant to get the next
+value, and so on.  Equation 1.1 is nothing more than a construction of
+V (t) = exp(kt) where k = ln(1 + a). The advantage of representing
+exponentials by the "prescription" defined in Equation 1.1 is
+analytical expediency. For example, if you have data that is an
+exponential, the parameters, or constants, in Equation 1.1 can be
+determined by simply reversing the "prescription," ie., subtracting
+the previous value, (at time t - 1,) from the current value, and
+dividing by the previous value would give the exponentiating constant,
+(1 + at). This process of reversing the "prescription" is termed
+calculating the "normalized increments." (Increments are simply the
+difference between two values in the exponential, and normalized
+increments are this difference divided by the value of the
+exponential.) Naturally, since one usually has many data points over a
+time interval, the values can be averaged for better precision-there
+is a large mathematical infrastructure dedicated to precision
+enhancement, for example, least squares approximation to the
+normalized increments, and statistical estimation.
+
+[2] "Random variable" means that the process, F(t), is random in
+nature, ie., there is no possibility of determining what the next
+value will be. However, F can be analyzed using statistical methods
+[Fed88, pp. 163], [Sch91, pp. 128]. For example, F typically has a
+Gaussian distribution for equity values [Cro95, pp. 249], in which
+case the it is termed a "fractional Brownian motion," or simply a
+"fractal" process. In the case of a single tossed coin, it is termed
+"fixed increment fractal," "Brownian," or "random walk" process. In
+any case, determination of the statistical characteristics of Ft are
+the essence of analysis. Fortunately, there is a large mathematical
+infrastructure dedicated to the subject. For example, F could be
+verified as having a Gaussian distribution using Chi-Square
+techniques. Frequently, it is convenient, from an analytical
+standpoint, to "model" F using a mathematically simpler process
+[Sch91, pp. 128]. For example, multiple iterations of tossing a coin
+can be used to approximate a Gaussian distribution, since the
+distribution of many tosses of a coin is binomial-which if the number
+of tosses is sufficient will represent a Gaussian distribution to
+within any required precision [Sch91, pp. 144], [Fed88, pp. 154].
+
+[3] Equation 1.3 is interesting in many other respects.  For example,
+adding a single term, m * V(t - 1), to the equation results in V(t) =
+v(t - 1) (1 + f(t) * F(t) + m * V(t - 1)) which is the "logistic," or
+'S' curve equation,(formally termed the "discreet time quadratic
+equation,") and has been used successfully in many unrelated fields
+such as manufacturing operations, market and economic forecasting, and
+analyzing disease epidemics [Mod92, pp. 131]. There is continuing
+research into the application of an additional "non-linear" term in
+Equation 1.3 to model equity value non-linearities. Although there
+have been modest successes, to date, the successes have not proved to
+be exploitable in a systematic fashion [Pet91, pp. 133]. The reason
+for the interest is that the logistic equation can exhibit a wide
+variety of behaviors, among them, "chaotic." Interestingly, chaotic
+behavior is mechanistic, but not "long term" predictable into the
+future. A good example of such a system is the weather. It is an
+important concept that compound interest, the logistic function, and
+fractals are all closely related.
+
+[4] In this section, "root mean square" is used to mean the variance
+of the normalized increments. In Brownian motion fractals, this is
+computed by sigmatotal^2 = sigma1^2 + sigma2^2 ... However, in many
+fractals, the variances are not calculated by adding the squares,
+(ie., a power of 2,) of the values-the power may be "fractional," ie.,
+3 / 2 instead of 2, for example [Sch91, pp. 130], [Fed88, pp.
+178]. However, as a first order approximation, the variances of the
+normalized increments of equity values can successfully be added root
+mean square [Cro95, kpp. 250]. The so called "Hurst" coefficient,
+which can be measured, determines the process to be used.  The Hurst
+coefficient is range of the equity values over a time interval,
+divided by the standard deviation of the values over the interval, and
+its determination is commonly called "R / S" analysis. As pointed out
+in [Sch91, pp. 157] the errors committed in such simplified
+assumptions can be significant-however, for analysis of equities,
+squaring the variances seems to be a reasonable simplification.
+
+[5] For example, many calculators have averaging and root mean square
+functionality, as do many spreadsheet programs-additionally, there are
+computer source codes available for both.  See the programs tsrms and
+tsavg.  The method used is not consequential.
+
+[6] There are significant implications do to the fact that equity
+volatilities are calculated root mean square.  For example, if capital
+is invested in N many equities, concurrently, then the volatility of
+the capital will be rms / sqrt (N) of an individual equity's
+volatility, rms, provided all the equites have similar statistical
+characteristics. But the growth in the capital will be unaffected,
+ie., it would be statistically similar to investing all the capital in
+only one equity. What this means is that capital, or portfolio,
+volatility can be minimized without effecting portfolio growth-ie.,
+volatility risk can addressed.  Further, it does not make any
+difference, as far as portfolio value growth is concerned, whether the
+individual equities are invested in concurrently, or serially, ie., if
+one invested in 10 different equities for 100 days, concurrently, or
+one could invest in only one equity, for 10 days, and then the next
+equity for the next 10 days, and so on. The capital growth would have
+the same characteristics for both agendas. (Note that the concurrent
+agenda is superior since the volatility of the capital will be the
+root mean square of the individual equity volatilities divided by the
+square root of the number of equities.  In the serial agenda, the
+volatility of the capital will be simply the root mean square of the
+individual equity volatilities.) Almost all equity wagering strategies
+will consist of optimizing variations on combinations of serial and
+concurrent agendas.  There are further applications.  For example,
+Equation 1.6 could be modified by dividing both the normalized
+increments, and the square of the normalized increments by the daily
+trading volume.  The quotient of the normalized increments divided by
+the trading volume is the instantaneous growth, avg, of the equity, on
+a per-share basis.  Likewise, the square root of the square of the
+normalized increments divided by the daily trading volume is the
+instantaneous root mean square, rmsf, of the equity on a per-share
+basis, ie., its instantaneous volatility of the equity.  (Note that
+these instantaneous values are the statistical characteristics of the
+equity on a per-share bases, similar to a coin toss, and not on time.)
+Additionally, it can be shown that the range-the maximum minus the
+minimum-of an equity's value over a time interval will increase with
+the square root of of the size of the interval of time [Fed88,
+pp. 178]. Also, it can be shown that the number of expected stock
+value "high and low" transitions scales with the square root of time,
+meaning that the probability of an equity value "high or low"
+exceeding a given time interval is proportional to the square root of
+the time interval [Schroder, pp. 153].
+
+[7] Here the "model" is to consider two black boxes, one with a stock
+"ticker" in it, and the other with a casino game of a tossed coin in
+it. One could then either invest in the equity, or, alternatively,
+invest in the tossed coin game by buying many casino chips, which
+constitutes the starting capital for the tossed coin game.  Later,
+either the equity is sold, or the chips "cashed in." If the statistics
+of the equity value over time is similar to the statistics of the coin
+game's capital, over time, then there is no way to determine which box
+has the equity, or the tossed coin game. The advantage of this model
+is that gambling games, such as the tossed coin, have a large
+analytical infrastructure, which, if the two black boxes are
+statistically the same, can be used in the analysis of equities.  The
+concept is that if the value of the equity, over time, is
+statistically similar to the coin game's capital, over time, then the
+analysis of the coin game can be used on equity values.  Note that in
+the case of the equity, the terms in f(t) * F(t) can not be
+separated. In this case, f = rms is the fraction of the equity's
+value, at any time, that is "at risk," of being lost, ie., this is the
+portion of a equity's value that is to be "risk managed."  This is
+usually addressed through probabilistic methods, as outlined below in
+the discussion of Shannon probabilities, where an optimal wagering
+strategy is determined. In the case of the tossed coin game, the
+optimal wagering strategy is to bet a fraction of the capital that is
+equal to f = rms = 2P - 1 [Sch91, pp. 128, 151], where P is the
+Shannon probability. In the case of the equity, since f = rms is not
+subject to manipulation, the strategy is to select equities that
+closely approximate this optimization, and the equity's value, over
+time, on the average, would increase in a similar fashion to the coin
+game.  The growth of either investment would be equal to avg = rms^2,
+on average, for each iteration of the coin game, or time unit of
+equity investment. This is an interesting concept from risk management
+since it maximizes the gain in the capital, while, simultaneously,
+minimizing risk exposure to the capital.
+
+[8] Penrose, referencing Russell's paradox, presents a very good
+example of logical contradiction in a self-referential system.
+Consider a library of books. The librarian notes that some books in
+the library contain their titles, and some do not, and wants to add
+two index books to the library, labeled "A" and "B," respectively; the
+"A" book will contain the list of all of the titles of books in the
+library that contain their titles; and the "B" book will contain the
+list of all of the titles of the books in the library that do not
+contain their titles.  Now, clearly, all book titles will go into
+either the "A" book, or the "B" book, respectively, depending on
+whether it contains its title, or not. Now, consider in which book,
+the "A" book or the "B" book, the title of the "B" book is going to be
+placed-no matter which book the title is placed, it will be
+contradictory with the rules. And, if you leave it out, the two books
+will be incomplete.)
+
+[9] [Art95] cites the "El Farol Bar" problem as an example. Assume one
+hundred people must decide independently each week whether go to the
+bar. The rule is that if a person predicts that more than, say, 60
+will attend, it will be too crowded, and the person will stay home; if
+less than 60 is predicted, the person will go to the bar. As trivial
+as this seems, it destroys the possibility of long-run shared,
+rational expectations.  If all believe few will go, then all will go,
+thus invalidating the expectations. And, if all believe many will go,
+then none will go, likewise invalidating those expectations.
+Predictions of how many will attend depend on others' predictions, and
+others' predictions of others' predictions. Once again, there is no
+rational means to arrive at deduced a-priori predictions. The
+important concept is that expectation formation is a self-referential
+process in systems involving many agents with incomplete information
+about the future behavior of the other agents. The problem of
+logically forming expectations then becomes ill-defined, and rational
+deduction, can not be consistent or complete. This indeterminacy of
+expectation-formation is by no means an anomaly within the real
+economy. On the contrary, it pervades all of economics and game theory
+[Art95].
+
+[10] Interestingly, the system described is a stable system, ie., if
+the players have a hypothesis that changing equity positions may be of
+benefit, then the equity values will fluctuate-a self fulfilling
+prophecy.  Not all such systems are stable, however.  Suppose that one
+or both players suddenly discover that equity values can be "timed,"
+ie., there are certain times when equities can be purchased, and
+chances are that the equity values will increase in the very near
+future. This means that at certain times, the equites would have more
+value, which would soon be arbitrated away. Such a scenario would not
+be stable.
+
+Bibliography:
+
+[Art95] W. Brian Arthur.  "Complexity in Economic and Financial
+Markets."  Complexity, 1, pp. 20-25, 1995.  Also available from
+http://www.santafe.edu/arthur, February 1995.
+
+[Cro95] Richard M. "Crownover.  Introduction to Fractals and Chaos."
+Jones and Bartlett Publishers International, London, England, 1995.
+
+[Fed88] Jens Feder. "Fractals." Plenum Press, New York, New York,
+1988.
+
+[Mod92] Theodore Modis. "Predictions." Simon & Schuster, New York, New
+York, 1992.
+
+[Pen89] Roger Penrose. "The Emperor's New Mind." Oxford University
+Press, New York, New York, 1989.
+
+[Pet91] Edgar E. Peters.  "Chaos and Order in the Capital Markets."
+John Wiley & Sons, New York, New York, 1991.
+
+[Rez94] Fazlollah M. Reza.  "An Introduction to Information Theory."
+Dover Publications, New York, New York, 1994.
+
+[Sch91] Manfred Schroeder. "Fractals, Chaos, Power Laws."
+W. H. Freeman and Company, New York, New York, 1991.
+
+$Revision: 0.0 $
+$Date: 2006/01/18 19:36:00 $
+$Id: tsshannonvolume.c,v 0.0 2006/01/18 19:36:00 john Exp $
+$Log: tsshannonvolume.c,v $
+Revision 0.0  2006/01/18 19:36:00  john
+Initial version
+
+
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <unistd.h>
+
+#ifdef __STDC__
+
+#include <float.h>
+
+#endif
+
+static char rcsid[] = "$Id: tsshannonvolume.c,v 0.0 2006/01/18 19:36:00 john Exp $"; /* program version */
+static char copyright[] = "Copyright (c) 1994-2006, John Conover, All Rights Reserved"; /* the copyright banner */
+
+#define BUFLEN BUFSIZ /* i/o buffer size */
+
+#define TOKEN_SEPARATORS " \t\n\r\b," /* file record field separators */
+
+#ifdef __STDC__
+
+static const char *help_message[] = /* help message index array */
+
+#else
+
+static char *help_message[] = /* help message index array */
+
+#endif
+
+{
+    "\n",
+    "Find the Shannon probability, based on trading volume, of a time series\n",
+    "Usage: tsshannonvolume [-i] [-p] [-t] [-v] [filename]\n",
+    "    -i, print the instantaneous values instead of the cumulative sums\n",
+    "    -p, don't output the time series, only the average values\n",
+    "    -t, sample's time will be included in the output time series\n",
+    "    -v, print the program's version information\n",
+    "    filename, input filename\n"
+};
+
+#ifdef __STDC__
+
+static const char *error_message[] = /* error message index array */
+
+#else
+
+static char *error_message[] = /* error message index array */
+
+#endif
+
+{
+    "No error\n",
+    "Error in program argument(s)\n",
+    "Error opening file\n",
+    "Error closing file\n"
+};
+
+#define NOERROR 0 /* error values, one for each index in the error message array */
+#define EARGS 1
+#define EOPEN 2
+#define ECLOSE 3
+
+#ifdef __STDC__
+
+static void print_message (int retval); /* print any error messages */
+static int strtoken (char *string, char *parse_array, char **parse, char *delim);
+
+#else
+
+static void print_message (); /* print any error messages */
+static int strtoken ();
+
+#endif
+
+#ifdef __STDC__
+
+int main (int argc, char *argv[])
+
+#else
+
+int main (argc, argv)
+int argc;
+char *argv[];
+
+#endif
+
+{
+    char buffer[BUFLEN], /* i/o buffer */
+         parsebuffer[BUFLEN], /* parsed i/o buffer */
+         *token[BUFLEN / 2], /* reference to tokens in parsed i/o buffer */
+         token_separators[] = TOKEN_SEPARATORS;
+
+    int count = 0, /* input file record counter */
+        retval = NOERROR, /* return value, assume no error */
+        fields, /* number of fields in a record */
+        i = 0, /* print the instantaneous values, 0 = no, 1 = yes */
+        p = 0, /* only output average, 0 = no, 1 = yes */
+        t = 0, /* print time of samples flag, 0 = no, 1 = yes */
+        c; /* command line switch */
+
+    double sum = (double) 0.0, /* running value of cumulative sum of squares */
+           sumsquared = (double) 0.0, /* running value of cumulative sum of squares */
+           currentvalue, /* value of current sample in time series */
+           lastvalue = (double) 0.0, /* value of last sample in time series */
+           volume, /* volume traded of current sample in time series */
+           temp, /* temporary storage */
+           temp1, /* temporary storage */
+           temp2, /* temporary storage */
+           temp3, /* temporary storage */
+           temp4; /* temporary storage */
+
+    FILE *infile = stdin; /* reference to input file */
+
+    while ((c = getopt (argc, argv, "iptv")) != EOF) /* for each command line switch */
+    {
+
+        switch (c) /* which switch? */
+        {
+
+            case 'i': /* request for print the instantaneous values? */
+
+                i = 1; /* yes, set the print the instantaneous values flag */
+                break;
+
+            case 'p': /* only output average? */
+
+                p = 1; /* yes, set the only output average */
+                break;
+
+            case 't': /* request printing time of samples? */
+
+                t = 1; /* yes, set the print time of samples flag */
+                break;
+
+            case 'v':
+
+                (void) printf ("%s\n", rcsid); /* print the version */
+                (void) printf ("%s\n", copyright); /* print the copyright */
+                optind = argc; /* force argument error */
+                retval = EARGS; /* assume not enough arguments */
+
+            default: /* illegal switch? */
+
+                optind = argc; /* force argument error */
+                retval = EARGS; /* assume not enough arguments */
+                break;
+        }
+
+    }
+
+    if (retval == NOERROR) /* enough arguments? */
+    {
+        retval = EOPEN; /* assume error opening file */
+
+        if ((infile = argc <= optind ? stdin : fopen (argv[optind], "r")) != (FILE *) 0) /* yes, open the input file */
+        {
+            retval = NOERROR; /* assume no error */
+
+            while (fgets (buffer, BUFLEN, infile) != (char *) 0) /* read the records from the input file */
+            {
+
+                if ((fields = strtoken (buffer, parsebuffer, token, token_separators)) != 0) /* parse the record into fields, skip the record if there are no fields */
+                {
+
+                    if (token[0][0] != '#') /* if the first character of the first field is a '#' character, skip it */
+                    {
+                        currentvalue = atof (token[fields - 2]); /* save the value of the current sample in the time series */
+                        volume = atof (token[fields - 1]); /* save the volume traded of current sample in time series */
+
+                        if (volume > (double) 0.0) /* protect division by zero by ignoring any records with zero volume */
+                        {
+
+                            if (count != 0) /* not first record? */
+                            {
+
+                                if (t == 1 && p == 0) /* print time of samples? */
+                                {
+
+                                    if (fields > 1) /* yes, more that one field? */
+                                    {
+                                        (void) printf ("%s\t", token[0]); /* yes, print the sample's time */
+                                    }
+
+                                    else
+                                    {
+                                        (void) printf ("%d\t", count); /* no, print the sample's time which is assumed to be the record count */
+                                    }
+
+                                }
+
+                                temp = (currentvalue - lastvalue) / lastvalue; /* normalized increment of time series */
+                                temp1 = temp / volume; /* divide the nomalized increment by the sample's trading volume */
+                                sum = sum + temp1; /* add the value  of the current sample in the time series to the cumulative sum of the time series */
+                                temp2 = (temp * temp) / volume; /* divide the square of the normalized increment by the sample's trading volume */
+                                sumsquared = sumsquared + temp2; /* add the square of the value of the current sample in the time series to the running value of cumulative sum of squares */
+
+                                if (p == 0) /* only output average flag set? */
+                                {
+
+                                    if (i == 0) /* no, print insantaneous values flag set? */
+                                    {
+
+                                        if (sum < (double) 0.0) /* protect sqrt (temp1) from exceptions */
+                                        {
+                                            temp3 = (double) 0.0; /* under exception, assume a Shannon probability of 0.0 */
+                                        }
+
+                                        else
+                                        {
+                                            temp3 = (sqrt (sum / (double) count) + (double) 1.0) / (double) 2.0; /* else, the shannon probability is (sqrt (temp1) + 1) / 2 */
+                                        }
+
+                                        (void) printf ("%f\t%f\t%f\t%f\t%f\n", sum / (double) count, sqrt (sumsquared / (double) count), (((sum / (double) count) / (sqrt (sumsquared / (double) count))) + (double) 1.0) / (double) 2.0, (sqrt (sumsquared / (double) count) + (double) 1.0) / (double) 2.0, temp3); /* no, print the current value of the average and root mean square of the time series, so far */
+                                    }
+
+                                    else
+                                    {
+
+                                        if (temp1 < (double) 0.0) /* protect sqrt (temp1) from exceptions */
+                                        {
+                                            temp3 = (double) 0.0; /* under exception, assume a Shannon probability of 0.0 */
+                                        }
+
+                                        else
+                                        {
+                                            temp3 = (sqrt (temp1) + (double) 1.0) / (double) 2.0; /* else, the shannon probability is (sqrt (temp1) + 1) / 2 */
+                                        }
+
+                                        if (temp2 == (double) 0.0) /* protect division by temp2 from exceptions */
+                                        {
+                                            temp4 = (double) 0.0; /* under exception, assume a Shannon probability of 0.0 */
+                                        }
+
+                                        else
+                                        {
+                                            temp4 = ((temp1 / sqrt (temp2)) + (double) 1.0) / (double) 2.0; /* else the Shannon probability is ((temp1 / sqrt (temp2)) + 1) / 2 */
+                                        }
+
+                                        (void) printf ("%f\t%f\t%f\t%f\t%f\n", temp1, sqrt (temp2), temp4, (sqrt (temp2) + (double) 1.0) / (double) 2.0, temp3); /* yes, print the instantaneous current value of the average and root mean square of the time series */
+                                    }
+
+                                }
+
+                            }
+
+                            lastvalue = currentvalue; /* save the current value of the sample in the time series as the last value */
+                            count ++; /* increment the count of records from the input file */
+                        }
+
+                    }
+
+                }
+
+            }
+
+            if (p == 1) /* only output average flag set? */
+            {
+
+                if (sum < (double) 0.0) /* protect sqrt (temp1) from exceptions */
+                {
+                    temp3 = (double) 0.0; /* under exception, assume a Shannon probability of 0.0 */
+                }
+
+                else
+                {
+                    temp3 = (sqrt (sum / (double) count) + (double) 1.0) / (double) 2.0; /* else, the shannon probability is (sqrt (temp1) + 1) / 2 */
+                }
+
+                (void) printf ("%f\t%f\t%f\t%f\t%f\n", sum / (double) count, sqrt (sumsquared / (double) count), (((sum / (double) count) / (sqrt (sumsquared / (double) count))) + (double) 1.0) / (double) 2.0, (sqrt (sumsquared / (double) count) + (double) 1.0) / (double) 2.0, temp3); /* no, print the last value of the average and root mean square of the time series, so far */
+            }
+
+            if (argc > optind) /* using stdin as input? */
+            {
+
+                if (fclose (infile) == EOF) /* no, close the input file */
+                {
+                    retval = ECLOSE; /* error closing file */
+                }
+
+            }
+
+        }
+
+    }
+
+    print_message (retval); /* print any error messages */
+    exit (retval); /* exit with the error value */
+
+#ifdef LINT
+
+    return (0); /* for lint formalities */
+
+#endif
+
+}
+
+/*
+
+Print any error messages.
+
+static void print_message (int retval);
+
+I) Data structures:
+
+    A) The help_message array is an array of character stings, one per
+       line to be printed for help.
+
+    B) The error_message array is an array of character strings, one
+       line per error; the error_message array is implicitly addressed
+       by the value integer retval, which specifies the error to be
+       printed.
+
+II) Function execution:
+
+    A) Depending on the value of the integer retval:
+
+        1) If retval is zero, print nothing-normal/successful program
+           exit.
+
+        2) Else if retval is unity, print help.
+
+        3) Else retval is not zero or unity, it is an error code, print
+           the corresponding error message.
+
+Returns nothing.
+
+*/
+
+#ifdef __STDC__
+
+static void print_message (int retval)
+
+#else
+
+static void print_message (retval)
+int retval;
+
+#endif
+
+{
+    size_t help_ctr; /* help_message line counter */
+
+    switch (retval) /* which return value */
+    {
+
+        case 0: /* program ended without errors, print nothing */
+
+            break;
+
+        case 1: /* program ended with a request for help, or argument error, print help */
+
+            for (help_ctr = 0; help_ctr < (sizeof (help_message) / sizeof (char *)); help_ctr ++) /* for each line of help */
+            {
+                (void) printf ("%s", help_message[help_ctr]); /* print the line */
+            }
+
+            break;
+
+        default: /* an error that was not a request for help, print the error */
+
+            (void) fprintf (stderr, "%s", error_message[retval]);
+            break;
+
+    }
+
+}
+
+/*
+
+parse a record based on sequential delimiters
+
+int strtoken (char *string, char *parse_array, char **parse, char *delim);
+
+parse a character array, string, into an array, parse_array, using
+consecutive characters from delim as field delimiters, point the
+character pointers, token, to the beginning of each field, return the
+number of fields parsed
+
+*/
+
+#ifdef __STDC__
+
+static int strtoken (char *string, char *parse_array, char **parse, char *delim)
+
+#else
+
+static int strtoken (string, parse_array, parse, delim)
+char *string,
+*parse_array,
+**parse,
+*delim;
+
+#endif
+
+{
+    int tokens = 0;
+
+    (void) strcpy (parse_array, string); /* copy the string */
+
+    parse[tokens] = strtok (parse_array, delim); /* get the 1st field */
+
+    while (parse[tokens] != 0) /* get the remaining fields */
+    {
+        parse[++ tokens] = strtok ((char *) 0, delim);
+    }
+
+    return (tokens); /* return the number of tokens parsed */
+}

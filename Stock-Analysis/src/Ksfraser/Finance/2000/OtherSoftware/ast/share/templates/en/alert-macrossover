@@ -1,0 +1,31 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="alert.type" value="$alert.type">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Moving Average Crossover Alert - Edit</th>
+    </tr>
+    <tr>
+      <td><b>Symbol:</b></td>
+      <td><input type="text" name="alert.symbol" value="$symbol" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td><select name="alert.market" class="awf_inputtext">$market_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Send To:</b></td>
+      <td><select name="alert.emailid" class="awf_inputtext">$email_options</select></td>
+    </tr>
+    <tr>
+      <td valign="bottom"><b>Condition:</b></td>
+      <td valign="bottom">When the prices crosses <select name="alert.arg1">$direction_options</select> over the <input type="text" value="$alert.arg2" name="alert.arg2">&nbsp;<select name="alert.arg3">$period_options</select> moving average.</td>
+    </tr>
+    <tr>
+      <td><b>Comment:</b></td>
+      <td><input type="text" maxlength="254" name="alert.comment" value="$alert.comment" class="awf_inputtext awf_wide_input"><div class="awf_small">(Sent with message of alert)</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Continue"></td>
+    </tr>
+  </table>
+</form>

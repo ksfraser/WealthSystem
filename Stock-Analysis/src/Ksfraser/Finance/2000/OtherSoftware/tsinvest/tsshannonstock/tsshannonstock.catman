@@ -1,0 +1,254 @@
+TSSHANNONSTOCK(1)                                            TSSHANNONSTOCK(1)
+
+
+
+NNAAMMEE
+       tsshannonstock - simulate the optimal gains of a stock investment using
+       Shannon probability
+
+SSYYNNOOPPSSIISS
+       tsshannonstock [-f fraction] [-i value] [-n] [-p] [-T]
+                      [-t] [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsshannonstock is for simulating the gains of a stock investment  using
+       Shannon   probability.  See  "Fractals,  Chaos,  Power  Laws,"  Manfred
+       Schroeder, W. H. Freeman and Company, New York, New  York,  1991,  ISBN
+       0-7167-2136-8, pp 128, 151.
+
+       the algorithm used is:
+
+           Let I(t) be the amount of capital at time t.
+
+           Let W(t) be the amount of the capital wagered at time
+           t.
+
+           Let V(t) be the price of the stock at time t.
+
+           Let F be the fraction of the captial wagered at any
+           time, and is assumed not to be a function of time.
+
+               W(t) = F * I(t - 1)
+
+                                     V(t) - V(t - 1)
+               I(t) = I(t - 1) + W * ---------------
+                                        V(t - 1)
+
+                                                V(t) - V(t - 1)
+               I(t) = I(t - 1) + F * I(t - 1) * ---------------
+                                                   V(t - 1)
+
+                 I(t)             V(t) - V(t - 1)
+               -------- = 1 + F * ---------------
+               I(t - 1)              V(t - 1)
+
+           If it is assumed that the stock's price time series
+           can be represented as a Brownian noise factal, then
+           the optimum value of F would be:
+
+               F = (2 * P) - 1
+
+           where P is the Shannon probability of the time series,
+           found by:
+
+                   avg
+                   --- + 1
+                   rms
+               P = -------
+                      2
+
+           where avg is the average, and rms is the root mean
+           square, of the normalized increments of the stock's
+           price time series, which can be calculated by
+
+               V(t) - V(t - 1)
+               ---------------
+                  V(t - 1)
+
+           for each data point in the time series.
+
+           Represented in pseudo code:
+
+               1) for each data point in the stock's price time
+               series, find the normalized increment from the
+               following equation:
+
+                   V(t) - V(t - 1)
+                   ---------------
+                      V(t - 1)
+
+               2) calculate the average of all normalized
+               increments in the stock's price time series by the
+               following equation:
+
+                             n
+                           -----
+                         1 \     V(t) - V(t - 1)
+                   avg = -  >    ---------------
+                         n /        V(t - 1)
+                           -----
+                           i = 0
+
+               3) calculate the root mean square of all
+               normalized increments in the stock's price time
+               series by the following equation:
+
+                              n
+                            -----                     2
+                      2   1 \      [ V(t) - V(t - 1) ]
+                   rms  = -  >     [ --------------- ]
+                          n /      [   V(t - 1)      ]
+                            -----
+                            i = 0
+
+               4) calculate the Shannon probability by the
+               following equation:
+
+                             avg
+                             --- + 1
+                             rms
+                   shannon = -------
+                                2
+
+               5) calculate the optimal fraction of the capital
+               to be wagered by the following equation:
+
+                   fraction = (2 * shannon) - 1
+
+               6) since the stock's price time series already has
+               a value rms as the root mean square of the
+               normalized increments, for the optimal wagering
+               strategy, the fraction should be divided by rms to
+               provide a multiplier:
+
+                   multiplier = fraction / rms
+
+               so that:
+
+                     I(t)                      V(t) - V(t - 1)
+                   -------- = 1 + multiplier * ---------------
+                   I(t - 1)                       V(t - 1)
+
+           What this means is that if you have capital, (ie, a
+           portfolio,) I(t), the fraction of I(t) that should be
+           wagered with each iteration of the game, (ie., time
+           unit,) would be twice the Shannon probability minus
+           unity, where the capital, (or portfolio,) is the sum
+           total of cash on hand, C(t), and the current value of
+           stocks held, V(t) * N, where N is the number of stocks
+           held, or:
+
+               I(t) = C(t) + V(t) * N
+
+           It would be convenient, from a comparative standpoint,
+           to let I(0), the beginning capital, be the same as
+           V(0), the price of the stock at the beginning of the
+           simulation, so that the wagering strategy can be
+           compared to the price of the stock over time.
+
+           N will be adjusted for the next game, (time unit,)
+           such that:
+
+                          I(t) * F
+               N(t + 1) = --------
+                            V(t)
+
+           where, as above, F is the fraction of capital,
+           (portfolio,) to be wagered:
+
+                   F = fraction = (2 * P) - 1 = (2 * shannon) -1
+
+           It would, additionally, for the simulation, be
+           convenient, from an information-theoretic standpoint,
+           to let F be a fraction, (either larger or smaller,) of
+           the root mean square value of the normalized
+           increments of the stock's price time series, ie., let
+           F = f * rms, where f is a constant value, (usually
+           around unity,) and rms is the average of the root mean
+           square value of the normalized increments of the
+           stock's price time series. This would allow a
+           comparison of the stock's price, over time, to the
+           capital, over time, with a wagering strategy that is
+           optimal for a stock price that is characterized as a
+           Brownian motion fractal over time.
+
+       The  input file structure is a text file consisting of records, in tem-
+       poral order, one record per time  series  sample.   Blank  records  are
+       ignored,  and  comment  records are signified by a '#' character as the
+       first non white space character in the record. Data records  must  con-
+       tain at least one field, which is the data value of the sample, but may
+       contain many fields-if the record contains many fields, then the  first
+       field  is regarded as the sample's time, and the last field as the sam-
+       ple's value at that time.
+
+OOPPTTIIOONNSS
+       --ff ffrraaccttiioonn
+              Optimal incremental changes are multiplied by fraction.
+
+       --ii vvaalluuee
+              Initial value of capital.
+
+       --nn     Print the number of stocks held, in addition to total capital.
+
+       --pp     Print the fraction of capital to  be  wagered  and  the  Shannon
+              probability.
+
+       --TT     Print  the  theoretical  capability of the stock, instead of the
+              simulation.
+
+       --tt     Sample's time will be included in the output time series.
+
+       --vv     Print the version and copyright banner of the program.
+
+       ffiilleennaammee
+              Input filename.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1), tsstockwager(1), tsshannonwindow(1),  tsmath(1),  tsavg-
+       window(1),   tspole(1),  tsdft(1),  tsbinomial(1),  tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),     tsshannonstock(1),     tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),    tsscalederivative(1),    tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 10, 2006              TSSHANNONSTOCK(1)

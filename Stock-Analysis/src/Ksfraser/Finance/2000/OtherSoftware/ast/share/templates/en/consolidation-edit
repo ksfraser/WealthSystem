@@ -1,0 +1,16 @@
+<form method="post" action="$save_page">
+    <table class="awf_form" width="60%">
+        <tr>
+            <th>Add Portfolios to Consolidation</th>
+        </tr>
+        <tr>
+            <td>Select the list of portfolios you would like to include in this consolidated portfolio</td>
+        </tr>
+        <tr>
+            <td><select multiple size="6" name="portfolios">$portfolio_list</select></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Save"></td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,10 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="broker" value="$broker">
+<input type="hidden" name="portfolioid" value="$portfolioid">
+I found the following companies on your statement. Please make sure that the information below is correct:<br><br>
+<textarea style="display: none" name="statement">$statement</textarea>
+$companylist
+<br><br>
+<input type="submit" value="Continue &gt;&gt;">
+</form>
+

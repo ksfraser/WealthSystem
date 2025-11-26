@@ -1,0 +1,14 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Advanced Stock Tracker - Input Error</title>
+  <link rel="stylesheet" type="text/css" href="$stylesheet">
+  <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+</head>
+<body>
+<table class="awf_form">
+<tr><th colspan="2" class="awf_column_header"><h2>Input Error</h2></td></tr>
+<tr><td><img src="images/attention.png" alt="error"></td><td><div class="error">$message</div><br>
+Please press your browser's <a href="javascript:back();">back</a> button and correct the error.</td></tr></table>
+</body>
+</html>

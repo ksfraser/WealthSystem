@@ -1,0 +1,792 @@
+TSSHANNONEFFECTIVE(1)                                    TSSHANNONEFFECTIVE(1)
+
+
+
+NNAAMMEE
+       tsshannoneffective - calculate the effective Shannon probability
+
+SSYYNNOOPPSSIISS
+       tsshannoneffective [-c] [-e] [-v] avg rms number
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsshannoneffective  is  for calculating the effective Shannon probabil-
+       ity, given the average, root mean square, data set size, and  data  set
+       duration, of the normalized increments of a time series.
+
+
+DDAATTAA SSEETT SSIIZZEE CCOONNSSIIDDEERRAATTIIOONNSS
+       This  program  addresses  the question "is there reasonable evidence to
+       justify investment in an equity based on data set size?"
+
+       The Shannon probability of a time series is  the  likelihood  that  the
+       value  of  the time series will increase in the next time interval. The
+       Shannon probability is measured using the average, avg, and  root  mean
+       square, rms, of the normalized increments of the time series. Using the
+       rms to compute the Shannon probability, P:
+
+               rms + 1
+           P = ------- ....................................(1.1)
+                  2
+
+       However, there is an error associated with the measurement of rms do to
+       the  size  of  the data set, N, (ie., the number of records in the time
+       series,) used in the calculation of rms. The confidence  level,  c,  is
+       the likelihood that this error is less than some error level, e.
+
+       Over  the many time intervals represented in the time series, the error
+       will be greater than the error level, e, (1 - c) * 100 percent  of  the
+       time-requiring  that the Shannon probability, P, be reduced by a factor
+       of c to accommodate the measurement error:
+
+                rms - e + 1
+           Pc = ----------- ...............................(1.2)
+                     2
+
+       where the error level, e, and the confidence level, c,  are  calculated
+       using statistical estimates, and the product P times c is the effective
+       Shannon probability that should be used in the calculation  of  optimal
+       wagering strategies.
+
+       The  error, e, expressed in terms of the standard deviation of the mea-
+       surement error do to an insufficient data set size, esigma, is:
+
+                     e
+           esigma = --- sqrt (2N) .........................(1.3)
+                    rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence  level  can be calculated from the cumulative sum, (ie., integra-
+       tion) of the normal distribution, ie.:
+
+           c     esigma
+           -------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                rms - e + 1
+           Pc = ----------- ...............................(1.4)
+                     2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion  is transcendental. For convenience, let F(esigma) be the function
+       that given esigma, returns  c,  (ie.,  performs  the  table  operation,
+       above,) then:
+
+                           rms - e + 1
+           P * F(esigma) = -----------
+                                2
+
+                                 rms * esigma
+                           rms - ------------ + 1
+                                  sqrt (2N)
+                         = ---------------------- .........(1.5)
+                                     2
+
+       Then:
+
+                                       rms * esigma
+                                 rms - ------------ + 1
+           rms + 1                      sqrt (2N)
+           ------- * F(esigma) = ---------------------- ...(1.6)
+              2                            2
+
+       or:
+
+                                         rms * esigma
+           (rms + 1) * F(esigma) = rms - ------------ + 1 .(1.7)
+                                          sqrt (2N)
+
+       Letting  a  decision variable, decision, be the iteration error created
+       by this equation not being balanced:
+
+                            rms * esigma
+           decision = rms - ------------ + 1
+                              sqrt (2N)
+
+                       - (rms + 1) * F(esigma) ............(1.8)
+
+       which can be iterated to find F(esigma), which is the confidence level,
+       c.
+
+       Note that from the equation:
+
+                rms - e + 1
+           Pc = -----------
+                     2
+
+       and  solving  for  rms  - e, the effective value of rms compensated for
+       accuracy of measurement by statistical estimation:
+
+           rms - e = (2 * P * c) - 1 ......................(1.9)
+
+       and substituting into the equation:
+
+               rms + 1
+           P = -------
+                  2
+
+           rms - e = ((rms + 1) * c) - 1 .................(1.10)
+
+       and defining the effective value of rms as rmseff:
+
+           rmseff = rms - e ..............................(1.11)
+
+       It can be seen that if optimality exists, ie., f = 2P - 1, or:
+
+                    2
+           avg = rms  ....................................(1.12)
+
+       or:
+                          2
+           avgeff = rmseff  ..............................(1.13)
+
+       As an example of this algorithm, if  the  Shannon  probability,  P,  is
+       0.51,  corresponding  to  an rms of 0.02, then the confidence level, c,
+       would be 0.996298, or the error level, e, would be 0.003776, for a data
+       set size, N, of 100.
+
+       Likewise,  if  P is 0.6, corresponding to an rms of 0.2 then the confi-
+       dence level, c, would be 0.941584, or the  error  level,  e,  would  be
+       0.070100, for a data set size of 10.
+
+       Robustness  is  an  issue in algorithms that, potentially, operate real
+       time. The traditional means of implementation of statistical  estimates
+       is  to  use an integration process inside of a loop that calculates the
+       cumulative of the normal distribution, controlled by, perhaps, a Newton
+       Method  approximation  using the derivative of cumulative of the normal
+       distribution, ie., the formula for the normal distribution:
+
+                                        2
+                        1           - x   / 2
+           f(x) = ------------- * e           ............(1.14)
+                  sqrt (2 * PI)
+
+       Numerical stability and convergence issues are an issue  in  such  pro-
+       cesses.
+
+       The  Shannon  probability  of  a time series is the likelihood that the
+       value of the time series will increase in the next time  interval.  The
+       Shannon  probability  is measured using the average, avg, and root mean
+       square, rms, of the normalized increments of the time series. Using the
+       avg to compute the Shannon probability, P:
+
+               sqrt (avg) + 1
+           P = -------------- ............................(1.15)
+                     2
+
+       However, there is an error associated with the measurement of avg do to
+       the size of the data set, N, (ie., the number of records  in  the  time
+       series,)  used  in  the calculation of avg. The confidence level, c, is
+       the likelihood that this error is less than some error level, e.
+
+       Over the many time intervals represented in the time series, the  error
+       will  be  greater than the error level, e, (1 - c) * 100 percent of the
+       time-requiring that the Shannon probability, P, be reduced by a  factor
+       of c to accommodate the measurement error:
+
+                sqrt (avg - e) + 1
+           Pc = ------------------ .......................(1.16)
+                        2
+
+       where  the  error level, e, and the confidence level, c, are calculated
+       using statistical estimates, and the product P times c is the effective
+       Shannon  probability  that should be used in the calculation of optimal
+       wagering strategies.
+
+       The error, e, expressed in terms of the standard deviation of the  mea-
+       surement error do to an insufficient data set size, esigma, is:
+
+                     e
+           esigma = --- sqrt (N) .........................(1.17)
+                    rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence level can be calculated from the cumulative sum,  (ie.,  integra-
+       tion) of the normal distribution, ie.:
+
+           c     esigma
+           -------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                sqrt (avg - e) + 1
+           Pc = ------------------ .......................(1.18)
+                        2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigma) be the  function
+       that  given  esigma,  returns  c,  (ie.,  performs the table operation,
+       above,) then:
+
+                           sqrt (avg - e) + 1
+           P * F(esigma) = ------------------
+                                   2
+
+                                       rms * esigma
+                           sqrt [avg - ------------] + 1
+                                         sqrt (N)
+                         = ----------------------------- .(1.19)
+                                        2
+
+       Then:
+
+           sqrt (avg)  + 1
+           --------------- * F(esigma) =
+                  2
+
+                           rms * esigma
+               sqrt [avg - ------------] + 1
+                             sqrt (N)
+               ----------------------------- .............(1.20)
+                            2
+
+       or:
+
+           (sqrt (avg) + 1) * F(esigma) =
+
+                           rms * esigma
+               sqrt [avg - ------------] + 1 .............(1.21)
+                             sqrt (N)
+
+       Letting a decision variable, decision, be the iteration  error  created
+       by this equation not being balanced:
+
+                                   rms * esigma
+           decision = sqrt [avg - ------------] + 1
+                                     sqrt (N)
+
+                      - (sqrt (avg) + 1) * F(esigma) .....(1.22)
+
+       which can be iterated to find F(esigma), which is the confidence level,
+       c.
+
+       There are two radicals that have to be protected from numerical  float-
+       ing point exceptions. The sqrt (avg) can be protected by requiring that
+       avg >= 0, (and returning a confidence level of 0.5, or  possibly  zero,
+       in  this instance-a negative avg is not an interesting solution for the
+       case at hand.)  The other radical:
+
+                       rms * esigma
+           sqrt [avg - ------------] .....................(1.23)
+                         sqrt (N)
+
+       and substituting:
+
+                     e
+           esigma = --- sqrt (N) .........................(1.24)
+                    rms
+
+       which is:
+
+                              e
+                       rms * --- sqrt (N)
+                             rms
+           sqrt [avg - ------------------] ...............(1.25)
+                         sqrt (N)
+
+       and reducing:
+
+           sqrt [avg - e] ................................(1.26)
+
+       requiring that:
+
+           avg >= e ......................................(1.27)
+
+       Note that if e > avg, then Pc < 0.5, which is not an interesting  solu-
+       tion for the case at hand. This would require:
+
+                     avg
+           esigma <= --- sqrt (N) ........................(1.28)
+                     rms
+
+       Obviously, the search algorithm must be prohibited from searching for a
+       solution in this space. (ie., testing for a solution in this space.)
+
+       The solution is to limit the search of the confidence array  to  values
+       that are equal to or less than:
+
+           avg
+           --- sqrt (N) ..................................(1.29)
+           rms
+
+       which can be accomplished by setting integer variable, top, usually set
+       to sigma_limit - 1, to this value.
+
+       Note that from the equation:
+
+                sqrt (avg - e) + 1
+           Pc = ------------------
+                        2
+
+       and solving for avg - e, the effective value  of  avg  compensated  for
+       accuracy of measurement by statistical estimation:
+
+                                      2
+           avg - e = ((2 * P * c) - 1)  ..................(1.30)
+
+       and substituting into the equation:
+
+               sqrt (avg) + 1
+           P = --------------
+                     2
+
+                                                 2
+           avg - e = (((sqrt (avg) + 1) * c) - 1)  .......(1.31)
+
+       and defining the effective value of avg as avgeff:
+
+           avgeff = avg - e ..............................(1.32)
+
+       It can be seen that if optimality exists, ie., f = 2P - 1, or:
+
+                    2
+           avg = rms  ....................................(1.33)
+
+       or:
+
+           rmseff = sqrt (avgeff) ........................(1.34)
+
+       As  an  example  of  this  algorithm, if the Shannon probability, P, is
+       0.52, corresponding to an avg of 0.0016, and an rms of 0.04,  then  the
+       confidence level, c, would be 0.987108, or the error level, e, would be
+       0.000893, for a data set size, N, of 10000.
+
+       Likewise, if P is 0.6, corresponding to an rms of 0.2, and  an  avg  of
+       0.04,  then  the  confidence  level, c, would be 0.922759, or the error
+       level, e, would be 0.028484, for a data set size of 100.
+
+       The Shannon probability of a time series is  the  likelihood  that  the
+       value  of  the time series will increase in the next time interval. The
+       Shannon probability is measured using the average, avg, and  root  mean
+       square,  rms,  of  the  normalized increments of the time series. Using
+       both the avg and the rms to compute the Shannon probability, P:
+
+               avg
+               --- + 1
+               rms
+           P = ------- ...................................(1.35)
+                  2
+
+       However, there is an error associated with both the measurement of  avg
+       and  rms do to the size of the data set, N, (ie., the number of records
+       in the time series,) used in the calculation of avg and rms. The confi-
+       dence  level,  c,  is  the likelihood that this error is less than some
+       error level, e.
+
+       Over the many time intervals represented in the time series, the  error
+       will  be  greater than the error level, e, (1 - c) * 100 percent of the
+       time-requiring that the Shannon probability, P, be reduced by a  factor
+       of c to accommodate the measurement error:
+
+                         avg - ea
+                         -------- + 1
+                         rms + er
+           P * ca * cr = ------------ ....................(1.36)
+                              2
+
+       where the error level, ea, and the confidence level, ca, are calculated
+       using statistical estimates, for avg, and the error level, er, and  the
+       confidence  level,  cr,  are calculated using statistical estimates for
+       rms, and the product P * ca * cr is the effective  Shannon  probability
+       that  should be used in the calculation of optimal wagering strategies,
+       (which is the product of the Shannon probability, P, times the superpo-
+       sition of the two confidence levels, ca, and cr, ie., P * ca * cr = Pc,
+       eg., the assumption is made that the error in avg and the error in  rms
+       are independent.)
+
+       The error, er, expressed in terms of the standard deviation of the mea-
+       surement error do to an insufficient data set size, esigmar, is:
+
+                     er
+           esigmar = --- sqrt (2N) .......................(1.37)
+                     rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence  level  can be calculated from the cumulative sum, (ie., integra-
+       tion) of the normal distribution, ie.:
+
+           cr     esigmar
+           --------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                      avg
+                    -------- + 1
+                    rms + er
+           P * cr = ------------ .........................(1.38)
+                         2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigmar) be the function
+       that given esigmar, returns cr, (ie.,  performs  the  table  operation,
+       above,) then:
+
+                              avg
+                            -------- + 1
+                            rms + er
+           P * F(esigmar) = ------------ =
+                                 2
+
+                                    avg
+                            ------------------- + 1
+                                  esigmar * rms
+                            rms + -------------
+                                    sqrt (2N)
+                            ----------------------- ......(1.39)
+                                       2
+
+       Then:
+
+           avg
+           --- + 1
+           rms
+           ------- * F(esigmar) =
+              2
+
+                          avg
+                  ------------------- + 1
+                        esigmar * rms
+                  rms + -------------
+                          sqrt (2N)
+                  ----------------------- ................(1.40)
+                             2
+
+       or:
+
+            avg
+           (--- + 1) * F(esigmar) =
+            rms
+
+                          avg
+                  ------------------- + 1 ................(1.41)
+                        esigmar * rms
+                  rms + -------------
+                          sqrt (2N)
+
+       Letting  a  decision variable, decision, be the iteration error created
+       by this equation not being balanced:
+
+                              avg
+           decision =  ------------------- + 1
+                             esigmar * rms
+                       rms + -------------
+                              sqrt (2N)
+
+                          avg
+                       - (--- + 1) * F(esigmar) ..........(1.42)
+                          rms
+
+       which can be iterated to  find  F(esigmar),  which  is  the  confidence
+       level, cr.
+
+       The error, ea, expressed in terms of the standard deviation of the mea-
+       surement error do to an insufficient data set size, esigmaa, is:
+
+                     ea
+           esigmaa = --- sqrt (N) ........................(1.43)
+                     rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence  level  can be calculated from the cumulative sum, (ie., integra-
+       tion) of the normal distribution, ie.:
+
+           ca     esigmaa
+           --------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                    avg - ea
+                    -------- + 1
+                      rms
+           P * ca = ------------ .........................(1.44)
+                         2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigmaa) be the function
+       that given esigmaa, returns ca, (ie.,  performs  the  table  operation,
+       above,) then:
+
+                            avg - ea
+                            -------- + 1
+                              rms
+           P * F(esigmaa) = ------------ =
+                                 2
+
+                                  esigmaa * rms
+                            avg - -------------
+                                    sqrt (N)
+                            ------------------- + 1
+                                      rms
+                            ----------------------- ......(1.45)
+                                       2 Then:
+
+           avg
+           --- + 1
+           rms
+           ------- * F(esigmaa) =
+              2
+
+                        esigmaa * rms
+                  avg - -------------
+                          sqrt (N)
+                  ------------------- + 1
+                            rms
+                  ----------------------- ................(1.46)
+                             2
+
+       or:
+
+            avg
+           (--- + 1) * F(esigmaa) =
+            rms
+
+                        esigmaa * rms
+                  avg - -------------
+                          sqrt (N)
+                  ------------------- + 1 ................(1.47)
+                            rms
+
+       Letting  a  decision variable, decision, be the iteration error created
+       by this equation not being balanced:
+
+                            esigmaa * rms
+                      avg - -------------
+                              sqrt (N)
+           decision = ------------------- + 1
+                                rms
+
+                  avg
+               - (--- + 1) * F(esigmaa) ..................(1.48)
+                  rms
+
+       which can be iterated to  find  F(esigmaa),  which  is  the  confidence
+       level, ca.
+
+       Note that from the equation:
+
+                      avg
+                    -------- + 1
+                    rms + er
+           P * cr = ------------
+                         2
+
+       and  solving  for  rms + er, the effective value of rms compensated for
+       accuracy of measurement by statistical estimation:
+
+                            avg
+           rms + er = ---------------- ...................(1.49)
+                      (2 * P * cr) - 1
+
+       and substituting into the equation:
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+                              avg
+           rms + er = -------------------- ...............(1.50)
+                        avg
+                      ((--- + 1) * cr) - 1
+                        rms
+
+       and defining the effective value of avg as rmseff:
+
+           rmseff = rms +/- er ...........................(1.51)
+
+       Note that from the equation:
+
+                    avg - ea
+                    -------- + 1
+                      rms
+           P * ca = ------------
+                         2
+
+       and solving for avg - ea, the effective value of  avg  compensated  for
+       accuracy of measurement by statistical estimation:
+
+           avg - ea = ((2 * P * ca) - 1) * rms ...........(1.52)
+
+       and substituting into the equation:
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+                         avg
+           avg - ea = (((--- + 1) * ca) - 1) * rms .......(1.53)
+                         rms
+
+       and defining the effective value of avg as avgeff:
+
+           avgeff = avg - ea .............................(1.54)
+
+       As  an  example  of  this  algorithm, if the Shannon probability, P, is
+       0.51, corresponding to an rms of 0.02, then the  confidence  level,  c,
+       would  be  0.983847,  or the error level in avg, ea, would be 0.000306,
+       and the error level in rms, er, would be 0.001254, for a data set size,
+       N, of 20000.
+
+       Likewise,  if  P is 0.6, corresponding to an rms of 0.2 then the confi-
+       dence level, c, would be 0.947154, or the error level in avg, ea, would
+       be  0.010750,  and the error level in rms, er, would be 0.010644, for a
+       data set size of 10.
+
+       As a final discussion to this section, consider the time series for  an
+       equity.  Suppose that the data set size is finite, and avg and rms have
+       both been measured, and have been found to both be positive. The  ques-
+       tion  that  needs  to  be resolved concerns the confidence, not only in
+       these measurements, but the  actual  process  that  produced  the  time
+       series.  For  example,  suppose, although there was no knowledge of the
+       fact, that the time series was actually produced by a  Brownian  motion
+       fractal  mechanism, with a Shannon probability of exactly 0.5. We would
+       expect a "growth" phenomena for extended  time  intervals  [Sch91,  pp.
+       152],  in the time series, (in point of fact, we would expect the cumu-
+       lative distribution of the length of such intervals to be  proportional
+       to  erf  (1  / sqrt (t)).) Note that, inadvertently, such a time series
+       would potentially justify investment. What the methodology outlined  in
+       this section does is to preclude such scenarios by effectively lowering
+       the Shannon probability to accommodate such issues. In such  scenarios,
+       the  lowered Shannon probability will cause data sets with larger sizes
+       to be "favored," unless the avg and rms of a smaller data set size  are
+       "strong"  enough  in relation to the Shannon probabilities of the other
+       equities in the market. Note that if the data set sizes of all equities
+       in  the market are small, none will be favored, since they would all be
+       lowered by the same amount, (if they were all statistically similar.)
+
+       To reiterate, in the equation avg = rms * (2P - 1), the Shannon  proba-
+       bility,  P,  can be compensated by the size of the data set, ie., Peff,
+       and used in the equation avgeff = rms * (2Peff - 1), where rms  is  the
+       measured  value  of  the root mean square of the normalized increments,
+       and avgeff is the effective, or compensated value, of  the  average  of
+       the normalized increments.
+
+
+DDAATTAA SSEETT DDUURRAATTIIOONN CCOONNSSIIDDEERRAATTIIOONNSS
+       An additional accuracy issue, besides data set size, is the time inter-
+       val over which the data was obtained. There is  some  possibility  that
+       the  data  set was taken during an extended run length, either negative
+       or positive, and the Shannon probability will have to be compensated to
+       accommodate  this measurement error. The chances that a run length will
+       exceed time, t, is:
+
+           1 - erf (1 / sqrt (t)) ........................(1.55)
+
+       or the Shannon probability, P, will have to be compensated by a  factor
+       of:
+
+           erf (1 / sqrt (t)) ............................(1.56)
+
+       giving a compensated Shannon probability, Pcomp:
+
+           Pcomp = Peff * (1 - erf (1 / sqrt (t)))........(1.57)
+
+       Fortunately,  since  confidence  levels  are calculated from the normal
+       probability function, the same lookup table used for confidence  calcu-
+       lations  (ie., the cumulative of a normal distribution,) can be used to
+       calculate the associated error function.
+
+       To use the value of the normal probability function  to  calculate  the
+       error  function,  erf (N), proceed as follows; since erf (X / sqrt (2))
+       represents the error function associated with the normal curve:
+
+           1) X = N * sqrt (2).
+
+           2) Lookup the value of X in the normal probability function.
+
+           3) Subtract 0.5 from this value.
+
+           4) And, multiply by 2.
+
+       or:
+
+           erf (N) = 2 * (normal (t * sqrt (2)) - 0.5) ...(1.58)
+
+
+OOPPTTIIOONNSS
+       aavvgg    Average of the normalized increments of the time series.
+
+       rrmmss    Root mean square  of  the  normalized  increments  of  the  time
+              series.
+
+       nnuummbbeerr Number of records used to calculate avg and rms.
+
+       --cc     Compensate the Shannon probability for run length duration.
+
+       --ee     Print only erf (1 / sqrt (number)), 1 - erf (1 / sqrt (number)).
+
+       --vv     Print the version and copyright banner of this program.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsinvest(1), tsinvestsim(1), tsshannoneffective(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+           http://www.johncon.com/ntropix/
+           http://www.johncon.com/
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 07, 2006          TSSHANNONEFFECTIVE(1)

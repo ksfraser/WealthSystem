@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for tsgaussian.tsmath.tsmath.tsunfraction. The data
+# was selected from an analysis of equity market indices, which,
+# typically, have a root mean square value of the normalized increments
+# of 0.01, and an average value of the normalized increments of 0.0003.
+#
+# A data file was made by running:
+#
+# ../../simulation/tsgaussian 5000 | ../../utilities/tsmath -t -m 0.01 | ../../utilities/tsmath -t -a 0.0003 | ../../utilities/tsunfraction > data
+#
+# where tsmath is used to first, multiply the output of the tsgaussian
+# program, which produces a time series of a random variable with a
+# Gaussian distribution that has a mean of zero, and a standard
+# deviation of unity, by 0.01, and then offset the mean by 0.0003-the
+# tsunfraction is used to cumulative sum the time series.
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/15 04:57:47 $
+# $Id: NOTES,v 0.0 2006/01/15 04:57:47 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/15 04:57:47  john
+# Initial version
+#
+#
+../../simulation/tsgaussian 5000 | ../../utilities/tsmath -t -m 0.01 | ../../utilities/tsmath -t -a 0.0003 | ../../utilities/tsunfraction > data

@@ -1,0 +1,16 @@
+<form method="post" action="$append_page">
+  <table class="awf_form" width="100%">
+   <tr><th>Select Indicator Type</th></tr>
+   <tr>
+    <td>
+      <input type="radio" name="type" value="colour">&nbsp;Change the colour of column data<br>
+      <input type="radio" name="type" value="image">&nbsp;Add an image to a column<br>
+      <input type="radio" name="type" value="calc">&nbsp;Append a calculation to a column<br>
+      <input type="radio" name="type" value="calc-add">&nbsp;Add a new column based on a calculation
+    </td>
+  </tr>
+  <tr>
+    <td><input type="submit" value="Next -&gt;"></td>
+  </tr>
+  </table>
+</form>

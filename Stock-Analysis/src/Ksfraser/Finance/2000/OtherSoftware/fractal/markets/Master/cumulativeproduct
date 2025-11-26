@@ -1,0 +1,81 @@
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make a cumulative product of a time series, printing each element to
+# stdout-each element is is divided by 10, to convert percent to
+# fraction, and divided by 12, to convert yearly rate to monthly rate,
+# and added to 1.0 to make the return factor, then multiplied by the
+# current cumulative product to get the next cumulative product
+#
+# x = the power that, when added to 1, the cumulative returns from the
+# current year in the time series is multiplied by to get the next
+# year's cumulative returns in the time series, or:
+#
+# R
+#  12    x
+# --- = R
+# R      0
+#  0
+#
+# y = the power that, when added to 1, the cumulative returns from the
+# current month in the time series is multiplied by to get the next
+# month's cumulative returns in the time series, or:
+#
+# R
+#  1    y
+# -- = R
+# R     0
+#  0
+#
+# then:
+#
+#  12y    x
+# R    = R
+#
+# or:
+#     x
+# y = --
+#     12
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/08 23:46:39 $
+# $Id: cumulativeproduct,v 0.0 2006/01/08 23:46:39 john Exp $
+# $Log: cumulativeproduct,v $
+# Revision 0.0  2006/01/08 23:46:39  john
+# Initial version
+#
+#
+{
+
+    if (linectr == 0)
+    {
+        productnumber = ($0 / 1200.0) + 1.0
+    }
+
+    else
+    {
+        number = ($0 / 1200.0) + 1.0
+        productnumber = (productnumber * number)
+        printf ("%f\n", productnumber)
+    }
+
+    linectr++
+}

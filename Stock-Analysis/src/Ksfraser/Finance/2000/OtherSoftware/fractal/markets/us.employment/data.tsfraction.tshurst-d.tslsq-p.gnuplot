@@ -1,0 +1,1 @@
+plot [t=:] "data.tsfraction.tshurst-d" with lines, -1.109623 + 0.978765 * t with lines, -0.903601 + 0.880810 * t with lines

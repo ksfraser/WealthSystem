@@ -1,0 +1,15 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="alert.type" value="$alert.type">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Stop Loss Alert</th>
+    </tr>
+    <tr>
+      <td><b>Comment:</b></td>
+      <td><input type="text" maxlength="254" name="alert.comment" value="$alert.comment" class="awf_inputtext awf_wide_input"><div class="awf_small">(Sent with message of alert)</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

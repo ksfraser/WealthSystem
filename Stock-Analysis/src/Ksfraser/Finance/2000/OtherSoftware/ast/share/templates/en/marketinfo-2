@@ -1,0 +1,42 @@
+<table width="100%" class="awf_form" id="marketinfo">
+  <tr>
+    <th colspan="2">Market Watch [<a href="$edit_page">edit</a>]</th>
+  </tr>
+  <tr>
+    <th>$name_1</th>
+    <th>$name_2</th>
+  </tr>
+  <tr>
+    <td>
+      <table>
+        <tr>
+          <td class="awf_colour_$colour_1"><h2>$price_1<br>$change_1<br>$changep_1%</h2></td>
+          <td><a href="$chartimage_page&amp;symbol=$symbol_1&amp;market=0&amp;period=weekly"><img src="$chart_page&amp;s=$symbol_1&amp;m=0&amp;period=Weekly&amp;name=$name_1"></a></td>
+          <td><a href="$chartimage_page&amp;symbol=$symbol_1&amp;market=0&amp;period=daily"><img src="$chart_page&amp;s=$symbol_1&amp;m=0&amp;period=Daily&amp;name=$name_1"></a></td>
+        </tr>
+        <tr>
+            <td colspan="3">The time is $time_1 - $mktstate_1</td>
+        </tr>
+        <tr>
+            <td colspan="3">$news_1</td>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <table>
+        <tr>
+          <td class="awf_colour_$colour_2"><h2>$price_2<br>$change_2<br>$changep_2%</h2></td>
+          <td><a href="$chartimage_page&amp;symbol=$symbol_2&amp;market=0&amp;period=weekly"><img src="$chart_page&amp;s=$symbol_2&amp;m=0&amp;period=Weekly&amp;name=$name_2"></a></td>
+          <td><a href="$chartimage_page&amp;symbol=$symbol_2&amp;market=0&amp;period=daily"><img src="$chart_page&amp;s=$symbol_2&amp;m=0&amp;period=Daily&amp;name=$name_2"></a></td>
+        </tr>
+        <tr>
+            <td colspan="3">The time is $time_2 - $mktstate_2</td>
+        </tr>
+        <tr>
+            <td colspan="3">$news_2</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<br>

@@ -1,0 +1,28 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="transaction.type" value="1">
+  <input type="hidden" name="transaction.price2" value="0">
+  <input type="hidden" name="transaction.portfolio_id" value="$portfolio_id">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Market Order (Purchase)</th>
+    </tr>
+    <tr>
+      <td><b>Buy Shares In:</b></td>
+      <td>$company_name</td>
+    </tr>
+    <tr>
+        <td colspan="2"><img src="images/help_small.png" alt="help">&nbsp;Enter either the number of shares you wish to purchase, or the approximate value of shares you wish to purchase.</td>
+    </tr>
+    <tr>
+      <td><b>Number Of Shares:</b></td>
+      <td><input name="transaction.quantity" value="$transaction.quantity"></td>
+    </tr>
+    <tr>
+      <td><b>Approximate purchase price:</b></td>
+      <td><input name="transaction.price" value="$transaction.price"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Buy">
+    </tr>
+  </table>
+</form>

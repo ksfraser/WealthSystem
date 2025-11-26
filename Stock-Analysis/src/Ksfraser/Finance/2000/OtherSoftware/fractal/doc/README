@@ -1,0 +1,46 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+This is the documentation to the "Notes on the Fractal Analysis of
+Various Market Segments in the North American Electronics Industry."
+
+It is written in LaTeX, and the following programs and macros will be
+required to compile the sources:
+
+    1) dvips
+    2) gnuplot
+    3) gnuindex
+    4) ispell
+    5) rcs
+    6) epsf.sty
+    6) fancyheadings.sty
+    7) auctex.sty
+    9) rcs.sty
+
+All programs are freely available, and ftp addresses are listed in the
+colophon.
+
+The documentation will require that all market data be compiled in the
+../markets directory, and, additionally all programs and test cases be
+compiled in the ../simulation, ../simulation/tests, ../utilities, and
+../utilities/tests. The schematic graphics are in the graphics
+directory.

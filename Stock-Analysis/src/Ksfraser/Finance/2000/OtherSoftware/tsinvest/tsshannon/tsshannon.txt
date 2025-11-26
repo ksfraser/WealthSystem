@@ -1,0 +1,127 @@
+TSSHANNON(1)							  TSSHANNON(1)
+
+
+
+NAME
+       tsshannon  -  calculate	the probability, given the Shannon information
+       capacity
+
+SYNOPSIS
+       tsshannon [-v] C(p)
+
+DESCRIPTION
+       Tsshannon is for calculating the probability, given the Shannon	infor-
+       mation  capacity. See "Fractals, Chaos, Power Laws," Manfred Schroeder,
+       W.  H.  Freeman	and  Company,  New  York,   New   York,   1991,   ISBN
+       0-7167-2136-8,  pp  128	and  pp 151. Uses Newton-Raphson method for an
+       iterative solution for the probability, p, given the  Shannon  informa-
+       tion capacity, C(p).
+
+       As a reference on Newton-Raphson Method of root finding, see "Numerical
+       Recipes in C: The Art of Scientific Computing," William H. Press, Brian
+       P.  Flannery,  Saul A. Teukolsky, William T. Vetterling, Cambridge Uni-
+       versity Press, New York, 1988, ISBN 0-521-35465-X, pp 270.
+
+       From Schroeder, pp 151:
+
+	   p = 0.55
+
+	   2^(C(0.55)) = 0.005, (probably a typo, meaning 1.005)
+
+	   by calculator, C(0.55) = 0.0072, (this program gives
+	   C(0.549912) = 0.0072)
+
+       Derivation, starting with Schroeder, pp 151:
+
+	   C(p) = 1 + p ln (p) + (1 - p) ln (1 - p)
+			  2		   2
+
+	   C(p) = 1 + p (ln (p) / ln (2)) +
+
+		  (1 - p) (ln (1 - p) / ln (2))
+
+	   C(p) = [1 / ln (2)] [ln (2) + p ln (p) +
+
+		  (1 - p) ln (1 - p)]
+
+	   C(p) = [1 / ln (2)] [ ln (2) + p ln (p) +
+
+		  ln (1 - p) - p ln (1 - p)]
+
+	   dC(p)
+	   ---- = [1 / ln (2)] [1 + ln (p) - (1 / (1 - p)) -
+	   dp
+
+		  {ln (1 - p) - (p / (1 - p))}]
+
+		= [1 / ln (2)] [1 + ln (p) - (1 / (1 - p)) -
+
+		  ln (1 - p) + (p / (1 - p))]
+
+		= [1 / ln (2)] [ln (p) - ln (1 - p) +
+
+		  (p / (1 - p)) - (1 / (1 - p))]
+
+		= [1 / ln (2)] [1 + ln (p) - ln (1 - p) +
+
+		  ((p - 1) / (1 - p))]
+
+		= [1 / ln (2)] [1 + ln (p) - ln (1 - p) - 1]
+
+		= [1 / ln (2)] [ln (p) - ln (1 - p)]
+
+
+OPTIONS
+       -v     Print the version and copyright banner of the program.
+
+       C(p)   Shannon information capacity.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1), tsstockwager(1), tsshannonwindow(1),  tsmath(1),	tsavg-
+       window(1),   tspole(1),	tsdft(1),  tsbinomial(1),  tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),	   tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 		  TSSHANNON(1)

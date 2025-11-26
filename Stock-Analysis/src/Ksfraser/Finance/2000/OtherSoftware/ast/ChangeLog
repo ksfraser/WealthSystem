@@ -1,0 +1,227 @@
+ADVANCED STOCK TRACKER CHANGELOG
+------------------------------------------
+Version 0.2.8 Released May 5, 2007
+        * New: Ability to manually correct for splits that Yahoo doesn't notice
+        * New: Slippage calculation for portfolio -- ties together worksheet and stoploss
+        * New: Added start date option for afetch
+        * New: Securitymaster and markets query to afetch
+        * Implemented wish #1584779: IDEA: Market news in market watch
+        * Implemented wish #1619729: WISH: Transaction Exchange Rate
+        * Implemented wish #1709433: Return of capital
+        * Fixed: afetch errors should go to stderr
+        * Fixed: Market watch was showing market opening in huge number of minutes.
+        * Fixed: Added a lock file for the scheduler so that you don't get two schedulers working on the same job.
+        * Fixed: date issues with AST regarding daylight savings time
+        * Fixed bug #1710125: Tried to add a dividend, got this error
+        * Fixed bug #1686863: ast does not support ta-lib 0.3.0
+
+Version 0.2.7 Released Mar 11, 2007
+        * New: Added Risk analysis to the portfolio
+        * New: New risk analysis reports
+        * New: Added pattern scanner alert
+        * New: Exponentiation operator and days_held fields in portfolio, which allow for annualised gains report
+        * New: Most trades game summary
+        * Fixed: Hide pattern stuff from stock screener email if it wasn't used
+        * Fixed: Added detection on inf and nan to formating code
+        * Fixed: Added FX correction for portfolio quotes.
+        * Fixed: Portfolio summary change colours were backwards.
+        * Fixed: Portfolio news did not work in text version.
+        * Fixed: Crash when looking up a symbol that wasn't found at start of alphabet
+        * Fixed: crashing run alerts; invalid quote period.
+        * Fixed: File error messages were not displayed correctly
+        * Fixed: Report MACD crash
+        * Fixed bug #1657334: tm_zone and HOST_NAME_MAX issue
+        * Fixed bug #1657298: a few LOCK_* const not declared
+        * Fixed bug #1657520: '_S' and '_N' not declared in this scope
+        * Fixed bug #1654804: Game purchases
+        * Fixed bug #1673068: Can't remove indicator
+        * Fixed bug #1669499: Stock screen crashes with failed ADX screen.
+        * Fixed bug #1672785: logic error : currency
+
+Version 0.2.6 Released Feb 10 2007
+        * Fixed bug #1653728: Crash if you press hide columns with no columns selected
+        * Fixed bug #1655239: report-viewer loads wrong report if market disabled
+        * Fixed: Yahoo has changed thier date format
+        * IMPORTANT: Older version of AST will NOT work Yahoo anymore, you must upgrade!
+        * Added ability for administrator to send email to game users
+        * Added ability to change user fullname
+        * Added the USA symbol file, which is every US market in one
+        * Implemented bug #1649910: Show small charts in portfolio.
+        * Fixed: Regression - news crashed if symbol lookup does not work.
+        * Feed reader uses cache in case of network failure like quotes do
+        * Moved email addresses out of the users table into thier own table so a user can have more than one address.
+        * Added option to add the date to backup files.
+        * Fixed: Portfolio quotes had no date attached, effects sending of portfolio summary
+        * Fixed bug #1643308: problem with AST Database Backup
+        * Should use notitle for gnuplot when a series has no label instead of a blank label.
+        * Added support for consolidated portfolios in portfolio quotes
+        * Fixed: Quote provider did not return record when there was a network error and records were cached.
+        * Portfolio names can now be looked up like any regular stock name
+        * Added support for systems which do not defined _BSD_SOURCE, e.g. solaris (INCOMPLETE, need a test system!)
+        * Fixed bug #1638602: ast 0.2.5 not compile when ENABLE_SQL
+        * Fixed bug #1637999: Decrease Javascript load times
+        * New alert types: Portfolio summary, Report and Stock Screener
+        * Update alerts with HTML output and charts
+        * NEW: Translation now uses po4a, which makes it much easier!
+
+Version 0.2.5 Released Jan 15 2007
+        * Improved output performance
+        * New translation of HTML using po4a
+        * Added many new markets, including Germany and India
+        * Added new portfolio charting feature where you can view your portfolio as a single security
+        * New AJAX dropmenu when entering ticker symbols
+        * ISIN look up / translation support
+        * New command-line quote fetcher - afetch
+        * Fixed bug #1626734: error when run saved screens
+        * Fixed bug #1630702: Add name of security to transaction history page
+        * Fixed bug #1627635: problem with error page of reset password
+        * Fixed bug #1634587: Pattern scanner crashes if no historical data avail
+        * Fixed bug #1631500: configure issue with lxml2, lcurl and lgd
+        * Fixed bug #1632368: consider using fcntl instead of flock
+        * Fixed bug #1632275: issues compiling libawf
+        * Fixed bug #1628330: Comparisons Crash After login
+        * Fixed bug #1630146: install.pl : unknown external program whoami
+        * Fixed: News job stops on network error
+
+Version 0.2.4 Released Dec 18 2006
+        * Fixed MySQL support in SQL engine. You now need to compile with --enable-mysql in addition --enable-sql.
+        * Fixed bug #1617128: Negative cash in game
+        * Fixed bug #1607248: Compilation Broken on Debian/Ubuntu
+        * Fixed install.pl not compiling ta-lib properly
+        * Fixed: Configuring with SQL failed with AWF_CHECK_ODBC not found.
+        * Fixed bug #1616147: Edit View -> Save crashes
+        * Fixed: if ast is not run from data directory it can't find its files.
+        * Fixed bug #1616565: Daily quote alert does not take into account timezone
+        * Fixed bug #1616148: Crash submit bug link broken in Firefox
+        * Fixed bug #1602521: Saved screens break when new fields added
+        * Implemented wish #1561863: Show worksheets on the stock comparison
+        * Fixed bug #1612411: Portfolio name is not displayed
+        * Fixed bug #1608853: Game ambiguity
+        * Fixed bug #1606389: Empty data contains \'
+        * Fixed bug #1606163: Out of place button in games
+        * Fixed bug #1610554: Crash editing comparison
+        * Made sql username and password configurable
+        * Changed portfolio to show less information so it doesn't look so overwhelming
+        * Fixed: Alerts crashed when stop loss alert is set but security is removed from the portfolio.
+        * Implemented wish #1607670: Consolidated Portfolio
+        * Added user restrictions (disables features of AST); compile with --enable-limits
+        * Fixed bug #1604634: Crash when editing a view
+        * Added ability for the user to reorder their portfolio, worksheet or comparisons. This allows the user to pick thier default portfolio.
+        * Fixed: AST ignores gnuplot path
+        * Fixed bug #1604574: Average current price not working - not sure about avg gain
+        * Removed a lot of totals on fields (portfolio) that it didn't make sense to have totals on (e.g. sector)
+        * Fixed bug #1602945: Mix currency portfolio totals always CAD
+        * Fixed bug #1561860: Lowest PEG Ratio is blank
+        * Fixed bug #1603939: Notes doesn't work if symbol not in stock list
+        * Added option to disable the testing code, which is default configuration. Reduces built-time, makes executable smaller.
+        * Fixed bug #1602946: Crash with quote caching times
+        * Fixed bug #1561864: Stock Comparison: bad label spacing
+        * Added command line flag --session-key which allows for better integration of multiple sites
+        * Changed E*Trade to E*Trade Canada in import statement because it only works for the Canadian website
+        * Fixed: When running in game mode, adding new portfolio causes error that we already have this portfolio.
+        * Added DPP support for import statement from E*Trade
+        * Updated E*Trade import filter to work for TXPDDV which is unit dividend payment
+        * Fixed: Some accuracy errors in MACD calculations
+        * Added category field to the portfolio and some fields in the diversification summary
+        * Changed expiry rules for cached to take into account the current timezone
+        * Added feature for the user to select thier favourite market. Changed the default currency for transactions to that of the market.
+        * Added missing 52 wk-high % calculation on stock screener and corrected math errors in 52 wk high and low calculations.
+        * Added the ADX indicator for use in the stock screener
+        * Fixed bug #1595674: Notes are not editable
+        * Fixed bug #1588915: Second company name search crashes
+        * Fixed bug #1582405: Restore views crashes
+        * Added news feeds from SeekingAlpha.com
+        * Added more sectors for US exchanges.
+        * Fixed bug #1597495: Sort news feeds by date
+        * Fixed bug #1594745: Added markets for Euronext
+        * Fixed: Removed XML parser errors for feeds with invalid UTF8 characters.
+        * Added ADX indicator for charts.
+        * Fixed: Feeds setup missing nav menu.
+        * Added a warning that the command in postinstall will destory your crontab.
+        * Added new report 'Dividend Growth'
+        * Added rules for games
+        * Fixed: Compile error on old versions of Red Hat.
+
+Version 0.2.3 Released Nov 07 2006
+	* Fixed bug #1587994: Commissions incorrect for sales
+	* Improved javascript browser compatibility
+	* Fixed: Style sheets were served as text/html instead of text/css
+	* Fixed bug #1581872: Chart lookup button unclear
+	* Fixed bug #1568485; added missing #!/bin/sh to the install script
+	* Fixed bug #1568488: Added a mirror for TA-LIB and the option to download manually
+	* Fixed: lock up when scheduler runs on portfolio
+	* Fixed bug #1578453: Security does not show up on portfolio
+	* Added new views for portfolio
+	* Fixed bug #1581869: Chart lookup crashes
+	* Fixed bug #1577515: Portfolio does not change when changing currency in user preferences
+	* Added ability for users to register themselves with a server (assuming that the admin allows that)
+	* Added preliminary support for stock market competitions. Compile with --enable-game.
+
+Version 0.2.2 Released Sep 27 2006
+	* Fixed bug #1561850: Best performance year to date report broken
+	* Fixed bug #1561854: Daily charts have two 'today' dates in evening
+	* Fixed refetch of realtime quotes when doing a multi-fetch. This improves the performance of the stock screener.
+	* Fixed: missing cache write when mutli-symbol realtime quote fetch fails.
+	* Fixed bug #1561849: Monthly/Weekly datasets missing lastest point
+	* Fixed bug #1561053: Symbol suggestion considers net errors
+	* Fixed bug #1555950: Permissions button is activated for shared portfolio
+	* Fixed bug #1563148: Incorrect sorting on vol % column
+	* Fixed bug #1560756: More options link (charts) broken in Firefox and Konqueror
+	* Fixed cannot find -lXpm when building ast on CentOS (possibly others)
+	* Fixed bug #1559609: Reports tab doesnt start
+	* Added additional checks in configure.in for mhash/crypt and isdigit
+	* Fixed bug #1559359: Crash adding user when pwgen is not installed
+	* Fixed bug #1559730: Stock comparison crash
+	* Fixed bug #1560744: Invalid currency when entering share dividend
+	* Fixed bug #1554941: Switching portfolios on estimated cash flows
+	* Fixed: bad link on estimate cash flows
+	* Fixed bug #1554940: Estimated cash flows - strikeout style
+	* Fixed compile errors on AMD64
+	
+Version 0.2.1 Released Aug 29 2006
+	* Automatically fill in last dividend value for new dividend transactions (WISH #1545628)
+	* Removed ast-0.1.9 import code from default install, configure with --enable-import to get it.
+	* Stopped using var/crash files in favour of var/log/error_log
+	* Removed requirement for user to be in DEBUG group to see full error messages in hopes that more people will submit bugs now.
+	* Removes the 'Guest' user from the default users database
+	* Added a forgotten password page to reset your password (required pwgen program installed)
+	* New users now have a randomly generated password (instead of blank)
+	* Added ability for users to change thier password in preferences
+	* Added stop-loss feature to portfolio. This feature allows you to program into the portfolio your stop loss and have it be trigged an alert. Also supports trailing stop losses.
+	* Removed rating change column from diversification summary (closes bug #1545653)
+	* Mouse over diversification summary no longer makes it highlight red.
+	* Fixed: Logging in at wrong time could cause crash (Fixes bug #1545976)
+	* Fixed: Quotes on portfolio don't show up until 10 AM (when they should show up at 9:45)
+	* Added target price field to portfolio
+	* Added support for recording commission costs (WISH #1544987)
+	* AST now compiles with -rdynamic which brings back missing stack trace symbols.
+	* Removed the word 'default' from the portfolio data as it is confusing (bug #1544615)
+	* Added ability to reorder views, to choose your default view.
+	* Views are no longer reordered when modifying them.
+	* Added ability to highlight patterns on chart (WISH #1538364)
+	* You can now use [field] in expressions when the field contains special characters (fixes bug #1532395)
+	* Added more documentation for mobile email address (fixes bug #1542325)
+	* Added ability to authenticate against generic SQL databases. Joomla is supported by default, others can be added manually or supported on request (WISH #1542241)
+	* Added website documentation into distribution
+	* Added INSTALL and README files
+	* Fixed crash when trying to sell shares for $0 (fixes bug #1542045)
+	* Now have the ability to automatically scale charts to your screen (WISH #1502624)
+	* Added help messages when a view is empty (WISH #1540287)
+	* Fixed: Daily Quote alert buttons Open and Close were switched (fixes bug #1541360)
+	* Added Yahoo Finance data source for worksheet (bug #1539013)
+	* Added more debugging information to bug form (system configuration info)
+	* When data is not available on a chart a nicer message is shown (fixes bug #1539013)
+	* Added missing system include to application.cc (fixes bug #1539018)
+	* Added ability to download all tables in AST as spreadsheets (WISH #1539004)
+	* Added ability to read quotes from a SQL database through ODBC
+	* Made libz an optional dependancy
+	* Made libmash an optional dependancy
+	* Fixed: Ast does not compile with >=ta-lib-0.2.0 (fixes bug #1511311)
+	* Fixed TA-lib ebuild failure when compiling with MAKEOPTS="-j2" or greater (bug #1538358)
+	* Added Read All button to portfolio (WISH #1532842)
+	* Some improvements to speed of stock screener
+	* Added new install.pl script which can automate installation of AST.
+	* Added feature to show chart prices when hovering over the chart.
+	* Added translation support to AST. If you want to translate AST please contact me!
+	* Removed current user from the list of users when granting portfolio permissions.
+	

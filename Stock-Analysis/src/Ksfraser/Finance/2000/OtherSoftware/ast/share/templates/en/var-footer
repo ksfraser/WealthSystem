@@ -1,0 +1,3 @@
+<br>
+<b id="var_tip">* Click on the header to display the Value-at-Risk histogram</b><br>
+<img src="$chart_image" id="histogram_image" alt="var histogram">

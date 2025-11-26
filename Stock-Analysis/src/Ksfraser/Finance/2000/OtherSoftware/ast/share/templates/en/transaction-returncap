@@ -1,0 +1,38 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="transaction.type" value="7">
+  <input type="hidden" name="transaction.commission" value="0">
+  <input type="hidden" name="transaction.portfolio_id" value="$portfolio_id">
+  <input type="hidden" name="transaction.price2" value="0">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Record Return of Capital</th>
+    </tr>
+    <tr>
+      <td><b>Record Return of Capital For:</b></td>
+      <td>$company_name</td>
+    </tr>
+    <tr>
+      <td><b>Payment Date:</b></td>
+      <td colspan="2"><select name="transaction.date-month">$month_options</select>/<select name="transaction.date-day">$day_options</select>/<select name="transaction.date-year">$year_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Number Of Shares:</b></td>
+      <td><input name="transaction.quantity" value="$transaction.quantity" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Capital Per Share:</b></td>
+      <td><input name="transaction.price" value="$transaction.price" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Currency:</b></td>
+      <td><select name="transaction.currency_id">$currency_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Exchange Rate:</b></td>
+      <td><input name="transaction.exchange_rate" value="$transaction.exchange_rate" class="awf_inputtext"></select></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save">
+    </tr>
+  </table>
+</form>

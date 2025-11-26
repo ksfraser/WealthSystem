@@ -1,0 +1,96 @@
+1. Introduction
+AST 0.2.1 and newer support translation. If you are planning on translating 
+AST please contact me first, so I can let you know if anyone else is working 
+on the same translation. This document you will assume you are translating 
+the language code xx for country YY. The country code is optional and often 
+omitted. AST does not yet support localization, so the country code will not 
+be used.
+
+2. Getting Started
+The first thing we need to do is setup all of the directories. First, add a 
+line to etc/languages for the language we are translating. It should be 
+something like:
+
+xx Example Language
+
+Next, create copies of the English templates, defaults and help directories:
+
+	cd share/templates
+	cp -R en xx
+	cd ../defaults
+	cp -R en xx
+	cd ../help
+	cp -R en xx
+
+Finally, we need to create the messages directory for the language and copy 
+the messages template:
+
+	mkdir -p share/messages/xx/LC_MESSAGES
+	cp src/po/ast.pot src/po/xx.po
+
+2. What to Translate
+The templates directory contains only HTML files. All of the English in these 
+files should be translated. Please do not translate field name, tags, etc. The 
+defaults directory contains data that is loaded into AST by default when the 
+application is installed. If you are translating this information, you will 
+not see any changes because the English data has already been loaded for you. 
+You will need to delete your var/data directory, which will cause AST to 
+reload the default data in the correct language. The format of these files is:
+
+field-name: field-value
+...
+# comment
+%% # <-- record separator
+
+You should only translate the field values. For some files, such as currencies,
+do not translate the currency code such as USD. Here is an example, the 
+portfolios defaults:
+
+portfolios.flags: 0
+portfolios.id: 0
+portfolios.name: Default Portfolio
+portfolios.description: AST Default Portfolio
+%%
+
+The translated file may look like (a babelfish French translation): 
+
+portfolios.flags: 0
+portfolios.id: 0
+portfolios.name: Brochure De Défaut
+portfolios.description: AST Brochure De Défaut
+%%
+
+The files in share/help also need to be translated. The format of these files 
+is mostly pain text. There are some directives, which are lines that start 
+with @word. You should translate every except for words starting with @. An 
+example file is (share/help/en/tooltip/chart):
+
+@caption Chart
+Draws a chart of the historical prices for this security.
+
+The babelfish French translation would be:
+
+@caption Diagramme
+Trace un diagramme des prix historiques de cette sécurité.
+
+The last thing you need to translation is the gettext message database. You 
+can read the gettext manual if you need more information on gettext. This is 
+the file src/po/xx.po. You can use a graphical tool such as KBabel to 
+translate this file. To compile and install it for testing, you should do:
+
+cd src/po
+./buildlang.sh xx
+
+3. What to send
+
+When you have completed the translation, please send me all of the transated 
+files so that I can add them to the distribution for other users. The files 
+you should send are:
+1. The share/templates/xx directory
+2. The share/help/xx directory
+3. The share/defaults/xx directory
+4. The file src/po/xx.po
+
+Your translation efforts are appreciated. Thanks!
+
+Michael Williamson <mswilliamson@uwaterloo.ca>

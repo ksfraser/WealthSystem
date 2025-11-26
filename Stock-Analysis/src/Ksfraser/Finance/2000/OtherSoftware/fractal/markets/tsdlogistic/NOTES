@@ -1,0 +1,41 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for tsdlogistic.
+#
+# A data file was made by running:
+#
+# ../../simulation/tsdlogistic -a 4 -b -1 315 | awk '{if ($1 > 0.0) print $1}' > data
+#
+# where the awk script filters zero values from the time series to protect
+# a division by zero error in ../../utilities/tsfraction
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/15 04:57:47 $
+# $Id: NOTES,v 0.0 2006/01/15 04:57:47 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/15 04:57:47  john
+# Initial version
+#
+#
+../../simulation/tsdlogistic -a 4 -b -1 315 | awk '{if ($1 > 0.0) print $1}' > data

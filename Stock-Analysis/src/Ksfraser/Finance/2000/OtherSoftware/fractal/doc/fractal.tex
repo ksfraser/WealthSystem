@@ -1,0 +1,117 @@
+\documentstyle[times,rcs,fancyheadings,gnuindex,epsf]{newreport}
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+%
+% Note: newreport.sty is report.sty modified with line 207 changed
+% from:
+%
+% \def\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+%
+% to:
+%
+% \def\l@figure{\@dottedtocline{1}{1.5em}{2.8em}}
+%
+% to accomodate 5 letter sections in the listoffigures, eg., C.123
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: fractal.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: fractal.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+% For float placement of many small floats
+%
+\setcounter{topnumber}{5}
+\renewcommand{\topfraction}{.9}
+\setcounter{bottomnumber}{5}
+\renewcommand{\bottomfraction}{.9}
+\setcounter{totalnumber}{10}
+\renewcommand{\textfraction}{.05}
+\renewcommand{\floatpagefraction}{.05}
+%
+% Page style
+%
+\topmargin 0.0in
+\textheight 8.125in
+\oddsidemargin 0.0in
+\textwidth 6.50in
+\pagestyle{fancy}
+\headrulewidth 0.4pt
+\footrulewidth 0.4pt
+%
+% Header and footer text
+%
+\plainheadrulewidth 0pt
+\plainfootrulewidth 0pt
+\lhead[\fancyplain{}]{\fancyplain{}{\sl\rightmark}}
+\chead{}
+\rhead[\fancyplain{}]{\fancyplain{}}
+\lfoot{Id: \RCSId}
+\cfoot{}
+\rfoot{\rm\thepage}
+%
+% Index macros
+%
+\makeindex
+\newcommand{\idx}[1]{\INDEX{#1}{#1}}
+\newcommand{\subidx}[2]{\SUBINDEX{#1}{#1}{#2}}
+%
+\begin{document}
+    \bibliographystyle{alpha}
+    \input{title.tex}
+    \input{abstract.tex}
+    \pagenumbering{roman}
+    \tableofcontents
+    \listoffigures
+    \listoftables
+    \input{preface.tex}
+    \pagenumbering{arabic}
+    \input{chap1.tex}
+    \input{chap2.tex}
+    \input{chap3.tex}
+    \input{chap4.tex}
+    \appendix
+        \input{appa.tex}
+        \input{appb.tex}
+        \input{appc.tex}
+        \input{appd.tex}
+    \bibliography{bibliography}
+    \begin{theindex}
+        \addcontentsline{toc}{chapter}{Index}
+        \input{fractal.idxs}
+    \end{theindex}
+    \input{colophon.tex}
+\end{document}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

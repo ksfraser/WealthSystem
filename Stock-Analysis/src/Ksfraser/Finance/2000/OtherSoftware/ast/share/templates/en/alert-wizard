@@ -1,0 +1,17 @@
+<input type="hidden" id="_filter" value="$alert_filter">
+<table class="awf_form">
+    <tr>
+        <th colspan="2">Create New Alert</th>
+    </tr>
+    <tr>
+        <td><b>Alert Type:</b></td>
+        <td><select id="alert_type" class="awf_inputtext" onchange="javascript:ast_alert_change();">$alert_options</select></td>
+    </tr>
+</table>
+<br><br>
+<div id="alert_form">
+</div>
+<script type="text/javascript" language="javascript">
+// Need to invoke this to load the alert page for the default selection.
+ast_alert_change();
+</script>

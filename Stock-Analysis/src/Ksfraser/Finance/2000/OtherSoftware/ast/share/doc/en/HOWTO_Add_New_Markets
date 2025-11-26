@@ -1,0 +1,25 @@
+Adding new markets 
+	 	 
+Describes the steps to create a new market in AST. By default AST comes setup for North American markets. 
+However you can configure AST to use any market. AST may already have the market you want, but it may be 
+disabled. First start by going into the Setup menu and selecting markets. If you see the market you want, 
+but it has a line through it, then click the eraser to enable that market. This is all you need to do.
+
+If you don't see the market you are looking for, press the Add Market button. Enter a short name, such as 
+TSX, for the market in the Market ID field. This can be whatever you like. The next thing we need to do 
+is determine the market key. This is the suffix Yahoo uses for the market. You can lookup the market on 
+http://finance.yahoo.com/exchanges. You can leave the the Globe Investor suffix blank as it applies to 
+North American markets only. BigCharts suffix is currently not used, so also leave that blank. In market 
+symbol, you should enter Yahoo's ticker symbol for your market index. This is used by some parts of AST 
+that compare stocks vs. the market they are in. There is no good page to look this up on, you have to 
+hunt around the Yahoo Finance website. You can leave it blank if you can't find it.
+
+The last thing you need is a symbol list. This is used for features like reports and pattern search, so 
+it is important. You can usually find this information on the exchange's website. You want to place the 
+symbol list in the share/symbols directory. It should be a text file in the format . You need to create 
+the symbol list before going into the add market screen, otherwise you won't see the file in the dropdown.
+
+If you add a new market, please send me the details so that I can add it to the default setup for other 
+users.
+
+Michael Williamson <mswilliamson@uwaterloo.ca>

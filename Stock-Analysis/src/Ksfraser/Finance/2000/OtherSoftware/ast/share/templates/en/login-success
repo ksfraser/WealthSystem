@@ -1,0 +1,16 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
+<meta http-equiv="Refresh" content="3; $target">
+<title>Login Successful</title>
+<link rel="stylesheet" type="text/css" href="$stylesheet">
+<link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+</head>
+<body>
+<br>
+<body onload="javascipt:window.location.href='$target'">
+<center>Login successful, redirecting in 3 seconds.<br>
+<a href="$target">Click here if you do not want to wait.</a></center>
+</body>
+</html>

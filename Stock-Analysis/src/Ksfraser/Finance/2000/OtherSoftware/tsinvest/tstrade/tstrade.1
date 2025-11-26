@@ -1,0 +1,1035 @@
+.TH TSTRADE 1 "January 18, 2006"
+.SH NAME
+tstrade \- optimal trade of multiple concurrent stock investments
+.SH SYNOPSIS
+.nf
+tstrade [-a a] [-D D] [-d 1|2|3|4] [-I] [-i i] [-n n]
+        [-p p] [-R R] [-r r] [-s] [-t] [-u] [-V] [-v]
+        [filename]
+.fi
+.SH DESCRIPTION
+Tstrade is for simulating the optimal gains of multiple equity
+investments. The program decides which of all available equities to
+invest in at any single time, by calculating the instantaneous Shannon
+probability of all equities, and using an approximation to statistical
+estimation techniques to estimate the accuracy of the calculated
+Shannon probability.
+
+The input file structure is a text file consisting of records, in
+temporal order, one record per time series sample.  Blank records are
+ignored, and comment records are signified by a '#' character as the
+first non white space character in the record. Each data record
+represents an equity transaction, consisting of a minium of six
+fields, separated by white space. The fields are ordered by time
+stamp, equity ticker identifier, maximum price in time unit, minimum
+price in time unit, closing price in time unit, and trade volume.  The
+existence of a record with more than 6 fields is used to suspend
+transactions on the equity, concluding with the record, for example:
+
+.nf
+    930830      AA      38.125  37.875  37.938  333.6
+    930830      AALR    3.250   2.875   3.250   7.2     Suspend
+    930830      AHP     64.375  63.625  64.375  335.9
+.fi
+
+Note: this program usees the following functions from other
+references:
+
+    ran1, which returns a uniform random deviate between
+    0.0 and 1.0. See "Numerical Recipes in C: The Art of
+    Scientific Computing," William H. Press, Brian
+    P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+    Cambridge University Press, New York, 1988, ISBN
+    0-521-35465-X, page 210, referencing Knuth.
+
+.SH INTRODUCTION
+
+One of the prevailing concepts in financial quantitative analysis,
+(eg., "financial engineering,") is that equity prices exhibit "random
+walk," (eg., Brownian motion, or fractal,) characteristics. The
+presentation by Brian Arthur [Art95] offers a compelling theoretical
+framework for the random walk model.  William A. Brock and Pedro
+J. F. de Lima [BdL95], among others, have published empirical evidence
+supporting Arthur's theoretical arguments.
+
+There is a large mathematical infrastructure available for
+applications of fractal analysis to equity markets. For example, the
+publications authored by Richard M. Crownover [Cro95], Edgar E. Peters
+[Pet91], and Manfred Schroeder [Sch91] offer formal methodologies,
+while the books by John L. Casti [Cas90], [Cas94] offer a less formal
+approach for the popular press.
+
+There are interesting implications that can be exploited if equity
+prices exhibit fractal characteristics:
+
+    1) It would be expected that equity portfolio
+    volatility would be equal to the root mean square of
+    the individual equity volatilities in the portfolio.
+
+    2) It would be expected that equity portfolio growth
+    would be equal to the linear addition of the growths
+    of the individual equities in the portfolio.
+
+    3) It would be expected that an equity's price would
+    fluctuate, over time, and the range, of these
+    fluctuations (ie., the maximum price minus the minimum
+    price,) would increase with the square root of time.
+
+    4) It would be expected that the number of equity
+    price fluctuations in a time interval, (ie., the
+    number of times an equity's price reaches a local
+    maximum, then reverse direction and decreases to a
+    local minimum,) would increase with the square root of
+    time.
+
+    5) It would be expected that the time between
+    fluctuations in an equity's price, (ie., the interval
+    between an equity's price reaching a local maximum and
+    then a local minimum,) would decrease with the
+    reciprocal of the square root of time.
+
+    6) It would be expected that an equity's price, over
+    time, would be mean reverting, (ie., if an equity's
+    price is below its average, there would be a
+    propensity for the equity's price to increase, and
+    vice versa.)
+
+Note that 1) and 2) above can be exploited to formulate an optimal
+hedging strategy; 3), 4), and 5) would tend to imply that "market
+timing" is not attainable; and 6) can be exploited to formulate an
+optimal buy-sell strategy.
+
+.SH DERIVATION
+
+As a tutorial, the derivation will start with a simple compound
+interest equation. This equation will be extended to a first order
+random walk model of equity prices. Finally, optimizations will
+derived based on the random walk model that are useful in optimizing
+equity portfolio performance.
+
+If we consider capital, V, invested in a savings account, and
+calculate the growth of the capital over time:
+
+    V(t) = V(t - 1)(1 + a(t)) .......................(1.1)
+
+where a(t) is the interest rate at time t, (usually a constant[1].)
+In equities, a(t) is not constant, and varies, perhaps being negative
+at certain times, (meaning that the value of the equity decreased.)
+This fluctuation in an equity's value can be represented by modifying
+a(t) in Equation 1.1:
+
+    a(t)  = f(t) * F(T) .............................(1.2)
+
+where the product f * F is the fluctuation in the equity's value at
+time t.  An equity's value, over time, is similar to a simple tossed
+coin game [Sch91, pp. 128], where f(t) is the fraction of a gambler's
+capital wagered on a toss of the coin, at time t, and F(t) is a random
+variable[2], signifying whether the game was a win, or a loss, ie.,
+whether the gambler's capital increased or decreased, and by how much.
+The amount the gambler's capital increased or decreased is f(t) *
+F(t).
+
+In general, F(t) is a function of a random variable, with an average,
+over time, of avgf, and a root mean square value, rmsf, of unity.
+Note that for simple, time invariant, compound interest, F(t) has an
+average and root mean square, both being unity, and f(t) is simply the
+interest rate, which is assumed to be constant. For a simple, single
+coin game, F(t) is a fixed increment, (ie., either +1 or -1,) random
+generator.  From an analytical perspective, it would be advantageous
+to measure the the statistical characteristics of the generator.
+Substituting Equation 1.2 into Equation 1.1[3]:
+
+
+    V(t) = V(t - 1)(1 + f(t) * F(t)) ...............(1.3)
+
+and subtracting V(t - 1) from both sides:
+
+
+    V(t) - V(t - 1) = V(t - 1) (1 + f(t) * F(t)) -
+
+    V(t - 1) .......................................(1.4)
+
+and dividing both sides by V(t - 1):
+
+    V(t) - V(t - 1)
+    --------------- =
+        V(t - 1)
+
+    V(t - 1) (1 + f(t) * F(t)) - V(t - 1)
+    ------------------------------------- ..........(1.5)
+                 V(t - 1)
+
+and combining:
+
+    V(t) - V(t - 1)
+    --------------- =
+        V(t - 1)
+
+    (1 + f(t) * F(t) ) - 1 = f(t) * F(t) ...........(1.6)
+
+We now have a "prescription," or process, for calculating the
+characteristics of the random process that determines an equity's
+price, over time.  That process is, for each unit of time, subtract
+the value of the equity at the previous time from the value of the
+equity at the current time, and divide this by the value of the equity
+at the previous time. The root mean square[4] of these values are the
+root mean square value of the random process.  The average of these
+values are the average of the random process, avgf.  The root mean
+square of these values can be calculated by any convenient means, and
+will be represented by rms. The average of these values can be found
+by any convenient means, and will be represented by avg[5].
+Therefore, if f(t) = f, and assuming that it does not vary over time:
+
+    rms = f ........................................(1.7)
+
+which, if there are sufficiently many samples, is a metric of the
+equity's price "volatility," and:
+
+
+    avg = f * F(t) .................................(1.8)
+
+and if there are sufficiently many samples, the average of F(t) is
+simply avgf, or:
+
+    avg = f * avgf .................................(1.9)
+
+which is a metric on the equity's rate of "growth." Note that this is
+the "effective" compound interest rate from Equation 1.1.  Equations
+1.7 and 1.9 are important equations, since they can be used in
+portfolio management.  For example, Equation 1.7 states that portfolio
+volatility is calculated as the root mean square of the individual
+volatility of the equities in the portfolio.  Equation 1.9 states that
+the growths of the equity prices add together linearly[6] in the
+portfolio.  Dividing Equation 1.9 by Equation 1.7 results in the two
+f's canceling, or:
+
+    avg
+    --- = avgf ....................................(1.10)
+    rms
+
+There may be analytical advantages to "model" F(t) as a simple tossed
+coin game, (either played with a single coin, or multiple coins, ie.,
+many coins played at one time, or a single coin played many times[7].)
+The number of wins minus the number of losses, in many iterations of a
+single coin tossing game would be:
+
+    P - (1 - P) = 2P - 1 ..........................(1.11)
+
+where P is the probability of a win for the tossed coin.  (This
+probability is traditionally termed, the "Shannon probability" of a
+win.) Note that from the definition of F(t) above, that P = avgf. For
+a fair coin, (ie., one that comes up with a win 50% of the time,) P =
+0.5, and there is no advantage, in the long run, to playing the game.
+However, if P > 0.5, then the optimal fraction of capital wagered on
+each iteration of the single coin tossing game, f, would be 2P - 1.
+Note that if multiple coins were used for each iteration of the game,
+we would expect that the volatility of the gambler's capital to
+increase as the square root of the number of coins used, and the
+growth to increase linearly with the number of coins used,
+irregardless of whether many coins were tossed at once, or one coin
+was tossed many times, (ie., our random generator, F(t) would assume a
+binomial distribution and if the number of coins was very large, then
+F(t) would assume, essentially, a Gaussian distribution.)  Many
+equities have a Gaussian distribution for the random process, F(t).
+It may be advantageous to determine the Shannon probability to analyze
+equity investment strategies.  From Equation 1.10:
+
+    avg
+    --- = avgf = 2P - 1 ...........................(1.12)
+    rms
+
+or:
+
+    avg
+    --- + 1 = 2P ..................................(1.13)
+    rms
+
+and:
+
+        avg
+        --- + 1
+        rms
+    P = ------- ...................................(1.14)
+           2
+
+where only the average and root mean square of the normalized
+increments need to be measured, using the "prescription" or process
+outlined above.
+
+Interestingly, what Equation 1.12 states is that the "best" equity
+investment is not, necessarily, the equity that has the largest
+average growth, avgf.  The best equity investment is the equity that
+has the largest growth, while simultaneously having the smallest
+volatility.  In point of fact, the optimal decision criteria is to
+choose the equity that has the largest ratio of growth to volatility,
+where the volatility is measured by computing the root mean square of
+the normalized increments, and the growth is computed by averaging the
+normalized increments.
+
+.SH MARKET
+
+We now have a "first order prescription" that enables us to analyze
+fluctuations in equity values, although we have not explained why
+equity values fluctuate the way they do.  For a formal presentation on
+the subject, see the bibliography in [Art95] which, also, offers
+non-mathematical insight into the subject.
+
+Consider a very simple equity market, with only two people holding
+equities. Equity value "arbitration" (ie., how equity values are
+determined,) is handled by one person posting (to a bulletin board,) a
+willingness to sell a given number of equities at a given price, to
+the other person.  There is no other communication between the two
+people. If the other person buys the equity, then that is the value of
+the equity at that time.  Obviously, the other person will not buy the
+equity if the price posted is too high-even if ownership of the equity
+is desired.  For example, the other person could simply decide to wait
+in hopes that a favorable price will be offered in the future.  What
+this means is that the seller must consider not only the behavior of
+the other person, but what the other person thinks the seller's
+behavior will be, ie., the seller must base the pricing strategy on
+the seller's pricing strategy. Such convoluted logical processes are
+termed "self referential," and the implication is that the market can
+never operate in a consistent fashion that can be the subject of
+deductive analysis [Pen89, pp. 101][8].  As pointed out by [Art95,
+Abstract], these types of indeterminacies pervade economics[9].  What
+the two players do, in absence of a deductively consistent and
+complete theory of the market, is to rely on inductive reasoning. They
+form subjective expectations or hypotheses about how the market
+operates.  These expectations and hypothesis are constantly formulated
+and changed, in a world that forms from others' subjective
+expectations. What this means is that equity values will fluctuate as
+the expectations and hypothesis concerning the future of equity values
+change[10]. The fluctuations created by these indeterminacies in the
+equity market are represented by the term f(t) * F(t) in Equation 1.3,
+and since there are many such indeterminacies, we would anticipate
+F(t) to have a Gaussian distribution.  This is a rather interesting
+conclusion, since analyzing the aggregate actions of many "agents,"
+each operating on subjective hypothesis in a market that is
+deductively indeterminate, can result in a system that can not only be
+analyzed, but optimized.
+
+.SH OPTIMIZATION
+
+The only remaining derivation is to show that the optimal wagering
+strategy is, as cited above:
+
+    f = rms = 2P - 1 ..............................(1.15)
+
+where f is the fraction of a gambler's capital wagered on each toss of
+a coin that has a Shannon probability, P, of winning.  Following
+[Rez94, pp. 450], consider that the gambler has a private wire into
+the future who places wagers on the outcomes of a game of chance.  We
+assume that the side information which he receives has a probability,
+P, of being true, and of 1 - P, of being false.  Let the original
+capital of gambler be V(0), and V(n) his capital after the n'th wager.
+Since the gambler is not certain that the side information is entirely
+reliable, he places only a fraction, f, of his capital on each wager.
+Thus, subsequent to n many wagers, assuming the independence of
+successive tips from the future, his capital is:
+
+                   w        l
+    V(n)  = (1 + f)  (1 - f) V (0) ................(1.16)
+
+where w is the number of times he won, and l = n - w, the number of
+times he lost. These numbers are, in general, values taken by two
+random variables, denoted by W and L. According to the law of large
+numbers:
+
+                  1
+    lim           - W = P .........................(1.17)
+    n -> infinity n
+
+
+                  1
+    lim           - L = q = 1 - P .................(1.18)
+    n -> infinity n
+
+The problem with which the gambler is faced is the determination of f
+leading to the maximum of the average exponential rate of growth of
+his capital. That is, he wishes to maximize the value of:
+
+                      1    V(n)
+    G = lim           - ln ---- ...................(1.19)
+        n -> infinity n    V(0)
+
+with respect to f, assuming a fixed original capital and specified P:
+
+                      W              L
+    G = lim           - ln (1 + f) + - ln (1 - f) .(1.20)
+        n -> infinity n              n
+
+or:
+
+
+    G = P ln (1 + f) + q ln (1 - f) ...............(1.21)
+
+which, by taking the derivative with respect to f, and equating to
+zero, can be shown to have a maxima when:
+
+    dG           P - 1        1 - P
+    -- = P(1 + f)      (1 - f)      -
+    df
+
+                  1 - P - 1
+    (1 - P)(1 - f)          (1 + f)P = 0 ..........(1.22)
+
+combining terms:
+
+
+                P - 1        1 - P
+    0 = P(1 + f)      (1 - f)      -
+
+                  P         P
+    (1 - P)(1 - f)  (1 + f )  .....................(1.23)
+
+and splitting:
+
+            P - 1        1 - P
+    P(1 + f)      (1 - f)      =
+
+                  P        P
+    (1 - P)(1 - f)  (1 + f)  ......................(1.24)
+
+then taking the logarithm of both sides:
+
+    ln (P) + (P - 1) ln (1 + f) + (1 - P) ln (1 - f) =
+
+    ln (1 - P) - P ln (1 - f) + P ln (1 + f) ......(1.25)
+
+and combining terms:
+
+    (P - 1) ln (1 + f) - P ln (1 + f) +
+
+    (1 - P) ln (1 - f) + P ln (1 - f) =
+
+    ln (1 - P) - ln (P) ...........................(1.26)
+
+or:
+
+    ln (1 - f) - ln (1 + f) =
+
+    ln (1 - P)  - ln (P)...........................(1.27)
+
+and performing the logarithmic operations:
+
+       1 - f      1 - P
+    ln ----- = ln ----- ...........................(1.28)
+       1 + f        P
+
+and exponentiating:
+
+    1 - f   1 - P
+    ----- = ----- .................................(1.29)
+    1 + f     P
+
+which reduces to:
+
+    P(1 - f) = (1 - P)(1 + f) .....................(1.30)
+
+and expanding:
+
+    P - Pf = 1 - Pf - P + f .......................(1.31)
+
+or:
+
+    P = 1 - P + f .................................(1.32)
+
+and, finally:
+
+    f = 2P - 1 ....................................(1.33)
+
+.SH FIXED INCREMENT FRACTAL
+
+It was mentioned that it would be useful to model equity prices as a
+fixed increment fractal, ie., an unfair tossed coin game.
+
+As above, consider a gambler, wagering on the iterated outcomes of an
+unfair tossed coin game. A fraction, f, of the gambler's capital will
+be wagered on the outcome of each iteration of the unfair tossed coin,
+and if the coin comes up heads, with a probability, P, then the
+gambler wins the iteration, (and an amount equal to the wager is added
+to the gambler's capital,) and if the coin comes up tails, with a
+probability of 1 - P, then the gambler looses the iteration, (and an
+amount of the wager is subtracted from the gambler's capital.)
+
+If we let the outcome of the first coin toss, (ie., whether it came up
+as a win or a loss,) be c(1) and the outcome of the second toss be
+c(2), and so on, then the outcome of the n'th toss, c(n), would be:
+
+           [win, with a probability of P
+    c(n) = [
+           [loose, with a probability of 1 - P
+
+for convenience, let a win to be represented by +1, and a loss by -1:
+
+           [+1, with a probability of P
+    c(n) = [
+           [-1, with a probability of 1 - P
+
+for the reason that when we multiply the wager, f, by c(n), it will be
+a positive number, (ie., the wager will be added to the capital,) and
+for a loss, it will be a negative number, (ie., the wager will be
+subtracted from the capital.)  This is convenient, since the
+increment, by with the gambler's capital increased or decreased in the
+n'th iteration of the game is f * c(n).
+
+If we let C(0) be the initial value of the gambler's capital, C(1) be
+the value of the gambler's capital after the first iteration of the
+game, then:
+
+    C(1) = C(0) * (1 + c(1) * f(1)) ...............(1.34)
+
+after the first iteration of the game, and:
+
+    C(2) = C(0) * ((1 + c(1) * f(1)) *
+
+    (1 + c(2) * f(2)))  ...........................(1.35)
+
+after the second iteration of the game, and, in general, after the
+n'th iteration of the game:
+
+    C(n) = C(0) * ((1 + c(1) * f(1)) *
+
+    (1 + c(2) * f(2)) * ...
+    * (1 + c(n) * f(n)) *
+    (1 + c(n + 1) * f(n + 1))) ....................(1.36)
+
+For the normalized increments of the time series of the gambler's
+capital, it would be convenient to rearrange these formulas. For the
+first iteration of the game:
+
+    C(1) - C(0) = C(0) * (1 + c(1) * f(1)) - C(0) .(1.37)
+
+or
+
+    C(1) - C(0)   C(0) * (1 + c(1) * f(1)) - C(0)
+    ----------- = ------------------------------- .(1.38)
+       C(0)                   C(0)
+
+and after reducing, the first normalized increment of the gambler's
+capital time series is:
+
+    C(1) - C(0)
+    ----------- = (1 + c(1) * f(1)) - 1
+       C(0)
+
+                = c(1) * f(1) .....................(1.39)
+
+and for the second iteration of the game:
+
+    C(2) = C(0) * ((1 + c(1) * f(1)) *
+
+    (1 + c(2) * f(2))) ............................(1.40)
+
+but C(0) * ((1 + c(1) * f(1)) is simply C(1):
+
+    C(2) = C(1) * (1 + c(2) * f(2)) ...............(1.41)
+
+or:
+
+    C(2) - C(1) = C(1) * (1 + c(2) * f(2)) - C(1) .(1.42)
+
+which is:
+
+    C(2) - C(1)   C(1) * (1 + c(2) * f(2)) - C(1)
+    ----------- = ------------------------------- .(1.43)
+       C(1)                    C(1)
+
+and after reducing, the second normalized increment of the gambler's
+capital time series is:
+
+    C(2) - C(1)
+    ----------- = 1 + c(2) * f(2)) - 1
+       C(1)
+
+                = c(2) * f(2) .....................(1.44)
+
+and it should be obvious that the process can be repeated
+indefinitely, so, the n'th normalized increment of the gambler's
+capital time series is:
+
+    C(n) - C(n - 1)
+    --------------- = c(n) * f(n) .................(1.45)
+         C(n)
+
+which is equation (1.6).
+
+.SH DATA SET REQUIREMENTS
+
+One of the implications of considering equity prices to have fractal
+characteristics, ie., random walk or Brownian motion, is that future
+prices can not be predicted from past equity price performance. The
+Shannon probability of a equity price time series is the likelihood
+that a equity price will increase in the next time interval. It is
+typically 0.51, on a day to day bases, (although, occasionally, it
+will be as high as 0.6) What this means, for a typical equity, is that
+51% of the time, a equity's price will increase, and 49% of the time
+it will decrease-and there is no possibility of determining which will
+occur-only the probability.
+
+However, another implication of considering equity prices to have
+fractal characteristics is that there are statistical optimizations to
+maximize portfolio performance. The Shannon probability, P, is related
+to the optimal volatility of a equity's price, (measured as the root
+mean square of the normalized increments of the equity's price time
+series,) rms, by rms = 2P - 1. Also, the optimized average of the
+normalized increments is the growth in the equity's price, and is
+equal to the square of the rms. Unfortunately, the measurements of avg
+and rms must be made over a long period of time, to construct a very
+large data set for analytical purposes do to the necessary accuracy
+requirements. Statistical estimation techniques are usually employed
+to quantitatively determine the size of the data set for a given
+analytical accuracy.
+
+The calculation of the Shannon probability, P, from the average and
+root mean square of the normalized increments, avg and rms,
+respectively, will require require specialized filtering, (to "weight"
+the most recent instantaneous Shannon probability more than the least
+recent,) and statistical estimation (to determine the accuracy of the
+measurement of the Shannon probability.)
+
+This measurement would be based on the normalized increments, as
+derived in Equation (1.6):
+
+    V(t) - V(t - 1)
+    ---------------
+       V(t - 1)
+
+which, when averaged over a "sufficiently large" number of increments,
+is the mean of the normalized increments, avg. The term "sufficiently
+large" must be analyzed quantitatively. For example, the following
+table is the statistical estimate for a Shannon probability, P, of a
+time series, vs, the number of records required, based on a mean of
+the normalized increments = 0.04:
+
+     P      avg         e       c     n
+    0.51   0.0004    0.0396  0.7000  27
+    0.52   0.0016    0.0384  0.7333  33
+    0.53   0.0036    0.0364  0.7667  42
+    0.54   0.0064    0.0336  0.8000  57
+    0.55   0.0100    0.0300  0.8333  84
+    0.56   0.0144    0.0256  0.8667  135
+    0.57   0.0196    0.0204  0.9000  255
+    0.58   0.0256    0.0144  0.9333  635
+    0.59   0.0324    0.0076  0.9667  3067
+    0.60   0.0400    0.0000  1.0000  infinity
+
+where avg is the average of the normalized increments, e is the error
+estimate in avg, c is the confidence level of the error estimate, and
+n is the number of records required for that confidence level in that
+error estimate.  What this table means is that if a step function,
+from zero to 0.04, (corresponding to a Shannon probability of 0.6,) is
+applied to the system, then after 27 records, we would be 70%
+confident that the error level was not greater than 0.0396, or avg was
+not lower than 0.0004, which corresponds to an effective Shannon
+probability of 0.51. Note that if many iterations of this example of
+27 records were performed, then 30% of the time, the average of the
+time series, avg, would be less than 0.0004, and 70% greater than
+0.0004. This means that the the Shannon probability, 0.6, would have
+to be reduced by a factor of 0.85 to accommodate the error created by
+an insufficient data set size to get the effective Shannon probability
+of 0.51. Since half the time the error would be greater than 0.0004,
+and half less, the confidence level would be 1 - ((1 - 0.85) * 2) =
+0.7, meaning that if we measured a Shannon probability of 0.6 on only
+27 records, we would have to use an effective Shannon probability of
+0.51, corresponding to an avg of 0.0004. For 33 records, we would use
+an avg of 0.0016, corresponding to a Shannon probability of 0.52, and
+so on.
+
+The table above was made by iterating the tsstatest(1) program, and
+can be approximated by a single pole low pass recursive discreet time
+filter [Con78], with the pole frequency at 0.00045 times the time
+series sampling frequency. The accuracy of the approximation is about
++/- 10% for the first 260 samples, with the approximation accuracy
+prediction becoming optimistic thereafter, ie., about +30%.
+
+A pole frequency of 0.033 seems a good approximation for working with
+the root mean square of the normalized increments, with a reasonable
+approximation to about 5-10 time units.
+
+The "instantaneous," weighted, and statistically estimated Shannon
+probability, P, can be determined by dividing the filtered rms by the
+filtered avg, adding unity, and dividing by two, as in Equation
+(1.14).
+
+The advantage of the discreet time recursive single pole filter
+approximation is that it requires only 3 lines of code in the
+implementation-two for initialization, and one in the calculation
+construct.
+
+The single pole low pass filter is implemented from the following
+discrete time equation:
+
+    v      = I * k2 + v  * k1
+     n + 1             n
+
+where I is the value of the current sample in the time series, v are
+the value of the output time series, and k1 and k2 are constants
+determined from the following equations:
+
+          -2 * p * pi
+    k1 = e
+
+and
+
+    k2 = 1 - k1
+
+where p is a constant that determines the frequency of the pole-a
+value of unity places the pole at the sample frequency of the time
+series.
+
+Footnotes:
+
+[1] For example, if a = 0.06, or 6%, then at the end of the first time
+interval the capital would have increased to 1.06 times its initial
+value.  At the end of the second time interval it would be (1.06 *
+1.06), and so on.  What Equation 1.1 states is that the way to get the
+value, V in the next time interval is to multiply the current value by
+1.06. Equation 1.1 is nothing more than a "prescription," or a process
+to make an exponential, or "compound interest" mechanism. In general,
+exponentials can always be constructed by multiplying the current
+value of the exponential by a constant, to get the next value, which
+in turn, would be multiplied by the same constant to get the next
+value, and so on.  Equation 1.1 is a construction of V (t) = exp(kt)
+where k = ln(1 + a). The advantage of representing exponentials by the
+"prescription" defined in Equation 1.1 is analytical expediency. For
+example, if you have data that is an exponential, the parameters, or
+constants, in Equation 1.1 can be determined by simply reversing the
+"prescription," ie., subtracting the previous value, (at time t - 1,)
+from the current value, and dividing by the previous value would give
+the exponentiating constant, (1 + at). This process of reversing the
+"prescription" is termed calculating the "normalized increments."
+(Increments are simply the difference between two values in the
+exponential, and normalized increments are this difference divided by
+the value of the exponential.) Naturally, since one usually has many
+data points over a time interval, the values can be averaged for
+better precision-there is a large mathematical infrastructure
+dedicated to these types of precision enhancements, for example, least
+squares approximation to the normalized increments, and statistical
+estimation.
+
+[2] "Random variable" means that the process, F(t), is random in
+nature, ie., there is no possibility of determining what the next
+value will be. However, F can be analyzed using statistical methods
+[Fed88, pp. 163], [Sch91, pp. 128]. For example, F typically has a
+Gaussian distribution for equity prices [Cro95, pp. 249], in which
+case the it is termed a "fractional Brownian motion," or simply a
+"fractal" process. In the case of a single tossed coin, it is termed
+"fixed increment fractal," "Brownian," or "random walk" process.  The
+determination of the statistical characteristics of F(t) are the
+essence of analysis. Fortunately, there is a large mathematical
+infrastructure dedicated to the subject. For example, F could be
+verified as having a Gaussian distribution using, perhaps, Chi-Square
+techniques. Frequently, it is convenient, from an analytical
+standpoint, to "model" F using a mathematically simpler process
+[Sch91, pp. 128]. For example, multiple iterations of tossing a coin
+can be used to approximate a Gaussian distribution, since the
+distribution of many tosses of a coin is binomial-which if the number
+of coins tossed is sufficient will represent a Gaussian distribution
+to any required precision [Sch91, pp. 144], [Fed88, pp. 154].
+
+[3] Equation 1.3 is interesting in many other respects.  For example,
+adding a single term, m * V(t - 1), to the equation results in V(t) =
+v(t - 1) (1 + f(t) * F(t) + m * V(t - 1)) which is the "logistic," or
+'S' curve equation,(formally termed the "discreet time quadratic
+equation,") and has been used successfully in many unrelated fields
+such as manufacturing operations, market and economic forecasting, and
+analyzing disease epidemics [Mod92, pp. 131]. There is continuing
+research into the application of an additional "non-linear" term in
+Equation 1.3 to model equity value non-linearities. Although there
+have been modest successes, to date, the successes have not proven to
+be exploitable in a systematic fashion [Pet91, pp. 133]. The reason
+for the interest is that the logistic equation can exhibit a wide
+variety of behaviors, among them, "chaotic." Interestingly, chaotic
+behavior is mechanistic, but not "long term" predictable into the
+future. A good example of such a system is the weather. It is an
+important concept that compound interest, the logistic function, and
+fractals are all closely related.
+
+[4] In this section, "root mean square" is used to mean the variance
+of the normalized increments. In Brownian motion fractals, this is
+computed by sigmatotal^2 = sigma1^2 + sigma2^2 ... However, in many
+fractals, the variances are not calculated by adding the squares,
+(ie., a power of 2,) of the values-the power may be "fractional," ie.,
+3 / 2 instead of 2, for example [Sch91, pp. 130], [Fed88, pp.
+178]. However, as a first order approximation, the variances of the
+normalized increments of equity prices can be added root mean square
+[Cro95, kpp. 250]. The so called "Hurst" coefficient determines the
+process to be used.  The Hurst coefficient is range of the equity
+values over a time interval, divided by the standard deviation of the
+values over the interval, and its determination is commonly called "R
+/ S" analysis. As pointed out in [Sch91, pp. 157] the errors committed
+in such simplified assumptions can be significant-however, for
+analysis of equities, squaring the variances seems to be a reasonably
+accurate simplification.
+
+[5] For example, many calculators have averaging and root mean square
+functionality, as do many spreadsheet programs-additionally, there are
+computer source codes available for both.  See the programs tsrms and
+tsavg.  The method used is not consequential.
+
+[6] There are significant implications do to the fact that equity
+volatilities are calculated root mean square.  For example, if capital
+is invested in N many equities, concurrently, then the volatility of
+the capital will be rms / sqrt (N) of an individual equity's
+volatility, rms, provided all the equites have similar statistical
+characteristics. But the growth in the capital will be unaffected,
+ie., it would be statistically similar to investing all the capital in
+only one equity. What this means is that capital, or portfolio,
+volatility can be minimized without effecting portfolio growth-ie.,
+volatility risk can addressed.  There are further applications.  For
+example, Equation 1.6 could be modified by dividing both the
+normalized increments, and the square of the normalized increments by
+the daily trading volume.  The quotient of the normalized increments
+divided by the trading volume is the instantaneous growth, avg, of the
+equity, on a per-share basis.  Likewise, the square root of the square
+of the normalized increments divided by the daily trading volume is
+the instantaneous root mean square, rmsf, of the equity on a per-share
+basis, ie., its instantaneous volatility of the equity.  (Note that
+these instantaneous values are the statistical characteristics of the
+equity on a per-share bases, similar to a coin toss, and not on time.)
+Additionally, it can be shown that the range-the maximum minus the
+minimum-of an equity's value over a time interval will increase with
+the square root of of the size of the interval of time [Fed88,
+pp. 178]. Also, it can be shown that the number of expected equity
+value "high and low" transitions scales with the square root of time,
+meaning that the probability of an equity value "high or low"
+exceeding a given time interval is proportional to the square root of
+the time interval [Schroder, pp. 153].
+
+[7] Here the "model" is to consider two black boxes, one with an
+equity "ticker" in it, and the other with a casino game of a tossed
+coin in it. One could then either invest in the equity, or,
+alternatively, invest in the tossed coin game by buying many casino
+chips, which constitutes the starting capital for the tossed coin
+game.  Later, either the equity is sold, or the chips "cashed in." If
+the statistics of the equity value over time is similar to the
+statistics of the coin game's capital, over time, then there is no way
+to determine which box has the equity, or the tossed coin game. The
+advantage of this model is that gambling games, such as the tossed
+coin, have a large analytical infrastructure, which, if the two black
+boxes are statistically the same, can be used in the analysis of
+equities.  The concept is that if the value of the equity, over time,
+is statistically similar to the coin game's capital, over time, then
+the analysis of the coin game can be used on equity values.  Note that
+in the case of the equity, the terms in f(t) * F(t) can not be
+separated. In this case, f = rms is the fraction of the equity's
+value, at any time, that is "at risk," of being lost, ie., this is the
+portion of a equity's value that is to be "risk managed."  This is
+usually addressed through probabilistic methods, as outlined below in
+the discussion of Shannon probabilities, where an optimal wagering
+strategy is determined. In the case of the tossed coin game, the
+optimal wagering strategy is to bet a fraction of the capital that is
+equal to f = rms = 2P - 1 [Sch91, pp. 128, 151], where P is the
+Shannon probability. In the case of the equity, since f = rms is not
+subject to manipulation, the strategy is to select equities that
+closely approximate this optimization, and the equity's value, over
+time, on the average, would increase in a similar fashion to the coin
+game.  As another alternative, various equities can be invested in
+concurrently to exercise control over portfolio volatility. The growth
+of either investment would be equal to avg = rms^2, on average, for
+each iteration of the coin game, or time unit of equity/portfolio
+investment. This is an interesting concept from risk management since
+it maximizes the gain in the capital, while, simultaneously,
+minimizing risk exposure to the capital.
+
+[8] Penrose, referencing Russell's paradox, presents a very good
+example of logical contradiction in a self-referential system.
+Consider a library of books. The librarian notes that some books in
+the library contain their titles, and some do not, and wants to add
+two index books to the library, labeled "A" and "B," respectively; the
+"A" book will contain the list of all of the titles of books in the
+library that contain their titles; and the "B" book will contain the
+list of all of the titles of the books in the library that do not
+contain their titles.  Now, clearly, all book titles will go into
+either the "A" book, or the "B" book, respectively, depending on
+whether it contains its title, or not. Now, consider in which book,
+the "A" book or the "B" book, the title of the "B" book is going to be
+placed-no matter which book the title is placed, it will be
+contradictory with the rules. And, if you leave it out, the two books
+will be incomplete.
+
+[9] [Art95] cites the "El Farol Bar" problem as an example. Assume one
+hundred people must decide independently each week whether go to the
+bar. The rule is that if a person predicts that more than, say, 60
+will attend, it will be too crowded, and the person will stay home; if
+less than 60 is predicted, the person will go to the bar. As trivial
+as this seems, it destroys the possibility of long-run shared,
+rational expectations.  If all believe few will go, then all will go,
+thus invalidating the expectations. And, if all believe many will go,
+then none will go, likewise invalidating those expectations.
+Predictions of how many will attend depend on others' predictions, and
+others' predictions of others' predictions. Once again, there is no
+rational means to arrive at deduced a-priori predictions. The
+important concept is that expectation formation is a self-referential
+process in systems involving many agents with incomplete information
+about the future behavior of the other agents. The problem of
+logically forming expectations then becomes ill-defined, and rational
+deduction, can not be consistent or complete. This indeterminacy of
+expectation-formation is by no means an anomaly within the real
+economy. On the contrary, it pervades all of economics and game
+theory.
+
+[10] Interestingly, the system described is a stable system, ie., if
+the players have a hypothesis that changing equity positions may be of
+benefit, then the equity values will fluctuate-a self fulfilling
+prophecy.  Not all such systems are stable, however.  Suppose that one
+or both players suddenly discover that equity values can be "timed,"
+ie., there are certain times when equities can be purchased, and
+chances are that the equity values will increase in the very near
+future. This means that at certain times, the equites would have more
+value, which would soon be arbitrated away. Such a scenario would not
+be stable.
+
+Bibliography:
+
+[Art95] W. Brian Arthur.  "Complexity in Economic and Financial
+Markets."  Complexity, 1, pp. 20-25, 1995.  Also available from
+http://www.santafe.edu/arthur, February 1995.
+
+[BdL95] William A. Brock and Pedro J. F. de Lima. "Nonlinear time
+series, complexity theory, and finance." To appear in "Handbook of
+Statistics Volume 14: Statistical Methods in Finance," edited by
+G. Maddala and C. Rao. New York: North Holland, forthcoming. Also
+available from http://www.santafe.edu/sfi/publications, March 1995.
+
+[Cas90] John L. Casti. "Searching for Certainty." William Morrow, New
+York, New York, 1990.
+
+[Cas94] John L. Casti. "Complexification." HarperCollins, New York,
+New York, 1994.
+
+[Con78] John Conover. "An analog, discrete time, single pole filter."
+Fairchild Journal of Semiconductor Progress, 6(4), July/August 1978.
+
+[Cro95] Richard M. Crownover.  "Introduction to Fractals and Chaos."
+Jones and Bartlett Publishers International, London, England, 1995.
+
+[Fed88] Jens Feder. "Fractals." Plenum Press, New York, New York,
+1988.
+
+[Mod92] Theodore Modis. "Predictions." Simon & Schuster, New York, New
+York, 1992.
+
+[Pen89] Roger Penrose. "The Emperor's New Mind." Oxford University
+Press, New York, New York, 1989.
+
+[Pet91] Edgar E. Peters.  "Chaos and Order in the Capital Markets."
+John Wiley & Sons, New York, New York, 1991.
+
+[Rez94] Fazlollah M. Reza.  "An Introduction to Information Theory."
+Dover Publications, New York, New York, 1994.
+
+[Sch91] Manfred Schroeder. "Fractals, Chaos, Power Laws."
+W. H. Freeman and Company, New York, New York, 1991.
+.SH OPTIONS
+.TP
+.B -a a
+Pole frequency for the average of the normalized
+increments, avg, of a stock's time series.
+.TP
+.B -D D
+Minimum decision criteria for investment in a stock, ie.,
+the minimum value of RMS * (avg / rms), RMS * rms, avg, or
+randomly.
+.TP
+.B -d 1|2|3
+Decision method for investment in a stock:
+    -d 1: RMS * (avg / rms),
+          P = ((avg / rms) + 1) / 2
+    -d 2: RMS * rms,
+          P = (rms + 1) / 2
+    -d 3: avg,
+          P = (sqrt (avg) + 1) / 2
+    -d 4: randomly,
+          P = ((avg / rms) + 1) / 2
+.TP
+.B -I
+Print the average index of all stocks in the output time
+series.
+.TP
+.B -i i
+Initial capital.
+.TP
+.B -n n
+Maximum number of stocks to invest in concurrently.
+.TP
+.B -p p
+Minimum Shannon probability, P, for investment in a stock.
+.TP
+.B -R R
+Pole frequency for the root mean square of the normalized
+increments, RMS, of a stock's time series.
+.TP
+.B -r r
+Pole frequency for the root mean square of the normalized
+increments, rms, of a stock's time series.
+.TP
+.B -s
+Print the names of stocks held in the output time series.
+.TP
+.B -t
+Print the time stamps in the output time series.
+.TP
+.B -u
+Reverse the sense of the decision criteria.
+.TP
+.B -V
+Compute Shannon probability, P, based on trading volumes.
+.TP
+.B -v
+Print the version and copyright banner of this program.
+.B filename
+Input filename.
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsderivative(1), tshcalc(1), tshurst(1), tsintegrate(1),
+tslogreturns(1), tslsq(1), tsnormal(1), tsshannon(1),
+tsblack(1), tsbrownian(1), tsdlogistic(1), tsfBm(1),
+tsfractional(1), tsgaussian(1), tsintegers(1),
+tslogistic(1), tspink(1), tsunfairfractional(1),
+tswhite(1), tscoin(1), tsunfairbrownian(1), tsfraction(1),
+tsshannonmax(1), tschangewager(1), tssample(1), tsrms(1),
+tscoins(1), tsavg(1), tsXsquared(1), tsstockwager(1),
+tsshannonwindow(1), tsmath(1), tsavgwindow(1), tspole(1),
+tsdft(1), tsbinomial(1), tsdeterministic(1), tsnumber(1),
+tsrmswindow(1), tsshannonstock(1), tsmarket(1),
+tsstock(1), tsstatest(1), tsunfraction(1),
+tsshannonaggregate(1), tsinstant(1), tsshannonvolume(1),
+tsstocks(1), tsshannonfundamental(1), tstrade(1),
+tstradesim(1), tsrunlength(1), tsunshannon(1),
+tsrootmean(1), tsrunmagnitude(1), tskurtosis(1),
+tskurtosiswindow(1), tsrootmeanscale(1),
+tsscalederivative(1), tsgain(1), tsgainwindow(1)
+tscauchy(1), tslognormal(1), tskalman(1), tsroot(1),
+tslaplacian(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+----------------------------------------------------------------------
+.fi

@@ -1,0 +1,19 @@
+<form method="post" action="$save_page" id="marketinfo">
+<input type="hidden" name="awf_setvar" id="awf_setvar" value="false">
+<table class="awf_form">
+  <tr>
+    <th colspan="2">Select Sector</th>
+  </tr>
+  <tr>
+    <td><b>Market:</b></td>
+    <td><select name="marketinfo.market" onchange="javascript:document.getElementById('marketinfo').action='$post_back';document.getElementById('awf_setvar').value='true';document.getElementById('marketinfo').submit();">$market_options</select></td>
+  </tr>
+  <tr>
+    <td><b>Sector:</b></td>
+    <td><select name="sector">$sector_options</select></td>
+  </tr>
+  <tr>
+    <td colspan="2"><input type="submit"></td>
+  </tr>
+</table>
+</form>

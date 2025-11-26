@@ -1,0 +1,1077 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/09 04:38:13 $
+\RCS $Id: appd.tex,v 0.0 2006/01/09 04:38:13 john Exp $
+% $Log: appd.tex,v $
+% Revision 0.0  2006/01/09 04:38:13  john
+% Initial version
+%
+%
+% The following are numerical data macros-the data is inserted by the
+% the input of the parameters.tex files-these files were made during the
+% processing of the data for each market place in ../markets, with the
+% execution of the maketex.awk awk script, which is as follows:
+%
+% -----------------------------------------------------------------------------
+%
+% Make the LaTeX parameters for this market
+%
+% Input must be successive records that contain:
+%
+%     0) the mean of the file data.tsfraction, from file
+%         "data.tsfraction.tsnormal-p.mean"
+%     1) the standard deviation of the file data.tsfraction, from the file,
+%         "data.tsfraction.tsnormal-p.stddev"
+%     2) the root mean square of the file data.tsfraction, from file
+%         "data.tsfraction.tsrms-p"
+%     3) the fraction of cumulative returns wagered, from file
+%         "data.tsfraction.abs.tsnormal-p.mean"
+%     4) the standard deviation of cumulative returns wagered, from the
+%         the file "data.tsfraction.abs.tsnormal-p.stddev"
+%     5) the constant in the least squares approximation of the file
+%         data.tsfraction, from the file "data.tsfraction.tslsq-p.constant"
+%     6) the slope in the least squares approximation of the file
+%         data.tsfraction, from the file "data.tsfraction.tslsq-p.slope"
+%     7) the constant in the least squares approximation of the file
+%         data.tsfraction.abs , from the file
+%         "data.tsfraction.abs.tslsq-p.constant"
+%     8) the slope in the least squares approximation of the file
+%         data.tsfraction.abs, from the file
+%         "data.tsfraction.abs.tslsq-p.slope"
+%     9) the hurst coefficient, from file
+%        "data.tsfraction.tshurst-d.tslsq-p.hurstall"
+%     10) the hurst coefficient for the lower end of the graph, from file
+%         "data.tsfraction.tshurst-d.tslsq-p.low.hurstlow"
+%     11) the h parameter, from file
+%         "data.tsfraction.tshcalc-d.tslsq-p.hcalcall"
+%     12) the h parameter for the lower end end of the graph, from file
+%         "data.tsfraction.tshcalc-d.tslsq-p.low.hcalclow"
+%     13) the maximum value of Shannon probability, from file
+%         "data.tsshannonmax-p.max"
+%     14) the logrithmic returns using tslogreturns, from file
+%         "data.tslogreturns-p.tsshannon.returns"
+%     15) the count of records with negative signes in data.tsfraction, from
+%         the file "data.tsfraction.pmaxnumerator"
+%     16) the count of records in data.tsfraction, from the file
+%         "data.tsfraction.pmaxdenominator"
+%     17) the mean of the file tsunfairbrownian-f.tsfraction, from file
+%         "tsunfairbrownian-f.fraction.mean"
+%     18) the standard deviation of the file tsunfairbrownian-f.tsfraction,
+%         from file "tsunfairbrownian-f.fraction.mean"
+%     19) the Shannon probability using tslogreturns, from file
+%         "data.tslogreturns-p.tsshannon.probability"
+%     20) the logrithmic returns in bits from the file
+%         "data.tslsq-e-p.bits"
+%     21) the traditional hurst coefficient, from file
+%        "data.tshurst.tslsq-p.hurstall"
+%     22) the traditional hurst coefficient for the lower end of the graph,
+%         from file "data.tshurst.tslsq-p.low.hurstlow"
+%     23) the traditional h parameter, from file
+%         "data.tshcalc.tslsq-p.hcalcall"
+%     24) the traditional h parameter for the lower end end of the graph,
+%         from file "data.tshcalc.tslsq-p.low.hcalclow"
+%     25) the chi-squared value, from file "chisquared"
+%     26) the critical value for the chi-squared value, from file
+%         "critical"
+%
+%{
+%
+%    if (linectr == 0)
+%    {
+%        datafractionmean = $0
+%        printf ("\\renewcommand{\\datafractionmean}{%f}\n", datafractionmean)
+%        datafractionmeanbits = log (datafractionmean + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionmeanbits}{%f}\n", datafractionmeanbits)
+%        datafractionmeanq = datafractionmean / 3.0
+%        printf ("\\renewcommand{\\datafractionmeanq}{%f}\n", datafractionmeanq)
+%        datafractionmeanbitsq = log (datafractionmeanq + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionmeanbitsq}{%f}\n", datafractionmeanbitsq)
+%    }
+%
+%    if (linectr == 1)
+%    {
+%        datafractionstddev = $0
+%        printf ("\\renewcommand{\\datafractionstddev}{%f}\n", datafractionstddev)
+%    }
+%
+%    if (linectr == 2)
+%    {
+%        datafractionrms = $0
+%        printf ("\\renewcommand{\\datafractionrms}{%f}\n", datafractionrms)
+%        avgrms = ((datafractionmean / datafractionrms) + 1.0) / 2
+%        printf ("\\renewcommand{\\avgrms}{%f}\n", avgrms)
+%        ncompanies = datafractionmean / (datafractionrms * datafractionrms)
+%        printf ("\\renewcommand{\\ncompanies}{%f}\n", ncompanies)
+%        pncompanies = ((datafractionmean / (sqrt (ncompanies) * datafractionrms)) + 1.0) / 2.0
+%        printf ("\\renewcommand{\\pncompanies}{%f}\n", pncompanies)
+%    }
+%
+%    if (linectr == 3)
+%    {
+%        datafractionabsmean = $0
+%        printf ("\\renewcommand{\\datafractionabsmean}{%f}\n", datafractionabsmean)
+%    }
+%
+%    if (linectr == 4)
+%    {
+%        datafractionabsstddev = $0
+%        printf ("\\renewcommand{\\datafractionabsstddev}{%f}\n", datafractionabsstddev)
+%    }
+%
+%    if (linectr == 5)
+%    {
+%        datafractionconstant = $0
+%        printf ("\\renewcommand{\\datafractionconstant}{%f}\n", datafractionconstant)
+%        datafractionconstantbits = log (datafractionconstant + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionconstantbits}{%f}\n", datafractionconstantbits)
+%        datafractionconstantq = datafractionconstant / 3.0
+%        printf ("\\renewcommand{\\datafractionconstantq}{%f}\n", datafractionconstantq)
+%        datafractionconstantbitsq = log (datafractionconstantq + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionconstantbitsq}{%f}\n", datafractionconstantbitsq)
+%    }
+%
+%    if (linectr == 6)
+%    {
+%        datafractionslope = $0
+%        printf ("\\renewcommand{\\datafractionslope}{%f}\n", datafractionslope)
+%    }
+%
+%    if (linectr == 7)
+%    {
+%        datafractionabsconstant = $0
+%        printf ("\\renewcommand{\\datafractionabsconstant}{%f}\n", datafractionabsconstant)
+%    }
+%
+%    if (linectr == 8)
+%    {
+%        datafractionabsslope = $0
+%        printf ("\\renewcommand{\\datafractionabsslope}{%f}\n", datafractionabsslope)
+%    }
+%
+%    if (linectr == 9)
+%    {
+%        hurstall = $0
+%        printf ("\\renewcommand{\\hurstall}{%f}\n", hurstall)
+%    }
+%
+%    if (linectr == 10)
+%    {
+%        hurstlow = $0
+%        printf ("\\renewcommand{\\hurstlow}{%f}\n", hurstlow)
+%        hurstlowtwo = hurstlow * 2.0
+%        printf ("\\renewcommand{\\hurstlowtwo}{%f}\n", hurstlowtwo)
+%        hurstlowhundred = hurstlow * 100.0
+%        printf ("\\renewcommand{\\hurstlowhundred}{%f}\n", hurstlowhundred)
+%    }
+%
+%    if (linectr == 11)
+%    {
+%        hcalcall = $0
+%        printf ("\\renewcommand{\\hcalcall}{%f}\n", hcalcall)
+%    }
+%
+%    if (linectr == 12)
+%    {
+%        hcalclow = $0
+%        printf ("\\renewcommand{\\hcalclow}{%f}\n", hcalclow)
+%    }
+%
+%    if (linectr == 13)
+%    {
+%        shannonmax = $0
+%        printf ("\\renewcommand{\\shannonmax}{%f}\n", shannonmax)
+%        twoponemax = 2.0 * shannonmax - 1
+%        printf ("\\renewcommand{\\twoponemax}{%f}\n", twoponemax)
+%    }
+%
+%    if (linectr == 14)
+%    {
+%        logreturns = $0
+%        printf ("\\renewcommand{\\logreturns}{%f}\n", logreturns)
+%        twologreturns = exp (logreturns * log (2.0))
+%        printf ("\\renewcommand{\\twologreturns}{%f}\n", twologreturns)
+%        twologreturnshundred = (twologreturns - 1.0) * 100.0
+%        printf ("\\renewcommand{\\twologreturnshundred}{%f}\n", twologreturnshundred)
+%        oneoverlogreturns = 1.0 / logreturns
+%        printf ("\\renewcommand{\\oneoverlogreturns}{%f}\n", oneoverlogreturns)
+%    }
+%
+%    if (linectr == 15)
+%    {
+%        pmaxnumerator = $0
+%    }
+%
+%    if (linectr == 16)
+%    {
+%        pmaxdenominator = $0
+%        pmax = (pmaxdenominator - pmaxnumerator) / pmaxdenominator
+%        if (pmax == 1)
+%        {
+%            pmax =0.99999
+%        }
+%        printf ("\\renewcommand{\\pmax}{%f}\n", pmax)
+%        twopminusone = (2 * pmax) - 1
+%        printf ("\\renewcommand{\\twopminusone}{%f}\n", twopminusone)
+%        rmsp = datafractionrms * twopminusone
+%        printf ("\\renewcommand{\\rmsp}{%f}\n", rmsp)
+%        twopx = ((2 * pmax) - 1) / (2 * sqrt (pmax * (1 - pmax)))
+%        printf ("\\renewcommand{\\twopx}{%f}\n", twopx)
+%        sigmap = datafractionstddev * twopx
+%        printf ("\\renewcommand{\\sigmap}{%f}\n", sigmap)
+%
+%    }
+%
+%    if (linectr == 17)
+%    {
+%        tsunfairbrownianfractionmean = $0
+%        printf ("\\renewcommand{\\tsunfairbrownianfractionmean}{%f}\n", tsunfairbrownianfractionmean)
+%    }
+%
+%    if (linectr == 18)
+%    {
+%        tsunfairbrownianfractionstddev = $0
+%        printf ("\\renewcommand{\\tsunfairbrownianfractionstddev}{%f}\n", tsunfairbrownianfractionstddev)
+%    }
+%
+%    if (linectr == 19)
+%    {
+%        shannonlogreturns = $0
+%        printf ("\\renewcommand{\\shannonlogreturns}{%f}\n", shannonlogreturns)
+%        shannonlogreturnshundred = shannonlogreturns * 100.0
+%        printf ("\\renewcommand{\\shannonlogreturnshundred}{%f}\n", shannonlogreturnshundred)
+%        twopone =  (2.0 * shannonlogreturns) - 1.0
+%        printf ("\\renewcommand{\\twopone}{%f}\n", twopone)
+%        twoponehundred = twopone * 100.0
+%        printf ("\\renewcommand{\\twoponehundred}{%f}\n", twoponehundred)
+%        hundredtwoponehundred = 100.0 - twoponehundred
+%        printf ("\\renewcommand{\\hundredtwoponehundred}{%f}\n", hundredtwoponehundred)
+%        hundredshannonlogreturnshundred = 100.0 - shannonlogreturnshundred
+%        printf ("\\renewcommand{\\hundredshannonlogreturnshundred}{%f}\n", hundredshannonlogreturnshundred)
+%    }
+%
+%    if (linectr == 20)
+%    {
+%        datatslsqepbits = $0
+%        printf ("\\renewcommand{\\datatslsqepbits}{%f}\n", datatslsqepbits)
+%    }
+%
+%    if (linectr == 21)
+%    {
+%        thurstall = $0
+%        printf ("\\renewcommand{\\thurstall}{%f}\n", thurstall)
+%    }
+%
+%    if (linectr == 22)
+%    {
+%        thurstlow = $0
+%        printf ("\\renewcommand{\\thurstlow}{%f}\n", thurstlow)
+%        thurstlowtwo = thurstlow * 2.0
+%        printf ("\\renewcommand{\\thurstlowtwo}{%f}\n", thurstlowtwo)
+%        thurstlowhundred = thurstlow * 100.0
+%        printf ("\\renewcommand{\\thurstlowhundred}{%f}\n", thurstlowhundred)
+%    }
+%
+%    if (linectr == 23)
+%    {
+%        thcalcall = $0
+%        printf ("\\renewcommand{\\thcalcall}{%f}\n", thcalcall)
+%    }
+%
+%    if (linectr == 24)
+%    {
+%        thcalclow = $0
+%        printf ("\\renewcommand{\\thcalclow}{%f}\n", thcalclow)
+%    }
+%
+%    if (linectr == 25)
+%    {
+%        chisquared = $0
+%        printf ("\\renewcommand{\\chisquared}{%f}\n", chisquared)
+%    }
+%
+%    if (linectr == 26)
+%    {
+%        critical = $0
+%        printf ("\\renewcommand{\\critical}{%f}\n", critical)
+%    }
+%
+%    linectr++
+%}
+%\newcommand{\LABPRE}{}
+%\newcommand{\LABPREREF}{}
+%\newcommand{\market}{}
+%\newcommand{\directory}{}
+%\newcommand{\timescale}{}
+%\newcommand{\SETLABEL}{}
+%\newcommand{\SETLABELQ}{}
+%\newcommand{\SETLABELREF}{}
+%\newcommand{\datafractionmean}{0.0}
+%\newcommand{\datafractionmeanbits}{0.0}
+%\newcommand{\datafractionmeanq}{0.0}
+%\newcommand{\datafractionmeanbitsq}{0.0}
+%\newcommand{\datafractionstddev}{0.0}
+%\newcommand{\datafractionrms}{0.0}
+%\newcommand{\avgrms}{0.0}
+%\newcommand{\ncompanies}{0.0}
+%\newcommand{\pncompanies}{0.0}
+%\newcommand{\datafractionabsmean}{0.0}
+%\newcommand{\datafractionabsstddev}{0.0}
+%\newcommand{\datafractionconstant}{0.0}
+%\newcommand{\datafractionconstantbits}{0.0}
+%\newcommand{\datafractionconstantq}{0.0}
+%\newcommand{\datafractionconstantbitsq}{0.0}
+%\newcommand{\datafractionslope}{0.0}
+%\newcommand{\datafractionabsconstant}{0.0}
+%\newcommand{\datafractionabsslope}{0.0}
+%\newcommand{\hurstall}{0.0}
+%\newcommand{\hurstlow}{0.0}
+%\newcommand{\hurstlowtwo}{0.0}
+%\newcommand{\hurstlowhundred}{0.0}
+%\newcommand{\hcalcall}{0.0}
+%\newcommand{\hcalclow}{0.0}
+%\newcommand{\shannonlogreturns}{0.0}
+%\newcommand{\shannonlogreturnshundred}{0.0}
+%\newcommand{\hundredshannonlogreturnshundred}{0.0}
+%\newcommand{\datatslsqepbits}{0.0}
+%\newcommand{\twopone}{0.0}
+%\newcommand{\twoponehundred}{0.0}
+%\newcommand{\hundredtwoponehundred}{0.0}
+%\newcommand{\logreturns}{0.0}
+%\newcommand{\twologreturns}{0.0}
+%\newcommand{\twologreturnshundred}{0.0}
+%\newcommand{\oneoverlogreturns}{0.0}
+%\newcommand{\shannonmax}{0.0}
+%\newcommand{\twoponemax}{0.0}
+%\newcommand{\pmax}{0.0}
+%\newcommand{\twopminusone}{0.0}
+%\newcommand{\rmsp}{0.0}
+%\newcommand{\twopx}{0.0}
+%\newcommand{\sigmap}{0.0}
+%\newcommand{\tsunfairbrownianfractionmean}{0.0}
+%\newcommand{\tsunfairbrownianfractionstddev}{0.0}
+%\newcommand{\thurstall}{0.0}
+%\newcommand{\thurstlow}{0.0}
+%\newcommand{\thurstlowtwo}{0.0}
+%\newcommand{\thurstlowhundred}{0.0}
+%\newcommand{\thcalcall}{0.0}
+%\newcommand{\thcalclow}{0.0}
+%\newcommand{\chisquared}{0.0}
+%\newcommand{\critical}{0.0}
+%
+\chapter{Condensed Fractal Analysis of Various Market Segments in the North American Electronics Industry}
+    \label{tables}
+
+    This appendix presents, in condensed tabular form, the numerical
+    metrics that were derived in appendix~\ref{markets}.
+
+    \renewcommand{\LABPRE}{D}
+    \renewcommand{\LABPREREF}{C}
+
+    \renewcommand{\market}{North American Integrated Circuit Market}
+    \renewcommand{\directory}{../markets/ic.namerica}
+    \input{../markets/ic.namerica/parameters.tex}
+    \renewcommand{\timescale}{quarter}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAICM}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAICM}
+        \label{\SETLABEL}
+
+        \idx{Semiconductor Industry Association}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the Semiconductor Industry
+        Association, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{World Semiconductor Market}
+    \renewcommand{\directory}{../markets/semiconductors.world}
+    \input{../markets/semiconductors.world/parameters.tex}
+    \renewcommand{\timescale}{quarter}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:WSM}
+        \renewcommand{\SETLABELQ}{\LABPRE:WSMQ}
+        \label{\SETLABEL}
+
+        \idx{Semiconductor Industry Association}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the Semiconductor Industry
+        Association, 1982---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{North American Semiconductor Market}
+    \renewcommand{\directory}{../markets/semiconductors.namerica}
+    \input{../markets/semiconductors.namerica/parameters.tex}
+    \renewcommand{\timescale}{quarter}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NASM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NASMQ}
+        \label{\SETLABEL}
+
+        \idx{Semiconductor Industry Association}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the Semiconductor Industry
+        Association, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Electronic Component Shipments}
+    \renewcommand{\directory}{../markets/electronic.components.shipments}
+    \input{../markets/electronic.components.shipments/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAECS}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAECSQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Electronic Component Production}
+    \renewcommand{\directory}{../markets/electronic.components.production}
+    \input{../markets/electronic.components.production/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAECP}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAECPQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1980---1994, by {\timescale}s, as an index, 1987
+        = 100.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Electronics Market}
+    \renewcommand{\directory}{../markets/electronics}
+    \input{../markets/electronics/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAEM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAEMQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1980---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Office Computer Market}
+    \renewcommand{\directory}{../markets/computer.office}
+    \input{../markets/computer.office/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAOCM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAOCMQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1982---1994, by {\timescale}s, as an index, 1987
+        = 100.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Information Systems Market}
+    \renewcommand{\directory}{../markets/information.systems}
+    \input{../markets/information.systems/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAISM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAISMQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Dow Jones Average}
+    \renewcommand{\directory}{../markets/dj}
+    \input{../markets/dj/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:DJA}
+        \renewcommand{\SETLABELQ}{\LABPRE:DJAQ}
+        \label{\SETLABEL}
+
+        \idx{Dow Jones News Information Retrieval Service}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from Dow Jones News Information
+        Retrieval Service, 1981---1994, by {\timescale}s, as an
+        index.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Cirrus Logic Stock}
+    \renewcommand{\directory}{../markets/crus}
+    \input{../markets/crus/parameters.tex}
+    \renewcommand{\timescale}{day}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:CRUS}
+        \renewcommand{\SETLABELQ}{\LABPRE:CRUSQ}
+        \label{\SETLABEL}
+
+        \idx{Cirrus Logic Stock}
+        \idx{Stock, Cirrus Logic}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from
+        ftp://ftp.ai.mit.edu/pub/stocks/results/, by {\timescale}s, in
+        dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Gross Domestic Product}
+    \renewcommand{\directory}{../markets/us.gdp}
+    \input{../markets/us.gdp/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USGDP}
+        \renewcommand{\SETLABELQ}{\LABPRE:USGDPQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1979---1994, by {\timescale}s, in billions of
+        1987 dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Employment Figures}
+    \renewcommand{\directory}{../markets/us.employment}
+    \input{../markets/us.employment/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USEMPLOYMENT}
+        \renewcommand{\SETLABELQ}{\LABPRE:USEMPLOYMENTQ}
+        \label{\SETLABEL}
+
+        \idx{United States Bureau of Labor and Statistics}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Bureau of
+        Labor and Statistics, 1980---1994, by {\timescale}s, in
+        thousands of persons.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Leading Economic Indicators}
+    \renewcommand{\directory}{../markets/us.indicators}
+    \input{../markets/us.indicators/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USINDICATORS}
+        \renewcommand{\SETLABELQ}{\LABPRE:USINDICATORSQ}
+        \label{\SETLABEL}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1980---1994, by {\timescale}s, as an index of
+        1987 = 100.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States M2}
+    \renewcommand{\directory}{../markets/us.m2}
+    \input{../markets/us.m2/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USM2}
+        \renewcommand{\SETLABELQ}{\LABPRE:USM2Q}
+        \label{\SETLABEL}
+
+        \idx{United States Federal Reserve Board}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Federal
+        Reserve Board, 1980---1994, by {\timescale}s, in billions of
+        1987 dollars, US.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{United States Treasury Bill Returns}
+    \renewcommand{\directory}{../markets/us.tbill}
+    \input{../markets/us.tbill/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USTBILL}
+        \renewcommand{\SETLABELQ}{\LABPRE:USTBILLQ}
+        \label{\SETLABEL}
+
+        \idx{United States Federal Reserve Board}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Federal
+        Reserve Board, 1980---1994, by {\timescale}s, in percent. The
+        time series, which was Treasury Bill rate of returns, in
+        percent per year, was converted to cumulative growth per month
+        by converting each element in the time series to a fraction,
+        dividing by 12, and adding 1. The previous value of cumulative
+        returns was multiplied by this number for the next value of
+        cumulative returns.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin}
+    \input{../markets/tscoin/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:CT}
+        \renewcommand{\SETLABELQ}{\LABPRE:CTQ}
+        \label{\SETLABEL}
+
+        \subidx{tscoin}{program}
+        \subidx{programs}{tscoin}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoin}\/ was run to make a time series data file.  The data is
+        by {\timescale}.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Non Optimal Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin.tsunfairbrownian}
+    \input{../markets/tscoin.tsunfairbrownian/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NOCT}
+        \renewcommand{\SETLABELQ}{\LABPRE:NOCTQ}
+        \label{\SETLABEL}
+
+        \idx{tscoin}
+        \idx{tsunfairbrownian}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoin}\/ was run to make a time series data file.  The data is
+        by {\timescale}s.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Time Sampled Non Optimal Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin.tsunfairbrownian.tssample}
+    \input{../markets/tscoin.tsunfairbrownian.tssample/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:TSNOCT}
+        \renewcommand{\SETLABELQ}{\LABPRE:TSNOCTQ}
+        \label{\SETLABEL}
+
+        \idx{tscoin}
+        \idx{tsunfairbrownian}
+        \idx{tssample}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tssample}
+        \subidx{tssample}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoin}\/ was run to make a time series data file.  The data is
+        by {\timescale}.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Time Sampled Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin.tssample}
+    \input{../markets/tscoin.tssample/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:TSCT}
+        \renewcommand{\SETLABELQ}{\LABPRE:TSCTQ}
+        \label{\SETLABEL}
+
+        \idx{tscoin}
+        \idx{tsunfairbrownian}
+        \idx{tssample}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{programs}{tssample}
+        \subidx{tssample}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoin}\/ was run to make a time series data file.  The data is
+        by {\timescale}.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Simulated Shannon Probability of 0.6}
+    \renewcommand{\directory}{../markets/tsunfairbrownian.exponential}
+    \input{../markets/tsunfairbrownian.exponential/parameters.tex}
+    \renewcommand{\timescale}{time units}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:TSTE}
+        \renewcommand{\SETLABELQ}{\LABPRE:TSTEQ}
+        \label{\SETLABEL}
+
+        \subidx{tscoin}{program}
+        \subidx{programs}{tscoin}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tsunfairbrownian}\/ was run to make a time series data file.  The
+        data is by {\timescale}s.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Coins Tossing Game}
+    \renewcommand{\directory}{../markets/tscoins}
+    \input{../markets/tscoins/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:CST}
+        \renewcommand{\SETLABELQ}{\LABPRE:CSTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:CST}
+
+        \subidx{tscoins}{program}
+        \subidx{programs}{tscoins}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoins}\/ was run to make a time series data file.
+        The data is by {\timescale}.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Non Optimal Coins Tossing Game}
+    \renewcommand{\directory}{../markets/tscoins-f}
+    \input{../markets/tscoins-f/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NOCST}
+        \renewcommand{\SETLABELQ}{\LABPRE:NOCSTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NOCST}
+
+        \subidx{tscoins}{program}
+        \subidx{programs}{tscoins}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoins}\/ was run to make a time series data file.
+        The data is by {\timescale}.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Non Optimal Logistic Coins Tossing Game}
+    \renewcommand{\directory}{../markets/tscoins-b}
+    \input{../markets/tscoins-b/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+        \subidx{market}{non-linearity}
+        \subidx{non-linearity}{market}
+        \subidx{logistic}{function}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NOLCST}
+        \renewcommand{\SETLABELQ}{\LABPRE:NOLCSTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NOLCST}
+
+        \subidx{tscoins}{program}
+        \subidx{programs}{tscoins}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tscoins}\/ was run to make a time series data file.
+        The data is by {\timescale}.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Simulated Industrial Market}
+    \renewcommand{\directory}{../markets/tsmarket}
+    \input{../markets/tsmarket/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:SIM}
+        \renewcommand{\SETLABELQ}{\LABPRE:SIMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:SIM}
+
+        \subidx{tsmarket}{program}
+        \subidx{programs}{tsmarket}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tsmarket}\/ was run to make a time series data file.
+        The data is by {\timescale}s.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Discreet Logistic Function}
+    \renewcommand{\directory}{../markets/tsdlogistic}
+    \input{../markets/tsdlogistic/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:DLF}
+        \renewcommand{\SETLABELQ}{\LABPRE:DLFQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:DLF}
+
+        \subidx{tsdlogistic}{program}
+        \subidx{programs}{tsdlogistic}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program
+        {\it tsdlogistic}\/ was run to make a time series data file.
+        The data is by {\timescale}s.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+    \renewcommand{\market}{Simulated Equity Market Index}
+    \renewcommand{\directory}{../markets/tsgaussian.tsmath.tsmath.tsunfraction}
+    \input{../markets/tsgaussian.tsmath.tsmath.tsunfraction/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:SEMIX}
+        \renewcommand{\SETLABELQ}{\LABPRE:SEMIXQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:SEMIX}
+
+        \subidx{tsunfraction}{program}
+        \subidx{programs}{tsunfraction}
+        \subidx{tsgaussian}{program}
+        \subidx{programs}{tsgaussian}
+        \subidx{tsmath}{program}
+        \subidx{programs}{tsmath}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the programs {\it
+        tsgaussian}\/, {\it tsmath}\/, and {\it tsunfraction}\/ were
+        run to make a time series data file.  The data is by
+        {\timescale}s.}.
+
+        The data in this section is presented in
+        Section~\ref{\SETLABELREF}.
+
+        \input{tables.tex}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

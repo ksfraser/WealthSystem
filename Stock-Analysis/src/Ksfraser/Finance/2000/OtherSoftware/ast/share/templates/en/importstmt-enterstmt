@@ -1,0 +1,8 @@
+<form method="post" action="$save_page">
+$instructions<br><br>
+<input type="hidden" name="broker" value="$broker">
+<input type="hidden" name="portfolioid" value="$portfolioid">
+Enter your statement below:<br><br>
+<textarea name="statement" rows="20" cols="60"></textarea>
+<br><br><input type="submit" value="Continue >>">
+</form>

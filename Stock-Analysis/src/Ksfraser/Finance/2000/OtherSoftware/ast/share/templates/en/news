@@ -1,0 +1,27 @@
+<table width="100%" class="awf_form">
+<tr>
+  <th colspan="6">$company_name</th>
+</tr>
+<tr>
+  <td rowspan="2"><span class="awf_small">Last:</span><h1><span class="$change_colour">$rtquote.price</span></h1></td>
+  <td><div class="awf_small">Change:</div><span class="$change_colour">$rtquote.change</span></td>
+  <td><div class="awf_small">Open:</div>$rtquote.open</td>
+  <td><div class="awf_small">High:</div>$rtquote.high</td>
+  <td><div class="awf_small">Low:</div>$rtquote.low</td>
+  <td><div class="awf_small">Volume:</div>$rtquote.volume</td>
+</tr>
+<tr>
+  <td><div class="awf_small">Change (%):</div><span class="$change_colour">$changep</span></td>
+  <td><div class="awf_small">Dividends:</div>$detailquote.dividends_per_share</td>
+  <td><div class="awf_small">Yield:</div>$div_yield %</td>
+  <td><div class="awf_small">PE Ratio:</div>$pe_ratio</td>
+  <td><div class="awf_small">EPS:</div>$detailquote.earnings_per_share</td>
+</tr>
+<tr>
+  <td colspan="6">
+    <ul class="awf_news">
+    $newsitems
+    </ul>
+  </td>
+</tr>
+</table>

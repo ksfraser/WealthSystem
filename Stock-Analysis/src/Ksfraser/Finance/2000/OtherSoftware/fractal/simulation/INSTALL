@@ -1,0 +1,123 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+To install the programs, use the standard make procedure in this
+directory. If all goes well, compile the ../utilities directory and
+change back to this directory, and then to the test directory, and use
+the standard make procedure to make the test cases.  Be advised that
+this is an extremely long process; for example, about 5 hours on a
+20Mhz 386. If all goes well, install the following programs in the
+executable path:
+
+    tsblack
+    tsbrownian
+    tsdlogistic
+    tsfBm
+    tsfractional
+    tsgaussian
+    tsintegers
+    tslogistic
+    tspink
+    tsunfairbrownian
+    tsunfairfractional
+    tswhite
+    tscoin
+    tscoins
+    tsstockwager
+    tsbinomial
+    tsshannonstock
+    tsmarket
+    tsstock
+    tsstocks
+    tstrade
+    tstradesim
+    tscauchy
+    tslognormal
+    tslaplacian
+
+Install the man pages to the programs in the man path:
+
+    tsblack.1
+    tsbrownian.1
+    tsdlogistic.1
+    tsfBm.1
+    tsfractional.1
+    tsgaussian.1
+    tsintegers.1
+    tslogistic.1
+    tspink.1
+    tsunfairbrownian.1
+    tsunfairfractional.1
+    tswhite.1
+    tscoin.1
+    tscoins.1
+    tsstockwager.1
+    tsbinomial.1
+    tsshannonstock.1
+    tsmarket.1
+    tsstock.1
+    tsstocks.1
+    tstrade.1
+    tstradesim.1
+    tscauchy.1
+    tslognormal.1
+    tslaplacian.1
+
+or
+
+    tsblack.catman
+    tsbrownian.catman
+    tsdlogistic.catman
+    tsfBm.catman
+    tsfractional.catman
+    tsgaussian.catman
+    tsintegers.catman
+    tslogistic.catman
+    tspink.catman
+    tsunfairbrownian.catman
+    tsunfairfractional.catman
+    tswhite.catman
+    tscoin.catman
+    tscoins.catman
+    tsstockwager.catman
+    tsbinomial.catman
+    tsshannonstock.catman
+    tsmarket.catman
+    tsstock.catman
+    tsstocks.catman
+    tstrade.catman
+    tstradesim.catman
+    tscauchy.catman
+    tslognormal.catman
+    tslaplacian.catman
+
+where the catman files have already been made by:
+
+    nroff -man file.1 > file.catman
+
+for those systems that do not support nroff.
+
+The programs are written in ANSI standard C, but there is little or no
+provisions for handling numerical exceptions. Usually, a great deal of
+analytical skill is required in an interactive analysis of fractal
+time series, and should probably not be attempted by the novice for
+other than academic purposes.

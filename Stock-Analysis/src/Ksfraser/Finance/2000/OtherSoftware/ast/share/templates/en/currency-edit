@@ -1,0 +1,18 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+     <tr>
+      <th class="awf_column_heading" colspan="2"><b>Add New Currency:</b></th>
+    </tr>
+    <tr>
+      <td><b>Currency Id:</b></td>
+      <td>$currency.id</td>
+    </tr>
+    <tr>
+      <td><b>Description:</b></td>
+      <td><input type="text" value="$currency.description" name="currency.description" class="awf_inputtext awf_wide_input"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

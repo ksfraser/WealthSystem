@@ -1,0 +1,335 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/geniustrader/!svn/ver/577/trunk/GT/Analyzers
+END
+Sum.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Sum.pm
+END
+NetGainPercent.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/NetGainPercent.pm
+END
+CompleteCash.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CompleteCash.pm
+END
+CompleteGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CompleteGain.pm
+END
+IsGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/IsGain.pm
+END
+Consec.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Consec.pm
+END
+Report.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/577/trunk/GT/Analyzers/Report.pm
+END
+IsLoss.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/IsLoss.pm
+END
+AvgGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/AvgGain.pm
+END
+AvgLoss.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/AvgLoss.pm
+END
+Process.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/576/trunk/GT/Analyzers/Process.pm
+END
+Quantity.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Quantity.pm
+END
+BuyPrice.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/BuyPrice.pm
+END
+IonDate.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/IonDate.pm
+END
+CumGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CumGain.pm
+END
+Min.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Min.pm
+END
+OpenPrice.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/OpenPrice.pm
+END
+Max.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Max.pm
+END
+CumLoss.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CumLoss.pm
+END
+AvgNZ.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/AvgNZ.pm
+END
+NetGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/NetGain.pm
+END
+R4.pm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/R4.pm
+END
+First.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/First.pm
+END
+InitSum.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/InitSum.pm
+END
+ClosePrice.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/ClosePrice.pm
+END
+AvgCosts.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/AvgCosts.pm
+END
+GrossGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/GrossGain.pm
+END
+ProfitFactorGT.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/ProfitFactorGT.pm
+END
+Long.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Long.pm
+END
+NB.pm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/NB.pm
+END
+OpenDate.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/OpenDate.pm
+END
+Short.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Short.pm
+END
+Performance.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Performance.pm
+END
+MeanPerformance.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/MeanPerformance.pm
+END
+CloseDate.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CloseDate.pm
+END
+CompleteValue.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CompleteValue.pm
+END
+CompleteDate.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/CompleteDate.pm
+END
+Losses.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Losses.pm
+END
+RiskReturn.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/RiskReturn.pm
+END
+PerShare.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/PerShare.pm
+END
+StdTime.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/StdTime.pm
+END
+Avg.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Avg.pm
+END
+Gain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Gain.pm
+END
+Type.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Type.pm
+END
+SellPrice.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/SellPrice.pm
+END
+Accumulate.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Accumulate.pm
+END
+Duration.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Duration.pm
+END
+DrawDown.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/DrawDown.pm
+END
+SumPerformance.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/SumPerformance.pm
+END
+BuyAndHold.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/BuyAndHold.pm
+END
+Costs.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Costs.pm
+END
+WinRatio.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/WinRatio.pm
+END
+AvgPerformance.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Analyzers/AvgPerformance.pm
+END
+ProfitFactor.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/ProfitFactor.pm
+END
+Last.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Analyzers/Last.pm
+END

@@ -1,0 +1,26 @@
+<form method="post">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Add symbol to Market Watch</th>
+    </tr>
+    <tr>
+      <td rowspan="6"><img src="images/question.png" alt="question"></td>
+      <td>Please check the box that applies below:</td>
+    </tr>
+    <tr>
+      <td><input type="radio" name="form" value="addmarket">&nbsp;I would like to add a market/market ticker.</td>
+    </tr>
+    <tr>
+      <td><input type="radio" name="form" value="addsector">&nbsp;I would like to add an index or sub-sector of a market.</td>
+    </tr>
+    <tr>
+      <td><input type="radio" name="form" value="addindex">&nbsp;I would like to add an index or sub-sector which is not part of AST <small>(a Yahoo symbol which starts with ^)</small>.</td>
+    </tr>
+    <tr>
+      <td><input type="radio" name="form" value="addsecurity">&nbsp;I would like to add an individual security.</td>
+    </tr>
+    <tr>
+      <td align="right"><input type="submit" value="Next ->"></td>
+    </tr>
+  </table>
+</form>

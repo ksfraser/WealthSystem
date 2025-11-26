@@ -1,0 +1,48 @@
+<form method="POST" action="$save_page">
+  <table class="awf_form" width="100%">
+    <tr>
+      <th colspan="2">User Preferences</th>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><div class="awf_error">$message</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><div align="right"><a href="$password_url">Change Password</a></div></td>
+    </tr>
+    <tr>
+      <td><b>Full Name:</b></td>
+      <td><input type="text" name="user.fullname" value="$user.fullname" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Default Email Address:</b></td>
+      <td><select name="user.default_email">$email_options</select>&nbsp;&nbsp;<a href="$email_link">Modify Email Address</a></td>
+    </tr>
+    <tr>
+      <td><b>Default Currency:</b></td>
+      <td><select name="user.default_currency">$currency_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Default Page:</b></td>
+      <td><select name="user.default_page">$homepage_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Style:</b></td>
+      <td><select name="user.style">$stylesheet_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Default Commission:</b></td>
+      <td><input type="text" name="user.default_commission" value="$user.default_commission" class="awf_inputtext">&nbsp;<img src="images/help_small.png" alt="help" $tooltip.commission></td>
+    </tr>
+    <tr>
+      <td><b>Default Stop Loss (%):</b></td>
+      <td><input type="text" name="user.default_stoploss" value="$user.default_stoploss" class="awf_inputtext">&nbsp;%</td>
+    </tr>
+    <tr>
+      <td><b>Default Market:</b></td>
+      <td><select name="user.default_market">$market_options</select></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

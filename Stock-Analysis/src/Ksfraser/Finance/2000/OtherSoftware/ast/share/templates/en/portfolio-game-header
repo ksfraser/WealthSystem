@@ -1,0 +1,10 @@
+<table width="100%" class="awf_form">
+<tr>
+    <td rowspan="2" width="10%"><img src="images/portfolio_big.png" alt="portfolio"></td>
+    <th>$portfolios.name</th>
+</tr>
+<tr>
+    <td>$portfolios.description</td>
+</tr>
+<tr><td colspan="2">Cash available for investment: &#36;$cash</td></tr>
+</table><br>

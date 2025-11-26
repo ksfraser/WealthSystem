@@ -1,0 +1,75 @@
+TSINVESTDB(1)                                                    TSINVESTDB(1)
+
+
+
+NNAAMMEE
+       tsinvestdb - manipulate a tsinvest time series database
+
+SSYYNNOOPPSSIISS
+       tsinvestdb [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsinvestdb.c  is  a C source code template for programs that manipulate
+       the tsinvest(1) time series database(s). It contains the hash algorithm
+       look  up  tables for expedient development of specialized database sys-
+       tems.
+
+       The time series database file structure is a text  file  consisting  of
+       records,  in  temporal order, one record per time series sample of each
+       equity.  Blank records are ignored, and comment records  are  signified
+       by  a  ’#’  character  as  the  first  non white space character in the
+       record. Each data record represents an equity  transaction,  consisting
+       of  a  minium of three fields, separated by white space. The fields are
+       ordered by time stamp, equity ticker identifier, and closing price, for
+       example:
+
+           1      ABC     333.6
+           2      DEF     7.2
+           3      GHI     335.9
+
+
+OOPPTTIIOONNSS
+       --vv     Print the version and copyright banner of this program.
+
+       ffiilleennaammee
+              Input filename.
+
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsinvest(1), tsinvestsim(1), tsshannoneffective(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+           http://www.johncon.com/ntropix/
+           http://www.johncon.com/
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 07, 2006                  TSINVESTDB(1)

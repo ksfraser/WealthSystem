@@ -1,0 +1,60 @@
+#!/bin/sh
+# ------------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# ------------------------------------------------------------------------------
+#
+# A shell script that uses the programs tscoin, tssample, tsfraction,
+# tsrms , tslsq, tslogreturns, and tsnormal to measure the root mean
+# square value of the normalized increments of a theoretical stock price
+# time series as a function of sampling interval. This is useful for
+# investigation into modeling stock price as a time sampled fixed
+# increment Brownian motion. The 0.002 was derived from (2 * P) -1,
+# where P is the Shannon probability.
+#
+../../../simulation/tscoin -p 0.501 250000 > data
+sample=50
+while [ ${sample} -le 100 ]
+do
+    echo "brownian ${sample}" 1>&2
+    trap "rm -f data brownian.table data.${sample} data.tsfraction.${sample} data.tsfraction.${sample}; exit" 0 1 2 3 9 15
+    ../../../utilities/tssample -i ${sample} data > data.${sample}
+    ../../../utilities/tsfraction data.${sample} > data.tsfraction.${sample}
+    TSRMS=`../../../utilities/tsrms -p data.tsfraction.${sample}`
+    TSLSQE=`../../../utilities/tslsq -e -p data.${sample} | sed 's/^.*2\^(//' | sed 's/^.* + //' | sed 's/t)//'`
+    TSSHANNONTSLSQE=`../../../utilities/tsshannon $TSLSQE | sed 's/^C(//' | sed 's/) =.*$//'`
+    TSLSQEFRACTION=`awk "BEGIN {print ($TSSHANNONTSLSQE * 2.0) - 1.0}"`
+    TSLOGRETURNS=`../../../utilities/tslogreturns -p data.${sample} | sed 's/^.*2\^(//' | sed 's/t)//'`
+    TSSHANNONTSLOGRETURNS=`../../../utilities/tsshannon $TSLOGRETURNS | sed 's/^C(//' | sed 's/) =.*$//'`
+    TSLOGRETURNSFRACTION=`awk "BEGIN {print ($TSSHANNONTSLOGRETURNS * 2.0) - 1.0}"`
+    TSNORMAL=`../../../utilities/tsnormal -p data.tsfraction.${sample} | sed 's/^.* //'`
+    /bin/echo "${sample}\t\c"
+    /bin/echo "${TSRMS}\t\c"
+    /bin/echo "${TSLSQEFRACTION}\t\c"
+    /bin/echo "${TSLOGRETURNSFRACTION}\t\c"
+    /bin/echo "${TSNORMAL}"
+    rm -f data.${sample} data.tsfraction.${sample} data.tsfraction.${sample}
+    sample=`expr $sample + 1`
+done > brownian.table
+trap "rm -f data brownian.table; exit" 0 1 2 3 9 15
+cut -f1,2 brownian.table > tsrms
+cut -f1,3 brownian.table > tslsq
+cut -f1,4 brownian.table > tslogreturns
+cut -f1,5 brownian.table > tsnormal
+rm -f data brownian.table

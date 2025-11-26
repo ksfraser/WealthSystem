@@ -1,0 +1,108 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: companies.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: companies.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Number of Companies}
+        \label{\SETLABEL:QNC}
+
+        \subidx{\market}{number of companies}
+        \subidx{number of companies}{analysis}
+        \subidx{analysis}{number of companies}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        This section evaluates the approximate, or ``average,'' number
+        of companies in the {\market}, and uses the method outlined in
+        Chapter~\ref{general}, Section~\ref{aftsma}. Since the
+        average, $avg_{ind}$, and the root mean square, $rms_{ind}$,
+        of the normalized increments of the {\market} time series is
+        \datafractionmean, and \datafractionrms respectively, the
+        number of companies participating in the market can be
+        calculated by Equation~\ref{ncompanies} to be {\ncompanies}.
+
+        If this value seems consistent number of companies in the
+        {\market}, within the assumptions outlined in
+        Chapter~\ref{general}, Section~\ref{aftsma}, then it would
+        seem that there is some circumstantial or indirect evidence
+        that the companies participating in the {\market} are
+        operating optimally, and the ``average'' Shannon probability,
+        $P$ for each participating company would be, using
+        Equation~\ref{pncompanies}, {\pncompanies}, which would be the
+        value which should be used in Section~\ref{\SETLABEL:FS} for
+        each participating company if market expansion was to be
+        consistent with the rest of the industry. However, if the
+        Shannon probability derived in Section~\ref{\SETLABEL:FS} is
+        greater than the average Shannon probability for the companies
+        participating in the {\market}, as derived in this section,
+        then the market would, possibly, be exploitable with the
+        fiscal strategy outlined in Section~\ref{\SETLABEL:FS}. The
+        maximum exploitability for the {\market} is derived in
+        Section~\ref{\SETLABEL:MAXSHANNON}, but it is probably of
+        doubtful practicality.
+
+        Note that these optimizations would maximize a company's
+        market growth. Since there are probably many companies
+        competing in the market place, this would not necessarily
+        maximize a company's P\&L, as described in
+        Chapter~\ref{general}, Section~\ref{ompl}. The Shannon
+        probability that maximizes market share in the {\market} is
+        \pncompanies, with several alternative solutions listed in the
+        previous paragraph. However, these should be contrasted to the
+        Shannon probability that maximizes a company's P\&L which is
+        \avgrms~in the {\market}. In all cases, the fraction of the
+        P\&L that should be ``wagered'' on the future, $f$, should be:
+
+        \begin{equation}
+            f = 2P - 1
+        \end{equation}
+
+        \noindent where $P$ is the particular Shannon probability
+        chosen optimize a particular fiscal strategy. Interestingly,
+        the measured Shannon probability of the {\market} would tend
+        to indicate that the companies participating in the market
+        have chosen a fiscal strategy that optimizes market growth, as
+        opposed to capital growth.
+
+        \subidx{\market}{increasing returns}
+        \subidx{economic increasing returns}{\market}
+        As interesting interpretation of these exploitive issues,
+        since all three fiscal strategies will result in exponential
+        market growth for every company participating in the market,
+        is that they may represent, perhaps, an example of
+        ``increasing returns.''
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

@@ -1,0 +1,14 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="checklist.type" value="$checklist.type">
+  <input type="hidden" name="checklist.symbol" value="$checklist.symbol">
+  <input type="hidden" name="checklist.market" value="$checklist.market">
+
+  <table class="awf_form">
+    <tr><th colspan="2">Add Checklist</th></tr>
+    <tr><td><b>Name:</b></td>
+    <td><input type="text" name="checklist.name" value="$checklist.name" class="awf_inputtext"></tr>
+    <tr><td><b>Description:</b></td>
+    <td><input type="text" name="checklist.description" value="$checklist.description" class="awf_inputtext awf_wide_input"></tr>
+    <tr><td colspan="2"><input type="submit"></td></tr>
+  </table>
+</form>

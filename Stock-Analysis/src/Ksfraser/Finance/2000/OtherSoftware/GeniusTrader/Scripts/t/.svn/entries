@@ -1,0 +1,101 @@
+8
+
+dir
+720
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader/trunk/Scripts/t
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader
+
+
+
+2009-07-09T17:46:32.228603Z
+672
+ras
+has-props
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bb1899a8-85f5-0310-a327-fe9f4e15340a
+
+launch.sh
+file
+
+
+
+
+2014-10-30T00:16:26.000000Z
+0f76a5e4be714fa92e6e4a1b9c615649
+2002-10-03T16:39:55.000000Z
+411
+rhertzog
+has-props
+
+TODO
+file
+
+
+
+
+2014-10-30T00:16:26.000000Z
+3abfa9690551c60278e19fbbc6dbecb1
+2002-10-03T16:39:55.000000Z
+411
+rhertzog
+has-props
+
+TODO.en
+file
+
+
+
+
+2014-10-30T00:16:26.000000Z
+5ef349a42593c68bed0423fe43b210d3
+2009-07-09T17:46:32.228603Z
+672
+ras
+
+bin
+dir
+
+data
+dir
+
+.cvsignore
+file
+
+
+
+
+2014-10-30T00:16:26.000000Z
+02fb4ab65c5915bfb23f579c31c686df
+2002-10-03T16:39:55.000000Z
+411
+rhertzog
+has-props
+
+README
+file
+
+
+
+
+2014-10-30T00:16:26.000000Z
+407b66a8a1ad7a1c3fed7cf5c7232f2b
+2002-10-03T16:39:55.000000Z
+411
+rhertzog
+has-props
+
+lists
+dir
+

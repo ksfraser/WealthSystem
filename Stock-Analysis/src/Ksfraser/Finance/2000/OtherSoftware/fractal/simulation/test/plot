@@ -1,0 +1,340 @@
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# The data may be viewed using gnuplot, with the command
+# "gnuplot plot"
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/07 02:11:53 $
+# $Id: plot,v 0.0 2006/01/07 02:11:53 john Exp $
+# $Log: plot,v $
+# Revision 0.0  2006/01/07 02:11:53  john
+# Initial version
+#
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsbrownian.tsnormal" with lines, "tsbrownian.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsgaussian.tsnormal" with lines, "tsgaussian.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tswhite.tsnormal" with lines, "tswhite.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Laplacian Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tslaplacian.tsnormal" with lines, "tslaplacian.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfractional.tsnormal" with lines, "tsfractional.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tspink.tsnormal" with lines, "tspink.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsblack.tsnormal" with lines, "tsblack.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tsunfairbrownian" with lines
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.0.tsnormal" with lines, "tsfBm-h0.0.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.1.tsnormal" with lines, "tsfBm-h0.1.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.3.tsnormal" with lines, "tsfBm-h0.3.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.5.tsnormal" with lines, "tsfBm-h0.5.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.7.tsnormal" with lines, "tsfBm-h0.7.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.9.tsnormal" with lines, "tsfBm-h0.9.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h1.0.tsnormal" with lines, "tsfBm-h1.0.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Cumulative Sum"
+show ylabel
+plot "tscoins" with lines
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tscoins.tsfraction.tsnormal" with lines, "tscoins.tsfraction.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tslogistic" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsdlogistic" with lines
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsbinomial.tsnormal" with lines, "tsbinomial.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tsunfairbrownian.tsstockwager" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tsunfairbrownian.tsunfairfractional" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsintegers" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsmarket" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsmarket.tsshannonstock" with lines
+pause -1
+#
+set grid
+show grid
+set title "Cauchy Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tscauchy.tsnormal" with lines, "tsgaussian.tscauchy-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tscoins.tsfraction.tsnormal" with lines, "tscoins.tsfraction.tsnormal-f" with steps, "tscoins.tslognormal.tsnormal" with lines, "tscoins.tslognormal.tsnormal-f" with steps
+pause -1

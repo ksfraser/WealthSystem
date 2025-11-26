@@ -1,0 +1,107 @@
+TSSTOCKWAGER(1)                                                TSSTOCKWAGER(1)
+
+
+
+NNAAMMEE
+       tsstockwager - simulate the portfolio gains time series of a stock
+
+SSYYNNOOPPSSIISS
+       tsstockwager [-c] [-d] [-f f] [-i i] [-p] [-s] [-t] [-u] [-w w]
+                    [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsstockwager is for stock capital investment simulation. The idea is to
+       simulate an optimal  wagering  strategy,  dynamically  determining  the
+       Shannon  probability by counting the up movements in a stock’s value in
+       a window from the stock’s value time series, and using this to  compute
+       the  fraction  of the total capital to be invested in the stock for the
+       next iteration of the time series, which is 2 * P - 1, where P  is  the
+       Shannon  probability.  See,  "Fractals,  Chaos,  Power  Laws,"  Manfred
+       Schroeder, W. H. Freeman and Company, New York, New  York,  1991,  ISBN
+       0-7167-2136-8, pp 128, 151. The assumption is that a stock’s price time
+       series could be modeled as a fixed increment fractal.
+
+OOPPTTIIOONNSS
+       --cc     Sample’s value will be included in the output time series.
+
+       --dd     Capital gains will be included in the output time series.
+
+       --ff ff   Fraction of capital invested will be included in the output time
+              series.
+
+       --ii ii   Initial value of capital.
+
+       --pp     Current  value  of  stock  will  be  included in the output time
+              series.
+
+       --ss     Sample’s Shannon probability will be included in the output time
+              series.
+
+       --tt     Sample’s time will be included in the output time series.
+
+       --uu     Count sequential elements from the time series with equal magni-
+              tude as an up movement in stock price.   (The  program  normally
+              counts  two  sequential elements from the time series with equal
+              magnitude as a down movement in the stock’s price. The -u switch
+              will have them counted as an up movement.)
+
+       --ww ww   Window  sample  size  for  Shannon probability computation. (The
+              number of sequential elements from the time series that will  be
+              included  in the calculation of Shannon probability will be this
+              number plus 1. For example, -w 3 will count 3 market  movements,
+              from 4 sequential elements from the time series.)
+
+       --vv     Print the version and copyright banner of the program.
+
+       ffiilleennaammee
+              Input filename.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsderivative(1),   tshcalc(1),   tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),     tsrmswindow(1),     tsshannonstock(1),    tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),  tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),  tstradesim(1),  tsrunlength(1),  tsunshannon(1),   tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),    tsscalederivative(1),    tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 10, 2006                TSSTOCKWAGER(1)

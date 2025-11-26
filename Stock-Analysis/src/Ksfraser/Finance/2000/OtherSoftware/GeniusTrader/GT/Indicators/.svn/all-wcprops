@@ -1,0 +1,533 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/669/trunk/GT/Indicators
+END
+MACD.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/MACD.pm
+END
+STO.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/STO.pm
+END
+WTCL.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/WTCL.pm
+END
+Wilders.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/669/trunk/GT/Indicators/Wilders.pm
+END
+ADX.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/664/trunk/GT/Indicators/ADX.pm
+END
+UI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/UI.pm
+END
+AROON.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/AROON.pm
+END
+KirshenbaumBands.pm
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/geniustrader/!svn/ver/569/trunk/GT/Indicators/KirshenbaumBands.pm
+END
+PFEraw.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/556/trunk/GT/Indicators/PFEraw.pm
+END
+PGO.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/PGO.pm
+END
+MaxPossibleGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Indicators/MaxPossibleGain.pm
+END
+InstantTrendLine.pm
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/InstantTrendLine.pm
+END
+SAR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/SAR.pm
+END
+OBV.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/OBV.pm
+END
+TRIX.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/510/trunk/GT/Indicators/TRIX.pm
+END
+RMI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Indicators/RMI.pm
+END
+MaxPossibleLoss.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Indicators/MaxPossibleLoss.pm
+END
+AT3.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/AT3.pm
+END
+DSS.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/DSS.pm
+END
+Range.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Range.pm
+END
+PERF.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/622/trunk/GT/Indicators/PERF.pm
+END
+RSI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/RSI.pm
+END
+CCI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/CCI.pm
+END
+CHAIKIN.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/CHAIKIN.pm
+END
+TDREI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Indicators/TDREI.pm
+END
+VROC.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/VROC.pm
+END
+SafeZone.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/SafeZone.pm
+END
+LinearRegression.pm
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/geniustrader/!svn/ver/569/trunk/GT/Indicators/LinearRegression.pm
+END
+ChaikinsVola.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/ChaikinsVola.pm
+END
+BOL.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/BOL.pm
+END
+EVWMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/655/trunk/GT/Indicators/EVWMA.pm
+END
+PP.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/PP.pm
+END
+CNDL.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/CNDL.pm
+END
+SMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/662/trunk/GT/Indicators/SMA.pm
+END
+RSquare.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/569/trunk/GT/Indicators/RSquare.pm
+END
+TP.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/TP.pm
+END
+REMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/REMA.pm
+END
+WMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/WMA.pm
+END
+FRAMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/FRAMA.pm
+END
+GAPO.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/GAPO.pm
+END
+T3.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/T3.pm
+END
+GMEAN.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/619/trunk/GT/Indicators/GMEAN.pm
+END
+SMI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/SMI.pm
+END
+QSTICK.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/QSTICK.pm
+END
+Chandelier.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Chandelier.pm
+END
+ADXR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/663/trunk/GT/Indicators/ADXR.pm
+END
+RAVI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/RAVI.pm
+END
+BBO.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/BBO.pm
+END
+MASS.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/MASS.pm
+END
+Keltner.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Indicators/Keltner.pm
+END
+SWMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/507/trunk/GT/Indicators/SWMA.pm
+END
+HilbertSine.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/HilbertSine.pm
+END
+DMI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/DMI.pm
+END
+PFE.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/PFE.pm
+END
+VOSC.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/VOSC.pm
+END
+WWMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/669/trunk/GT/Indicators/WWMA.pm
+END
+Test.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/575/trunk/GT/Indicators/Test.pm
+END
+MEAN.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/618/trunk/GT/Indicators/MEAN.pm
+END
+TMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/507/trunk/GT/Indicators/TMA.pm
+END
+EPMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/507/trunk/GT/Indicators/EPMA.pm
+END
+ROC.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/ROC.pm
+END
+ATR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/ATR.pm
+END
+ForceIndex.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/ForceIndex.pm
+END
+ENV.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/ENV.pm
+END
+FISH.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/571/trunk/GT/Indicators/FISH.pm
+END
+ZigZag.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/ZigZag.pm
+END
+HilbertPeriod.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/HilbertPeriod.pm
+END
+EMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/EMA.pm
+END
+BPCorrelation.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/569/trunk/GT/Indicators/BPCorrelation.pm
+END
+StandardDeviation.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/StandardDeviation.pm
+END
+ElderRay.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/ElderRay.pm
+END
+KAMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/KAMA.pm
+END
+StandardError.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/StandardError.pm
+END
+MFI.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/MFI.pm
+END
+MAMA.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/656/trunk/GT/Indicators/MAMA.pm
+END
+CMO.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/CMO.pm
+END
+Interquartil.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/Interquartil.pm
+END
+VHF.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/VHF.pm
+END
+Prices.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/627/trunk/GT/Indicators/Prices.pm
+END
+TR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/TR.pm
+END
+MOM.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/MOM.pm
+END
+MaxDrawDown.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/MaxDrawDown.pm
+END
+TETHER.pm
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/TETHER.pm
+END
+FromTimeframe.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/652/trunk/GT/Indicators/FromTimeframe.pm
+END
+ADL.pm
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/ADL.pm
+END
+PercentagePosition.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/PercentagePosition.pm
+END
+IFISH.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/571/trunk/GT/Indicators/IFISH.pm
+END
+WilliamsR.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/WilliamsR.pm
+END

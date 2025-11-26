@@ -1,0 +1,13 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+    <tr>
+      <th colspan="3">Add Sort</th>
+    </tr>
+    <tr>
+      <td><b>Column:</b></td><td colspan="2"><b>Sort Order:</b></td>
+    </tr>
+    <tr>
+      <td><select name="column">$field_options</select></td><td><select name="order">$order_options</select></td><td><input type="submit" value="Add"></td>
+    </tr>
+  </table>
+</form> 

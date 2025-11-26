@@ -1,0 +1,1 @@
+plot [t=:] "data.tshcalc" with lines, 6.358440 + 0.885411 * t with lines, 6.363176 + 0.871338 * t with lines

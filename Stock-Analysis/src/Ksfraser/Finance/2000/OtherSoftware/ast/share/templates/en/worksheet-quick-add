@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>Add to Worksheet</title>
+    <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="$stylesheet">
+  </head>
+  <body>
+    <form method="post" action="$save_page">
+      <input type="hidden" name="symbol" value="$symbol">
+      <input type="hidden" name="name" value="$name">
+      <input type="hidden" name="market" value="$market">
+      <table class="awf_form" width="100%">
+        <tr>
+          <th>$name</th>
+        </tr>
+        <tr>
+          <td>Select worksheet to add $name to:</td>
+        </tr>
+        <tr>
+          <td><select name="worksheetid">$worksheet_options</select>&nbsp;<input type="submit" value="Add"></td>
+        </tr>
+      </table>
+    </form>
+  </body>
+</html>

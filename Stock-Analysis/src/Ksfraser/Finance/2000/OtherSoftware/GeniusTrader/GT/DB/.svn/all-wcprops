@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svnroot/geniustrader/!svn/ver/712/trunk/GT/DB
+END
+Text.pm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/712/trunk/GT/DB/Text.pm
+END
+bean.pm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/498/trunk/GT/DB/bean.pm
+END
+pg.pm
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/geniustrader/!svn/ver/534/trunk/GT/DB/pg.pm
+END
+MetaStock.pm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/562/trunk/GT/DB/MetaStock.pm
+END
+CSV.pm
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/geniustrader/!svn/ver/562/trunk/GT/DB/CSV.pm
+END
+genericdbi.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/659/trunk/GT/DB/genericdbi.pm
+END
+MetaStockReader.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/562/trunk/GT/DB/MetaStockReader.pm
+END
+HTTP.pm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/592/trunk/GT/DB/HTTP.pm
+END

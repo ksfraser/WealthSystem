@@ -1,0 +1,29 @@
+While ast is writen in C++, it doesn't take any C++ knowledge for modify a 
+form, stylesheet, javascript or most any HTML output from ast. AST uses a 
+system of templates, which are stored in the share/templates directory. These 
+templates have parameters which start with $. When you request a form, ast 
+loads up the template and replaces all $ parameters with thier values. If 
+you try to use a parameter which ast does not know about you will get an 
+error. If you need to use a dollar sign in the template, you should use 
+its HTML code: &#36;. The file names typically start with the process they 
+are used by. You can find this in the url of the page you want to modify, 
+it will say process=worksheet for example. Then you can find the form used 
+by the worksheet in the file share/templates/worksheet-edit.
+
+If you want to modify the style, you can find the stylesheets in share/style. 
+If you create a new stylesheet in this directory, ast will give the user the 
+option to select your new stylesheet in the User Preferences screen. For this 
+to work the stylesheet must end with .css.
+
+If you want to add javascript, you can modify the existing scripts in 
+share/script or add your own. You should use the javascript process to 
+return the javascript as this will pass it through the template parser.
+
+All of the images used by ast can be found in the images directory.
+
+If you have any questions about how to make further modifications or have a 
+problem with this document please contact me. Also if you would like to get 
+your modifications into the default ast distribution, please send me a patch. 
+I am always looking for talented web designers to improve the interface.
+
+Michael Williamson <mswilliamson@uwaterloo.ca>

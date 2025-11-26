@@ -1,0 +1,144 @@
+8
+
+dir
+720
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader/trunk/GT/CloseStrategy
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader
+
+
+
+2005-05-22T19:41:50.782632Z
+470
+joao
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bb1899a8-85f5-0310-a327-fe9f4e15340a
+
+Reinvest
+dir
+
+CloseGain.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+e08be1654a48bb826f7a462a507a6d39
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+ChannelBreakout.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+ab2e77e5034c0620cc2d86ced142e49d
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+NeverClose.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+14163122bfa28a6c2cd3445d13455dd3
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+Conditional
+dir
+
+Stop
+dir
+
+PartialGain.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+16959296ce564bd9f5bc30d8d04b8e92
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+Systems
+dir
+
+Generic.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+da6768c4f0a9d6fc38ca9b26aa2a4e6f
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+LimitPeriodInTheMarket.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+e50ca6fb77ea3b03fbdeaebb359a5fd7
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+OppositeSignal.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+c465e4cd67e8805c46e285aca27243e4
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+
+PartialStop.pm
+file
+
+
+
+
+2014-10-30T00:15:03.000000Z
+b1793564df51cbc662a3f7926869f590
+2005-05-22T19:41:50.782632Z
+470
+joao
+has-props
+

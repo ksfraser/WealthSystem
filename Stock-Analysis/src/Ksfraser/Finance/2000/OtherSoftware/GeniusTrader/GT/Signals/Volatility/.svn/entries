@@ -1,0 +1,41 @@
+8
+
+dir
+720
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader/trunk/GT/Signals/Volatility
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader
+
+
+
+2004-03-19T06:37:26.000000Z
+324
+rhertzog
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bb1899a8-85f5-0310-a327-fe9f4e15340a
+
+NR.pm
+file
+
+
+
+
+2014-10-30T00:15:05.000000Z
+e2f5bf5da7822bd655f6e5acb219e6ed
+2004-03-19T06:37:26.000000Z
+324
+rhertzog
+has-props
+

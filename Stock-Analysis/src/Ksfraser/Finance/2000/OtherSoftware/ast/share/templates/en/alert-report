@@ -1,0 +1,38 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="alert.type" value="$alert.type">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Report Alert</th>
+    </tr>
+    <tr>
+      <td colspan="2">At the end of every this alert will email you the contents of any report that AST generates</td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td><select name="alert.market" class="awf_inputtext">$market_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Reports:</b></td>
+      <td><select name="alert.arg1" class="awf_inputtext">$report_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Send To:</b></td>
+      <td><select name="alert.emailid" class="awf_inputtext">$email_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Comment:</b></td>
+      <td><input type="text" maxlength="254" name="alert.comment" value="$alert.comment" class="awf_inputtext awf_wide_input"><div class="awf_small">(Sent with message of alert)</div></td>
+    </tr>
+    <tr>
+        <td><b>Attachment Options:</b></td>
+        <td>
+            <input type="radio" name="alert.arg2" value="0" $attach_none_checked>&nbsp;No Attachments<br>
+            <input type="radio" name="alert.arg2" value="1" $attach_csv_checked>&nbsp;Attach CSV File<br>
+            <input type="radio" name="alert.arg2" value="2" $attach_spread_checked>&nbsp;Attach Spreadsheet (Excel)
+        </td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Continue"></td>
+    </tr>
+  </table>
+</form>

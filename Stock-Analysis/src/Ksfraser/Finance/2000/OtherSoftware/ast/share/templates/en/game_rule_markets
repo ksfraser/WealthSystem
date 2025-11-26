@@ -1,0 +1,9 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="gamerule.ruletype" value="3">
+<table class="awf_form" width="80%">
+    <tr><th>Available Markets</th></tr>
+    <tr><td><b>Select Available markets:</b></td></tr>
+    <tr><td><select multiple name="markets" size="8">$market_options</select><br><small>Use control + click to select multiple markets.</td></tr>
+    <tr><td><input type="submit" value="Save"></td></tr>
+</table>
+</form>

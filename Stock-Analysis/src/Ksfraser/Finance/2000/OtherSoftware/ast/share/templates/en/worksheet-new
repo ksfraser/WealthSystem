@@ -1,0 +1,32 @@
+<form method="POST" action="$save_page" id="worksheet">
+  <input type="hidden" name="awf_setvar" id="awf_setvar" value="false">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Worksheet</th>
+    </tr>
+    <tr>
+      <td><b>Symbol:</b></td>
+      <td><b>Name:</b></td>
+    </tr>
+    <tr>
+      <td><input autocomplete="off" type="text" name="worksheet.symbol" value="$worksheet.symbol" id="symbol" class="awf_inputtextshort"><div id="symbolupdate" class="awf_dropmenu" style="display: none"></div></td>
+      <td><input type="text" name="worksheet.name" value="$worksheet.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td><b>Sector:</b></td>
+    </tr>
+    <tr>
+      <td><select name="worksheet.market" id="market" onchange="javascript:document.getElementById('worksheet').action='';document.getElementById('awf_setvar').value='true';document.getElementById('worksheet').submit();">$market_options</select></td>
+      <td><select name="worksheet.sector">$sector_options</select></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" name="Add"></td>
+    </tr>
+  </table>
+</form>
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+new Ajax.Autocompleter('symbol','symbolupdate','?process=ajax-symbol-list',{select:'awf_selectiontext', parameters: 'prefix=worksheet.&market=' + $('market').value});
+// ]]>
+</script>

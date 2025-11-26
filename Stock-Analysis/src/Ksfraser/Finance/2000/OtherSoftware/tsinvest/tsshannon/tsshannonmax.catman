@@ -1,0 +1,98 @@
+TSSHANNONMAX(1)                                                TSSHANNONMAX(1)
+
+
+
+NNAAMMEE
+       tsshannonmax - returns of a time series with unfair weights
+
+SSYYNNOOPPSSIISS
+       tsshannonmax [-d] [-i value] [-m minimum] [-M maximum]
+                    [-p] [-s step] [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsshannonmax  is  for calculating unfair returns of a time series, as a
+       function of Shannon probability. The input time series is  presumed  to
+       have  a  Brownian  distribution.  The  main function of this program is
+       regression scenario verification-given an empirical time series, specu-
+       lative  market  pro forma performance can be analyzed, as a function of
+       Shannon probability. The cumulative sum process is Brownian in  nature.
+
+       To  find  the  maximum  returns, the "golden" method of minimization is
+       used.  As a reference on  the  "golden"  method  of  minimization,  see
+       "Numerical  Recipes  in C: The Art of Scientific Computing," William H.
+       Press, Brian P. Flannery, Saul A.  Teukolsky,  William  T.  Vetterling,
+       Cambridge University Press, New York, 1988, ISBN 0-521-35465-X, pp 298.
+
+
+OOPPTTIIOONNSS
+       --dd     The input file is a derivative instead of an integral.
+
+       --ii vvaalluuee
+              Initial value of output time series (ie., initial reserves.)
+
+       --mm mmiinniimmuumm
+              Minimum Shannon probability, (0.5 <= probability <= 1.0).
+
+       --MM mmaaxxiimmuumm
+              Maximum Shannon probability, (0.5 <= probability <= 1.0).
+
+       --pp     Output only the Shannon probability followed by  maximum  return
+              value.
+
+       --ss sstteepp
+              Step size of output time series, (0.0 < size < 1.0).
+
+       --vv     Print the version and copyright banner of the program.
+
+       ffiilleennaammee
+              Input filename.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsderivative(1),   tshcalc(1),   tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),     tsrmswindow(1),     tsshannonstock(1),    tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),  tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),  tstradesim(1),  tsrunlength(1),  tsunshannon(1),   tsroot-
+       mean(1),    tsrunmagnitude(1),    tskurtosis(1),   tskurtosiswindow(1),
+       tsrootmeanscale(1),  tsscalederivative(1),  tsgain(1),  tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 17, 2006                TSSHANNONMAX(1)

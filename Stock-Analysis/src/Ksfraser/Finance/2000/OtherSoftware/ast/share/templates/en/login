@@ -1,0 +1,44 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Advanced Stock Tracker - Login</title>
+  <link rel="stylesheet" type="text/css" href="$stylesheet">
+  <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+</head>
+<body onload="document.getElementById('screenres').value=screen.width + 'x' + screen.height;">
+<form method="POST" action="$target" id="loginform">
+<input type="hidden" name="screenres" id="screenres" value="0x0">
+  <table align="center" boarder="0" class="awf_form">
+    <tr>
+      <td colspan="2"><img src="images/ast-logo-welcome.png" alt="welcome"></td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <td colspan="2">Advanced Stock Tracker version $version</td>
+    <tr>
+    <tr>
+      <td colspan="2">By Michael Williamson</td>
+    </tr>
+    <tr>
+      <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+      <th colspan="2">Advanced Stock Tracker Login</th>
+    </tr>
+    <tr>
+      <td><b>Username:<b></td>
+      <td><input type="text" name="username">&nbsp;<a href="$register_page">Register</a></td>
+    </tr>
+    <tr>
+      <td><b>Password:<b></td>
+      <td><input type="password" name="password">&nbsp;<a href="$pwreset_page">Forget Password?</a></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Login"></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

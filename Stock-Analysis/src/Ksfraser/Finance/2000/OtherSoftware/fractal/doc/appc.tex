@@ -1,0 +1,3711 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/09 04:38:13 $
+\RCS $Id: appc.tex,v 0.0 2006/01/09 04:38:13 john Exp $
+% $Log: appc.tex,v $
+% Revision 0.0  2006/01/09 04:38:13  john
+% Initial version
+%
+%
+% The following are numerical data macros-the data is inserted by the
+% the input of the parameters.tex files-these files were made during the
+% processing of the data for each market place in ../markets, with the
+% execution of the maketex.awk awk script, which is as follows:
+%
+% -----------------------------------------------------------------------------
+%
+% Make the LaTeX parameters for this market
+%
+% Input must be successive records that contain:
+%
+%     0) the mean of the file data.tsfraction, from file
+%         "data.tsfraction.tsnormal-p.mean"
+%     1) the standard deviation of the file data.tsfraction, from the file,
+%         "data.tsfraction.tsnormal-p.stddev"
+%     2) the root mean square of the file data.tsfraction, from file
+%         "data.tsfraction.tsrms-p"
+%     3) the fraction of cumulative returns wagered, from file
+%         "data.tsfraction.abs.tsnormal-p.mean"
+%     4) the standard deviation of cumulative returns wagered, from the
+%         the file "data.tsfraction.abs.tsnormal-p.stddev"
+%     5) the constant in the least squares approximation of the file
+%         data.tsfraction, from the file "data.tsfraction.tslsq-p.constant"
+%     6) the slope in the least squares approximation of the file
+%         data.tsfraction, from the file "data.tsfraction.tslsq-p.slope"
+%     7) the constant in the least squares approximation of the file
+%         data.tsfraction.abs , from the file
+%         "data.tsfraction.abs.tslsq-p.constant"
+%     8) the slope in the least squares approximation of the file
+%         data.tsfraction.abs, from the file
+%         "data.tsfraction.abs.tslsq-p.slope"
+%     9) the hurst coefficient, from file
+%        "data.tsfraction.tshurst-d.tslsq-p.hurstall"
+%     10) the hurst coefficient for the lower end of the graph, from file
+%         "data.tsfraction.tshurst-d.tslsq-p.low.hurstlow"
+%     11) the h parameter, from file
+%         "data.tsfraction.tshcalc-d.tslsq-p.hcalcall"
+%     12) the h parameter for the lower end end of the graph, from file
+%         "data.tsfraction.tshcalc-d.tslsq-p.low.hcalclow"
+%     13) the maximum value of Shannon probability, from file
+%         "data.tsshannonmax-p.max"
+%     14) the logrithmic returns using tslogreturns, from file
+%         "data.tslogreturns-p.tsshannon.returns"
+%     15) the count of records with negative signes in data.tsfraction, from
+%         the file "data.tsfraction.pmaxnumerator"
+%     16) the count of records in data.tsfraction, from the file
+%         "data.tsfraction.pmaxdenominator"
+%     17) the mean of the file tsunfairbrownian-f.tsfraction, from file
+%         "tsunfairbrownian-f.fraction.mean"
+%     18) the standard deviation of the file tsunfairbrownian-f.tsfraction,
+%         from file "tsunfairbrownian-f.fraction.mean"
+%     19) the Shannon probability using tslogreturns, from file
+%         "data.tslogreturns-p.tsshannon.probability"
+%     20) the logrithmic returns in bits from the file
+%         "data.tslsq-e-p.bits"
+%     21) the traditional hurst coefficient, from file
+%        "data.tshurst.tslsq-p.hurstall"
+%     22) the traditional hurst coefficient for the lower end of the graph,
+%         from file "data.tshurst.tslsq-p.low.hurstlow"
+%     23) the traditional h parameter, from file
+%         "data.tshcalc.tslsq-p.hcalcall"
+%     24) the traditional h parameter for the lower end end of the graph,
+%         from file "data.tshcalc.tslsq-p.low.hcalclow"
+%     25) the chi-squared value, from file "chisquared"
+%     26) the critical value for the chi-squared value, from file
+%         "critical"
+%{
+%
+%    if (linectr == 0)
+%    {
+%        datafractionmean = $0
+%        printf ("\\renewcommand{\\datafractionmean}{%f}\n", datafractionmean)
+%        datafractionmeanbits = log (datafractionmean + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionmeanbits}{%f}\n", datafractionmeanbits)
+%        datafractionmeanq = datafractionmean / 3.0
+%        printf ("\\renewcommand{\\datafractionmeanq}{%f}\n", datafractionmeanq)
+%        datafractionmeanbitsq = log (datafractionmeanq + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionmeanbitsq}{%f}\n", datafractionmeanbitsq)
+%    }
+%
+%    if (linectr == 1)
+%    {
+%        datafractionstddev = $0
+%        printf ("\\renewcommand{\\datafractionstddev}{%f}\n", datafractionstddev)
+%    }
+%
+%    if (linectr == 2)
+%    {
+%        datafractionrms = $0
+%        printf ("\\renewcommand{\\datafractionrms}{%f}\n", datafractionrms)
+%        avgrms = ((datafractionmean / datafractionrms) + 1.0) / 2
+%        printf ("\\renewcommand{\\avgrms}{%f}\n", avgrms)
+%        ncompanies = datafractionmean / (datafractionrms * datafractionrms)
+%        printf ("\\renewcommand{\\ncompanies}{%f}\n", ncompanies)
+%        pncompanies = ((datafractionmean / (sqrt (ncompanies) * datafractionrms)) + 1.0) / 2.0
+%        printf ("\\renewcommand{\\pncompanies}{%f}\n", pncompanies)
+%    }
+%
+%    if (linectr == 3)
+%    {
+%        datafractionabsmean = $0
+%        printf ("\\renewcommand{\\datafractionabsmean}{%f}\n", datafractionabsmean)
+%    }
+%
+%    if (linectr == 4)
+%    {
+%        datafractionabsstddev = $0
+%        printf ("\\renewcommand{\\datafractionabsstddev}{%f}\n", datafractionabsstddev)
+%    }
+%
+%    if (linectr == 5)
+%    {
+%        datafractionconstant = $0
+%        printf ("\\renewcommand{\\datafractionconstant}{%f}\n", datafractionconstant)
+%        datafractionconstantbits = log (datafractionconstant + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionconstantbits}{%f}\n", datafractionconstantbits)
+%        datafractionconstantq = datafractionconstant / 3.0
+%        printf ("\\renewcommand{\\datafractionconstantq}{%f}\n", datafractionconstantq)
+%        datafractionconstantbitsq = log (datafractionconstantq + 1) / log (2.0)
+%        printf ("\\renewcommand{\\datafractionconstantbitsq}{%f}\n", datafractionconstantbitsq)
+%    }
+%
+%    if (linectr == 6)
+%    {
+%        datafractionslope = $0
+%        printf ("\\renewcommand{\\datafractionslope}{%f}\n", datafractionslope)
+%    }
+%
+%    if (linectr == 7)
+%    {
+%        datafractionabsconstant = $0
+%        printf ("\\renewcommand{\\datafractionabsconstant}{%f}\n", datafractionabsconstant)
+%    }
+%
+%    if (linectr == 8)
+%    {
+%        datafractionabsslope = $0
+%        printf ("\\renewcommand{\\datafractionabsslope}{%f}\n", datafractionabsslope)
+%    }
+%
+%    if (linectr == 9)
+%    {
+%        hurstall = $0
+%        printf ("\\renewcommand{\\hurstall}{%f}\n", hurstall)
+%    }
+%
+%    if (linectr == 10)
+%    {
+%        hurstlow = $0
+%        printf ("\\renewcommand{\\hurstlow}{%f}\n", hurstlow)
+%        hurstlowtwo = hurstlow * 2.0
+%        printf ("\\renewcommand{\\hurstlowtwo}{%f}\n", hurstlowtwo)
+%        hurstlowhundred = hurstlow * 100.0
+%        printf ("\\renewcommand{\\hurstlowhundred}{%f}\n", hurstlowhundred)
+%    }
+%
+%    if (linectr == 11)
+%    {
+%        hcalcall = $0
+%        printf ("\\renewcommand{\\hcalcall}{%f}\n", hcalcall)
+%    }
+%
+%    if (linectr == 12)
+%    {
+%        hcalclow = $0
+%        printf ("\\renewcommand{\\hcalclow}{%f}\n", hcalclow)
+%    }
+%
+%    if (linectr == 13)
+%    {
+%        shannonmax = $0
+%        printf ("\\renewcommand{\\shannonmax}{%f}\n", shannonmax)
+%        twoponemax = 2.0 * shannonmax - 1
+%        printf ("\\renewcommand{\\twoponemax}{%f}\n", twoponemax)
+%    }
+%
+%    if (linectr == 14)
+%    {
+%        logreturns = $0
+%        printf ("\\renewcommand{\\logreturns}{%f}\n", logreturns)
+%        twologreturns = exp (logreturns * log (2.0))
+%        printf ("\\renewcommand{\\twologreturns}{%f}\n", twologreturns)
+%        twologreturnshundred = (twologreturns - 1.0) * 100.0
+%        printf ("\\renewcommand{\\twologreturnshundred}{%f}\n", twologreturnshundred)
+%        oneoverlogreturns = 1.0 / logreturns
+%        printf ("\\renewcommand{\\oneoverlogreturns}{%f}\n", oneoverlogreturns)
+%    }
+%
+%    if (linectr == 15)
+%    {
+%        pmaxnumerator = $0
+%    }
+%
+%    if (linectr == 16)
+%    {
+%        pmaxdenominator = $0
+%        pmax = (pmaxdenominator - pmaxnumerator) / pmaxdenominator
+%        if (pmax == 1)
+%        {
+%            pmax =0.99999
+%        }
+%        printf ("\\renewcommand{\\pmax}{%f}\n", pmax)
+%        twopminusone = (2 * pmax) - 1
+%        printf ("\\renewcommand{\\twopminusone}{%f}\n", twopminusone)
+%        rmsp = datafractionrms * twopminusone
+%        printf ("\\renewcommand{\\rmsp}{%f}\n", rmsp)
+%        twopx = ((2 * pmax) - 1) / (2 * sqrt (pmax * (1 - pmax)))
+%        printf ("\\renewcommand{\\twopx}{%f}\n", twopx)
+%        sigmap = datafractionstddev * twopx
+%        printf ("\\renewcommand{\\sigmap}{%f}\n", sigmap)
+%
+%    }
+%
+%    if (linectr == 17)
+%    {
+%        tsunfairbrownianfractionmean = $0
+%        printf ("\\renewcommand{\\tsunfairbrownianfractionmean}{%f}\n", tsunfairbrownianfractionmean)
+%    }
+%
+%    if (linectr == 18)
+%    {
+%        tsunfairbrownianfractionstddev = $0
+%        printf ("\\renewcommand{\\tsunfairbrownianfractionstddev}{%f}\n", tsunfairbrownianfractionstddev)
+%    }
+%
+%    if (linectr == 19)
+%    {
+%        shannonlogreturns = $0
+%        printf ("\\renewcommand{\\shannonlogreturns}{%f}\n", shannonlogreturns)
+%        shannonlogreturnshundred = shannonlogreturns * 100.0
+%        printf ("\\renewcommand{\\shannonlogreturnshundred}{%f}\n", shannonlogreturnshundred)
+%        twopone =  (2.0 * shannonlogreturns) - 1.0
+%        printf ("\\renewcommand{\\twopone}{%f}\n", twopone)
+%        twoponehundred = twopone * 100.0
+%        printf ("\\renewcommand{\\twoponehundred}{%f}\n", twoponehundred)
+%        hundredtwoponehundred = 100.0 - twoponehundred
+%        printf ("\\renewcommand{\\hundredtwoponehundred}{%f}\n", hundredtwoponehundred)
+%        hundredshannonlogreturnshundred = 100.0 - shannonlogreturnshundred
+%        printf ("\\renewcommand{\\hundredshannonlogreturnshundred}{%f}\n", hundredshannonlogreturnshundred)
+%    }
+%
+%    if (linectr == 20)
+%    {
+%        datatslsqepbits = $0
+%        printf ("\\renewcommand{\\datatslsqepbits}{%f}\n", datatslsqepbits)
+%    }
+%
+%    if (linectr == 21)
+%    {
+%        thurstall = $0
+%        printf ("\\renewcommand{\\thurstall}{%f}\n", thurstall)
+%    }
+%
+%    if (linectr == 22)
+%    {
+%        thurstlow = $0
+%        printf ("\\renewcommand{\\thurstlow}{%f}\n", thurstlow)
+%        thurstlowtwo = thurstlow * 2.0
+%        printf ("\\renewcommand{\\thurstlowtwo}{%f}\n", thurstlowtwo)
+%        thurstlowhundred = thurstlow * 100.0
+%        printf ("\\renewcommand{\\thurstlowhundred}{%f}\n", thurstlowhundred)
+%    }
+%
+%    if (linectr == 23)
+%    {
+%        thcalcall = $0
+%        printf ("\\renewcommand{\\thcalcall}{%f}\n", thcalcall)
+%    }
+%
+%    if (linectr == 24)
+%    {
+%        thcalclow = $0
+%        printf ("\\renewcommand{\\thcalclow}{%f}\n", thcalclow)
+%    }
+%
+%    if (linectr == 25)
+%    {
+%        chisquared = $0
+%        printf ("\\renewcommand{\\chisquared}{%f}\n", chisquared)
+%    }
+%
+%    if (linectr == 26)
+%    {
+%        critical = $0
+%        printf ("\\renewcommand{\\critical}{%f}\n", critical)
+%    }
+%
+%    linectr++
+%}
+\newcommand{\LABPRE}{}
+\newcommand{\LABPREREF}{}
+\newcommand{\market}{}
+\newcommand{\directory}{}
+\newcommand{\timescale}{}
+\newcommand{\SETLABEL}{}
+\newcommand{\SETLABELQ}{}
+\newcommand{\SETLABELREF}{}
+\newcommand{\datafractionmean}{0.0}
+\newcommand{\datafractionmeanbits}{0.0}
+\newcommand{\datafractionmeanq}{0.0}
+\newcommand{\datafractionmeanbitsq}{0.0}
+\newcommand{\datafractionstddev}{0.0}
+\newcommand{\datafractionrms}{0.0}
+\newcommand{\avgrms}{0.0}
+\newcommand{\ncompanies}{0.0}
+\newcommand{\pncompanies}{0.0}
+\newcommand{\datafractionabsmean}{0.0}
+\newcommand{\datafractionabsstddev}{0.0}
+\newcommand{\datafractionconstant}{0.0}
+\newcommand{\datafractionconstantbits}{0.0}
+\newcommand{\datafractionconstantq}{0.0}
+\newcommand{\datafractionconstantbitsq}{0.0}
+\newcommand{\datafractionslope}{0.0}
+\newcommand{\datafractionabsconstant}{0.0}
+\newcommand{\datafractionabsslope}{0.0}
+\newcommand{\hurstall}{0.0}
+\newcommand{\hurstlow}{0.0}
+\newcommand{\hurstlowtwo}{0.0}
+\newcommand{\hurstlowhundred}{0.0}
+\newcommand{\hcalcall}{0.0}
+\newcommand{\hcalclow}{0.0}
+\newcommand{\shannonlogreturns}{0.0}
+\newcommand{\shannonlogreturnshundred}{0.0}
+\newcommand{\hundredshannonlogreturnshundred}{0.0}
+\newcommand{\datatslsqepbits}{0.0}
+\newcommand{\twopone}{0.0}
+\newcommand{\twoponehundred}{0.0}
+\newcommand{\hundredtwoponehundred}{0.0}
+\newcommand{\logreturns}{0.0}
+\newcommand{\twologreturns}{0.0}
+\newcommand{\twologreturnshundred}{0.0}
+\newcommand{\oneoverlogreturns}{0.0}
+\newcommand{\shannonmax}{0.0}
+\newcommand{\twoponemax}{0.0}
+\newcommand{\pmax}{0.0}
+\newcommand{\twopminusone}{0.0}
+\newcommand{\rmsp}{0.0}
+\newcommand{\twopx}{0.0}
+\newcommand{\sigmap}{0.0}
+\newcommand{\tsunfairbrownianfractionmean}{0.0}
+\newcommand{\tsunfairbrownianfractionstddev}{0.0}
+\newcommand{\thurstall}{0.0}
+\newcommand{\thurstlow}{0.0}
+\newcommand{\thurstlowtwo}{0.0}
+\newcommand{\thurstlowhundred}{0.0}
+\newcommand{\thcalcall}{0.0}
+\newcommand{\thcalclow}{0.0}
+\newcommand{\chisquared}{0.0}
+\newcommand{\critical}{0.0}
+%
+% Following is a work around for an issue with lacheck(1). The program
+% will not \input {\directory/data.tsstatest-f0.1-c0.9-i.tex}, so it
+% is made into a macro. The idea is that since lacheck(1) does not
+% expand macros, it won't see the \input{..}. Unfortunately, this
+% means that the file will not be checked. To remove it, search for
+% XXX, and replace \XXX with \input.
+%
+\newcommand{\XXX}{\input}
+%
+\chapter{Fractal Analysis of Various Market Segments in the North American Electronics Industry}
+    \label{markets}
+
+    \subidx{markets}{analysis}
+    \subidx{analysis}{markets}
+    \subidx{strategy}{optimum fiscal}
+    \subidx{fiscal}{optimum strategy}
+    \subidx{industry}{electronics}
+    \subidx{electronics}{industry}
+    \subidx{tsunfairbrownian}{program}
+    \subidx{programs}{tsunfairbrownian}
+    This appendix presents a remedial analysis on the optimization of
+    fiscal strategies in various market segments in the North American
+    electronics industry. It is offered in academic perspective, and
+    under no circumstances would it be appropriate to consider it
+    financial advice. It can serve, however, as an illustrative method
+    for comparative analysis of various market segments.  Rigorous and
+    sophisticated approaches that address the issues of financial
+    strategies in industrial markets are contained in the
+    bibliography. The analysis of the Dow Jones Average, United States
+    Gross Domestic Product, United States M2, United States Leading
+    Economic Indicators, and United States Employment Figures, and
+    United States Treasury Bill Returns, are presented for comparative
+    purposes\footnote{One of the reasons that these are included in
+    the analysis is for reasons of scientific induction. The reasoning
+    is as follows. Since the electronics industry is one of the major
+    industries in the United States, fluctuations in the rate of
+    revenue returns of the industry should have correlations in the
+    total production of the United States, flow of money, which can be
+    related by the GNP and M2, leading indicators, and employment
+    figures.  Of course, bonds should have an
+    anti-correlation. Additionally, it would seem that a company's
+    equity value, represented by its stock evaluation would rise
+    exponentially as the industry's rate of revenue returns increased
+    exponentially---and this should be reflected in the aggregate
+    industry stock index. The intent was to investigate the
+    correlations in the normalized increments in the decomposition of
+    the time series for each of the macro economic entities. Whether
+    such a correlation can be induced remains conjecture.}---although
+    the optimum fiscal strategies were derived, these optimums may
+    have no real meaning, interpretation, or significance for other
+    than comparative purposes with the rather large research already
+    done by others on these time series.  The coin tossing games are
+    presented for ``theoretical'' comparison of the characteristics of
+    Brownian motion, and regression testing, as are the constructions
+    using the program {\it tsunfairbrownian}\/, etc., and are useful
+    in evaluating software system correctness.  Additionally, note
+    that the fiscal strategies that are derived in each case, are the
+    financial strategies that will do at least as well as the rest of
+    the industry, in the long run, and may not, necessarily, be the
+    maximal strategy if the rest of the industry is not maximally
+    optimum---ie., it is commensurate with the industry as a
+    whole. Additionally, it should be noted that the amount of data,
+    from various sources, that was analyzed in each market section was
+    very sparce,
+    see~\cite[pp. 179]{Feder},~\cite[pp. 83]{Peters:CAOITCM}. The
+    reader is urged to use caution when judging the accuracy of these
+    presentations.
+
+    For the analysis, the data for the various market segments was in
+    the directory~../market, the simulation programs where in the
+    directory~../simulation, and the utility programs in the
+    directory~../utilities. A brief description of the programs
+    appears in Appendix~\ref{programs}, and the methodology used is
+    described in Chapter~\ref{methodology}. To add a new market
+    segment to the analysis, make a new directory in~../market, and
+    copy all of the files from any other directory into the new
+    directory. The file, named ``data,'' should contain the market
+    time series, with a syntax that is consistent with the program
+    {\it tsfraction}\/, which is described briefly in
+    appendix~\ref{programs}. Several simulation files are created
+    during the analysis, for example
+    ``data\-.tsshannonmax-p\-.tsunfairbrownian-p,'' which may be
+    re-analyzed by the same method.
+
+    The data presented in this appendix is presented in in condensed
+    tabular form in appendix~\ref{tables}.
+
+    \renewcommand{\LABPRE}{C} % if this is changed, change \newcommand{\LABPRETWO}{C} in chap2.tex, also.
+    \renewcommand{\LABPREREF}{D}
+
+    \renewcommand{\market}{North American Integrated Circuit Market}
+    \renewcommand{\directory}{../markets/ic.namerica}
+    \input{../markets/ic.namerica/parameters.tex}
+    \renewcommand{\timescale}{quarter}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAICM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAICMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAICM}
+
+        \idx{Semiconductor Industry Association}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the Semiconductor Industry
+        Association, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Many {\market} industry analyst speculate that there is
+            ``periodic'' behavior in the market place, at
+            approximately 5 year intervals. Both the Hurst coefficient
+            and H parameter graphs would tend to support the
+            intuition. Notice that the slope of the graphs, in
+            figures~\ref{\SETLABEL:HC} and~\ref{\SETLABEL:HP}, tend to
+            decrease abruptly at $t \approx \ln(3) \approx 20$
+            {\timescale}s, which is approximately 60 months, or 5
+            years~\cite[pp. 96]{Peters:CAOITCM}. Whether this is
+            ``periodic'' behavior, or an indication of more complex
+            system dynamics, perhaps ``chaotic,'' remains to be
+            seen. If that is the case, it could provide an exploitive
+            venue.
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        For convenience of comparison, converting from quarters to
+        months by dividing the logarithmic returns by 3:
+
+        \renewcommand{\timescale}{month}
+        \input{../markets/ic.namerica/qparameters.tex}
+        \renewcommand{\SETLABEL}{\LABPRE:NAICMQ}
+        \renewcommand{\datafractionmean}{\datafractionmeanq}
+        \renewcommand{\datafractionconstant}{\datafractionconstantq}
+        \renewcommand{\datafractionmeanbits}{\datafractionmeanbitsq}
+        \renewcommand{\datafractionconstantbits}{\datafractionconstantbitsq}
+
+        \input{fiscal.tex}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAICM}
+        \input{../markets/ic.namerica/parameters.tex}
+        \renewcommand{\timescale}{quarter}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running near the optimal re-investment strategy. This
+            seems enigmatic, since those companies that run, on a long
+            term average, far below the optimally maximal value would
+            seem to be eclipsed by those that didn't. And those that
+            run too close, or even above, the optimally maximal value
+            would be over extended, and become financially destitute
+            during market down turns, which is inevitable in a fractal
+            time series as presented in Figure~\ref{\SETLABEL:TS}.  It
+            would seem that the natural selection process of the
+            competitive environment would allow only those companies
+            that run sufficiently near the optimally maximal value to
+            survive, in the long run. One possible explanation,
+            foremost, is that the analytical methodology presented
+            herein is inappropriate.  Another explanation is that the
+            gross margins are less than the fraction {\shannonmax} of
+            the rate of revenue returns, and thus could not
+            accommodate such an aggressive re-investment strategy. If
+            this is the case, then it presents an intriguing
+            issue. If, in a capitalistic market, the natural outcome
+            of the competitive situation, according to game-theoretic
+            analysis, is that there will be many competitors, each
+            making minimal gross margins, then how do the companies
+            grow their markets?  Naturally, those that run the most
+            efficient will have lower costs, making larger percentage
+            of rate of revenue returns re-investment possible. Yet
+            another interpretation is that the number of competitors
+            would grow at an exponential rate, but all of them would
+            make minimal returns. However, an operational Shannon
+            probability of {\shannonlogreturns} is not just marginally
+            lower than the maximum Shannon probability of
+            {\shannonmax}. There is a significant disparity which is
+            difficult to explain. It would seem that the
+            game-theoretic eventual outcome of a competitive market
+            place would be a solution that hinders growth, wealth and
+            jobs creation, etc., which does not seem consistent with
+            capitalistic theory. On the other hand, is there an
+            optimum number of competitors in a market place, where the
+            gross margins can be higher, permitting wealth and job
+            creation, and also a competitive situation? If this
+            analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{World Semiconductor Market}
+    \renewcommand{\directory}{../markets/semiconductors.world}
+    \input{../markets/semiconductors.world/parameters.tex}
+    \renewcommand{\timescale}{quarter}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:WSM}
+        \renewcommand{\SETLABELQ}{\LABPRE:WSMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:WSM}
+
+        \idx{Semiconductor Industry Association}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the Semiconductor Industry
+        Association, 1982---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Many {\market} industry analyst speculate that there is
+            ``periodic'' behavior in the market place, at
+            approximately 5 year intervals. Both the Hurst coefficient
+            and H parameter graphs would tend to support the
+            intuition. Notice that the slope of the graphs, in
+            figures~\ref{\SETLABEL:HC} and~\ref{\SETLABEL:HP}, tend to
+            decrease abruptly at $t \approx \ln(3) \approx 20$
+            {\timescale}s, which is approximately 60 months, or 5
+            years~\cite[pp. 96]{Peters:CAOITCM}. Whether this is
+            ``periodic'' behavior, or an indication of more complex
+            system dynamics, perhaps ``chaotic,'' remains to be
+            seen. If that is the case, it could provide an exploitive
+            venue.
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        For convenience of comparison, converting from quarters to
+        months by dividing the logarithmic returns by 3:
+
+        \renewcommand{\timescale}{month}
+        \input{../markets/semiconductors.world/qparameters.tex}
+        \renewcommand{\SETLABEL}{\LABPRE:WSMQ}
+        \renewcommand{\datafractionmean}{\datafractionmeanq}
+        \renewcommand{\datafractionconstant}{\datafractionconstantq}
+        \renewcommand{\datafractionmeanbits}{\datafractionmeanbitsq}
+        \renewcommand{\datafractionconstantbits}{\datafractionconstantbitsq}
+
+        \input{fiscal.tex}
+
+        \renewcommand{\SETLABEL}{\LABPRE:WSM}
+        \input{../markets/semiconductors.world/parameters.tex}
+        \renewcommand{\timescale}{quarter}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{North American Semiconductor Market}
+    \renewcommand{\directory}{../markets/semiconductors.namerica}
+    \input{../markets/semiconductors.namerica/parameters.tex}
+    \renewcommand{\timescale}{quarter}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NASM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NASMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NASM}
+
+        \idx{Semiconductor Industry Association}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the Semiconductor Industry
+        Association, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Many {\market} industry analyst speculate that there is
+            ``periodic'' behavior in the market place, at
+            approximately 5 year intervals. Both the Hurst coefficient
+            and H parameter graphs would tend to support the
+            intuition. Notice that the slope of the graphs, in
+            figures~\ref{\SETLABEL:HC} and~\ref{\SETLABEL:HP}, tend to
+            decrease abruptly at $t \approx \ln(3) \approx 20$
+            {\timescale}s, which is approximately 60 months, or 5
+            years~\cite[pp. 96]{Peters:CAOITCM}. Whether this is
+            ``periodic'' behavior, or an indication of more complex
+            system dynamics, perhaps ``chaotic,'' remains to be
+            seen. If that is the case, it could provide an exploitive
+            venue.
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        For convenience of comparison, converting from quarters to
+        months by dividing the logarithmic returns by 3:
+
+        \renewcommand{\timescale}{month}
+        \input{../markets/semiconductors.namerica/qparameters.tex}
+        \renewcommand{\SETLABEL}{\LABPRE:NASMQ}
+        \renewcommand{\datafractionmean}{\datafractionmeanq}
+        \renewcommand{\datafractionconstant}{\datafractionconstantq}
+        \renewcommand{\datafractionmeanbits}{\datafractionmeanbitsq}
+        \renewcommand{\datafractionconstantbits}{\datafractionconstantbitsq}
+
+        \input{fiscal.tex}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NASM}
+        \input{../markets/semiconductors.namerica/parameters.tex}
+        \renewcommand{\timescale}{quarter}
+
+        \input{simulation.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. But an operational Shannon
+            probability of {\shannonlogreturns} is not just marginally
+            lower than the maximum Shannon probability of
+            {\shannonmax}. There is a significant disparity. It would
+            seem that the game-theoretic eventual outcome of a
+            competitive market place would be a solution that hinders
+            growth, wealth and jobs creation, etc., which does not
+            seem consistent with capitalistic theory. On the other
+            hand, is there an optimum number of competitors in a
+            market place, where the gross margins can be higher,
+            permitting wealth and job creation, and also a competitive
+            situation? If this analysis is correct, and that should be
+            subject to scrutiny, then it would appear that this is the
+            case. But this brings up another issue---that of taxation,
+            and other contributions to the social welfare function. If
+            there is an optimum number of competitors in the market
+            place, that maximizes wealth and job creation, then,
+            perhaps by lemma, there is also an optimal value of
+            taxation rate, and other contributions to the social
+            welfare function, that will permit maximal industrial
+            growth, and thus maximal growth in the tax base. But this
+            would seem to be inconsistent with the work of Kenneth
+            Arrow and the so called Impossibility Theorem, which
+            states that such optimizations can not be optimized
+            because the ordering of priorities is intransitive.  All
+            very perplexing, since the simulation of the maximum
+            Shannon probability in the next section seems to indicate
+            that such an aggressive re-investment strategy is, indeed,
+            feasible.
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Electronic Component Shipments}
+    \renewcommand{\directory}{../markets/electronic.components.shipments}
+    \input{../markets/electronic.components.shipments/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAECS}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAECSQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAECS}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Note that the H parameter data is not linear, and the long
+            term predictability is better than the short term
+            predictability, indicating that the least squares
+            approximation is low.
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Electronic Component Production}
+    \renewcommand{\directory}{../markets/electronic.components.production}
+    \input{../markets/electronic.components.production/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAECP}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAECPQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAECP}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1980---1994, by {\timescale}s, as an index, 1987
+        = 100.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Electronics Market}
+    \renewcommand{\directory}{../markets/electronics}
+    \input{../markets/electronics/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAEM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAEMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAEM}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1980---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Note that the H parameter data is not linear, and both the
+            short term and long term predictability are better than
+            the mid term predictability. This is also indicated by a
+            Hurst coefficient of {\thurstall}, which is less than 0.5,
+            and would tend to indicate that there is a predisposition
+            to antipersistence, or ergodic, market behavior. What this
+            means is that the system is mean reverting, and that a
+            {\timescale} where rate of revenue returns increased, will
+            have a predisposition to be followed by a {\timescale}
+            where the rate of revenue returns decrease, and vice
+            versa. See~\cite[pp. 64]{Peters:CAOITCM},~\cite[pp. 170]{Feder},~\cite[pp. 496]{Peitgen}~\cite[pp. 130]{Schroeder},~\cite[pp. 172]{Cambel}.
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+        \subsubsection{Observations on the Qualitative Verification of Fixed Increment Approximation Analysis}
+
+            In the equation:
+
+            \begin{equation}
+                \datafractionmean \approx \rmsp \approx \sigmap
+            \end{equation}
+
+            Note that the mean is unusually large, in relation to
+            values for $rms (2P - 1)$ and $\frac{\sigma (2P - 1)}{2
+            \sqrt{P(1 - P)}}$, respectively-in principle, they should
+            all be equal. Also note that the standard deviation of the
+            increments, {\datafractionstddev}, is much larger than the
+            mean. These issues, coupled with a Hurst coefficient of
+            {\thurstall}, probably prohibit ``modeling'' the
+            {~\market} with the methodologies presented in this
+            manuscript. Note, however, the poor accuracy performance
+            of the methodology was estimated by the equation, above,
+            so was anticipated.  As an aside, it is not clear what
+            market mechanisms create the numbers in the equation
+            above, or a Hurst coefficient that is indicative of an
+            antipersistent rate of revenue returns.  Investigation of
+            the metric methodologies for this market place, perhaps,
+            may be interesting and provide some insight.
+
+    \renewcommand{\market}{United States Office Computer Market}
+    \renewcommand{\directory}{../markets/computer.office}
+    \input{../markets/computer.office/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAOCM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAOCMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAOCM}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1982---1994, by {\timescale}s, as an index, 1987
+        = 100.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Information Systems Market}
+    \renewcommand{\directory}{../markets/information.systems}
+    \input{../markets/information.systems/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NAISM}
+        \renewcommand{\SETLABELQ}{\LABPRE:NAISMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NAISM}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1979---1994, by {\timescale}s, in millions of
+        dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Note that the H parameter data is not linear, and the long
+            term predictability is better than the short term
+            predictability, indicating that the least squares
+            approximation is low.
+
+        \input{fiscal.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Fiscal Strategy}
+
+            A re-investment of {\twoponehundred} of the rate of
+            revenue returns per {\timescale} does not seem
+            inconsistent with the industry averages, since it includes
+            investments in research and development, additional
+            manufacturing infrastructure, advertising,
+            etc. Additionally, a product mix of {\twoponehundred}\%
+            ``proprietary'' and the remainder ``industry standard''
+            products seems consistent with the industry analyst
+            ``20/80'' rule. The value of one standard deviation,
+            $84.13$\%, of the revenue return rate being generated by
+            $\frac{1}{{\twopone}}$ products seems consistent with the
+            industry, also.
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \subsubsection{Observations on the Fixed Increment Approximation for Operational Strategy}
+
+            As an interesting interpretation of
+            Figure~\ref{\SETLABEL:FF}, and evaluating the
+            approximation $\frac{1}{\sqrt{t}}$ at 60 months gives a
+            probability that the market will still have the same
+            agenda of about $0.12909945$, or about 1 in 8. This is
+            commensurate with numbers from the venture
+            community\footnote{For example, see ``IEEE Engineering
+            Management Review,'' Volume 23 Number 3, Fall 1995,
+            pp. 83}. Of course new venture backed companies fail for
+            many reasons, but market appropriateness to product
+            portfolio 60 months in the future may be a major
+            contributor. Additionally, the success rate of development
+            projects of 8 month duration, which have a market success
+            rate of about 1 in 3, seems consistent with
+            $\frac{1}{\sqrt{3}} = 0.353553391$. Naturally, projects
+            fail in the market for many reasons, but market
+            appropriateness, in a dynamic market environment may be a
+            major contributor to failure.
+
+            As mentioned in Section~\ref{\SETLABEL:H},
+            Equation~\ref{\SETLABEL:MA}, and the preceeding section,
+            approximately 3 times the value where ${\thurstlow}^{n} =
+            0.5$ could be interpreted as an approximation to the
+            ``average'' product life cycle. This seems consistent with
+            the 6 to 12 month life cycles quoted by many industry
+            analyst. In addition, maintaining inventory levels that do
+            not exceed the anticipated requirements of
+            $\frac{\ln{0.5}}{\ln{\thurstlow}}$ many {\timescale}s
+            seems consistent with the author's experience in the
+            industry.
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \subsubsection{Observations on the Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+
+            Note that these simulations are base on a very, perhaps
+            overly, simplified model. For example, from
+            Section~\ref{\SETLABEL:TSA}, Figure~\ref{\SETLABEL:NH}, it
+            would appear that the {\market}'s normalized increments
+            are characterized by fractional Brownian motion---but the
+            simulations used classical Brownian motion as the
+            model. One consequence of this is that a re-investment
+            strategy that is to ``wager'' a fraction of {\twoponemax}
+            of the rate of returns every {\timescale} is overly
+            aggressive, since in the classical Brownian scenario, the
+            maximum loss, in any {\timescale}, was no more that what
+            was ``wagered.'' However, in the fractional Brownian
+            scenario, much more can be lost. From
+            Equation~\ref{fopt2},
+
+            \begin{equation}
+                \frac{avg}{rms^2} = \frac{f_{opt}}{rms} = K
+            \end{equation}
+
+            \noindent where, under the optimum classical Brownian
+            scenario, $K$ is unity, or $avg = rms^2$. Notice that,
+            since $f = rms$, whether the scenario is optimal or not,
+            that the operational ``wager'' fraction, from
+            Figure~\ref{\SETLABEL:TF} of {\datafractionrms}, vs.\ an
+            ``theoretical optimal'' value of {\twoponemax} seems
+            overly conservative. Additionally, notice that, at least
+            in principle, the chance of failure in the fractional
+            Brownian scenario, which is more accurate, would
+            correspond to 1 standard deviation, or about 15.865\% per
+            {\timescale}, which is unacceptably high. However, it is
+            not clear why the {\market} is running at a value of
+            {\datafractionrms}, which seems very
+            conservative. However, a re-investment strategy of
+            {\datafractionrms} per {\timescale} does not seem
+            inconsistent with a failure rate, on the Fortune 500 list,
+            which it is inferred that the {\market} is similar to, of
+            about 50\% in ten years, which corresponds to $(1 -
+            p_f)^{120} \approx 0.5$, or $p_f$, the probability of
+            failure, is $0.005759576$, which is, approximately, 2.5
+            standard deviations, meaning that to be consistent with
+            the large companies in the Fortune 500, the re-investment
+            rate should be, approximately, $\frac{\twoponemax}{2.5}$,
+            compared with an operational value, from
+            Figure~\ref{\SETLABEL:NH} of {\datafractionrms}.
+
+            An interesting, and intriguing, interpretation and
+            discussion of the maximum Shannon probability, is an
+            explanation as to why the companies in the {\market} are
+            not running an optimal re-investment strategy. This seems
+            enigmatic, since those companies that run, on a long term
+            average, below the optimally maximal value would seem to
+            be eclipsed by those that didn't. And those that run above
+            the optimally maximal value would be over extended, and
+            become financially destitute during market down turns,
+            which is inevitable in a fractal time series as presented
+            in Figure~\ref{\SETLABEL:TS}.  It would seem that the
+            natural selection process of the competitive environment
+            would allow only those companies that run near the
+            optimally maximal value to survive, in the long run. One
+            possible explanation, foremost, is that the analytical
+            methodology presented herein is inappropriate.  Another
+            explanation is that the gross margins are less than the
+            fraction {\shannonmax} of the rate of revenue returns, and
+            thus could not accommodate such an aggressive
+            re-investment strategy. If this is the case, then it
+            presents an intriguing issue. If, in a capitalistic
+            market, the natural outcome of the competitive situation,
+            according to game-theoretic analysis, is that there will
+            be many competitors, each making minimal gross margins,
+            then how do the companies grow their markets?  Naturally,
+            those that run the most efficient will have lower costs,
+            making larger percentage of rate of revenue returns
+            re-investment possible. Yet another interpretation is that
+            the number of competitors would grow at an exponential
+            rate, but all of them would make minimal returns. However,
+            an operational Shannon probability of {\shannonlogreturns}
+            is not just marginally lower than the maximum Shannon
+            probability of {\shannonmax}. There is a significant
+            disparity which is difficult to explain. It would seem
+            that the game-theoretic eventual outcome of a competitive
+            market place would be a solution that hinders growth,
+            wealth and jobs creation, etc., which does not seem
+            consistent with capitalistic theory. On the other hand, is
+            there an optimum number of competitors in a market place,
+            where the gross margins can be higher, permitting wealth
+            and job creation, and also a competitive situation? If
+            this analysis is correct, and that should be subject to
+            scrutiny, then it would appear that this is the case. But
+            this brings up another issue---that of taxation, and other
+            contributions to the social welfare function. If there is
+            an optimum number of competitors in the market place, that
+            maximizes wealth and job creation, then, perhaps by lemma,
+            there is also an optimal value of taxation rate, and other
+            contributions to the social welfare function, that will
+            permit maximal industrial growth, and thus maximal growth
+            in the tax base. But this would seem to be inconsistent
+            with the work of Kenneth Arrow and the so called
+            Impossibility Theorem, which states that such
+            optimizations can not be determined because the ordering
+            of priorities are intransitive.  All very perplexing,
+            since the simulation of the maximum Shannon probability in
+            the next section seems to indicate that such an aggressive
+            re-investment strategy is, indeed, feasible.
+
+            Yet another possibility for the industry not running at
+            maximum Shannon probability is the high cost of expansion
+            of operations. Some of these industries require very
+            sophisticated manufacturing processes, which have high
+            barrier costs.
+
+            Additionally, as mentioned in both~\cite[pp. 29]{Brock},
+            and~\cite[pp. 8]{Arthur:CTIRALIBHE}, optimal efficiency
+            may not be attainable in increasing-return economic
+            scenarios.
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Dow Jones Average}
+    \renewcommand{\directory}{../markets/dj}
+    \input{../markets/dj/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:DJA}
+        \renewcommand{\SETLABELQ}{\LABPRE:DJAQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:DJA}
+
+        \idx{Dow Jones News Information Retrieval Service}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from Dow Jones News Information
+        Retrieval Service, 1981---1994, by {\timescale}s, as an
+        index.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        value, or price, of the stocks in the {\market}, and not stock
+        yield, or dividends. This is included for comparative
+        purposes.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Cirrus Logic Stock}
+    \renewcommand{\directory}{../markets/crus}
+    \input{../markets/crus/parameters.tex}
+    \renewcommand{\timescale}{day}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:CRUS}
+        \renewcommand{\SETLABELQ}{\LABPRE:CRUSQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:CRUS}
+
+        \subidx{crus}{program}
+        \subidx{programs}{crus}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Cirrus Logic stock price, November 15,
+        1994, through April 8, 1996, inclusive.  The data is by
+        {\timescale}s.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes, and has no meaning,
+        unless it is considered as a ``future.''
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Gross Domestic Product}
+    \renewcommand{\directory}{../markets/us.gdp}
+    \input{../markets/us.gdp/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USGDP}
+        \renewcommand{\SETLABELQ}{\LABPRE:USGDPQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:USGDP}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1979---1994, by {\timescale}s, in billions of
+        1987 dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        {\market}. This is included for comparative purposes.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Employment Figures}
+    \renewcommand{\directory}{../markets/us.employment}
+    \input{../markets/us.employment/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USEMPLOYMENT}
+        \renewcommand{\SETLABELQ}{\LABPRE:USEMPLOYMENTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:USEMPLOYMENT}
+
+        \idx{United States Bureau of Labor and Statistics}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Bureau of
+        Labor and Statistics, 1980---1994, by {\timescale}s, in
+        thousands of persons.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        {\market}. This is included for comparative
+        purposes. Presumably, the {\market} represents something of
+        value, or they could be used as a ``futures'' derivative, and
+        thus, it would be considered that there is a rate of revenue
+        returns.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Leading Economic Indicators}
+    \renewcommand{\directory}{../markets/us.indicators}
+    \input{../markets/us.indicators/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USINDICATORS}
+        \renewcommand{\SETLABELQ}{\LABPRE:USINDICATORSQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:USINDICATORS}
+
+        \idx{United States Department of Commerce}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Department
+        of Commerce, 1980---1994, by {\timescale}s, as an index of
+        1987 = 100.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        {\market}. This is included for comparative
+        purposes. Presumably, the {\market} represent something of
+        value, or they could be used as a ``futures'' derivative, and
+        thus, it would be considered that there is a rate of revenue
+        returns.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States M2}
+    \renewcommand{\directory}{../markets/us.m2}
+    \input{../markets/us.m2/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USM2}
+        \renewcommand{\SETLABELQ}{\LABPRE:USM2Q}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:USM2}
+
+        \idx{United States Federal Reserve Board}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Federal
+        Reserve Board, 1980---1994, by {\timescale}s, in billions of
+        1987 dollars, US.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        {\market}. This is included for comparative
+        purposes. Presumably, the {\market} represents something of
+        value, or it could be used as a ``futures'' derivative, and
+        thus, it would be considered that there is a rate of revenue
+        returns.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{United States Treasury Bill Returns}
+    \renewcommand{\directory}{../markets/us.tbill}
+    \input{../markets/us.tbill/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:USTBILL}
+        \renewcommand{\SETLABELQ}{\LABPRE:USTBILLQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:USTBILL}
+
+        \idx{United States Federal Reserve Board}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{Data from the United States Federal
+        Reserve Board, 1980---1994, by {\timescale}s, in percent. The
+        time series, which was Treasury Bill rate of returns, in
+        percent per year, was converted to cumulative growth per month
+        by converting each element in the time series to a fraction,
+        dividing by 12, and adding 1. The previous value of cumulative
+        returns was multiplied by this number for the next value of
+        cumulative returns.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        {\market}. This is included for comparative purposes. The data
+        file actually represents how the value of an investment in
+        {\market} Returns has increased, over the years.
+
+        \input{fraction.tex}
+
+        \subsubsection{Observations on the Time Series Increments Analysis}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin}
+    \input{../markets/tscoin/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:CT}
+        \renewcommand{\SETLABELQ}{\LABPRE:CTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:CT}
+
+        \subidx{tscoin}{program}
+        \subidx{programs}{tscoin}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoin}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoin -p 0.6 300 > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of 300 elements, with a
+        Shannon probability of 0.6.  The data is by {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Non-optimal Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin.tsunfairbrownian}
+    \input{../markets/tscoin.tsunfairbrownian/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NOCT}
+        \renewcommand{\SETLABELQ}{\LABPRE:NOCTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NOCT}
+
+        \idx{tscoin}
+        \idx{tsunfairbrownian}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoin}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoin -p 0.7 300 > data.1
+        \vspace{0.1in}
+
+        \noindent to make a time series of 300 elements, with a
+        Shannon probability of 0.7.  In addition, the program {\it
+        tsunfairbrownian}\/ was run on the data file with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tsunfairbrownian -f 0.03 data.1 > data
+        \vspace{0.1in}
+
+        \noindent to make a time series with a known non-optimal
+        investment strategy.  The data is by {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Time Sampled Non-optimal Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin.tsunfairbrownian.tssample}
+    \input{../markets/tscoin.tsunfairbrownian.tssample/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:TSNOCT}
+        \renewcommand{\SETLABELQ}{\LABPRE:TSNOCTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:TSNOCT}
+
+        \idx{tscoin}
+        \idx{tsunfairbrownian}
+        \idx{tssample}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tssample}
+        \subidx{tssample}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoin}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoin -p 0.70 1500 > data.1
+        \vspace{0.1in}
+
+        \noindent to make a time series of 1500 elements, with a
+        Shannon probability of 0.70.  In addition, the program {\it
+        tsunfairbrownian}\/ was run on the data file with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tsunfairbrownian -f 0.0894 data.1 > data.2
+        \vspace{0.1in}
+
+        \noindent to make a time series with a known non-optimal
+        investment strategy. The value, 0.0894 was calculated by
+        reducing the desired value, 0.2, by a factor of
+        $\frac{1}{\sqrt{5}}$, where the sampling occurs every fifth
+        time series element. Then the program {\it tssample}\/ was run
+        with the following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tssample -i 5  data.2 > data
+        \vspace{0.1in}
+
+        \noindent to time sample every fifth element in the time
+        series to make a time sampled time series with a known non
+        optimal investment strategy. The data is by {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Time Sampled Coin Tossing Game}
+    \renewcommand{\directory}{../markets/tscoin.tssample}
+    \input{../markets/tscoin.tssample/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:TSCT}
+        \renewcommand{\SETLABELQ}{\LABPRE:TSCTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:TSCT}
+
+        \idx{tscoin}
+        \idx{tsunfairbrownian}
+        \idx{tssample}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{programs}{tssample}
+        \subidx{tssample}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoin}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoin -p 0.5447 1500 > data.1
+        \vspace{0.1in}
+
+        \noindent to make a time series of 1500 elements, with a
+        Shannon probability of 0.5447. Since $f = 2P - 1$, where the
+        desired Shannon probability, $P$, is $0.6$, $f$ must be
+        reduced by a factor of $\frac{1}{\sqrt{5}}$. Reducing $f$ from
+        $0.2$ to $0.0894$, and recalculating $P$ to be $0.5447$.  Then
+        the program {\it tssample}\/ was run with the following
+        parameters:
+
+        \vspace{0.1in}
+        {\noindent}tssample -i 5 data.1 > data
+        \vspace{0.1in}
+
+        \noindent to time sample every fifth element in the time
+        series to make a time sampled time series.  The data is by
+        {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Simulated Shannon Probability of 0.6 Game}
+    \renewcommand{\directory}{../markets/tsunfairbrownian.exponential}
+    \input{../markets/tsunfairbrownian.exponential/parameters.tex}
+    \renewcommand{\timescale}{time units}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:TSTE}
+        \renewcommand{\SETLABELQ}{\LABPRE:TSTEQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:TSTE}
+
+        \subidx{tscoin}{program}
+        \subidx{programs}{tscoin}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{programs}{tscoin}
+        \subidx{tscoin}{program}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tsunfairbrownian}\/ was run on the time series,
+        ``data.original,'' constructed with a text editor, by
+        replicating the following fragment 1000 times:
+
+            \vspace{0.1in}
+            \noindent\hspace*{1.0in}0.2\\
+            \noindent\hspace*{1.0in}-0.2\\
+            \noindent\hspace*{1.0in}0.2\\
+            \noindent\hspace*{1.0in}-0.2\\
+            \noindent\hspace*{1.0in}0.2\\
+            \vspace{0.1in}
+
+        \noindent to produce a time series data file of 5000 records
+        that ``oscillates,'' on a period of 5, with a Shannon
+        probability of 3 / 5 = 0.6. A data file was made by running:
+
+        \vspace{0.1in}
+        \noindent tsunfairbrownian -d -i 1.0 -f 0.2 data.original > data
+        \vspace{0.1in}
+
+        \noindent since $f = 2P - 1$, where $P = 0.6, f = 0.2$. An $i$
+        of $1.0$ was used simulate an exponential beginning with
+        $e^{0}$. After running the {\it tsunfairbrownian}\/ program to
+        make the data time series, and the program {\it tsfraction}\/,
+        the sequence will be:
+
+            \vspace{0.1in}
+            \noindent\hspace*{1.0in}0.2\\
+            \noindent\hspace*{1.0in}-0.2\\
+            \noindent\hspace*{1.0in}0.2\\
+            \noindent\hspace*{1.0in}-0.2\\
+            \noindent\hspace*{1.0in}0.2\\
+            \vspace{0.1in}
+
+        \noindent Note that there are $3 +0.2$'s for every $2 -.2$s in
+        $5$ {\timescale}s, for an average of $+0.2 / 5 = 0.04$.  The
+        rationale for the numbers, $+0.2$ and $-0.2$, is that it is
+        the optimum for a Shannon probability of $P = 0.6$, since $0.2
+        = 2P - 1$, (which also equals $P - (1 - P)$,) where $2 \cdot
+        0.6 - 1 = 0.2$, which is the optimal amount of the cumulative
+        returns to wager with an unfair coin that has a probability of
+        $0.6$ of a win, ie., $3$ out of $5$. If the $n-1$'th value in
+        the time series is subtracted from the $n$'th value, and the
+        value of this subtraction is then divided by the $n-1$'th
+        value, then this quotient should be either $+0.2$ or $-0.2$
+        depending on the whether the wager was won or lost.
+
+        \noindent Under this scenario, $P = 0.6$, and the returns are:
+
+        \begin{equation}
+            2^{0.029049406} = e^{0.020135514}
+        \end{equation}
+
+        \subidx{programs}{tsshannon}
+        \subidx{tsshannon}{program}
+        \noindent which can be verified with the program {\it
+        tsshannon}\/, and are consistent
+        with~\cite[pp. 128]{Schroeder}.
+
+        Using tsunfairbrownian -f 0.2 will construct an exponential
+        data time series that is known to be optimum, ie., a Shannon
+        probability of 0.6 with an optimal wager fraction of 0.2, with
+        an ``approximate'' Brownian motion noise content-albeit not
+        random. For an analytical insight, see
+        appendix~\ref{tutorial}, Section~\ref{simple}. It is useful
+        for evaluating methodologies.  The data is by {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \subsubsection{Observations on the Hurst Coefficient Analysis}
+
+            Note that both the Hurst coefficient and H parameter
+            graphs indicate that the time series data set does not
+            contain a random process---which is to be anticipated,
+            since the data set is periodic.
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Coins Tossing Game}
+    \renewcommand{\directory}{../markets/tscoins}
+    \input{../markets/tscoins/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:CST}
+        \renewcommand{\SETLABELQ}{\LABPRE:CSTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:CST}
+
+        \subidx{tscoins}{program}
+        \subidx{programs}{tscoins}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoins}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoins -p 0.6 300 > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of 300 elements, with a
+        Shannon probability of 0.6.  The data is by {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Non-optimal Coins Tossing Game}
+    \renewcommand{\directory}{../markets/tscoins-f}
+    \input{../markets/tscoins-f/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NOCST}
+        \renewcommand{\SETLABELQ}{\LABPRE:NOCSTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NOCST}
+
+        \subidx{tscoins}{program}
+        \subidx{programs}{tscoins}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoins}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoins -p 0.6 -f 0.03 300 > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of 300 elements, with a
+        Shannon probability of 0.6 and a known non-optimal investment
+        strategy.  The data is by {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Non-optimal Logistic Coins Tossing Game}
+    \renewcommand{\directory}{../markets/tscoins-b}
+    \input{../markets/tscoins-b/parameters.tex}
+    \renewcommand{\timescale}{tosses}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+        \subidx{market}{non-linearity}
+        \subidx{non-linearity}{market}
+        \subidx{logistic}{function}
+
+        \renewcommand{\SETLABEL}{\LABPRE:NOLCST}
+        \renewcommand{\SETLABELQ}{\LABPRE:NOLCSTQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:NOLCST}
+
+        \subidx{tscoins}{program}
+        \subidx{programs}{tscoins}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tscoins}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tscoins -p -b 0.00000005 0.6 -b 0.03 1000 > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of 1000 elements, with a
+        Shannon probability of 0.6 and a known non-optimal investment
+        strategy.  The non-linearity term of the logistic function is
+        $0.00000005$. Otherwise, the first 300 elements of the
+        simulation is approximately the same as in
+        Section~\ref{\LABPRE:NOCST}.  Note that there is some
+        possibility that the analytical techniques used could be used
+        to determine the maturity of an industrial market.  See
+        Chapter~\ref{general}, Section~\ref{nlextend}. The data is by
+        {\timescale}.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Simulated Industrial Market}
+    \renewcommand{\directory}{../markets/tsmarket}
+    \input{../markets/tsmarket/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:SIM}
+        \renewcommand{\SETLABELQ}{\LABPRE:SIMQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:SIM}
+
+        \subidx{tsmarket}{program}
+        \subidx{programs}{tsmarket}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tsmarket}\/ was run to make a time series data file, with the
+        following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tsmarket -p 0.55 -c 11 300 > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of 300 elements, with a
+        Shannon probability of 0.55, and 11 companies participating in
+        the market, each with equal market share, and operating
+        optimally.  The data is by {\timescale}s.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Discreet Logistic Function}
+    \renewcommand{\directory}{../markets/tsdlogistic}
+    \input{../markets/tsdlogistic/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:DLF}
+        \renewcommand{\SETLABELQ}{\LABPRE:DLFQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:DLF}
+
+        \subidx{tsdlogistic}{program}
+        \subidx{programs}{tsdlogistic}
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the program {\it
+        tsdlogistic}\/ was run to make a time series data file, with
+        the following parameters:
+
+        \vspace{0.1in}
+        {\noindent}tsdlogistic 4 1 315 | awk '{if ($1 > 0.0) print $1}' > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of 300 elements, with no
+        element equal to zero. The data is by {\timescale}s.}.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. This is included for
+        ``theoretical'' comparative purposes---of particular interest
+        is the deterministic map in Figure~\ref{\SETLABEL:TD}.
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} does not represent a
+            cumulative sum/integration of a random process that has a
+            Gaussian distribution, (ie., satisfies the Gaussian
+            increments property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to discount the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+    \renewcommand{\market}{Simulated Equity Market Index}
+    \renewcommand{\directory}{../markets/tsgaussian.tsmath.tsmath.tsunfraction}
+    \input{../markets/tsgaussian.tsmath.tsmath.tsunfraction/parameters.tex}
+    \renewcommand{\timescale}{month}
+    \subidx{market}{\market}
+    \idx{\market}
+
+    \section{\market}
+
+        \renewcommand{\SETLABEL}{\LABPRE:SEMIX}
+        \renewcommand{\SETLABELQ}{\LABPRE:SEMIXQ}
+        \label{\SETLABEL}
+        \renewcommand{\SETLABELREF}{\LABPREREF:SEMIX}
+
+        \subidx{tsunfraction}{program}
+        \subidx{programs}{tsunfraction}
+        \subidx{tsgaussian}{program}
+        \subidx{programs}{tsgaussian}
+        \subidx{tsmath}{program}
+        \subidx{programs}{tsmath}
+
+        For the analysis, the data was in the directory
+        {\directory}\footnote{As a simulation model, the programs {\it
+        tsgaussian}\/, {\it tsmath}\/, and {\it tsunfraction}\/ were
+        run to make a time series data file, with the following
+        parameters:
+
+        \vspace{0.1in}
+            {\noindent}tsgaussian 5000 | tsmath -t -m 0.01 | tsmath -t -a 0.0003 | tsunfraction > data
+        \vspace{0.1in}
+
+        \noindent to make a time series of $5000$ elements, with a
+        Shannon probability of $0.515$, to demonstrate an alternative
+        method of constructing fractal time series. The average of the
+        normalized increments is $0.0003$, and the root mean square
+        value of the normalize increments is $0.01$, which is
+        ``typical'' for an equity market time series.  The data is by
+        {\timescale}s.}.
+
+        The program {\it tsunfraction}\/, which is described briefly
+        in appendix~\ref{programs}, provides the inverse function of
+        the program {\it tsunfraction}\/. This allows a time series
+        that contains normalized increments to be constructed, and
+        then, cumulative summed into a fractal time series by the
+        program {\it tsunfraction}\/.
+
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF}. Note that in this analysis, the
+        rate of revenue returns means the increase or decrease in the
+        cumulative sum of the {\market}. This is included for
+        ``theoretical'' comparative purposes.
+
+        \input{fraction.tex}
+
+            Figure~\ref{\SETLABEL:NH} would seem to indicate that the
+            time series data for the {\market} represents a cumulative
+            sum/integration of a random process that has a Gaussian
+            distribution, (ie., satisfies the Gaussian increments
+            property of fractional Brownian
+            motion~\cite[pp. 250]{Crownover},) tending to justify the
+            assumption that the time series data represents fractional
+            Brownian motion.
+
+        \input{instant.tex}
+
+        \input{logistic.tex}
+
+        \input{hurst.tex}
+
+        \input{fiscal.tex}
+
+        \input{companies.tex}
+
+        \input{operations.tex}
+
+        \input{simulation.tex}
+
+        \input{maximum.tex}
+
+        \input{verification.tex}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

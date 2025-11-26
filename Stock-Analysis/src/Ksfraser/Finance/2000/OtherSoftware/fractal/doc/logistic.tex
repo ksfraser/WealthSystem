@@ -1,0 +1,113 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: logistic.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: logistic.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Logistic Analysis}
+        \label{\SETLABEL:LA}
+
+        \subidx{\market}{Logistic function analysis}
+        \subidx{time series}{logistic function}
+        \subidx{logistic function}{time series}
+        \subidx{time series}{increments}
+        \subidx{time series}{analysis}
+        \subidx{cumulative sum}{analysis}
+        \subidx{analysis}{cumulative sum}
+        \subidx{analysis}{random process}
+        \subidx{random process}{analysis}
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF:LAA}.  Figure~\ref{\SETLABEL:LA1} is
+        a graph of the logistic function estimates of the time series
+        data for the {\market}. The reader is cautioned that these
+        graphs are constructed using the method suggested in
+        Chapter~\ref{general}, Section~\ref{nlextend} and enormous
+        precision is required for adequate prediction of the logistic
+        function,~\cite{Modis}. Particularly, the non-linear term will
+        usually require intervention to produce a practical fit to the
+        data. In addition, there are numerical stability issues with
+        logistic function methodologies\footnote{For example, in
+        Figures~\ref{\SETLABEL:LA1} and~\ref{\SETLABEL:LA2}, if the
+        non-linear term, $b$, was greater than zero, it was set to
+        zero to produce the graphs. See Section~\ref{\SETLABELREF:LAA}
+        for the actual derived values. In other cases, the magnitude
+        of $b$ was too large, resulting in a graph that was decreasing
+        as a function of time}.  The methodology should be regarded as
+        ``fragile.'' It is included for completeness.
+
+        \idx{least squares approximation}
+        Figure~\ref{\SETLABEL:LA1} is a graph of the logistic function
+        for the time series data presented in
+        Figure~\ref{\SETLABEL:TS}. The data presented was made by
+        running the program {\it tsdlogistic}\/, which is described
+        briefly in Appendix~\ref{programs}, on the parameters
+        extracted from the time series data as suggested in
+        Figure~\ref{\SETLABEL:TF}. The program {\it tslsq}\/ was used
+        to derive the constant and the slope of the normalized
+        increments of the data presented in Figure~\ref{\SETLABEL:TF}.
+        Figure~\ref{\SETLABEL:LA2} is the same graph, but with the
+        time scale expanded by a factor of two.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tslsq-p.tsdlogistic.eps}
+                    \caption[{\market}, logistic function
+                        estimates.]{{\market}, logistic function
+                        estimates, provided by running the {\it
+                        tslsq}\/ program on the normalized increments
+                        presented in Figure~\ref{\SETLABEL:TF} with
+                        the -p option. These parameters were used as
+                        arguments to the {\it tsdlogistic}\/ program.}
+                    \label{\SETLABEL:LA1}
+                    \label{\SETLABELQ:LA1}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tslsq-p.tsdlogistic2.eps}
+                    \caption[{\market}, logistic function
+                        estimates.]{{\market}, logistic function
+                        estimates of Figure~\ref{\SETLABEL:LA1} with
+                        the time scale expanded by a factor of two.}
+                    \label{\SETLABEL:LA2}
+                    \label{\SETLABELQ:LA2}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

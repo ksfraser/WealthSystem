@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/geniustrader/!svn/ver/719/trunk/Scripts
+END
+report_old.ash
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/453/trunk/Scripts/report_old.ash
+END
+display_system.pl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/691/trunk/Scripts/display_system.pl
+END
+backtest_multi.pl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/719/trunk/Scripts/backtest_multi.pl
+END
+graphic.pl
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/689/trunk/Scripts/graphic.pl
+END
+analyze_backtest.pl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/630/trunk/Scripts/analyze_backtest.pl
+END
+scan.pl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/geniustrader/!svn/ver/658/trunk/Scripts/scan.pl
+END
+backtest_many.pl
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/715/trunk/Scripts/backtest_many.pl
+END
+manage_portfolio.pl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/630/trunk/Scripts/manage_portfolio.pl
+END
+anashell.pl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/453/trunk/Scripts/anashell.pl
+END
+report_summary.ash
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/453/trunk/Scripts/report_summary.ash
+END
+OptimizeGT.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/488/trunk/Scripts/OptimizeGT.pm
+END
+backtest.pl
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/716/trunk/Scripts/backtest.pl
+END
+display_indicator.pl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/658/trunk/Scripts/display_indicator.pl
+END
+select_combination.pl
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/608/trunk/Scripts/select_combination.pl
+END
+display_signal.pl
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/658/trunk/Scripts/display_signal.pl
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/453/trunk/Scripts/.cvsignore
+END
+test.xml
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/geniustrader/!svn/ver/453/trunk/Scripts/test.xml
+END

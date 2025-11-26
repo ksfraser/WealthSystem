@@ -1,0 +1,16 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Reorder Columns</th>
+    </tr>
+    <tr>
+      <td><select name="column" size="20" multiple>$column_options</select></td>
+      <td valign="middle">
+        <input type="submit" name="location" value="To Top"><br><br>
+        <input type="submit" name="location" value="Up"><br><br>
+        <input type="submit" name="location" value="Down"><br><br>
+        <input type="submit" name="location" value="To Bottom"><br><br>
+      </td>
+    </tr>
+  </table>
+</form>

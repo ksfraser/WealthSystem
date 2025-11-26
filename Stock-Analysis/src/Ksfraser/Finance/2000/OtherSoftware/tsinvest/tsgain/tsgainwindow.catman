@@ -1,0 +1,99 @@
+TSGAINWINDOW(1)                                                TSGAINWINDOW(1)
+
+
+
+NNAAMMEE
+       tsgainwindow - find the windowed gain of a time series
+
+SSYYNNOOPPSSIISS
+       tsgainwindow [-t] [-w size] [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsgainwindow  is  for  finding the windowed gain of a time series.  The
+       value of a sample in the time series added to the cumulative sum of the
+       samples, and is squared and added to the cumulative sum of squares, the
+       Shannon probability, P, calculated using:
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+       where rms is the root mean square of the marginal returns, and  avg  is
+       the average of the marginal returns, and the gain, G, calculated using:
+
+                        P            P - 1
+           G = (1 + rms)  * (1 - rms)
+
+       to make a new time series. The new time series is printed to stdout.
+
+       The input file structure is a text file consisting of records, in  tem-
+       poral  order,  one  record  per  time series sample.  Blank records are
+       ignored, and comment records are signified by a '#'  character  as  the
+       first  non  white space character in the record. Data records must con-
+       tain at least one field, which is the data value of the sample, but may
+       contain  many fields-if the record contains many fields, then the first
+       field is regarded as the sample's time, and the last field as the  sam-
+       ple's value at that time.
+
+OOPPTTIIOONNSS
+       --tt     Sample's time will be included in the output time series.
+
+       --ww ssiizzee
+              Specifies the window size for the running average.
+
+       --vv     Print the version and copyright banner of the program.
+
+       ffiilleennaammee
+              Input filename.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsderivative(1),   tshcalc(1),   tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),     tsrmswindow(1),     tsshannonstock(1),    tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),  tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),     tstradesim(1),     tsrunlength(1),      tsunshannon(1),
+       tsrootmean(1),  tsrunmagnitude(1),  tskurtosis(1), tskurtosiswindow(1),
+       tsrootmeanscale(1),  tsscalederivative(1),  tsgain(1),  tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 18, 2006                TSGAINWINDOW(1)

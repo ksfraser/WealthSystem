@@ -1,0 +1,22 @@
+<form method="post" action="$save_page">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th>Edit Worksheet Information</th>
+    </tr>
+    <tr>
+      <td><b>Worksheet Name:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="worksheets.name" value="$worksheets.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Description:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="worksheets.description" value="$worksheets.description" class="awf_inputtext awf_wide_input"></td>
+    </tr>
+    <tr>
+      <td align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

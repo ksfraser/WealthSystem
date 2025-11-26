@@ -1,0 +1,104 @@
+TSUNFAIRFRACTIONAL(1)                                    TSUNFAIRFRACTIONAL(1)
+
+
+
+NNAAMMEE
+       tsunfairfractional - unfair returns of a time series
+
+SSYYNNOOPPSSIISS
+       tsunfairfractional [-d] [-f fraction] [-F] [-i value]
+                          [-l lower] [-p probability] [-t]
+                          [-u upper] [-v] filename
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsunfairfractional  is  for generating unfair returns of a time series.
+       The idea is to produce the returns of a time series which  is  weighted
+       unfairly,  by  a  Shannon probability, p. The input time series is pre-
+       sumed to have a Gaussian distribution. The main function of  this  pro-
+       gram  is  regression  scenario  verification-given  an  empirical  time
+       series, a Shannon probability, and  a  "wager"  fraction,  (which  were
+       probably  derived  from  the program tsshannon,) speculative market pro
+       forma performance can be analyzed. The cumulative sum process is  frac-
+       tional Brownian in nature.
+
+       Note: Conceptually, this program is used to ‘‘weight’’ the returns of a
+       time series with a Gaussian distribution,  ie.,  produce  a  fractional
+       Brownian motion time series, as opposed to a Brownian distribution. The
+       program should be regarded as experimental, and used with caution.
+
+
+OOPPTTIIOONNSS
+       --dd     The input file is a derivative instead of an integral.
+
+       --ff ffrraaccttiioonn
+              Fraction of reserves to be wagered, (0 <= fraction <= 1).
+
+       --FF     output time series is fraction of reserves wagered
+
+       --ii vvaalluuee
+              Initial value of output time series (ie., initial reserves).
+
+       --ll lloowweerr
+              lower limit to interval losses
+
+       --pp pprroobbaabbiilliittyy
+              Shannon probability, (0.5 <= probability <= 1.0).
+
+       --tt     Sample’s time will be included in the output time series.
+
+       --uu uuppppeerr
+              upper limit to interval gains
+
+       --vv     Print the version and copyright banner of the program.
+
+
+       WWAARRNNIINNGGSS
+
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1),    tsstockwager(1),    tsshannonwindow(1),    tsmath(1),
+       tsavgwindow(1), tspole(1), tsdft(1), tsbinomial(1), tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),     tsshannonstock(1),     tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),    tsscalederivative(1),    tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 27, 2006          TSUNFAIRFRACTIONAL(1)

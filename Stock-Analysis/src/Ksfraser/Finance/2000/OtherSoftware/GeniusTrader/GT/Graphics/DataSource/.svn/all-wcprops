@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Graphics/DataSource
+END
+PricesColor.pm
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/PricesColor.pm
+END
+Close.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/Close.pm
+END
+PortfolioEvaluation.pm
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/PortfolioEvaluation.pm
+END
+Prices.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/Prices.pm
+END
+Systems.pm
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/Systems.pm
+END
+Volume.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/Volume.pm
+END
+GenericIndicatorResults.pm
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/DataSource/GenericIndicatorResults.pm
+END
+SingleIndicator.pm
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/geniustrader/!svn/ver/474/trunk/GT/Graphics/DataSource/SingleIndicator.pm
+END

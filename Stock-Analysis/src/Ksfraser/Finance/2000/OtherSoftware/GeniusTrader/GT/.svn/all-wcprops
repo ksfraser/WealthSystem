@@ -1,0 +1,197 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svnroot/geniustrader/!svn/ver/720/trunk/GT
+END
+PricesTools.pm
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/PricesTools.pm
+END
+Serializable.pm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/503/trunk/GT/Serializable.pm
+END
+Brokers.pm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Brokers.pm
+END
+Systems.pm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/541/trunk/GT/Systems.pm
+END
+Registry.pm
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/geniustrader/!svn/ver/579/trunk/GT/Registry.pm
+END
+List.pm
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/geniustrader/!svn/ver/688/trunk/GT/List.pm
+END
+Report.pm
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/geniustrader/!svn/ver/713/trunk/GT/Report.pm
+END
+CacheValues.pm
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/CacheValues.pm
+END
+MoneyManagement.pm
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/MoneyManagement.pm
+END
+DB.pm
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svnroot/geniustrader/!svn/ver/665/trunk/GT/DB.pm
+END
+Eval.pm
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/geniustrader/!svn/ver/594/trunk/GT/Eval.pm
+END
+TradeFilters.pm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/TradeFilters.pm
+END
+CloseStrategy.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/CloseStrategy.pm
+END
+Calculator.pm
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/geniustrader/!svn/ver/655/trunk/GT/Calculator.pm
+END
+DateTime.pm
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/geniustrader/!svn/ver/718/trunk/GT/DateTime.pm
+END
+Indicators.pm
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/geniustrader/!svn/ver/688/trunk/GT/Indicators.pm
+END
+Signals.pm
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals.pm
+END
+Tools.pm
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svnroot/geniustrader/!svn/ver/646/trunk/GT/Tools.pm
+END
+.cvsignore
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/.cvsignore
+END
+OrderFactory.pm
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/OrderFactory.pm
+END
+Analyzers.pm
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/geniustrader/!svn/ver/575/trunk/GT/Analyzers.pm
+END
+PortfolioManager.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/480/trunk/GT/PortfolioManager.pm
+END
+ArgsTree.pm
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/ArgsTree.pm
+END
+Portfolio.pm
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/geniustrader/!svn/ver/503/trunk/GT/Portfolio.pm
+END
+Dependency.pm
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/geniustrader/!svn/ver/628/trunk/GT/Dependency.pm
+END
+SystemManager.pm
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/SystemManager.pm
+END
+Prices.pm
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svnroot/geniustrader/!svn/ver/717/trunk/GT/Prices.pm
+END
+Conf.pm
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svnroot/geniustrader/!svn/ver/690/trunk/GT/Conf.pm
+END
+TODO
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/TODO
+END
+MarketCalculator.pm
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/MarketCalculator.pm
+END
+BackTest.pm
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/geniustrader/!svn/ver/720/trunk/GT/BackTest.pm
+END
+MetaInfo.pm
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/MetaInfo.pm
+END

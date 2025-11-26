@@ -1,0 +1,106 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: preface.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: preface.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+\chapter*{Preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+    This manuscript is a compilation of my un-edited personal notes,
+    written over two decades in which I was involved in operational
+    management in the electronics industry. One of the issues
+    addressed in industrial operations is the dynamics of the market
+    place. This manuscript describes an attempt at ``modeling,'' at
+    least in a qualitative sense, the dynamics of the North American
+    Electronics Industry. Being an engineer by academic tenure, I
+    chose fractal methodologies, since a large formal infrastructure
+    exists, and it is a ``method of choice,'' where applicable. The
+    latter part of my career has been spent in the financial
+    community, where such entropic methods have been used,
+    controversially, in such areas as ``programmed trading'' in the
+    capital markets. The reader should be advised that such methods
+    remain controversial, and applications to industrial markets, will
+    no doubt, add to the controversy. How applicable the methodology
+    is found to be will be left to the reader's discretion.
+
+    Most of the presentation is in chronological order. The
+    derivations in chapters~\ref{general} and~\ref{methodology} were
+    done over the span of the last decade and a half, and the sections
+    are, roughly, in temporal order. The reader should be advised that
+    there were paradigm shifts and symbol ambiguities as time
+    progressed, and that chapters~\ref{general} and~\ref{methodology}
+    are in need of a total rework---they are offered in that context,
+    and the reader should be advised that there are, almost
+    inevitably, errors in the presentation. (Specifically,
+    Section~\ref{samplets} in Chapter~\ref{general} regarding time
+    sampled time series should be regarded with scepticism and should
+    be used with caution---it is unfortunate that a clear derivation
+    of the effect of sampling on time series has not been addressed
+    adequately, since there are many issues left open at this time.)
+
+    The programs used in the analysis were written by the author, and
+    should be considered as ``fragile,'' since there has never been
+    any intention to turn them into ``commercial'' products. They are
+    offered in that context, and the reader should be advised that
+    there is little or no provision for handling numerical exceptions,
+    and no attention given to quality assurance.  The ``C'' language
+    sources to the programs are available, as is, by sending an
+    electronic mail to john-archive-request@johncon.johncon.com with a
+    subject of ``archive get fractal''. The source distribution also
+    contains the {\LaTeX} sources to this manuscript.
+
+    The other programs used in the composition of this manuscript are
+    all freely available by anonymous ftp. For the list of programs,
+    and availability on the Internet, see the colophon.
+
+\def\thismonth % convert numeric month to month name
+    {
+        \ifcase\month
+            \or January\or February\or March\or April\or May\or June
+            \or July\or August\or September\or October\or November\or December
+        \fi
+    }
+
+\begin{flushright}
+    ---J. C. C.\\
+\end{flushright}
+
+\begin{flushleft}
+    \thismonth, \number\year \\
+\end{flushleft}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

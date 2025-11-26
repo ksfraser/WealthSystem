@@ -1,0 +1,106 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+    http://www.johncon.com/ntropix/
+    http://www.johncon.com/
+
+------------------------------------------------------------------------------
+
+File inventory:
+
+    INSTALL explains how to compile and install the tsinvest program
+    suite.
+
+    MANIFEST this file.
+
+    Makefile is the makefile script that compiles the tsinvest program
+    suite.
+
+    QA.METRICS is listing of the quality assurance process and metrics
+    on the tsinvest suite of programs.
+
+    README is a general description, quick start, demonstration, and
+    general comments on the tsinvest program suite.
+
+    tsinvest.c is the C source code for the equity investment program.
+
+    tsinvest.1 is the Unix manual, (man(1)), page for the tsinvest
+    program.
+
+    tsinvestsim.c is the C source code for the equity market
+    simulation program.
+
+    tsinvestsim.1 is the Unix manual, (man(1)), tsinvestsim program.
+
+    tsshannoneffective.c is the C source code for the program that
+    uses statistical estimation techniques to compute the maximum
+    effective Shannon probability that can be used. It is a fragment
+    from the tsinvest program, and is included separately as a
+    tutorial on the large data set required for accurate analysis of
+    equity values.
+
+    tsshannoneffective.1 is the Unix manual, (man(1)), page for the
+    tsshannoneffective program.
+
+    tsinvestdb.c is a C source code template for programs that
+    manipulate the tsinvest(1) time series database(s). It contains
+    the hash algorithm look up tables for expedient development of
+    specialized database systems. The example application is a syntax
+    verification program for the tsinvest(1) time series database
+    format and structure.
+
+    tsinvestdb.1 is the Unix manual, (man(1)), page for the tsinvestdb
+    program.
+
+    csv2tsinvest.c is a C source code template for programs that that
+    convert different time series formats and structures to the
+    tsinvest(1) time series database(s) format.  The example
+    application is the Yahoo! historical stock price database
+    spreadsheet format, csv, available from http://chart.yahoo.com/d
+    by specifying "Download Spreadsheet Format" at the bottom of the
+    page when requesting the time series for a stock.
+
+    csv2tsinvest.1 is the Unix manual, (man(1)), page for the
+    csv2tsinvest program.
+
+    stocks is a daily fragment of the American stock exchanges,
+    consisting of 454 equities, from January 1, 1993, to June 6, 1996,
+    as supplied by http://www.ai.mit.edu/stocks.html.
+
+    stocks.names is the names, and corporate web sites, of various
+    equities in the file, stocks, as supplied by
+    http://www.ai.mit.edu/stocks.html.
+
+    stocks.symbols is the names, and ticker symbols of various
+    equities in the file, stocks, as supplied by
+    http://www.ai.mit.edu/stocks.html.
+
+    stocks.copyright is correspondence between Mark Torrance of
+    http://www.ai.mit.edu/stocks.html and myself concerning copyright
+    issues of the reformatted historical equity data contained in the
+    file, stocks.
+
+    tests is a directory that contains data files for the tsinvestsim
+    program for regression testing of the tsinvest and tsinvestsim
+    programs.
+
+John Conover
+john@email.johncon.com
+January 7, 2006

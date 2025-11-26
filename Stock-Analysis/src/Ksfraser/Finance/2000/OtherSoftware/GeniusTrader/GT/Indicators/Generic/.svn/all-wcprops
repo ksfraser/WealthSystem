@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svnroot/geniustrader/!svn/ver/626/trunk/GT/Indicators/Generic
+END
+Sum.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/Sum.pm
+END
+Divide.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/621/trunk/GT/Indicators/Generic/Divide.pm
+END
+Abs.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/598/trunk/GT/Indicators/Generic/Abs.pm
+END
+Diff.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/Diff.pm
+END
+SumDownDiffs.pm
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/SumDownDiffs.pm
+END
+PeriodAgo.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/PeriodAgo.pm
+END
+ByName.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/573/trunk/GT/Indicators/Generic/ByName.pm
+END
+MinInPeriod.pm
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/geniustrader/!svn/ver/493/trunk/GT/Indicators/Generic/MinInPeriod.pm
+END
+SignalLength.pm
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/SignalLength.pm
+END
+MaxInPeriod.pm
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/geniustrader/!svn/ver/493/trunk/GT/Indicators/Generic/MaxInPeriod.pm
+END
+Container.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/626/trunk/GT/Indicators/Generic/Container.pm
+END
+Min.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/Min.pm
+END
+SumIf.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/SumIf.pm
+END
+Cum.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/570/trunk/GT/Indicators/Generic/Cum.pm
+END
+Max.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/Max.pm
+END
+SumUpDiffs.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/SumUpDiffs.pm
+END
+Eval.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/Eval.pm
+END
+If.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/If.pm
+END
+Speed.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Indicators/Generic/Speed.pm
+END

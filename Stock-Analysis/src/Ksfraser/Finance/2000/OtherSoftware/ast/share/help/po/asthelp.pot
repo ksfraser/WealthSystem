@@ -1,0 +1,596 @@
+#: ../help/en/tooltip/test.po:2
+msgid "# Copyright (C) YEAR Free Software Foundation, Inc."
+msgstr ""
+
+#: ../help/en/tooltip/test.po:3
+msgid "# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR."
+msgstr ""
+
+#: ../help/en/tooltip/test.po:1
+msgid "# SOME DESCRIPTIVE TITLE"
+msgstr ""
+
+#: ../help/en/tooltip/test.po:5
+msgid "#, fuzzy"
+msgstr ""
+
+#: ../help/en/tooltip/test.po:18 ../help/en/tooltip/test.po:23
+msgid "#, no-wrap"
+msgstr ""
+
+#: ../help/en/tooltip/test.po:17
+msgid "#: adx:1"
+msgstr ""
+
+#: ../help/en/tooltip/test.po:22
+msgid "#: adx:2"
+msgstr ""
+
+#: ../help/en/empty/worksheet:9
+msgid "(e.g. Watch List, Dividends, EPS, ROE, etc). To get started using the worksheet"
+msgstr ""
+
+#: ../help/en/empty/report-viewer:6
+msgid "<a href=\"http://ast.sourceforge.net/index.php?option=com_content&task=view&id=41&Itemid=29\">AST installation guide</a>."
+msgstr ""
+
+#: ../help/en/tooltip/stoploss:2
+msgid "A stop loss is the maximum amount of money you are willing to loss on this security. It can be expressed as a price target (at which you will sell) or a percent of the current price."
+msgstr ""
+
+#: ../help/en/tooltip/trailing_stoploss:2
+msgid "A trailing stop loss is a percent stop loss that only moves up. A 10% trailing stop loss will always be set at 10% below the highest close the security has had."
+msgstr ""
+
+#: ../help/en/tooltip/adx:1
+msgid "ADX Indicator"
+msgstr ""
+
+#: ../help/en/empty/alerts.fr:1
+msgid "Alerts The Alerts feature in Advanced Stock Tracker allows to you"
+msgstr ""
+
+#: ../help/en/tooltip/alerts:1
+msgid "Alerts"
+msgstr ""
+
+#: ../help/en/tooltip/sysset_usagestats:1
+msgid "Anonymous Usage Statistics"
+msgstr ""
+
+#: ../help/en/tooltip/sysset_usagestats:2
+msgid "Anonymous usage statistics contains information such as the version of AST you are using, the number of users you have setup, or which markets you use. No personal data is sent, nor any information about your holdings. For more information, see usagestatsjob.cc source file."
+msgstr ""
+
+#: ../help/en/tooltip/checklisttype2:2
+msgid "Available options on the checklist will be Positive, Negative and Neutral which result in a score of 1, -1 and 0 respectively."
+msgstr ""
+
+#: ../help/en/tooltip/market_big_charts:1
+msgid "Big Charts Prefix"
+msgstr ""
+
+#: ../help/en/tooltip/csv:1
+msgid "CSV Output"
+msgstr ""
+
+#: ../help/en/tooltip/portfolio_category:1
+msgid "Category (Portfolio)"
+msgstr ""
+
+#: ../help/en/tooltip/perms:2
+msgid "Change the permissions for this user."
+msgstr ""
+
+#: ../help/en/tooltip/rules:2
+msgid "Change the rules for this game. This allows you to control what the players can do."
+msgstr ""
+
+#: ../help/en/tooltip/pass:2
+msgid "Change this user's password."
+msgstr ""
+
+#: ../help/en/tooltip/chart:1
+msgid "Chart"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:7
+msgid "Chart). You can setup a new comparison with different securities by clicking"
+msgstr ""
+
+#: ../help/en/tooltip/checklisttype1:1
+msgid "Checked / Unchecked"
+msgstr ""
+
+#: ../help/en/tooltip/checklist:1
+msgid "Checklists"
+msgstr ""
+
+#: ../help/en/tooltip/checks:1
+msgid "Checks"
+msgstr ""
+
+#: ../help/en/tooltip/csv:2
+msgid "Clicking this button will render the table below as a CSV file. CSV files can be opened by spreadsheets such as Microsoft Excel and many others."
+msgstr ""
+
+#: ../help/en/tooltip/consolidated:1
+msgid "Consolidated Portfolio"
+msgstr ""
+
+#: ../help/en/tooltip/consolidated:2
+msgid "Creating a consolidated portfolio allows you to combine one or more existing portfolios into a single portfolio."
+msgstr ""
+
+#: ../help/en/tooltip/commission:1
+msgid "Default Commission"
+msgstr ""
+
+#: ../help/en/tooltip/delete:2
+msgid "Delete this record."
+msgstr ""
+
+#: ../help/en/tooltip/delete:1
+msgid "Delete"
+msgstr ""
+
+#: ../help/en/tooltip/disable:2
+msgid "Disable this record."
+msgstr ""
+
+#: ../help/en/tooltip/disable:1
+msgid "Disable"
+msgstr ""
+
+#: ../help/en/tooltip/chart:2
+msgid "Draws a chart of the historical prices for this security."
+msgstr ""
+
+#: ../help/en/tooltip/editchecklist:1
+msgid "Edit Checklist"
+msgstr ""
+
+#: ../help/en/tooltip/rules:1
+msgid "Edit Rules"
+msgstr ""
+
+#: ../help/en/tooltip/edit:2
+msgid "Edit this record."
+msgstr ""
+
+#: ../help/en/tooltip/edit:1
+msgid "Edit"
+msgstr ""
+
+#: ../help/en/empty/marketinfo:1
+msgid "Empty Market Watch"
+msgstr ""
+
+#: ../help/en/empty/portfolio:1
+msgid "Empty Portfolio"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:1
+msgid "Empty Stock Comparison"
+msgstr ""
+
+#: ../help/en/empty/worksheet:1
+msgid "Empty Worksheet"
+msgstr ""
+
+#: ../help/en/tooltip/sysset_register:1
+msgid "Enable Registration"
+msgstr ""
+
+#: ../help/en/tooltip/commission:2
+msgid "Enter here the amount your broker charges to make a trade for you. This amount will automatically be filled in when you record transactions."
+msgstr ""
+
+#: ../help/en/tooltip/market_globe_suffix:1
+msgid "Globe Investor Suffix"
+msgstr ""
+
+#: ../help/en/tooltip/symbollookup:2
+msgid "If you don't know the symbol for the company you wish to chart enter the name of the company in the symbol field and press this button to lookup the symbol."
+msgstr ""
+
+#: ../help/en/tooltip/sysset_register:2
+msgid "If you enable this option anyone will be able to sign up for an AST account on your server. With this option disabled only the administrator can create new users."
+msgstr ""
+
+#: ../help/en/tooltip/targetprice:2
+msgid "In this field enter either 0 (to disable this feature) or enter the price you would expect this security to reach (i.e. the price you want to sell it for)."
+msgstr ""
+
+#: ../help/en/tooltip/scan:2
+msgid "Invoke the pattern scanner to search for technical buy and sell rules for this security."
+msgstr ""
+
+#: ../help/en/tooltip/market_id:1
+msgid "Market ID"
+msgstr ""
+
+#: ../help/en/tooltip/market_key:1
+msgid "Market Key"
+msgstr ""
+
+#: ../help/en/tooltip/mobileemail:1
+msgid "Mobile Email Address"
+msgstr ""
+
+#: ../help/en/tooltip/checks:2
+msgid "Modify the check lines on this checklist."
+msgstr ""
+
+#: ../help/en/tooltip/news:1
+msgid "News"
+msgstr ""
+
+#: ../help/en/empty/game-select:1
+msgid "No Competitions Available"
+msgstr ""
+
+#: ../help/en/empty/game-rules:1
+msgid "No Rules Set"
+msgstr ""
+
+#: ../help/en/empty/transactions:1
+msgid "No Transactions"
+msgstr ""
+
+#: ../help/en/tooltip/notes:1
+msgid "Note"
+msgstr ""
+
+#: ../help/en/tooltip/pass:1
+msgid "Password"
+msgstr ""
+
+#: ../help/en/tooltip/scan:1
+msgid "Pattern Scanner"
+msgstr ""
+
+#: ../help/en/tooltip/perms:1
+msgid "Permissions"
+msgstr ""
+
+#: ../help/en/tooltip/checklisttype2:1
+msgid "Positive / Neutral / Negative"
+msgstr ""
+
+#: ../help/en/tooltip/note:2
+msgid "Record information about this security such as your current thoughts. View previously taken notes as well as notes shared by other users."
+msgstr ""
+
+#: ../help/en/tooltip/notes:2
+msgid "Record information about this security such as your current thoughts."
+msgstr ""
+
+#: ../help/en/tooltip/trans:2
+msgid "Record transactions such as buys, sells, or dividends."
+msgstr ""
+
+#: ../help/en/empty/report-viewer:1
+msgid "Reports - No Data Available"
+msgstr ""
+
+#: ../help/en/tooltip/excel:1
+msgid "Save as Excel"
+msgstr ""
+
+#: ../help/en/tooltip/excel:2
+msgid "Saves the table as an Excel spreadsheet."
+msgstr ""
+
+#: ../help/en/tooltip/alerts:2
+msgid "Setup alert emails for events such as price targets."
+msgstr ""
+
+#: ../help/en/tooltip/note:1
+msgid "Show Notes"
+msgstr ""
+
+#: ../help/en/tooltip/checklist:2
+msgid "Show previously completed checklists or record a new checklist."
+msgstr ""
+
+#: ../help/en/tooltip/editchecklist:2
+msgid "Show this checklist, allowing you to change what you checked off before."
+msgstr ""
+
+#: ../help/en/tooltip/stoploss:1
+msgid "Stop Loss"
+msgstr ""
+
+#: ../help/en/tooltip/market_symbol_file:1
+msgid "Symbol File"
+msgstr ""
+
+#: ../help/en/tooltip/symbollookup:1
+msgid "Symbol Lookup"
+msgstr ""
+
+#: ../help/en/tooltip/targetprice:1
+msgid "Target Price"
+msgstr ""
+
+#: ../help/en/tooltip/adx:2
+msgid "The ADX indicator describes the trend of a security. If ADX is below 20 then the stock is trading sideways (and likely not desirable to invest in). If the ADX is greater than 40 then it is exhibiting a strong trend (up or down)."
+msgstr ""
+
+#: ../help/en/empty/marketinfo:2
+msgid "The Market Watch feature allows you to view performance of various markets and"
+msgstr ""
+
+#: ../help/en/tooltip/portfolio_category:2
+msgid "The category field in the portfolio allows you to define a grouping of your securities (i.e. not by sector or risk rating) for use in the diversification summary. If you don't want to use this, just leave the field blank."
+msgstr ""
+
+#: ../help/en/tooltip/mobileemail:2
+msgid "The email address for your mobile phone. If this is a cell phone, your carrier will likely have an email address like PHONENUMBER@carrier.com. If this is a Blackberry just enter the regular email address. Emails sent to this address will be kept shorter than regular emails."
+msgstr ""
+
+#: ../help/en/tooltip/market_id:2
+msgid "The market ID is a unique, short identifier for this market. It can be any 6 character or shorter word."
+msgstr ""
+
+#: ../help/en/tooltip/market_key:2
+msgid "The market key is the suffix that Yahoo assigns to this market. You can find this information on Yahoo! Finance or in the FAQ on the AST home page."
+msgstr ""
+
+#: ../help/en/empty/portfolio:2
+msgid "The portfolio allows you to keep track of different securities that you own"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:2
+msgid "The stock comparison is a tool that allows you to plot different securities,"
+msgstr ""
+
+#: ../help/en/tooltip/market_symbol_file:2
+msgid "The symbol file is a text file which contains a list of symbols for this market. It can found in share/symbols. For more information on this file, please see the User Information on the AST web site."
+msgstr ""
+
+#: ../help/en/empty/worksheet:2
+msgid "The worksheet feature allows you to watch and compare many different"
+msgstr ""
+
+#: ../help/en/empty/game-select:2
+msgid "There are currently not any competitions available. Your administrator must create a competition before you can use this feature."
+msgstr ""
+
+#: ../help/en/empty/report-viewer:2
+msgid "There is no data available for this report. This is likely because AST is"
+msgstr ""
+
+#: ../help/en/tooltip/checklisttype1:2
+msgid "There will be a single check box which has a value of either on or off corresponding to a score of 1 or 0 respectively."
+msgstr ""
+
+#: ../help/en/tooltip/market_big_charts:2
+msgid "This field is currently unused, please leave it blank."
+msgstr ""
+
+#: ../help/en/empty/game-rules:2
+msgid "This game currently does not have any rules. Rules allow you to limit what the players can do. For example you can forbid securities that cost less than $1 (or any amount) or you can set a maximum investment in a single security. Click the New Rule button to get started creating rules."
+msgstr ""
+
+#: ../help/en/tooltip/market_globe_suffix:2
+msgid "This is the suffix that Globe Investor applies to its symbols. This is only applicable to North American markets. This field should be left blank for other markets."
+msgstr ""
+
+#: ../help/en/tooltip/market_yahoo_symbol:2
+msgid "This should be set to the Yahoo symbol for the main market index, such as the TSX 300 or NASDAQ composite. It can be left blank, which will disable comparisons against the market."
+msgstr ""
+
+#: ../help/en/tooltip/trailing_stoploss:1
+msgid "Trailing Stop Loss"
+msgstr ""
+
+#: ../help/en/tooltip/trans:1
+msgid "Transactions"
+msgstr ""
+
+#: ../help/en/tooltip/news:2
+msgid "View recent news articles for this security from Yahoo! Finance."
+msgstr ""
+
+#: ../help/en/tooltip/market_yahoo_symbol:1
+msgid "Yahoo Symbol"
+msgstr ""
+
+#: ../help/en/empty/transactions:2
+msgid "You have not yet recorded any transactions for this security. The portfolio"
+msgstr ""
+
+#: ../help/en/tooltip/test.po:15
+msgid "\"Content-Transfer-Encoding: ENCODING\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:14
+msgid "\"Content-Type: text/plain; charset=CHARSET\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:12
+msgid "\"Language-Team: LANGUAGE <LL@li.org>\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:11
+msgid "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:13
+msgid "\"MIME-Version: 1.0\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:10
+msgid "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:9
+msgid "\"POT-Creation-Date: 2007-01-17  7:08-0500\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:8
+msgid "\"Project-Id-Version: PACKAGE VERSION\\n\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:25
+msgid "\"The ADX indicator describes the trend of a security. If ADX is below 20 then \""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:28
+msgid "\"down).\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:27
+msgid "\"the ADX is greater than 40 then it is exhibiting a strong trend (up or \""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:26
+msgid "\"the stock is trading sideways (and likely not desirable to invest in). If \""
+msgstr ""
+
+#: ../help/en/empty/portfolio:3
+msgid "and monitor their performance. There are two ways you can get started with"
+msgstr ""
+
+#: ../help/en/empty/alerts.fr:3
+msgid "choosing.  For example, you may wish to be notified when the price of a"
+msgstr ""
+
+#: ../help/en/empty/worksheet:10
+msgid "click the 'Add Security' link on the left."
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:4
+msgid "comparison of past performance. To get started, click the 'Add Stock', 'Add Market'"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:6
+msgid "comparison you can click on of the Table or Chart tabs at the top (e.g. Daily"
+msgstr ""
+
+#: ../help/en/empty/worksheet:8
+msgid "different view by clicking on the name of the view at the top of this page"
+msgstr ""
+
+#: ../help/en/empty/transactions:5
+msgid "etc. You probably want to click on the 'Buy Shares' link on the left to record"
+msgstr ""
+
+#: ../help/en/empty/alerts.fr:2
+msgid "have emails sent to you when certain events occur in the security of your"
+msgstr ""
+
+#: ../help/en/empty/transactions:3
+msgid "in AST is based on transactions, which means that you record all of your buys,"
+msgstr ""
+
+#: ../help/en/empty/marketinfo:3
+msgid "indices (or regular securities) along side your portfolio or worksheet. To"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:3
+msgid "markets and indices against each other as well as view a table based"
+msgstr ""
+
+#: ../help/en/tooltip/test.po:19
+msgid "msgid \"ADX Indicator\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:6 ../help/en/tooltip/test.po:24
+msgid "msgid \"\""
+msgstr ""
+
+#: ../help/en/tooltip/test.po:7 ../help/en/tooltip/test.po:20 ../help/en/tooltip/test.po:29
+msgid "msgstr \"\""
+msgstr ""
+
+#: ../help/en/empty/report-viewer:3
+msgid "not setup correctly on your system. For reports to be generated you must"
+msgstr ""
+
+#: ../help/en/empty/worksheet:4
+msgid "of prospects (such as a Short term or Long Term worksheet, or a different"
+msgstr ""
+
+#: ../help/en/empty/worksheet:7
+msgid "of the available data. You can look at your worksheet through different a"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:8
+msgid "on the 'New Comparison' button on the left."
+msgstr ""
+
+#: ../help/en/empty/portfolio:6
+msgid "on the left. You can also click on the 'Add Security' link to add a single"
+msgstr ""
+
+#: ../help/en/empty/stock-comparison:5
+msgid "or 'Add Index' button above. Once you have added a few securities to this"
+msgstr ""
+
+#: ../help/en/empty/marketinfo:6
+msgid "or market."
+msgstr ""
+
+#: ../help/en/empty/report-viewer:5
+msgid "scheduled tasks. For more information on see the"
+msgstr ""
+
+#: ../help/en/empty/worksheet:3
+msgid "securities. You can have multiple worksheets for tracking different types"
+msgstr ""
+
+#: ../help/en/empty/alerts.fr:4
+msgid "security reaches a set value or when it is no longer oversold. To get"
+msgstr ""
+
+#: ../help/en/empty/portfolio:7
+msgid "security to your portfolio."
+msgstr ""
+
+#: ../help/en/empty/transactions:4
+msgid "sells and dividends into AST. AST will then figure out your cost base, gains,"
+msgstr ""
+
+#: ../help/en/empty/report-viewer:4
+msgid "setup AST in your crontab. Cron is the UNIX daemon responsible for running"
+msgstr ""
+
+#: ../help/en/empty/alerts.fr:5
+msgid "started, click the \"New Alert\" button on the left which will guide you"
+msgstr ""
+
+#: ../help/en/empty/marketinfo:5
+msgid "the \"Add Index\" link on the left will guide you through adding an index"
+msgstr ""
+
+#: ../help/en/empty/worksheet:6
+msgid "the left. The worksheet has different views which show you different subsets"
+msgstr ""
+
+#: ../help/en/empty/portfolio:4
+msgid "the worksheet. You can import your broker's statement (the list of your"
+msgstr ""
+
+#: ../help/en/empty/alerts.fr:6
+msgid "through the process of creating an alert."
+msgstr ""
+
+#: ../help/en/empty/portfolio:5
+msgid "transactions into AST by clicking on the 'Import Brokers Statement' link"
+msgstr ""
+
+#: ../help/en/empty/marketinfo:4
+msgid "use this feature, you must select which indices you wish to track. Clicking"
+msgstr ""
+
+#: ../help/en/empty/worksheet:5
+msgid "worksheet for different sectors) by clicking on the 'New Worksheet' link on"
+msgstr ""
+
+#: ../help/en/empty/transactions:6
+msgid "your position."
+msgstr ""
+

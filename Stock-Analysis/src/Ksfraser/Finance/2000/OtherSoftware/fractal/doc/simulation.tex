@@ -1,0 +1,114 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: simulation.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: simulation.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Simulation of Fixed Increment Approximation for Fiscal Strategy}
+        \label{\SETLABEL:TSUNFAIRBROWNIAN}
+
+        \subidx{\market}{market simulation}
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF:SIM}.
+        Figure~\ref{\SETLABEL:TSUNFAIRBROWNIAN0} represents a
+        constructional simulation of the time series data presented in
+        Figure~\ref{\SETLABEL:TS}. The program {\it
+        tsunfairbrownian}\/, which is briefly described in
+        appendix~\ref{programs}, was used in the reconstruction. The
+        reconstructed data is superimposed on the original time series
+        data.  The program, {\it tsunfairbrownian}\/, essentially,
+        constructs the new time series as a Brownian fractal with
+        fixed increments---the value of the fixed increment is derived
+        from the root mean square average of the normalized increments
+        presented in Figure~\ref{\SETLABEL:TF}. The ``quality'' of
+        such a reconstruction should be subject to adequate scepticism
+        and scrutiny since, in all probability, the normalized
+        increments presented in Figure~\ref{\SETLABEL:TF} represent a
+        relatively complex process, that may not be ``modeled'' with
+        such a simple methodology.
+
+        As a further comparison of the the constructional simulation
+        with the original time series data,
+        Figure~\ref{\SETLABEL:TSUNFAIRBROWNIAN1} presents a normalized
+        histogram of the normalized increments of the reconstructed
+        time series, superimposed on the normalized histogram
+        presented in Figure~\ref{\SETLABEL:NH}.
+
+        \subidx{\market}{fiscal strategy, simulation}
+        \subidx{markets}{simulation}
+        \subidx{simulation}{markets}
+        \subidx{strategy}{fiscal, simulation}
+        \subidx{fiscal}{strategy, simulation}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/tsunfairbrownian-f.eps}
+                    \caption[{\market}, Time series data, empirical and
+                        simulated]{{\market}, Time series data, empirical
+                        and simulated, using the program {\it tsunfairbrownian}\/
+                        with f = {\datafractionrms}. This data is
+                        superimposed on the data presented in
+                        Figure~\ref{\SETLABEL:TS}.}
+                    \label{\SETLABEL:TSUNFAIRBROWNIAN0}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/tsunfairbrownian-f.tsfraction.tsnormal-s30.eps}
+                    \caption[{\market}, normalized histogram,
+                        empirical and simulated]{{\market}, normalized
+                        histogram of the normalized increments of the
+                        time series data shown in
+                        Figure~\ref{\SETLABEL:TSUNFAIRBROWNIAN0},
+                        empirical and simulated.  The empirical data
+                        has a mean of {\datafractionmean}, with a
+                        standard deviation of {\datafractionstddev}.
+                        By comparison, the simulated data has a mean
+                        of {\tsunfairbrownianfractionmean} with a
+                        standard deviation of
+                        {\tsunfairbrownianfractionstddev}. This data
+                        is superimposed on the data presented in
+                        Figure~\ref{\SETLABEL:NH}. The area under the
+                        four curves is identical.}
+                    \label{\SETLABEL:TSUNFAIRBROWNIAN1}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

@@ -1,0 +1,140 @@
+checklisttype.id: 1000001
+checklisttype.type: 2
+checklisttype.name: Down Trend line Breakout
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000002
+checklisttype.type: 2
+checklisttype.name: Up Trend line Breakout (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000003
+checklisttype.type: 2
+checklisttype.name: Broadening Top (Bullish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000004
+checklisttype.type: 2
+checklisttype.name: Broadening Top (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000005
+checklisttype.type: 2
+checklisttype.name: Diamond (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000006
+checklisttype.type: 2
+checklisttype.name: Double Bottom (Adam & Adam)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000007
+checklisttype.type: 2
+checklisttype.name: Double Bottom (Adam & Eve)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000008
+checklisttype.type: 2
+checklisttype.name: Double Bottom (Eve & Adam)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000009
+checklisttype.type: 2
+checklisttype.name: Double Bottom (Eve & Eve)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000010
+checklisttype.type: 2
+checklisttype.name: Double Top (Adam & Adam) (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000011
+checklisttype.type: 2
+checklisttype.name: Double Top (Adam & Eve) (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000012
+checklisttype.type: 2
+checklisttype.name: Double Top (Eve & Adam) (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000013
+checklisttype.type: 2
+checklisttype.name: Double Top (Eve & Eve) (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000014
+checklisttype.type: 2
+checklisttype.name: Head-and-Shoulders Bottom
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000015
+checklisttype.type: 2
+checklisttype.name: Head-and-Shoulders Top (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000016
+checklisttype.type: 2
+checklisttype.name: Rectangle
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000017
+checklisttype.type: 2
+checklisttype.name: Ascending Scallops (Bullish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000018
+checklisttype.type: 2
+checklisttype.name: Ascending Scallops (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 100001
+checklisttype.type: 2
+checklisttype.name: Descending Scallops (Bullish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000020
+checklisttype.type: 2
+checklisttype.name: Descending Scallops (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000021
+checklisttype.type: 2
+checklisttype.name: Ascending Triangles (Bullish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000022
+checklisttype.type: 2
+checklisttype.name: Ascending Triangles (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000023
+checklisttype.type: 2
+checklisttype.name: Descending Triangles (Bullish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000024
+checklisttype.type: 2
+checklisttype.name: Descending Triangles (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000025
+checklisttype.type: 2
+checklisttype.name: Symmetrical Triangles (Bullish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000026
+checklisttype.type: 2
+checklisttype.name: Symmetrical Triangles (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000027
+checklisttype.type: 2
+checklisttype.name: Triple Bottom
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%
+checklisttype.id: 1000028
+checklisttype.type: 2
+checklisttype.name: Triple Top (Bearish)
+checklisttype.description: From Trading Classical Chart Patterns, Bulkowski 2002
+%%

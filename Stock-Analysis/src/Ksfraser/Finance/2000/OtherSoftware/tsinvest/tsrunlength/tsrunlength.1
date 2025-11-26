@@ -1,0 +1,103 @@
+.TH TSRUNLENGTH 1 "January 5, 2006"
+.SH NAME
+tsrunlength \- find the run lengths of zero free intervals in a time series
+.SH SYNOPSIS
+.nf
+tsrunlength [-v]
+.fi
+.SH DESCRIPTION
+Tsrunlength is for finding the run lengths of zero free intervals in
+a time series, which is assumed to be a Brownian fractal.  The value
+of each sample in the time series is stored, and the run length to a
+like value in the time series is stored. A histogram of the number of
+run lengths of each run length value is printed to stdout as tab
+delimited columns of run length value, positive run lengths, negative
+run lengths, and the sum of both positive and negative run lengths,
+followed by the cumulative sum of the positive run lengths, the
+cumulative sum of negative run lengths, and the cumulative sum of both
+positive and negative run lengths.
+
+The idea is to create a run length structure, that tallies how many
+time intervals a run length was either positive or negative, for each
+element in the time series. When a run length transition is made,
+(ie., when the value of the time series has PASSED through the value
+of the time series when the run length structure was created, from a
+positive or negative direction,) then the run length is tallied into
+histogram arrays, and the structure removed. See "Fractals, Chaos,
+Power Laws," Manfred Schroeder, W. H. Freeman and Company, New York,
+New York, 1991, ISBN 0-7167-2136-8, pp 160.
+
+As approximations for the probability, p, of the run lengths, for t >>
+1, p = 1 / (2 * x^(3/2)), which can be integrated for the cumulative
+probability, P, for t >> 1, P = 1 / sqrt (t). For t ~ 1, P = erf (1 /
+sqrt (t).
+
+Note: there is an issue with this methodology-a run length is not
+considered complete until the value is PASSED, so, for example, a
+square wave function input will never be tallied, ie., a 1 to -1 to 1
+to -1 to 2 sequence is a negative run length of 3 time units.
+
+The input file structure is a text file consisting of records, in
+temporal order, one record per time series sample.  Blank records are
+ignored, and comment records are signified by a '#' character as the
+first non white space character in the record. Data records must
+contain at least one field, which is the data value of the sample, but
+may contain many fields-if the record contains many fields, then the
+first field is regarded as the sample's time, and the last field as
+the sample's value at that time.
+.SH OPTIONS
+.TP
+.B -v
+Print the version and copyright banner of the program.
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsderivative(1), tshcalc(1), tshurst(1), tsintegrate(1),
+tslogreturns(1), tslsq(1), tsnormal(1), tsshannon(1),
+tsblack(1), tsbrownian(1), tsdlogistic(1), tsfBm(1),
+tsfractional(1), tsgaussian(1), tsintegers(1),
+tslogistic(1), tspink(1), tsunfairfractional(1),
+tswhite(1), tscoin(1), tsunfairbrownian(1), tsfraction(1),
+tsshannonmax(1), tschangewager(1), tssample(1), tsrms(1),
+tscoins(1), tsavg(1), tsXsquared(1), tsstockwager(1),
+tsshannonwindow(1), tsmath(1), tsavgwindow(1), tspole(1),
+tsdft(1), tsbinomial(1), tsdeterministic(1), tsnumber(1),
+tsrmswindow(1), tsshannonstock(1), tsmarket(1),
+tsstock(1), tsstatest(1), tsunfraction(1),
+tsshannonaggregate(1), tsinstant(1), tsshannonvolume(1),
+tsstocks(1), tsshannonfundamental(1), tstrade(1),
+tstradesim(1), tsrunlength(1), tsunshannon(1),
+tsrootmean(1), tsrunmagnitude(1), tskurtosis(1),
+tskurtosiswindow(1), tsrootmeanscale(1),
+tsscalederivative(1), tsgain(1), tsgainwindow(1)
+tscauchy(1), tslognormal(1), tskalman(1), tsroot(1),
+tslaplacian(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+----------------------------------------------------------------------
+.fi

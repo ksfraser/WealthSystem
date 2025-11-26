@@ -1,0 +1,22 @@
+<form method="post" action="$save_page" name="marketinfo">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Select Security</th>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td><select name="marketinfo.market">$market_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Symbol:</b></td>
+      <td><input type="text" name="marketinfo.symbol" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+      <td><input type="text" name="marketinfo.name" class="awf_inputtext"><small>(Leave blank to automatically fill-in)</small></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

@@ -1,0 +1,415 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: hurst.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: hurst.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Hurst Coefficient Analysis}
+        \label{\SETLABEL:H}
+
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{increments}{normalized}
+        \subidx{normalized}{increments}
+        \subidx{programs}{tshurst}
+        \subidx{tshurst}{program}
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF:HCHP}. Figure~\ref{\SETLABEL:HC} is
+        a graph of the Hurst coefficient data time series data shown
+        in Figure~\ref{\SETLABEL:TS}. The slope of the graph is the
+        Hurst coefficient.  The data for this figure was produced by
+        the program {\it tshurst}\/, which is described briefly in
+        Appendix~\ref{programs}.
+
+        \subidx{\market}{H parameter analysis}
+        \subidx{H parameter}{analysis}
+        \subidx{programs}{tshcalc}
+        \subidx{tshcalc}{program}
+        Figure~\ref{\SETLABEL:HP} is a graph of the H parameter data
+        for the normalized increments of the time series data shown in
+        Figure~\ref{\SETLABEL:TF}. The data for this figure was
+        produced by the program {\it tshcalc}\/, which is described
+        briefly in Appendix~\ref{programs}.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tshurst.eps}
+                    \caption[{\market}, Hurst coefficient data]{{\market},
+                        Hurst coefficient data for the normalized
+                        increments of the time series data shown in
+                        Figure~\ref{\SETLABEL:TF}.  The slope of the graph
+                        is the Hurst coefficient.}
+                    \label{\SETLABEL:HC}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tshcalc.eps}
+                    \caption[{\market}, H parameter data]{{\market}, H
+                        parameter data for the normalized increments of
+                        the time series data shown in
+                        Figure~\ref{\SETLABEL:TF} The slope of the graph
+                        is the H parameter.}
+                    \label{\SETLABEL:HP}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        \subidx{revenue}{See, rate of revenue returns}
+        \subidx{returns}{See, rate of revenue returns}
+        \subidx{\market}{revenues}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{\market}{rate of change}
+        \subidx{\market}{windows of opportunity}
+        \subidx{rate of revenue returns}{forecast}
+        \subidx{forecast}{rate of revenue returns}
+        \idx{windows of opportunity}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+
+        The approximately linear slope of the graph in
+        Figure~\ref{\SETLABEL:HC} implies that the variance of the
+        rate of revenue returns, (per {\timescale},) in the {\market},
+        $V(t_2 - t_1)$, over a period of time is proportional to the
+        period of time raised to twice the Hurst
+        coefficient~\cite[pp. 180]{Feder},~\cite[pp. 246]{Crownover}.
+        This seems to be a quantitative statement concerning how fast,
+        and to what degree, the rate of revenue returns' state of
+        affairs can change over a period of time.  An additional
+        implication, for Hurst coefficients sufficiently close to 0.5,
+        is that the probability of the state of affairs repeating
+        sometime in the future goes down with increasing
+        time\footnote{It can be shown that the number of expected
+        market ``high'' and ``low'' transitions, $N$, scales with the
+        square root of time, or $N \propto \sqrt {t}$, meaning that
+        the cumulative distribution of the probability, $P$, of the
+        duration of a market's ``high'' or ``low'' exceeding a given
+        time interval, $t$, is proportional to the reciprocal of the
+        square root of the time interval, $P \propto 1 / \sqrt {t}$,
+        (or, conversely, that the probability of the duration of a
+        market's ``high'' or ``low'' exceeding a given time interval
+        is proportional to the reciprocal of the time interval raised
+        to the power $3 / 2$, ie., $P \propto 1 / t^{3 /
+        2}$,~\cite[pp. 153]{Schroeder}. What this means is that a
+        histogram of the ``zero free'' run-lengths of a market being
+        ``high'' or ``low,'' over a long time, would have a $1 / t^{3
+        / 2}$ characteristic.)}, $t$, $p(t) = erf (1/\sqrt{2t})$ which
+        is approximately $1/\sqrt{t}$ for $t \gg
+        1$~\cite[pp. 160]{Schroeder}. Figures~\ref{\SETLABEL:FN},
+        and,~\ref{\SETLABEL:FF} compare methods of approximation of
+        the ``forecastability'' of the rate of revenue returns in the
+        {\market} for the near term and far term,
+        respectively~\cite[pp. 83-84]{Peters:CAOITCM}\footnote{The
+        author is not comfortable with Peters' interpretation. For
+        example, if the algorithm explained
+        in~\cite[pp. 82]{Peters:CAOITCM} is used on ``white noise''
+        which, by definition, never has any correlations, the short
+        term Hurst coefficient, and thus the ``forecastability,'' is
+        still near unity---a bit of an enigma. This can be verified
+        with the {\it tswhite}\/ and {\it tshurst}\/ programs, which
+        are briefly described in Appendix~\ref{programs}.}.  This
+        seems to be a quantitative statement concerning ``windows of
+        opportunity'' in the rate of revenue returns, (per
+        {\timescale}.)  The program {\it tslsq}\/ was used on the
+        Hurst coefficient data, presented in
+        Figure~\ref{\SETLABEL:HC}, to provide a least squares
+        approximation to the Hurst coefficient. The superimposed least
+        squares approximation with on original Hurst coefficient data
+        is presented.  The time series data has a Hurst coefficient of
+        {\thurstlow}, so that:
+
+        \subidx{\market}{Hurst coefficient analysis}
+        \begin{eqnarray}
+            V\left(t_2 - t_1\right) & \propto & \left(t_2 - t_1\right)^{2 \cdot H}\\
+            V\left(t_2 - t_1\right) & \propto & \left(t_2 - t_1\right)^{2 \cdot {\thurstlow}}\\
+                                    & \propto & \left(t_2 - t_1\right)^{\thurstlowtwo}
+            \label{\SETLABEL:V}
+        \end{eqnarray}
+
+        \subidx{fractional}{Brownian motion}
+        \subidx{Brownian motion}{fractional}
+        \idx{fractal}
+        \noindent where $V(t_2 - t_1)$ is the variance of the
+        increments of the rate of revenue returns, (per {\timescale},)
+        over the time interval $t_2 -
+        t_1$,~\cite[pp. 177]{Feder},~\cite[pp. 494]{Peitgen}. If $H >
+        \frac{1}{2}$, then the time series is termed as being
+        characterized by ``fractional Brownian
+        motion~\cite[pp. 170]{Feder}.''
+
+        \subidx{rate of revenue returns}{predictability}
+        \subidx{rate of revenue returns}{forecastability}
+        \subidx{rate of revenue returns}{consistency}
+        \subidx{predictability}{rate of revenue returns}
+        \subidx{forecastability}{rate of revenue returns}
+        \subidx{consistency}{rate of revenue returns}
+        \subidx{\market}{rate of revenue returns, predictability}
+        \subidx{\market}{rate of revenue returns, forecastability}
+        \subidx{\market}{rate of revenue returns, consistency}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{\market}{rate of change}
+
+        In some sense, the Hurst coefficient is a quantitative
+        expression of the ``forecastability'' of the future based on
+        the past\footnote{Actually, in general, when summing fractal
+        entities, the method used should be a root mean square
+        process, dependent on the Hurst Coefficient, $H$, where
+        $P_{total}^H = P_1^H + P_2^H + \cdots$, where $P_n$ is the
+        fractal entities. For a Brownian motion, or random walk type
+        of fractal the Hurst Coefficient is a function of time into
+        the future. For the ``near term,'' the Hurst coefficient is
+        very near unity, meaning the summation process is linear. For
+        the ``long term,'' $H \approx 0.5$, or a standard root mean
+        square summation process should be used. If $H$ is $0.5$ then
+        the market is termed a Brownian motion, or random walk
+        process. If it is larger than 0.5, it is termed fractional
+        Brownian motion process. For a random walk process, ``near
+        term'' and ``far term'' are quantitatively differentiated on
+        the Hurst Coefficient graph where $1 - \ln (t) = 0.5 \cdot \ln
+        (t)$, or when $\ln (t) = 2$, or $t = 7.389\ldots$ See
+        Section~\ref{\SETLABEL:FS} for the particulars on using Hurst
+        Coefficient to sum fractal process' for the {\market}. See
+        also~\cite[pp. 67, 83-84]{Peters:CAOITCM} and~\cite[pp. 129,
+        159]{Schroeder} for particulars on the implications of the
+        Hurst Coefficient and root mean square summation issues.}.  A
+        Hurst coefficient of {\thurstlow}, (for the near future, and
+        {\thurstall} for the distant future.) implies that the
+        likelihood of the rate of revenue returns, (per {\timescale},)
+        for any two consecutive {\timescale}s being the same is
+        {\thurstlowhundred}\%~\cite[pp. 66]{Peters:CAOITCM} for the
+        near future, and {\thurstall} for the distant
+        future. Likewise, there is a {\thurstlowhundred}\% chance of
+        the rate of revenue returns, (per {\timescale},) movements
+        being the same in consecutive time periods---ie., if, in a
+        given {\timescale}, the rate of revenue returns, (per
+        {\timescale},) is increasing, there is a {\thurstlowhundred}\%
+        that the rate of revenue returns, (per {\timescale},) will
+        increase in the following period, also. In some sense, this is
+        a quantitative statement on how ``predictable,'' or
+        ``forecastable'' the rate of revenue returns, (per
+        {\timescale},) for the {\market} are over time, since the
+        probability of having $n$ many consecutive {\timescale}s of
+        the same agenda is $H^n$ where $H$ is the Hurst coefficient,
+        or, letting the short term probability of having $n$ many
+        {\timescale}s of the same market agenda, $p_a$, is:
+
+        \begin{eqnarray}
+            p_a\left(n\right) & = & H^{n}\\
+                              & = & {\thurstlow}^{n}
+            \label{\SETLABEL:MA}
+        \end{eqnarray}
+
+        \subidx{rate of revenue returns}{predictability}
+        \subidx{rate of revenue returns}{forecastability}
+        \subidx{rate of revenue returns}{consistency}
+        \subidx{predictability}{rate of revenue returns}
+        \subidx{forecastability}{rate of revenue returns}
+        \subidx{consistency}{rate of revenue returns}
+        As an interesting interpretation of the normalized increments
+        of the time series data presented in
+        Figure~\ref{\SETLABEL:TF}, if the vertical axis is multiplied
+        by 100, to convert to percent, then the graph represents the
+        error, in percent, that would be made by forecasting, month by
+        month, that the next {\timescale}'s rate of revenue returns
+        would be the same as the current {\timescale}'s revenue
+        rate. Interestingly, it is $\datafractionmean \cdot 100$
+        percent, on the average, with a standard deviation of
+        $\datafractionstddev \cdot 100$ percent, and a root mean
+        square error value of $\datafractionrms \cdot 100$
+        percent---small values for such a simple forecasting
+        mechanism.
+
+        \subidx{\market}{rate of revenue returns, range}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{\market}{rate of change}
+
+        This is, essentially, a statement of the range of values, in
+        the increments of the rate of revenue returns, (per
+        {\timescale},) that is to be expected over the time interval,
+        $t_2 - t_1$,
+        $R_v$,~\cite[pp. 178]{Feder},~\cite[pp. 172]{Cambel}:
+
+        \begin{eqnarray}
+            R_v\left(t_2 - t_1\right) & \propto & \left(t_2 - t_1\right)^{H}\\
+                                      & \propto & \left(t_2 - t_1\right)^{\thurstlow}
+            \label{\SETLABEL:R}
+        \end{eqnarray}
+
+        \subidx{\market}{rate of revenue returns, range}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{\market}{rate of change}
+        \subidx{Markov}{statistics}
+        \subidx{statistics}{Markov}
+        \noindent where $R$ is the range of values in the increments
+        of the rate of revenue returns, (per {\timescale}.) A Hurst
+        coefficient, $H$, that is much larger than $\frac{1}{2}$, (but
+        less than 1,) implies a strongly non-Gaussian distribution in
+        the increments of the rate of revenue returns, (per
+        {\timescale},)~\cite[pp. 152, 194]{Feder}, and a Hurst
+        coefficient near $\frac{1}{2}$ implies that the increments of
+        the rate of revenue returns, (per {\timescale}) is
+        characteristic of an independent
+        process~\cite[pp. 195]{Feder}. Extreme caution should be
+        exercised in using Markov statistics in any analysis where the
+        Hurst coefficient is not
+        $\frac{1}{2}$,~\cite[pp. 124]{Crownover},~\cite[pp. 106]{Peters:CAOITCM}.
+
+
+        As a useful approximation, if $H$, is approximately
+        $\frac{1}{2}$, Equation~\ref{\SETLABEL:R} reduces
+        to,~\cite[pp. 129]{Schroeder}:
+
+        \begin{eqnarray}
+            R\left(t_2 - t_1\right) & \propto & (t_2 - t_1)^{\frac{1}{2}}\\
+                                    & \propto & \sqrt{\left(t_2 - t_1\right)}
+        \end{eqnarray}
+
+        \subidx{\market}{rate of revenue returns, range}
+        \subidx{\market}{rate of revenue returns, increase and decrease}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{\market}{rate of change}
+        \subidx{Markov}{statistics}
+        \subidx{statistics}{Markov}
+
+        In the case where the Hurst coefficient, $H$, is
+        $\frac{1}{2}$, the range of values in the increments of the
+        rate of revenue returns, (per {\timescale},) divided by the
+        standard deviation of these values, $S$, can be anticipated to
+        increase over time according to the following
+        relation,~\cite[pp. 154]{Feder},~\cite[pp. 129]{Schroeder}:
+
+        \begin{equation}
+            \frac{R\left(t_2 - t_1\right)}{S} \propto \left(t_2 - t_1\right)^{\frac{1}{2}}
+        \end{equation}
+
+        \subidx{\market}{rate of revenue returns, range}
+        \subidx{\market}{rate of revenue returns, increase and decrease}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{\market}{rate of change}
+        \noindent which is a useful conceptual approximation, since it
+        involves only the square root function---if the range and the
+        standard deviation of the increments of the rate of revenue
+        returns, (per {\timescale},) are known, (and $H \approx
+        \frac{1}{2}$,) then the expected change in $\frac{R}{S}$, will
+        increase with the square root of time\footnote{To be precise,
+        it is actually asymptotically proportional to
+        $\tau^{\frac{1}{2}}$}.
+
+        Another useful approximation when rescaling processes that are
+        characterize by Brownian motion, (ie., when $H \approx
+        \frac{1}{2}$,) is that:
+
+        \begin{eqnarray}
+            X\left(t\right) & \propto & \frac{X\left(rt\right)}{r^{H}}\\
+                            & \propto & \frac{X\left(rt\right)}{r^{\thurstlow}}
+        \end{eqnarray}
+
+        \idx{Brownian motion}
+        \idx{fractal}
+        Where $X(t)$ is the process characterized by Brownian motion,
+        and $r$ is a scaling factor,~\cite[pp. 494]{Peitgen}.
+
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+        The program {\it tslsq}\/ was used on the H parameter data,
+        presented in Figure~\ref{\SETLABEL:HP}, to provide a least
+        squares approximation to the H parameter for the
+        {\market}. The superimposed least squares approximation on the
+        original H parameter data is presented.  By contrast, the H
+        parameter, as derived by the methodology outlined
+        in~\cite[pp. 249]{Crownover}, is {\thcalclow} for the near
+        future, and {\thcalcall} for the distant future.
+
+        \subidx{\market}{Hurst coefficient analysis}
+        \subidx{Hurst coefficient}{analysis}
+        \subidx{increments}{normalized}
+        \subidx{normalized}{increments}
+        \subidx{programs}{tshurst}
+        \subidx{tshurst}{program}
+        \subidx{\market}{H parameter analysis}
+        \subidx{H parameter}{analysis}
+        \subidx{programs}{tshcalc}
+        \subidx{tshcalc}{program}
+        Figures~\ref{\SETLABEL:HC} and~\ref{\SETLABEL:HP} represent
+        Hurst coefficient and H parameter data that are derived from
+        the normalized increments, shown in
+        Figure~\ref{\SETLABEL:TF}. In this case, the data is
+        considered a normalized derivative of the time series data
+        presented in Figure~\ref{\SETLABEL:TF}, instead of a
+        cumulative sum.  The program, {\it tshurst}\/, is described
+        briefly in appendix~\ref{programs}, and the data for
+        figures~\ref{\SETLABEL:THC} and~\ref{\SETLABEL:THP} was made
+        using the -d option.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tshurst-d.eps}
+                    \caption[{\market}, traditional Hurst coefficient
+                        data]{{\market}, traditional Hurst coefficient
+                        data for the time series data shown in
+                        Figure~\ref{\SETLABEL:TS}.  The slope of the
+                        graph is the Hurst coefficient, and is
+                        {\hurstlow} for the near term, and
+                        {\hurstall} for the far term.}
+                    \label{\SETLABEL:THC}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tshcalc-d.eps}
+                    \caption[{\market}, traditional H parameter
+                        data]{{\market}, traditional H parameter data
+                        for the time series data shown in
+                        Figure~\ref{\SETLABEL:TS} The slope of the
+                        graph is the H parameter, and is {\hcalclow}
+                        for the near term, and {\hcalcall} for the
+                        far term.}
+                    \label{\SETLABEL:THP}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

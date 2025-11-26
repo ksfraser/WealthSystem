@@ -1,0 +1,18 @@
+AST README
+------------------------------------------------------------------------------
+Advanced Stock Tracker is a web based stock portfolio, watch list, screener
+and charting program.
+
+To install:
+
+	perl install.pl
+
+See INSTALL for more information on manual installation.
+
+Homepage: http://ast.sourceforge.net
+Bug Reports: http://sourceforge.net/tracker/?group_id=148045&atid=770268
+Bug reports can also be submitted using a form in the program.
+
+Problem reports as well as success stories are welecome!
+
+Michael Williamson <mswilliamson@uwaterloo.ca>

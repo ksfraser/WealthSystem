@@ -1,0 +1,136 @@
+.TH CSV2TSINVEST 1 "January 07, 2006"
+.SH NAME
+csv2tsinvest \- Convert a csv spreadsheet time series to tsinvest time series database
+.SH SYNOPSIS
+.nf
+csv2tsinvest symbol [-v] [filename]
+.fi
+.SH DESCRIPTION
+
+Csv2tsinvest.c is a C source code template for programs that convert
+different time series formats and structures to the tsinvest(1) time
+series database(s) format.
+
+The example application is the Yahoo! historical stock price database
+spreadsheet format, csv, available from http://chart.yahoo.com/d by
+specifying "Download Spreadsheet Format" at the bottom of the page
+when requesting the time series for a stock. For example, the csv
+format for ticker symbol GE looks like:
+
+    Date,Open,High,Low,Close,Volume
+    26-Oct-99,125.9375,127.25,124.9375,125.625,6226400
+    25-Oct-99,124.625,125.9375,123.625,125.25,4565300
+    22-Oct-99,123.50,126.1875,123.4375,125.625,5705400
+    .
+    .
+    .
+    6-Jan-70,0.8956,0.8956,0.8662,0.8706,35500
+    5-Jan-70,0.9015,0.9059,0.8897,0.8971,42400
+    2-Jan-70,0.9118,0.9133,0.90,0.9015,23200
+
+Which needs to be converted to the tsinvest(1) database format.
+
+The tsinvest(1) time series database file structure is a text file
+consisting of records, in temporal order, one record per time series
+sample of each equity.  Blank records are ignored, and comment records
+are signified by a '#' character as the first non white space
+character in the record. Each data record represents an equity
+transaction, consisting of a minium of three fields, separated by
+white space. The fields are ordered by time stamp, equity ticker
+identifier, and closing price, for example:
+
+    1      ABC     333.6
+    2      DEF     7.2
+    3      GHI     335.9
+
+.SH GENERAL COMMENTS
+
+There are certain advantages to imposing additional structural
+requirements on the tsinvest(1) time series database file
+structure. For example, although tsinvest(1) places no constraints on
+white space field delimiters, if the multiple consecutive white space
+characters are required to be exactly a single tab character, the time
+series database becomes a "Unix standard" tab delimited tabular text
+relational database, and can be manipulated with the traditional Unix
+commands, sed(1), awk(1), cut(1), paste(1), etc.
+
+Additionally, although tsinvest(1) places no context or meaning on the
+time stamp in the first field, if the time stamp values are required
+to be lexical on the temporal order, databases of individual stocks
+can be combined into a market by concatenating the files of individual
+stocks, and then sorting on the first field with the traditional Unix
+commands, cat(1), and sort(1). For example:
+
+    cat stock1.file ... stockn.file | sort > market.file
+
+There are, obviously, many alternatives for importing stock price time
+series into the tsinvest(1) suite:
+
+    1) The Unix standard tab delimited tabular text
+    relational database is a very extensible universal
+    file structure, and a significant infrastructure
+    exists for translating and manipulating such files
+    with programs like perl(1), sed(1), awk(1), cut(1),
+    paste(1), etc., which can be used in shell script
+    programs.
+
+    2) The sources, in main (), of tsinvest(1) can be
+    modified to accommodate some file
+    structures. Frequently, all that has to be changed are
+    the field number implicit addresses, and perhaps the
+    field delimiter, since the field sequence, (time
+    stamp, symbol name, price,) is fairly
+    standard-although intermixed with other data, such as
+    open, high, low, and volume.
+
+    3) A separate program can be written, in a compiled
+    language, to do the translation from one file format
+    to another.
+
+.SH OPTIONS
+.TP
+.B symbol
+Symbol name of stock.
+.TP
+.B -v
+Print the version and copyright banner of this program.
+.TP
+.B filename
+Input filename.
+
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsinvest(1), tsinvestsim(1), tsshannoneffective(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+    http://www.johncon.com/ntropix/
+    http://www.johncon.com/
+
+----------------------------------------------------------------------
+.fi

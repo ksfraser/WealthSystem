@@ -1,0 +1,39 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form" width="60%">
+    <tr>
+      <th colspan="2">Quote Settings</th>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Real-time Quote Engine:</b></td>
+    </tr>
+    <tr>
+      <td><select name="quote_realtime">$rtquote_options</select></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Historical Quote Engine:</b></td>
+    </tr>
+    <tr>
+      <td><select name="quote_historical">$histquote_options</select></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Dividend Quote Engine:</b></td>
+    </tr>
+    <tr>
+      <td><select name="quote_dividend">$divquote_options</select></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Detail Quote Engine:</b></td>
+    </tr>
+    <tr>
+      <td><select name="quote_detail">$detailquote_options</select></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

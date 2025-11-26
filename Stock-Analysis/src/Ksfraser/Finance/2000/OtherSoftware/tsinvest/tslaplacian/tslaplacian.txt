@@ -1,0 +1,101 @@
+TSLAPLACIAN(1)							TSLAPLACIAN(1)
+
+
+
+NAME
+       tslaplacian - Laplacian noise generator-generates a time series
+
+SYNOPSIS
+       tslaplacian [-t] [-v] number
+
+DESCRIPTION
+       Tslaplacian,  Laplacian	noise  generator-generates a time series.  The
+       idea is to produce a a time series with a Laplacian  distribution.  The
+       elements  of  the  time	series are made from elements from the uniform
+       distribution, n, and:
+
+	   for n < 0.5, sqrt (0.5) * log (2 * n)
+	   for n >= 0.5, -sqrt (0.5) * log (2 * (1 - n))
+
+       where the sqrt (0.5) is the required scaling for a variance of unity.
+
+       Note: these programs use the following functions from other references:
+
+	   ran1, which returns a uniform random deviate between
+	   0.0 and 1.0. See "Numerical Recipes in C: The Art of
+	   Scientific Computing," William H. Press, Brian
+	   P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+	   Cambridge University Press, New York, 1988, ISBN
+	   0-521-35465-X, page 210, referencing Knuth.
+
+	   gasdev, which returns a normally distributed deviate
+	   with zero mean and unit variance, using ran1 () as the
+	   source of uniform deviates. See "Numerical Recipes in
+	   C: The Art of Scientific Computing," William H. Press,
+	   Brian P. Flannery, Saul A. Teukolsky, William
+	   T. Vetterling, Cambridge University Press, New York,
+	   1988, ISBN 0-521-35465-X, page 217.
+
+	   gammln, which returns the log of the results of the
+	   gamma function.  See "Numerical Recipes in C: The Art
+	   of Scientific Computing," William H. Press, Brian
+	   P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+	   Cambridge University Press, New York, 1988, ISBN
+	   0-521-35465-X, page 168.
+
+OPTIONS
+       -t     Sample's time will be included in the output time series.
+
+       -v     Print the version and copyright banner of the program.
+
+       number Number of data points in the output time series.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),   tshcalc(1),	tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),	tsrmswindow(1),     tsshannonstock(1),	  tsmarket(1),
+       tsstock(1),   tsstatest(1),   tsunfraction(1),	tsshannonaggregate(1),
+       tsinstant(1), tsshannonvolume(1), tsstocks(1), tsshannonfundamental(1),
+       tstrade(1),  tstradesim(1),  tsrunlength(1),  tsunshannon(1),   tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 		TSLAPLACIAN(1)

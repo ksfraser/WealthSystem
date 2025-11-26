@@ -1,0 +1,34 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
+<title>Advanced Stock Tracker - First Run</title>
+<link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+<link rel="stylesheet" type="text/css" href="$stylesheet">
+</head>
+<body>
+<div id="container">
+<div id="top">
+  <div id="awf_logo"><img src="images/ast-banner.png" alt="" width="422" height="70" /></div>
+  <div id="awf_title">First Run Wizard</div>
+  <div id="awf_logo_text">Advanced Stock Tracker</div>
+  <div id="awf_author_text">By Michael Williamson</div>
+</div>
+<div id="content">
+<br>
+<h1>Yahoo! Finance Data Agreement</h1>
+<form method="post" action="$save_page">
+Advanced Stock Tracker pulls its data from external sources, namely Yahoo! Finance. Yahoo!'s terms of service do not allow for commercial use of Yahoo's data. In order to use Advanced Stock Tracker, you must agree to be bound the terms of Yahoo!'s data agreement. For more information on <a href="http://developer.yahoo.com/usagePolicy">Yahoo!'s usage policy</a> click <a href="http://developer.yahoo.com/usagePolicy">here</a>.<br><br>
+<input type="submit" value="I Agree to Yahoo's Usage Policy">
+</form>
+</div>
+<div id="footer">
+<div class="awf_dot_div"></div>
+<p class="ast_footer"><small>Powered By Advanced Stock Tracker (AST)<br>
+(c) Michael Williamson, 2005, 2006<br>
+Visit <a href="http://ast.sourceforge.net">ast.sourceforge.net</a></small>
+</p>
+</div>
+</div>
+</body>
+</html>

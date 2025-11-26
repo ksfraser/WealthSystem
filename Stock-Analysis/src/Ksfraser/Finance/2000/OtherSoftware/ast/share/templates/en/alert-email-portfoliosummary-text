@@ -1,0 +1,18 @@
+                                PORTFOLIO SUMMARY:  $name
+-----------------------------------------------------------------------------------------------------------------
+Comment: $alert.comment
+
+
+$summary_table
+
+$newstable
+
+-----------------------------------------------------------------------------------------------------------------
+This email has been sent to you because you subscribed to alerts of this type in 
+Advanced Stock Tracker.  You can unsubscribe from these alerts by logging into 
+Advanced Stock Tracker and disabling these alerts or deleting them. The page 
+you can delete the alerts from is: $server_url?process=alerts
+
+Powered by Advanced Stock Tracker
+(c) 2005, 2006, 2007 Michael Williamson
+http://ast.sourceforge.net

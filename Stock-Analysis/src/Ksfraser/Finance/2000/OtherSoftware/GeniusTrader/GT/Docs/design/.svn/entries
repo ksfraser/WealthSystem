@@ -1,0 +1,54 @@
+8
+
+dir
+720
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader/trunk/GT/Docs/design
+https://geniustrader.svn.sourceforge.net/svnroot/geniustrader
+
+
+
+2003-06-08T18:38:14.000000Z
+265
+rhertzog
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+bb1899a8-85f5-0310-a327-fe9f4e15340a
+
+PortfolioAnalysis
+file
+
+
+
+
+2014-10-30T00:14:59.000000Z
+959726e0fe2e6d9bac8aa518edc30fab
+2003-06-08T18:38:14.000000Z
+265
+rhertzog
+has-props
+
+Database
+file
+
+
+
+
+2014-10-30T00:14:59.000000Z
+58d79b0ca55a179888b9d50e6aaf38bc
+2003-06-08T12:10:43.000000Z
+260
+rhertzog
+has-props
+

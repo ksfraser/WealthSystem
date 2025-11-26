@@ -1,0 +1,213 @@
+<form method="POST" action="$save_page">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Worksheet</th>
+    </tr>
+    <tr>
+      <td><b>Symbol:</b></td>
+      <td><b>Name:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="worksheet.symbol" value="$worksheet.symbol" class="awf_inputtextshort"></td>
+      <td><input type="text" name="worksheet.name" value="$worksheet.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td><b>Sector:</b></td>
+    </tr>
+    <tr>
+      <td><select name="worksheet.market">$market_options</select></td>
+      <td><select name="worksheet.sector">$sector_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Price Added At:</b></td>
+      <td><b>Recommendation:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="worksheet.add_price" value="$worksheet.add_price" class="awf_inputnum">&nbsp;<span class="awf_small">(leave blank or zero to auto-detect)</span></td>
+      <td><input type="text" name="worksheet.recommendation" value="$worksheet.recommendation" class="awf_inputnum"></td>
+    </tr>
+  </table>
+  <table class="awf_form" width="100%">
+    <tr>
+      <th width="90%">Income Statement</th><td><a href="#" onclick="javascript:document.getElementById('income_statement').style.display='inline';">show</a></td>
+    </tr>
+  </table>
+  <table id="income_statement" width="100%" class="awf_form" style="display: none">
+    <tr>
+      <td>&nbsp;</td>
+      <td><b>$year_0</b></td>
+      <td><b>$year_1</b></td>
+      <td><b>$year_2</b></td>
+      <td><b>$year_3</b></td>
+      <td><b>$year_4</b></td>
+      <td><b>$year_5</b></td>
+      <td><b>$year_6</b></td>
+      <td><b>$year_7</b></td>
+      <td><b>$year_8</b></td>
+      <td><b>$year_9</b></td>
+    </tr>
+    <tr>
+      <td><b>Sales:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_0" value="$worksheet.sales_0" onChange="javascript:ws_splitdata10('worksheet.sales_0','worksheet.sales_1','worksheet.sales_2','worksheet.sales_3','worksheet.sales_4','worksheet.sales_5','worksheet.sales_6','worksheet.sales_7','worksheet.sales_8','worksheet.sales_9');"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_1" value="$worksheet.sales_1" onChange="javascript:ws_splitdata9(sales_1,sales_2,sales_3,sales_4,sales_5,sales_6,sales_7,sales_8,sales_9);"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_2" value="$worksheet.sales_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_3" value="$worksheet.sales_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_4" value="$worksheet.sales_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_5" value="$worksheet.sales_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_6" value="$worksheet.sales_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_7" value="$worksheet.sales_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_8" value="$worksheet.sales_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.sales_9" value="$worksheet.sales_9"></td>
+    </tr>
+    <tr>
+      <td><b>Net Income:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_0" value="$worksheet.netincome_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_1" value="$worksheet.netincome_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_2" value="$worksheet.netincome_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_3" value="$worksheet.netincome_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_4" value="$worksheet.netincome_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_5" value="$worksheet.netincome_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_6" value="$worksheet.netincome_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_7" value="$worksheet.netincome_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_8" value="$worksheet.netincome_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.netincome_9" value="$worksheet.netincome_9"></td>
+    </tr>
+    <tr>
+      <td><b>EPS:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_0" value="$worksheet.eps_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_1" value="$worksheet.eps_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_2" value="$worksheet.eps_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_3" value="$worksheet.eps_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_4" value="$worksheet.eps_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_5" value="$worksheet.eps_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_6" value="$worksheet.eps_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_7" value="$worksheet.eps_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_8" value="$worksheet.eps_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.eps_9" value="$worksheet.eps_9"></td>
+    </tr>
+  </table>
+  <table class="awf_form" width="100%">
+    <tr>
+      <th width="90%">Balance Sheet</th><td><a href="#" onclick="javascript:document.getElementById('balance_sheet').style.display='inline';">show</a></td>
+    </tr>
+  </table>
+  <table id="balance_sheet" width="100%" class="awf_form" style="display: none">
+    <tr>
+      <td>&nbsp;</td>
+      <td><b>$year_0</b></td>
+      <td><b>$year_1</b></td>
+      <td><b>$year_2</b></td>
+      <td><b>$year_3</b></td>
+      <td><b>$year_4</b></td>
+      <td><b>$year_5</b></td>
+      <td><b>$year_6</b></td>
+      <td><b>$year_7</b></td>
+      <td><b>$year_8</b></td>
+      <td><b>$year_9</b></td>
+    </tr>
+    <tr>
+      <td><b>Assets:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_0" value="$worksheet.assets_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_1" value="$worksheet.assets_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_2" value="$worksheet.assets_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_3" value="$worksheet.assets_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_4" value="$worksheet.assets_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_5" value="$worksheet.assets_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_6" value="$worksheet.assets_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_7" value="$worksheet.assets_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_8" value="$worksheet.assets_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.assets_9" value="$worksheet.assets_9"></td>
+    </tr>
+    <tr>
+      <td><b>Liabilities:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_0" value="$worksheet.liabilities_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_1" value="$worksheet.liabilities_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_2" value="$worksheet.liabilities_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_3" value="$worksheet.liabilities_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_4" value="$worksheet.liabilities_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_5" value="$worksheet.liabilities_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_6" value="$worksheet.liabilities_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_7" value="$worksheet.liabilities_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_8" value="$worksheet.liabilities_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.liabilities_9" value="$worksheet.liabilities_9"></td>
+    </tr>
+    <tr>
+      <td><b>Book Value / Share:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_0" value="$worksheet.bookvalue_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_1" value="$worksheet.bookvalue_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_2" value="$worksheet.bookvalue_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_3" value="$worksheet.bookvalue_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_4" value="$worksheet.bookvalue_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_5" value="$worksheet.bookvalue_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_6" value="$worksheet.bookvalue_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_7" value="$worksheet.bookvalue_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_8" value="$worksheet.bookvalue_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.bookvalue_9" value="$worksheet.bookvalue_9"></td>
+    </tr>
+  </table>
+  <table class="awf_form" width="100%">
+    <tr>
+      <th width="90%">Misc Ratios</th><td><a href="#" onclick="javascript:document.getElementById('misc').style.display='inline';">show</a></td>
+    </tr>
+  </table>
+  <table id="misc" width="100%" class="awf_form" style="display: none">
+    <tr>
+      <td>&nbsp;</td>
+      <td><b>$year_0</b></td>
+      <td><b>$year_1</b></td>
+      <td><b>$year_2</b></td>
+      <td><b>$year_3</b></td>
+      <td><b>$year_4</b></td>
+      <td><b>$year_5</b></td>
+      <td><b>$year_6</b></td>
+      <td><b>$year_7</b></td>
+      <td><b>$year_8</b></td>
+      <td><b>$year_9</b></td>
+    </tr>
+    <tr>
+      <td><b>ROE:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_0" value="$worksheet.roe_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_1" value="$worksheet.roe_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_2" value="$worksheet.roe_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_3" value="$worksheet.roe_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_4" value="$worksheet.roe_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_5" value="$worksheet.roe_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_6" value="$worksheet.roe_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_7" value="$worksheet.roe_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_8" value="$worksheet.roe_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.roe_9" value="$worksheet.roe_9"></td>
+    </tr>
+    <tr>
+      <td><b>Shares:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_0" value="$worksheet.shares_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_1" value="$worksheet.shares_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_2" value="$worksheet.shares_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_3" value="$worksheet.shares_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_4" value="$worksheet.shares_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_5" value="$worksheet.shares_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_6" value="$worksheet.shares_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_7" value="$worksheet.shares_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_8" value="$worksheet.shares_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.shares_9" value="$worksheet.shares_9"></td>
+    </tr>
+    <tr>
+      <td><b>Dividends:</b></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_0" value="$worksheet.dividends_0"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_1" value="$worksheet.dividends_1"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_2" value="$worksheet.dividends_2"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_3" value="$worksheet.dividends_3"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_4" value="$worksheet.dividends_4"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_5" value="$worksheet.dividends_5"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_6" value="$worksheet.dividends_6"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_7" value="$worksheet.dividends_7"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_8" value="$worksheet.dividends_8"></td>
+      <td><input type="text" class="awf_inputnum" name="worksheet.dividends_9" value="$worksheet.dividends_9"></td>
+    </tr>
+  </table>
+  <table>
+    <tr>
+      <td><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

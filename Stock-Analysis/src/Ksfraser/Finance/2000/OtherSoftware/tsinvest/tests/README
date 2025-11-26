@@ -1,0 +1,565 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+    http://www.johncon.com/ntropix/
+    http://www.johncon.com/
+
+------------------------------------------------------------------------------
+
+This directory contains data files for the tsinvestsim(1) program for
+regression testing of the tsinvest(1) and tsinvestsim(1) programs.
+
+Note: some/most of the simulations are for 100,000 days, and the
+complete regression suite takes over 300 hours, (ie., about two
+weeks,) of execution time on a Pentium 90. Additionally, the output
+files of the regression suite require over half of a gigabyte of disk
+space.  A makefile is supplied to construct the regression suite. The
+results are documented in each data file.
+
+Inventory:
+
+    non-volatile.data, a test file for tsinvestsim(1), of a market
+    with 300 equities, with too little volatility, ie., rms < 2P - 1,
+    with Shannon probabilities, P, ranging, in a linear fashion, from
+    0.51 to 0.51299. (Real markets go from about 0.505 to 0.560, or
+    so, and are typically, non-volatile.)  The volatility is 50% too
+    low.
+
+        The daily gain in value of the index, i, should be 1.000266,
+        and the gain in value of a portfolio of the top ten equities, g,
+        should be 1.000327.
+
+        This file is intended to test whether the tsinvest(1) program
+        can exploit markets where the difference in the growth rates
+        of equities is not large. Ideally, what should happen, after
+        many days, (say, 100,000,) is that the equities invested in are
+        299, 298, 297, ..., and the value of the capital should be
+        greater than the value of the average index.
+
+        To exercise this file:
+
+            tsinvestsim non-volatile.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000265    1.000265    1.000265    1.000265    1.000265
+         g   1.000288    1.000317    1.000295    1.000275    1.000270
+
+    non-volatile.equal.antipersistent.data, a test file for
+    tsinvestsim(1), of a market with 300 equities, with too little
+    volatility, ie., rms < 2P - 1, with Shannon probabilities, P,
+    identical, and equal to 0.51, and an antipersistence, H, ranging,
+    in a linear fashion, from 0.4 to 0.5. (Real markets have Shannon
+    probabilities that go from about 0.505 to 0.560, or so, and
+    antipersistences running from about 0.400 to 0.500, or so.) The
+    volatility is 50% too low. This is a good "bear" market
+    simulation.
+
+        The daily gain in value of the index, i, should be 1.000200,
+        and the gain in value of a portfolio of the top ten equities,
+        g, should be 1.000195. The gain in value of a portfolio of the
+        top ten equites, g, based on the selection criteria of
+        antipersistence, (ie., the -d5 option,) should be about
+        1.001997, (assuming a probability of an up movement of 1 - H,
+        or about 0.6.)
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index. There is no strategic
+        advantage in investing in any stock over any other stock-in
+        point of fact, the optimal strategy is to invest equally in
+        all 300 equities.  Anything less than this will result in a
+        loss, in comparison to the average index of all equities.
+
+        To exercise this file:
+
+            tsinvestsim non-volatile.equal.antipersistent.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000176    1.000176    1.000176    1.000176    1.000176
+         g   1.000166    1.000180    1.000166    1.000177    1.001925
+
+    non-volatile.equal.data, a test file for tsinvestsim(1), of a
+    market with 300 equities, with too little volatility, ie., rms < 2P
+    - 1, with Shannon probabilities, P, identical, and equal to
+    0.51. (Real markets go from about 0.505 to 0.560, or so.) The
+    volatility is 50% too low. This is a good "bear" market
+    simulation.
+
+        The daily gain in value of the index, i, should be 1.000200,
+        and the gain in value of a portfolio of the top ten equities, g,
+        should be 1.000195.
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.
+
+        To exercise this file:
+
+            tsinvestsim non-volatile.equal.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000199    1.000199    1.000199    1.000199    1.000199
+         g   1.000193    1.000200    1.000192    1.000196    1.000178
+
+    non-volatile.equal.persistent.data, a test file for
+    tsinvestsim(1), of a market with 300 equities, with too little
+    volatility, ie., rms < 2P - 1, with Shannon probabilities, P,
+    identical, and equal to 0.51, and a persistence, H, ranging, in a
+    linear fashion, from 0.5 to 0.6. (Real markets have Shannon
+    probabilities that go from about 0.505 to 0.560, or so, and
+    persistences running from about 0.500 to 0.600, or so.) The
+    volatility is 50% too low. This is a good "bear" market
+    simulation.
+
+        The daily gain in value of the index, i, should be 1.000200,
+        and the gain in value of a portfolio of the top ten equities,
+        g, should be 1.000195. The gain in value of a portfolio of the
+        top ten equites, g, based on the selection criteria of
+        antipersistence, (ie., the -d5 option,) should be about
+        1.001997, (assuming a probability of an up movement of H, or
+        about 0.6.)
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index. There is no strategic
+        advantage in investing in any stock over any other stock-in
+        point of fact, the optimal strategy is to invest equally in
+        all 300 equities.  Anything less than this will result in a
+        loss, in comparison to the average index of all equities.
+
+        To exercise this file:
+
+            tsinvestsim non-volatile.equal.persistent.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000226    1.000226    1.000226    1.000226    1.000226
+         g   1.000253    1.000231    1.000255    1.000226    1.001915
+
+    optimal.data, a test file for tsinvestsim(1), of a market with 300
+    equities, all optimal, ie., rms = 2P - 1, with Shannon
+    probabilities, P, ranging, in a linear fashion, from 0.51 to
+    0.51299. (Real markets go from about 0.505 to 0.560, or so.)
+
+        The daily gain in value of the index, i, should be 1.000531,
+        and the gain in value of a portfolio of the top ten equities, g,
+        should be 1.000637.
+
+        This file is intended to test whether the tsinvest(1) program
+        can exploit markets where the difference in the growth rates
+        of equities is not large. Ideally, what should happen, after
+        many days, (say, 100,000,) is that the equities invested in are
+        299, 298, 297, ..., and the value of the capital should be
+        greater than the value of the average index.
+
+        To exercise this file:
+
+            tsinvestsim optimal.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000530    1.000530    1.000530    1.000530    1.000530
+         g   1.000553    1.000616    1.000575    1.000579    1.000523
+
+    optimal.equal.antipersistent.data, a test file for tsinvestsim(1),
+    of a market with 300 equities, all optimal, ie., rms = 2P - 1, with
+    Shannon probabilities, P, identical, and equal to 0.51, and a
+    antipersistence, H, ranging, in a linear fashion, from 0.4 to
+    0.5. (Real markets have Shannon probabilities that go from about
+    0.505 to 0.560, or so, and antipersistences running from about
+    0.400 to 0.500.)
+
+        The daily gain in value of the index, i, should be 1.000399,
+        and the gain in value of a portfolio of the top ten equities,
+        g, should be 1.000380. The gain in value of a portfolio of the
+        top ten equites, g, based on the selection criteria of
+        antipersistence, (ie., the -d5 option,) should be about
+        1.003988, (assuming a probability of an up movement of 1 - H,
+        or about 0.6.)
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.  There is no strategic
+        advantage in investing in any stock over any other stock-in
+        point of fact, the optimal strategy is to invest equally in
+        all 300 equities.  Anything less than this will result in a
+        loss, in comparison to the average index of all equities.
+
+        To exercise this file:
+
+           tsinvestsim optimal.equal.antipersistent.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000352    1.000352    1.000352    1.000352    1.000352
+         g   1.000322    1.000351    1.000320    1.000325    1.003843
+
+    optimal.equal.data, a test file for tsinvestsim(1), of a market
+    with 300 equities, all optimal, ie., rms = 2P - 1, with Shannon
+    probabilities, P, identical, and equal to 0.51. (Real markets go
+    from about 0.505 to 0.560, or so.)
+
+        The daily gain in value of the index, i, should be 1.000399,
+        and the gain in value of a portfolio of the top ten equities, g,
+        should be 1.000380.
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.
+
+        To exercise this file:
+
+            tsinvestsim optimal.equal.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000399    1.000399    1.000399    1.000399    1.000399
+         g   1.000377    1.000390    1.000378    1.000379    1.000346
+
+    optimal.equal.persistent.data, a test file for tsinvestsim(1), of
+    a market with 300 equities, all optimal, ie., rms = 2P - 1, with
+    Shannon probabilities, P, identical, and equal to 0.51, and a
+    persistence, H, ranging, in a linear fashion, from 0.5 to
+    0.6. (Real markets have Shannon probabilities that go from about
+    0.505 to 0.560, or so, and persistences running from about 0.500
+    to 0.600.)
+
+        The daily gain in value of the index, i, should be 1.000399,
+        and the gain in value of a portfolio of the top ten equities,
+        g, should be 1.000380. The gain in value of a portfolio of the
+        top ten equites, g, based on the selection criteria of
+        antipersistence, (ie., the -d5 option,) should be about
+        1.003988, (assuming a probability of an up movement of H, or
+        about 0.6.)
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.  There is no strategic
+        advantage in investing in any stock over any other stock-in
+        point of fact, the optimal strategy is to invest equally in
+        all 300 equities.  Anything less than this will result in a
+        loss, in comparison to the average index of all equities.
+
+        To exercise this file:
+
+            tsinvestsim optimal.equal.persistent.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000453    1.000453    1.000453    1.000453    1.000453
+         g   1.000499    1.000451    1.000496    1.000452    1.003821
+
+    volatile.data, a test file for tsinvestsim(1), of a market with
+    300 equities, all too volatile, ie., rms > 2P - 1, with Shannon
+    probabilities, P, ranging, in a linear fashion, from 0.51 to
+    0.51299. (Real markets go from about 0.505 to 0.560, or so, and
+    are typically, non-volatile, but some equities exhibit volatility.)
+    The volatility is 50% too high.
+
+        The daily gain in value of the index, i, should be 1.000796,
+        and the gain in value of a portfolio of the top ten equities, g,
+        should be 1.000931.
+
+        This file is intended to test whether the tsinvest(1) program
+        can exploit markets where the difference in the growth rates
+        of equities is not large. Ideally, what should happen, after
+        many days, (say, 100,000,) is that the equities invested in are
+        299, 298, 297, ..., and the value of the capital should be
+        greater than the value of the average index.
+
+        To exercise this file:
+
+            tsinvestsim volatile.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000800    1.000800    1.000800    1.000800    1.000800
+         g   1.000780    1.001055    1.000848    1.000877    1.000622
+
+    volatile.equal.antipersistent.data, a test file for
+    tsinvestsim(1), of a market with 300 equities, all too volatile,
+    ie., rms > 2P - 1, with Shannon probabilities, P, identical, and
+    equal to 0.51, and a antipersistence, H, ranging, in a linear
+    fashion, from 0.4 to 0.5. (Real markets have Shannon probabilities
+    that go from about 0.505 to 0.560, or so, and antipersistences
+    running from about 0.400 to 0.500, or so.)  The volatility is 50%
+    too high.
+
+        The daily gain in value of the index, i, should be 1.000599,
+        and the gain in value of a portfolio of the top ten equities,
+        g, should be 1.000555. The gain in value of a portfolio of the
+        top ten equites, g, based on the selection criteria of
+        antipersistence, (ie., the -d5 option,) should be about
+        1.005973, (assuming a probability of an up movement of 1 - H,
+        or about 0.6.)
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.  There is no strategic
+        advantage in investing in any stock over any other stock-in
+        point of fact, the optimal strategy is to invest equally in
+        all 300 equities.  Anything less than this will result in a
+        loss, in comparison to the average index of all equities.
+
+        To exercise this file:
+
+            tsinvestsim volatile.equal.antipersistent.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000536    1.000536    1.000536    1.000536    1.000536
+         g   1.000400    1.000730    1.000451    1.000517    1.005375
+
+    volatile.equal.data, a test file for tsinvestsim(1), of a market
+    with 300 equities, all too volatile, ie., rms > 2P - 1, with Shannon
+    probabilities, P, identical, and equal to 0.51. (Real markets go
+    from about 0.505 to 0.560, or so.)  The volatility is 50% too
+    high.
+
+        The daily gain in value of the index, i, should be 1.000599,
+        and the gain in value of a portfolio of the top ten equities, g,
+        should be 1.000555.
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.
+
+        To exercise this file:
+
+            tsinvestsim volatile.equal.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000600    1.000600    1.000600    1.000600    1.000600
+         g   1.000555    1.000647    1.000556    1.000558    1.000336
+
+    volatile.equal.persistent.data, a test file for tsinvestsim(1), of
+    a market with 300 equities, all too volatile, ie., rms > 2P - 1,
+    with Shannon probabilities, P, identical, and equal to 0.51, and a
+    persistence, H, ranging, in a linear fashion, from 0.5 to
+    0.6. (Real markets have Shannon probabilities that go from about
+    0.505 to 0.560, or so, and persistences running from about 0.500
+    to 0.600, or so.)  The volatility is 50% too high.
+
+        The daily gain in value of the index, i, should be 1.000599,
+        and the gain in value of a portfolio of the top ten equities,
+        g, should be 1.000555. The gain in value of a portfolio of the
+        top ten equites, g, based on the selection criteria of
+        antipersistence, (ie., the -d5 option,) should be about
+        1.005973, (assuming a probability of an up movement of H, or
+        about 0.6.)
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market where there is nothing to exploit.  Ideally,
+        what should happen, after many days, (say, 100,000,) is that
+        value of the capital should be less than, but nearly equal to,
+        the value of the average index.  There is no strategic
+        advantage in investing in any stock over any other stock-in
+        point of fact, the optimal strategy is to invest equally in
+        all 300 equities.  Anything less than this will result in a
+        loss, in comparison to the average index of all equities.
+
+        To exercise this file:
+
+            tsinvestsim volatile.equal.persistent.data 100000 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1         -d2         -d3         -d4         -d5
+         i   1.000679    1.000679    1.000679    1.000679    1.000679
+         g   1.000736    1.000696    1.000728    1.000670    1.005578
+
+    crash-up.data, a test file for tsinvestsim(1), of a deteriorating
+    market with 300 equities, simulating the US equity markets for 3,254
+    trading days between 15 August, 1921, and 6 June, 1932,
+    inclusive. During the 2,401 trading day period between 15 August,
+    1921 and 7 September, 1929, the US equity markets had a
+    substantial gain of about 5.7X in value, (DJIA values of 66.02 to
+    375.44.) During the 853 trading day period between 7 September,
+    1929, and 6 June, 1932, the markets had a significant reversal,
+    loosing about 90% of their 7 September, 1929 value, (DJIA values
+    of 375.44 to 42.68,) for about a 30% loss on the decade 1921-1931,
+    and did not regain their 7 September, 1929 values until mid 1956.
+
+        To make the tsinvest(1) data file, tsinvestsim(1) is executed
+        twice-the first time on this file, which is when the market
+        was increasing:
+
+            tsinvestsim crash-up.data 2401 | sed 's/^/UP/' > crash.data
+
+        with the terminal values for each stock at the end of the
+        simulation used to make another tsinvestsim(1) input file with
+        the same initial values, which is when the market was
+        decreasing:
+
+            egrep '^UP2400' crash.data | cut -f2,3 | sed 's/    /, p = 0.44, f = 0.02, h = 0.55, i = /' > crash-down.data
+
+        (where sed(1) is replacing a tab character,) which is then
+        executed by tsinvestsim(1):
+
+            tsinvestsim crash-down.data 853 | sed 's/^/DOWN/' >> crash.data
+
+        and, to exercise this file:
+
+            tsinvest -i -t -s -c crash.data
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+        Arg  -d1 -c      -d2 -c      -d3 -c      -d4 -c      -d5 -c
+         i   0.999866    0.999866    0.999866    0.999866    0.999866
+         g   1.000134    1.000000    1.000000    0.999950    1.000450
+
+    crash-down.data, a test file for tsinvestsim(1), machine generated
+    from the crash-up.data file. The file crash-up.data represents the
+    escalation in equity values, from 1921 on, and the file
+    crash-down.data represents the deterioration in equity values,
+    from 1929 on.
+
+    stocks.data, a test file for tsinvestsim(1), of a market with 454
+    equities. This file was generated by dumping the internal data
+    structures of the tsinvest(1) program after it had completed
+    execution of the file "stocks", (a daily fragment of the American
+    stock exchanges, consisting of 454 equities, from January 1, 1993,
+    to June 6, 1996, as supplied by
+    http://www.ai.mit.edu/stocks.html,) using the -r option, to make a
+    new file for tsinvestsim(1).
+
+        This file is intended to test how well the tsinvestsim(1) and
+        tsinvest(1) programs model real markets. The data output from
+        the tsinvest(1) program should be similar with the real, and
+        dumped data.
+
+        To exercise this file:
+
+            tsinvestsim stocks.data 671 | tsinvest -i -s -t
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy.
+
+    losers.data, a test file for tsinvest(1), of a market with 49
+    equities, all decreasing in value. This file was generated by
+    dumping the internal data structures of the tsinvest(1) program
+    after it had completed execution of the file "stocks", (a daily
+    fragment of the American stock exchanges, consisting of 454
+    equities, from January 1, 1993, to June 6, 1996, as supplied by
+    http://www.ai.mit.edu/stocks.html,) using the -r option, (the -p
+    -P options were used, also,) to make a new file for tsinvest(1).
+
+        To make the tsinvest(1) data file:
+
+            tsinvest -p -P -r stocks > stocks.data
+
+        The file stocks.data was then edited in a text editor, and
+        stocks picked such that:
+
+            1) The gain, G, of the value of the stock was less than
+            unity, ie., it decreased in value.
+
+            2) The root mean square, rms, of the marginal returns,
+            squared, was greater than the average of the marginal
+            returns, ie., the stock's rms^2 > avg, it was too
+            volatile.
+
+            3) The likelihood of an up movement in the stock's value,
+            P, was greater than 50%.
+
+        The file "stocks" was then filtered, using egrep(1), to make a
+        new tsinvest(1) database of the stocks that lost value do to
+        being too volatile, between January 1, 1993, to June 6, 1996.
+
+        This file is intended to test how well the tsinvest(1) program
+        does in a market that is deteriorating, and test how well it
+        does assembling the portfolio, taking advantage of moving
+        money around in the portfolio, (ie., asset allocation.)
+
+        Note that the -D0 and -j options were used; normally, the
+        tsinvest(1) program will not invest in stocks that are
+        declining in value-the -D0 option over rides this default
+        behavior, and forces the program to commit to managing
+        investments in stocks that are declining in value; and the -j
+        option prints the average of the stocks, as opposed to the
+        average balanced growth.
+
+        To exercise this file:
+
+            tsinvest -i -s -t losers.data
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+            Arg  -d1         -d2         -d3         -d4         -d5
+             i   0.999987    0.999987    0.999987    0.999987    0.999987
+             g   0.999364    1.001251    0.999413    1.001209    0.999845
+
+            tsinvest -i -s -t -m0 losers.data
+
+        where the -d 1|2|3|4|5|6 argument of tsinvest(1) is used to
+        alter the wagering strategy. The measured results are:
+
+            Arg  -d1 -m0     -d2 -m0     -d3 -m0     -d4 -m0     -d5 -m0
+             i   0.999987    0.999987    0.999987    0.999987    0.999987
+             g   0.999291    1.001649    0.999388    1.000336    1.000943
+
+    John Conover
+    john@email.johncon.com
+    January 7, 2006

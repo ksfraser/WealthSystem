@@ -1,0 +1,3 @@
+<form method="post" action="$save_page">
+Select Market:&nbsp;<select name="marketinfo.market">$market_options</select>&nbsp;<input type="submit" value="Add">
+</form>

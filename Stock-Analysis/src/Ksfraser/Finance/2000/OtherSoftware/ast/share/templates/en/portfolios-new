@@ -1,0 +1,24 @@
+<form method="post" action="$save_page">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th>Edit Portfolio Information</th>
+    </tr>
+    <tr>
+      <td><b>Portfolio Name:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="portfolios.name" value="$portfolios.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Description:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="portfolios.description" value="$portfolios.description" class="awf_inputtext awf_wide_input"></td>
+    </tr>
+    <tr>
+      <td><input type="checkbox" name="consolidated">&nbsp;Consolidated&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.consolidated></td>
+    <tr>
+      <td align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

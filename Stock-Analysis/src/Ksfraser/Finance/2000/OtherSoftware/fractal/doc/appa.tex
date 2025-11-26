@@ -1,0 +1,491 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: appa.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: appa.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+\chapter{Tutorial on Fractal Time Series}
+    \label{tutorial}
+
+    \subidx{time series}{tutorial}
+    \subidx{optimization}{betting strategies}
+    \subidx{betting strategies}{optimization}
+    \idx{speculative markets}
+    \idx{economic theory}
+    This appendix presents a remedial tutorial on the optimization of
+    betting strategies in speculative markets. It is offered in
+    academic perspective, and under no circumstances would it be
+    appropriate to consider it financial advice. It can serve,
+    however, as an introduction to the contemporary economic theory of
+    speculative markets. Rigorous and sophisticated approaches that
+    address the issues of investing in speculative markets are
+    contained in the bibliography.
+
+    \subidx{game}{speculative}
+    \idx{coin game}
+    \subidx{optimization}{betting strategies}
+    \subidx{betting strategies}{optimization}
+    This section begins with the analysis of a very simple speculative
+    game, that of tossing coins. The analysis will then be expanded by
+    permitting the use of unfair coins in the game, roughly
+    following~\cite[pp. 128]{Schroeder}. An optimal betting strategy
+    will be developed for the game, and this strategy will then be
+    generalized and extended to include remedial betting strategies in
+    certain speculative markets.
+
+    \section{The Coin Tossing Game}
+        \label{coingame}
+
+        \idx{coin game}
+        Consider a coin tossing game, where a player makes a wager,
+        and then, flips a coin. If the coin comes up heads, then the
+        player wins twice the original wager, (ie., makes back the
+        original wager plus an amount equal to the original wager from
+        the ``bank.'')  But if the coin comes up tails, then the
+        player looses the wager to the bank. The game is iterated,
+        many times, until the player decides not to play any more, or
+        goes ``bust.''
+
+        \subsection{Strategic Considerations in the Iterated Coin Tossing Game}
+
+            \subidx{optimization}{betting strategies}
+            \subidx{betting strategies}{optimization}
+            The player has an initial cash reserve, to which are added
+            the cumulative returns, and from which each wager is made,
+            and the cumulative returns will increase by the amount of
+            the wager each time the player wins, and, likewise the
+            cumulative returns will decrease by the amount of the
+            wager each time the player looses.  The objective of the
+            player is, obviously, to maximize the magnitude of the
+            cumulative returns, over time. Note that this is a
+            speculative game, in that the player speculates on the
+            likelihood that the coin will come up heads on next
+            iteration of the game, and adjusts the wager accordingly,
+            betting zero if the outcome of the next coin toss is
+            anticipated to be tails.
+
+            \subsubsection{Description of ``Time Series'' and ``Fractal''}
+
+                \subidx{fractal}{time series}
+                \subidx{time series}{fractal}
+                \begin{description}
+
+                    \item[Time Series:]If the player makes a list,
+                    recording the time, and magnitude of cumulative
+                    returns, for each iteration of the game, such a
+                    table is called the {\it time series}\/ of the
+                    cumulative
+                    returns~\cite[pp. 223]{Schroeder},~\cite[pp. 199]{Cambel}.
+
+
+                    \item[Fractal:]If the player plots a graph of the
+                    time series, time on the X---axis and magnitude of
+                    cumulative returns on the Y---axis, this graph
+                    will exhibit {\it fractal}\footnote{Technically,
+                    the term, as used here, should be {\it Random
+                    Fractal}\/, or {\it Fractional Brownian
+                    Motion},~\cite[pp. 170]{Feder}.} characteristics,
+                    which means that it represents a system that has
+                    the characteristics of a cumulative sum, (ie.,
+                    integrative process,) of random events, coin
+                    tosses in this
+                    case~\cite[pp. 229]{Crownover},~\cite[pp. 163]{Feder}.
+
+
+                \end{description}
+
+            \subidx{iterated}{game}
+            \subidx{game}{iterated}
+            \idx{cumulative returns}
+            \subidx{cumulative returns}{iterated game}
+            \subidx{iterated game}{cumulative returns}
+            It is an important concept that the magnitude of the
+            cumulative returns, at any time during the iterated game,
+            is the cumulative sum of all of the wins and losses of
+            wagers made in the previous iterations of the game,
+            starting with the initial cash reserves, ie., it is an
+            integrative process. If the player does not have ``a
+            priory'' knowledge of the outcome of the future coin
+            tosses, then optimizing this integrative process is the
+            strategic objective of playing a rational game.
+
+            \subidx{cumulative returns}{strategic considerations}
+            \subidx{strategic considerations}{cumulative returns}
+            For example, it would be foolish for the player to always
+            wager zero, since, although there would never be a loss,
+            there would never be a win, either. Likewise, it would be
+            foolish for the player to wager a large percentage of the
+            cumulative returns, since a few losses in succession would
+            deplete the cash reserves and cumulative returns to zero,
+            and the player would ``go bust,'' thus ending the
+            game. Obviously, the player could wager too much, or too
+            little of the cumulative returns on a single game
+            iteration. The series optimum wagers, is termed the {\it
+            optimal betting
+            strategy},~\cite[pp. 128]{Schroeder},~\cite[pp. 450]{Reza},~\cite[pp. 270]{Pierce}.
+
+
+    \section{Optimal Betting Strategy in the Iterated Coin Tossing Game}
+        \label{unfaircoingame}
+
+        \idx{unfair coin game}
+        \subidx{optimization}{betting strategies}
+        \subidx{betting strategies}{optimization}
+        If the coin is a fair coin, ie., it has a 50\% chance of
+        coming up heads and a 50\% chance of coming up tails, then the
+        player should elect not to play. The rationale for this
+        statement is that, in the long run, some iterated games will
+        be won, and some lost, with the amount of money won equal to
+        the amount of money lost---so there is no financial incentive
+        to play the game. However, suppose that there is a 60\% chance
+        for the coin to come up heads, on any single iteration of the
+        game, and a 40\% chance of coming up tails. It turns out that
+        the fractal characteristics of the game can be exploited to
+        determine the optimal betting strategy\footnote{Fortunately,
+        there is a large analytical infrastructure in mathematics and
+        economics available that addresses these issues. The answers
+        are provided by {\it Information Theory,}\/ and the
+        applications of these {\it entropic}\/ principles are a firmly
+        entrenched discipline in the field of
+        economics~\cite[pp. 127]{Schroeder},~\cite[pp. 450]{Reza},~\cite[pp. 270]{Pierce}.}. The
+        optimal betting strategy, in this case, is for the player to
+        wager 20\% of the cumulative returns, every iteration of the
+        game. As it turns out, this will maximize the growth of the
+        player's cumulative
+        returns~\cite[pp. 128]{Schroeder},~\cite[pp. 450]{Reza},~\cite[pp. 270]{Pierce}. The
+        way that this was computed was from the formula:
+        \subidx{optimum strategy}{coin game, formula}
+
+        \begin{equation}
+            F = 2P - 1
+            \label{bet_optimum1}
+        \end{equation}
+
+        \subidx{cumulative returns}{strategic considerations}
+        \subidx{strategic considerations}{cumulative returns}
+        \noindent where $F$ is the fraction of the player's cumulative
+        returns that should be wagered on an iteration of a game with
+        a $P$ chance of winning the
+        game~\cite[pp. 151]{Schroeder},~\cite[pp. 450]{Reza},~\cite[pp. 270]{Pierce}. In
+        the above case, with a 60\%, (ie., $p = 0.6$,) chance of
+        winning:
+
+        \begin{equation}
+            \label{bet_optimum2}
+            F = \left(2 \cdot 0.6\right) - 1
+        \end{equation}
+
+        \begin{equation}
+            \label{bet_optimum3}
+            F = 1.2 - 1
+        \end{equation}
+
+        \begin{equation}
+            \label{bet_optimum4}
+            F = 0.2
+        \end{equation}
+
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \idx{binary symmetric channel}
+
+        \noindent or $F$ is 20\% of the player's cumulative
+        returns\footnote{This will maximize the logarithmic growth of
+        the player's cumulative returns, and is the highest value that
+        can be attained, as given by Shannon's {\it information
+        capacity}\/, $C(P) = 1 - H(P)$ of a binary symmetric channel
+        with an error probability of $P$. Here, $H(P)$ is the entropy
+        function, $H(P) = -[P \ln P + (1 - P) \ln (1 -
+        P)$~\cite[pp. 128,
+        151]{Schroeder},~\cite[pp. 38]{Shannon},~\cite[pp. 114,
+        pp. 450]{Reza},~\cite[pp. 270]{Pierce},~\cite[pp. 155]{Klir},~\cite[pp. 9]{Ash}.}. Playing
+        this betting strategy, the player can expect an average of 2\%
+        increase in the magnitude of cumulative returns on each toss
+        of the coin\footnote{This value is computed by taking the
+        logarithm to the base $2$, $H(P) = 0.97$ bits per game, and
+        $2^C = 1.02$, or 2\% each
+        game~\cite[pp. 128]{Schroeder},~\cite[pp. 36]{Shannon},~\cite[pp. 30]{Ash},~\cite[pp. 450]{Reza},~\cite[pp. 270]{Pierce}.}.
+
+        For those wishing to experiment with optimal betting
+        strategies, the unfair coin can be simulated with a six sided
+        die.  After the wager, the die is rolled, and if the die comes
+        up 1, 2, 3, or 4 the player wins. But if it comes up 5 or 6,
+        the player loses. The probability of winning, $P$, in this
+        case is 0.66 since the player will win 4 times out of 6, on
+        average. The optimal wager will be $F = (2 \cdot 0.66) - 1 =
+        0.33$, or 33\% of the cumulative returns should be wagered on
+        each iteration of the game. It is interesting to play many
+        iterations of the game, particularly using different betting
+        strategies---for example change the wager fraction to 20\%, or
+        40\% of the cumulative returns---and see how the long term
+        cumulative returns change in response to the different betting
+        strategies.
+
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \subidx{programs}{tsunfaircoin}
+        \subidx{tsunfaircoin}{program}
+        The program, {\it tsunfaircoin}\/, which is briefly described
+        in Appendix~\ref{programs}, uses a random number generator to
+        simulate the unfair coin in an iterated coin tossing game. The
+        program's command line options control the wager fraction,
+        $F$, and the Shannon probability, $P$, and the number of
+        iterations of the game.  The cumulative returns for each
+        iteration of the game are printed to the terminal, and may be
+        plotted, to show that there is indeed an optimum value of
+        wager fraction, $F$, for any value of Shannon probability,
+        $P$, provided $P$ is greater than $\frac{1}{2}$.
+
+    \section{Important Intuitive Concepts of Speculative Games}
+
+        \idx{unfair coin game}
+        \subidx{speculative games}{intuitive concepts}
+        \subidx{games}{iterated}
+        \idx{cumulative returns}
+        The unfair coin tossing game is probably one of the simplest
+        speculative games. It is important to develop an intuitive
+        concept based on the fundamentals of this simple game.
+        Speculative games have the following characteristics:
+
+            \begin{itemize}
+
+                \item Speculative games are iterated. A wager is made
+                from the player's cumulative returns for the game, and
+                depending on the outcome of the iteration of the game,
+                the player either wins or looses the wager for that
+                iteration. The winnings or losses, for each iteration,
+                are summed to the player's cumulative returns.
+
+                \item The outcome of a particular iteration has random
+                characteristics, ie., the outcome of a particular
+                iteration is not ``predictable.''
+
+                \item The objective of the game is to maximize the
+                value of the player's cumulative returns.
+
+            \end{itemize}
+
+        \idx{capital markets}
+        As it turns out, these simple concepts have many applications,
+        for example, they can be used to model and analyze the capital
+        markets~\cite[pp. 81]{Peters:CAOITCM}.
+
+    \section{An Analytical Approach to the Iterated Unfair Coin Tossing Game}
+        \label{analyticalgame}
+
+        \subidx{random mechanism}{speculative games}
+        \subidx{speculative games}{random mechanism}
+        In Section~\ref{unfaircoingame} it was assumed that the player
+        had knowledge about the probability of a tossed coin coming up
+        heads. In most speculative games, knowledge of the random
+        mechanism is not available. For a simple game, like tossing an
+        unfair coin, the coin could be tossed many times, and the
+        probability of it coming up heads measured.  The methodology
+        would be to toss the coin, say, 100 times, and count how many
+        times it came up heads. Say it comes up heads 60 times out of
+        the 100 tosses. Then the probability that the coin will come
+        up heads on any particular iteration of the game would be
+        60\%, and the player could arrange a betting strategy,
+        accordingly. It turns out that this concept is very
+        extensible.
+
+        \subidx{random mechanism}{speculative games}
+        \subidx{speculative games}{random mechanism}
+        \idx{capital markets}
+        \idx{historical data}
+        \subidx{unfair}{games}
+        \subidx{games}{unfair}
+        \subidx{optimization}{betting strategies}
+        \subidx{betting strategies}{optimization}
+        In many speculative games, there is no knowledge available
+        about the characteristics of the random process of the game.
+        As a simple example, assume that no knowledge is available
+        about the underlying random process of the unfair coin tossing
+        game.  Like the capital markets, we have only historical data
+        about the wagering process, ie., what was won, and what was
+        lost during each iteration of the game. If we look at the
+        historical time series of the game, we would observe that
+        since the cumulative returns are increasing, that the game is
+        unfair. It would be desirable gain some insight into the
+        random process that controls the outcome of an iteration of
+        the game, so a betting strategy can be formulated. Referring
+        to the preceeding paragraph, when the coin was tossed a
+        hundred times to count how many times it came up heads, it
+        should be realized that this was a cumulative sum of number of
+        times the coin came up heads over a hundred iterations.
+
+        \subidx{unfair}{games}
+        \subidx{games}{unfair}
+        \subidx{optimization}{betting strategies}
+        \subidx{betting strategies}{optimization}
+        \subidx{analysis}{speculative games}
+        \subidx{speculative games}{analysis}
+        Being formal, in $n$ many tosses of the coin, it would be
+        expected that the coin came up heads, $P \cdot n$ many times,
+        and come up tails, $(1 - P) \cdot n$ many times, where $P$ is
+        the probability of the coin coming up heads. If a counting
+        process is started, tallied in $C$, by which, if the coin is
+        tossed, and it comes up heads, we increase the count by one,
+        and if it comes up tails, we decrease the count by one, then
+        it would be expected, after $n$ many tosses\footnote{For
+        computational reasons, it is advantageous to implement
+        counting of the number of heads in a series of coin tosses in
+        this manner, which finds the ``average'' $C$ by summing both
+        heads and tails, with differing signs. In the unfair coin
+        tossing game, the random mechanism can be analyzed by simply
+        counting the number of times heads comes up in series of
+        tosses.  However, in speculative games, in general, the random
+        mechanisms are much more sophisticated, requiring an
+        ``average'' to be taken. This methodology provides a means of
+        extensibility to these types of systems.}:
+
+        \begin{equation}
+            C = P \cdot n - \left(1 - P\right) \cdot n
+        \end{equation}
+
+        Notice that $C$ was derived empirically, and from $C$, we can
+        compute the probability, $P$, of the coin coming up heads in
+        any iteration of the game. Rearranging:
+
+        \begin{equation}
+            C = P \cdot n - n  + P \cdot n
+        \end{equation}
+
+        \noindent and dividing both sides of the equation by $n$:
+
+        \begin{equation}
+            \frac{C}{n} = P - 1 + P = 2 \cdot P - 1
+        \end{equation}
+
+        \noindent and solving for $P$:
+
+        \begin{equation}
+            P = \frac{\frac{C}{n} + 1}{2}
+            \label{p1}
+        \end{equation}
+
+        \noindent noting that $\frac{C}{n}$ is the ``average'' $C$.
+
+        The same methodology can be used in general. Access to the
+        unfair coin to measure the probability of it coming up heads
+        on any iteration is not necessary---this information can be
+        deduced from the historical files of a game where the coin was
+        used.  For example, we can take the historical time series of
+        a unfair coin tossing game, and for each iteration, subtract
+        the value of the cumulative returns of the previous iteration
+        from the value of the cumulative returns of the next
+        iteration, dividing the result of the subtraction by the value
+        of the cumulative returns in the previous iteration, making a
+        new time series. This is a very powerful concept in the
+        strategy of speculative games. The new time series contains
+        the fraction of the cumulative returns that was won or lost on
+        each iteration of the game.
+
+        \subidx{random mechanism}{speculative games}
+        \subidx{speculative games}{random mechanism}
+        \subidx{optimization}{betting strategies}
+        \subidx{betting strategies}{optimization}
+        \subidx{cumulative returns}{fraction wagered}
+        Using our example of the unfair coin tossing game, we would
+        observe that the new time series would be a list of numbers,
+        containing either $+F$, if the wager was won in an iteration,
+        or $-F$, if the wager was lost, (assuming that $F$ was
+        constant throughout the game.) The important concept here is
+        that, given a specific iteration, the fraction of the
+        cumulative returns wagered can be deduced, and whether the
+        wager was won or lost. It is an important concept that we can
+        reconstruct the characteristics of the random mechanism, and
+        the fraction of the cumulative returns wagered from the
+        historical data of a speculative game, without having
+        knowledge of the random mechanism\footnote{It is not a
+        complicated concept, actually, if you look at the process by
+        which the historical time series was made. A wager is made,
+        that is a fraction of the cumulative returns, and the wager
+        was either added or subtracted from the cumulative returns for
+        the game, depending on the results of a random process. When
+        we subtract the value of the cumulative returns of a previous
+        iteration from the value of the cumulative returns of the next
+        iteration, and dividing by the value of the cumulative returns
+        in the previous iteration, we are actually ``undoing'' the
+        cumulative returns process of the game---kind of working
+        backward to create the underlying random process and betting
+        strategy.}. As before, we do a cumulative sum on the random
+        game's process, only instead of it being a tossed coin, it is
+        the new time series that contains the fraction of the
+        cumulative returns that was won or lost in each iteration of
+        the game. Formalizing, using Equation~\ref{p1}, and replacing
+        $\frac{C}{n}$, the average value of $C$, with the ``average''
+        value of $F$, found by summing all of the values in the new
+        time series, and dividing by the number of iterations:
+
+       \begin{equation}
+           \label{p2}
+           P = \frac{1}{2} + \frac{1}{2n}\sum_{i = 0}^{n} F\left(i\right)
+       \end{equation}
+
+       \noindent or more generally:
+
+       \begin{equation}
+           P = \frac{1}{2} + \frac{1}{2t}\int_0^t F\left(n\right) dn
+       \end{equation}
+
+       Interestingly, if we want to find out the fraction of the
+       cumulative returns that was wagered each iteration of the game,
+       the absolute value of $F(i)$ can be taken in
+       Equation~\ref{p2}. In the simple case of the unfair tossed
+       coin, it is simply $F$, since $F(i)$ is either $+F$ or $-F$,
+       ie., we simply remove the signs, and the equation reduces
+       to\footnote{The absolute value of the normalized increments,
+       when averaged, is related to the root mean square of the
+       increments by a constant. If the normalized increments are a
+       fixed increment, the constant is unity. If the normalized
+       increments have a Gaussian distribution, the constant is
+       $\approx 0.8$ depending on the accuracy of of ``fit'' to a
+       Gaussian distribution.}:
+
+       \begin{equation}
+           F = 2P - 1
+           \label{bet_optimum5}
+       \end{equation}
+
+       \noindent which is the same as
+       Equation~\ref{bet_optimum1}. Although this is a generalization,
+       this derivation has not shown that this is indeed an optimal
+       solution. See Section~\ref{GA} in Chapter~\ref{general} for a
+       presentation on the optimal solution---it turns out that $F = 2P
+       - 1$ is, indeed, the optimal solution.
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

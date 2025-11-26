@@ -1,0 +1,1 @@
+plot [t=0:12] 1.074084 ** t with lines, erf (1 / sqrt (2 * t)) with lines, 1 / sqrt (t) with lines

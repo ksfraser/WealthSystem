@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy
+END
+CloseGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/CloseGain.pm
+END
+ChannelBreakout.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/ChannelBreakout.pm
+END
+NeverClose.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/NeverClose.pm
+END
+PartialGain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/PartialGain.pm
+END
+Generic.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/Generic.pm
+END
+LimitPeriodInTheMarket.pm
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/LimitPeriodInTheMarket.pm
+END
+OppositeSignal.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/OppositeSignal.pm
+END
+PartialStop.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/CloseStrategy/PartialStop.pm
+END

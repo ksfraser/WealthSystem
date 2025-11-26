@@ -1,0 +1,60 @@
+currency.flags: 0
+currency.id: CAD
+currency.description: Canadian Dollar
+%%
+currency.flags: 0
+currency.id: USD
+currency.description: US Dollar
+%%
+currency.flags: 0
+currency.id: EUR
+currency.description: Euro
+%%
+currency.flags: 0
+currency.id: HKD
+currency.description: Hong Kong Dollar
+%%
+currency.flags: 0
+currency.id: GBP
+currency.description: British Pound
+%%
+currency.flags: 0
+currency.id: JPY
+currency.description: Japanese Yen
+%%
+currency.flags: 0
+currency.id: AUD
+currency.description: Australian Dollar
+%%
+currency.flags: 0
+currency.id: SGD
+currency.description: Singapore Dollar
+%%
+currency.flags: 0
+currency.id: SEK
+currency.description: Swedish Krona
+%%
+currency.flags: 0
+currency.id: INR
+currency.description: Indian Rupee
+%%
+currency.flags: 0
+currency.id: BRL
+currency.description: Brazilian Real
+%%
+currency.flags: 0
+currency.id: NOK
+currency.description: Norwegian Krone
+%%
+currency.flags: 0
+currency.id: IDR
+currency.description: Indonesia Rupiahs
+%%
+currency.flags: 0
+currency.id: KRW
+currency.description: South Korea Won
+%%
+currency.flags: 0
+currency.id: TWD
+currency.description: Taiwan New Dollars
+%%

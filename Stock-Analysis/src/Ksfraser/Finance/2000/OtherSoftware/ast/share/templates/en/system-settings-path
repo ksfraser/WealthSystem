@@ -1,0 +1,53 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">System Settings</th>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Sendmail Path:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="sendmail_path" value="$sendmail_path" class="awf_inputtext"></td>
+      <td><div class="awf_small">Usually /usr/lib/sendmail</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Gnuplot Path:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="gnuplot_path" value="$gnuplot_path" class="awf_inputtext"></td>
+      <td><div class="awf_small">Usually /usr/bin/gnuplot</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>tar Path:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="tar_path" value="$tar_path" class="awf_inputtext"></td>
+      <td><div class="awf_small">Usually /usr/bin/tar</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>gzip Path:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="gzip_path" value="$gzip_path" class="awf_inputtext"></td>
+      <td><div class="awf_small">Usually /bin/gzip</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>bzip2 Path:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="bzip2_path" value="$bzip2_path" class="awf_inputtext"></td>
+      <td><div class="awf_small">Usually /bin/bzip2</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>pwgen Path:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="pwgen_path" value="$pwgen_path" class="awf_inputtext"></td>
+      <td><div class="awf_small">Usually /usr/bin/pwgen</div></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

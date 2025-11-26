@@ -1,0 +1,9 @@
+Hello $fullname,
+
+Welcome to Advanced Stock Tracker. Advanced Stock Tracker is a web-base portfolio and research tool. You can visit the homepage at http://ast.sourceforge.net. Your account has been successfully created. You can login using the credentials listed below:
+
+Username: $username
+Password: $password
+URL:      $server_url
+
+Thank you for using Advanced Stock Tracker.

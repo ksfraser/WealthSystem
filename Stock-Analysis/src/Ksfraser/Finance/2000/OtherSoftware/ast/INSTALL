@@ -1,0 +1,63 @@
+AST Installation
+------------------------------------------------------------------------------
+
+1. Automatic Installation
+
+   On most systems AST can be installed by running install.pl. You must 
+install gnuplot separately. install.pl will modify your crontab and apache
+configuration.
+
+2. Manual Installation
+
+   If install.pl doesn't work with your system (e.g. you are not running
+apache, or on a host without shell access) then you probably want to do the 
+manual installation. The first thing you need to do is locate your web root.
+Here is a list of common webroots:
+
+DISTRIBUTION		WEB ROOT
+Gentoo Linux		/var/www/localhost/htdocs
+SUSE Linux 9, 10	/srv/www/htdocs
+Ubuntu, Debian		/var/www
+Fedora, Red Hat		/var/www/html
+
+You can also use the cgi-bin in your home directory (~/public_html/cgi-bin).
+ If you are using a hosting provider, you will want to use your cgi-bin 
+directory.
+
+Once you have determined your web root, copy all files from the AST tarball 
+into a directory in your webroot.
+
+mkdir -p /var/www/localhost/htdocs/ast
+cp -R * /var/www/localhost/htdocs/ast/
+
+You need to make AST setuid some user, because it will be run by many different
+users and the files need to be compatible with each other. Using your web 
+server user id is probably the best way to do it. If you are using apache, 
+you can find this in the configuration file, the settings User and Group. If 
+you are using your public_html directory this is already done for you.
+
+cd /var/www/localhost/htdocs/ast
+chown apache:apache ast
+chmod 6755 ast
+
+Finally you need to make your new directory able to execute CGI scripts. If 
+you are using apache, you should add this to your configuration file:
+
+<Directory "/var/www/localhost/htdocs/ast">
+    AllowOverride All
+    Options ExecCGI
+    SetHandler cgi-script
+    DirectoryIndex ast
+</Directory>
+
+To make these settings take effect, you must restart the web server:
+
+/etc/init.d/apache2 restart
+
+The last thing you need to do is load up the crontab file which will execute scheduled events:
+
+crontab /var/www/localhost/htdocs/ast/share/example/crontab
+
+Make sure to merge these files if you already have something in your crontab!
+
+Enjoy!

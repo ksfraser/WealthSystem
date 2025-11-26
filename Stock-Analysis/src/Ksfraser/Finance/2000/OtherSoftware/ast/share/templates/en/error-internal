@@ -1,0 +1,66 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <title>Error</title>
+  <link rel="stylesheet" type="text/css" href="$stylesheet">
+  <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+</head>
+<body>
+<table width="100%" class="awf_table" id="error_table">
+<tr>
+<th colspan="2" class="awf_column_heading">
+<h2>An Error Occurred Generating This Page</h2>
+</tr>
+<tr>
+<td><img src="images/attention.png" alt="error"></td>
+<td>
+<div class="error">$message</div><br>
+Type: $exception_info<br>
+Thrown from $file:$line<br>
+In function $function
+</td>
+</tr>
+<tr><th colspan="2" class="awf_column_heading">Stack Trace:</th></tr>
+<tr><td colspan="2">$stack_trace</td></tr>
+</table>
+<a href="#" onclick="javascript:document.getElementById('bug_form').style.display='inline';document.getElementById('bug_link').style.display='none';document.getElementById('error_table').style.display='none';" id="bug_link">Submit Bug</a>
+<form method="POST" enctype="multipart/form-data" id="bug_form" style="display: none" action="http://sourceforge.net/tracker/?func=add&amp;group_id=148045&amp;atid=770268">
+  <input type="hidden" name="group_id" value="148045">
+  <input type="hidden" name="atid" value="770268">
+  <input type="hidden" NAME="func" value="postadd">
+  <input type="hidden" NAME="category_id" value="100"><!-- 100 is none. -->
+  <input type="hidden" NAME="artifact_group_id" value="100">
+  <table class="awf_form">
+    <tr><th class="awf_column_heading">Submit Bug</th></tr>
+    <tr><td><b>Summary:</b></td></tr>
+    <tr><td><input type="text" name="summary" size="35" maxlength="60" class="awf_inputtext awf_wide_input" value="[$version] &lt;enter subject&gt;"></td></tr>
+    <tr><td><b>Description:</b></td></tr>
+    <tr><td><div class="awf_small">(Please describe what you did to cause this)</div></td></tr>
+    <tr><td><textarea rows="10" cols="80" name="details">
+&lt;describe how to reproduce error&gt;
+
+Message: $message_text
+File: $file
+Line: $line
+Function: $function
+Error Type: $exception_info
+Stack Trace:
+$stack_trace_text
+Parameters: $parameters
+Version: $version
+Language: $language
+Crypto: $crypto
+TA-lib Version: $talibver
+Compression: $compression
+SQL Support: $sql
+OS: $os $osver
+Bit Size: $bitlen bits
+Server: $server
+User Agent: $ua
+Contact: $email
+</textarea></td></tr>
+   <tr><td><input type="submit" name="submit" value="SUBMIT"></td></tr>
+  </table>
+</form>
+</body>
+</html>

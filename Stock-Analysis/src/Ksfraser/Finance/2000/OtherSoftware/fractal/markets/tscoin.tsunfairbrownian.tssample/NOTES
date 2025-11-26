@@ -1,0 +1,63 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for tscoin.tsunfairbrownian.tssample. The data from
+# files in the ../computer.office ../electronic.components.production
+# ../electronic.components.shipments ../information.systems directories
+# were averaged and found to be:
+#
+#     data.tslogreturns-p.tsshannon.returns, 0.0145 ~ 0.015
+#     data.tslogreturns-p.tsshannon.probability, 0.5698 ~ 0.6
+#     data.tsshannonmax-p.max, 0.70 ~ 0.7000
+#     data.tsfraction.tsnormal-p.stddev, 0.0278 ~ 0.03
+#     data.tsfraction.tsrms-p, 0.02992 ~ 0.03
+#
+# A data file was made by first running:
+#
+# ../../simulation/tscoin -p 0.70 1500 > data.1
+#
+# and the fraction altered by running:
+#
+# ../../simulation/tsunfairbrownian -f 0.0894 data.1 > data.2
+#
+# where the -f argument was derived by f = 2P - 1, and P is 0.6,
+# or f = 0.2, which must be reduced by a factor of 5^0.5, and
+# 0.2 / 5^0.5 = 0.0894, with the output sampled:
+#
+# ../../utilities/tssample -i 5 data.2 > data
+#
+# to produce 300 records, which is consistent with the number of records
+# in the data files of the listed directories.
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/15 05:01:24 $
+# $Id: NOTES,v 0.0 2006/01/15 05:01:24 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/15 05:01:24  john
+# Initial version
+#
+#
+../../simulation/tscoin -p 0.70 1500 > data.1
+../../simulation/tsunfairbrownian -f 0.0894 data.1 > data.2
+../../utilities/tssample -i 5 data.2 > data
+rm -f data.1 data.2

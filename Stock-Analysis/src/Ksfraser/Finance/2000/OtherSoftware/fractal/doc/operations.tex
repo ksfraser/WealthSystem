@@ -1,0 +1,182 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: operations.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: operations.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Fixed Increment Approximation for Operational Strategy}
+        \label{\SETLABEL:OPS}.
+
+        This section derives various values based on the ``average''
+        of the normalized increments presented in
+        Figure~\ref{\SETLABEL:TFA}. These values are an approximation
+        to a, probably, complex process with a distribution shown in
+        Figure~\ref{\SETLABEL:TF}. These values will be used in a
+        fixed increment Brownian fractal analysis and simulation of
+        the {\market}, and may, or may not, provide adequate accuracy
+        for projections.
+
+        \subidx{\market}{fiscal strategy}
+        \subidx{\market}{Shannon probability}
+        \subidx{strategy}{fiscal}
+        \subidx{fiscal}{strategy}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        It should be noted that the analysis of fiscal strategy,
+        presented in Section~\ref{\SETLABEL:FS}, is derived from the
+        {\market} metrics and may, or may not, be maximally
+        optimal. For the optimal fiscal strategy, which may be
+        exploitable, see Section~\ref{\SETLABEL:MAXSHANNON}.
+
+        \subidx{strategy}{exploitable}
+        \subidx{exploitable}{strategy}
+        \subidx{\market}{windows of opportunity}
+        \idx{windows of opportunity}
+        \subidx{decision}{obsolete}
+        \subidx{obsolete}{decision}
+        \subidx{decision}{timeliness}
+        \subidx{timeliness}{decision}
+        \subidx{rate of revenue returns}{forecast}
+        \subidx{forecast}{rate of revenue returns}
+        An additional exploitable strategy may be time itself.
+        Equations~\ref{\SETLABEL:V},~\ref{\SETLABEL:R},
+        and,~\ref{\SETLABEL:MA}, are, essentially, metrics on how fast
+        a decision, which is based on information concerning the
+        current status of the {\market}, becomes obsolete. Obviously,
+        how long a decision is expected to remain relevant should be
+        addressed as an operational necessity in strategic planning
+        and project management. Figures~\ref{\SETLABEL:FN},
+        and,~\ref{\SETLABEL:FF} compare methods of approximation of
+        the ``forecastability'' of rate of revenue returns in the
+        {\market} for the near term and far
+        term~\cite[pp. 83-84]{Peters:CAOITCM}, respectively. As a
+        general rule, caution must be exercised when making decisions
+        that will span a time interval larger than the time interval
+        where the ``forecastability'' of rate of revenue returns drops
+        below 50\%. Beyond this time interval, the chances increase
+        that the competitive and market forces will alter the market
+        environment in a possibly detrimental unanticipated
+        fashion. Obviously, there is significant advantage in
+        ``timeliness'' of development, manufacturing, and distribution
+        of products and services that are consistent with this
+        temporal agenda. Automation of these processes, if executed
+        consistently with this agenda, should be considered a
+        competitive advantage.
+
+        \subidx{strategy}{exploitable}
+        \subidx{exploitable}{strategy}
+        \subidx{rate of revenue returns}{forecast}
+        \subidx{forecast}{rate of revenue returns}
+        \idx{product life cycle}
+        \idx{life cycle, product}
+        In some sense, this temporal agenda defines the ``average''
+        product or service life cycle in the {\market}. When the
+        ``forecastability'' of rate of revenue returns drops below
+        50\%, there is an even chance that the rate of revenue returns
+        for the product or service will change in a detrimental
+        fashion. If it is assumed that a product or service life cycle
+        consists of a ramp up, a maintenence interval, and a ramp
+        down, then, if all three life cycle intervals are equal, the
+        product life cycle will be, approximately, three times the
+        time interval where the ``forecastability'' of rate of revenue
+        returns drops below 50\%. Although probably not an accurate
+        prediction of product or service life cycle, the technique may
+        be used as a conceptual approximation to the dynamics of
+        ``market windows.\footnote{For example, consider the market
+        for table salt. Since it has inelastic supply and demand
+        curves, and is a necessary requirement for life, it would be
+        expected that the Hurst coefficient would be very near
+        unity---ignoring competitive pressures in the market. The
+        predictability of the table salt market would, therefore, be
+        expected to be relatively good, over time.}''  The conceptual
+        approximation will probably predict a ``conservative'' or
+        ``pessimistic'' value in relation to actual markets.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/datahurstlownear.eps}
+                    \caption[{\market}, ``forecastability'' of near
+                        term rate of revenue returns]{{\market},
+                        ``forecastability'' of near term rate of
+                        revenue returns. Although the error function
+                        is the most accurate, for the near term,
+                        $H^{t} = \thurstlow^{t}$ may be used as a
+                        reliable metric of ``forecastability'' of the
+                        rate of revenue returns.}
+                    \label{\SETLABEL:FN}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/datahurstlowfar.eps}
+                    \caption[{\market}, ``forecastability'' of far
+                        term rate of revenue returns]{{\market},
+                        ``forecastability'' of far term rate of
+                        revenue returns. Although the error function
+                        is the most accurate, for the far term,
+                        $\frac{1}{\sqrt{t}}$ may be used as a reliable
+                        metric of ``forecastability'' of the rate of
+                        revenue returns.}
+                    \label{\SETLABEL:FF}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        \idx{operations research}
+        As an interesting interpretation of the data presented in
+        Figure~\ref{\SETLABEL:FN}, there may be, perhaps, some
+        applicability to such operational agendas as inventory
+        control. Maintaining too little inventory, obviously, will
+        create a situation where the organization can not exploit
+        market expansion, and maintaining too much inventory,
+        likewise, would over extend the company, creating unnecessary
+        losses when the market contracts. The company should maintain
+        inventory levels that do not exceed, from
+        Equation~\ref{\SETLABEL:MA}, ${\thurstlow}^{n} = 0.5$
+        {\timescale}s of operations. Since the optimal amount of
+        inventory and, from Equation~\ref{\SETLABEL:V}, the variance
+        of change in the rate of revenue returns in the future can be
+        calculated, there may, perhaps, be some applicability to a
+        forecasting methodology that can be incorporated into other
+        areas of operations research, for example the linear algebras
+        using simplex methodologies for optimization of manufacturing
+        processes. Traditionally, these forecasts are made by the
+        sales department, and are subject to various subjective
+        biases.
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

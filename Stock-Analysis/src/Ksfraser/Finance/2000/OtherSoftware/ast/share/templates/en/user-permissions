@@ -1,0 +1,48 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+    <input type="hidden" name="object" value="permissions">
+    <tr>
+      <th>Viewing permissions for $user.fullname ($user.username)</th>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm1" $s_perm1>&nbsp;Admin
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm2" $s_perm2>&nbsp;Debug
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm8" $s_perm8>&nbsp;Configure
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm16" $s_perm16>&nbsp;Modify Default Views
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm32" $s_perm32>&nbsp;Modify View Library
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm64" $s_perm64>&nbsp;Unrestricted&nbsp;<small>(Bypasses user restrictions for this user)</small>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="checkbox" name="s_perm128" $s_perm32>&nbsp;Record Splits
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <input type="submit" value="Save">
+      </td>
+    </tr>
+  </table>
+</form>

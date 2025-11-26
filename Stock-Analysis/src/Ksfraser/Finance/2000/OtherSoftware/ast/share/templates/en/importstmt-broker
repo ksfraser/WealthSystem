@@ -1,0 +1,5 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="portfolioid" value="$portfolioid">
+The import statement feature of AST allows you to build your portfolio by importing your account statement from a supported broker. Please select your broker below. If you do not see you broker in the list, please submit a bug using the link to the left. Make sure you include a sample of your statement and the name of your broker.<br><br>
+My broker is:<br> $brokerlist<br><br><input type="submit" value="Continue >>">
+</form>

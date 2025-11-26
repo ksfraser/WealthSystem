@@ -1,0 +1,133 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: maximum.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: maximum.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Simulation of Fixed Increment Approximation for Optimally Maximal Fiscal Strategy}
+        \label{\SETLABEL:MAXSHANNON}
+        \subidx{\market}{fiscal strategy, simulation}
+        \subidx{\market}{maximum Shannon probability}
+        \subidx{markets}{simulation}
+        \subidx{simulation}{markets}
+        \subidx{strategy}{optimum fiscal, simulation}
+        \subidx{fiscal}{optimum strategy, simulation}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+
+        \subidx{strategy}{exploitable}
+        \subidx{exploitable}{strategy}
+        \subidx{programs}{tsshannonmax}
+        \subidx{tsshannonmax}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{strategy}{fiscal}
+        \subidx{fiscal}{strategy}
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF:MAXSHANNON}. One of the issues of
+        analysis, as mentioned in Section~\ref{\SETLABEL:OPS}, is to
+        determine the maximum Shannon probability for the time series
+        presented in Figure~\ref{\SETLABEL:TS}. Potentially, this
+        could be exploited with an aggressive fiscal
+        strategy. Figure~\ref{\SETLABEL:SHANNONMAX0} is a graph of the
+        output of the {\it tsshannonmax}\/ program, which is described
+        briefly in appendix~\ref{programs}. The maximum of this
+        function is the maximum Shannon probability for the time
+        series data presented in Figure~\ref{\SETLABEL:TS}.
+        Figure~\ref{\SETLABEL:SHANNONMAX1} was constructed using {\it
+        tsunfairbrownian}\/ program, which is also described in
+        appendix~\ref{programs}, with the maximum Shannon probability,
+        and the time series data presented in
+        Figure~\ref{\SETLABEL:TS}. This represents a ``what if'' the
+        investment strategy was changed from a Shannon probability of
+        {\shannonlogreturns}, as derived in Section~\ref{\SETLABEL:SP}
+        to {\shannonmax}. This process, essentially, extracts the
+        random statistical data from the time series presented in
+        Figure~\ref{\SETLABEL:TS}, and constructs a new time series,
+        using the random statistical data, with a different investment
+        strategy.  The program, {\it tsunfairbrownian}\/, essentially,
+        constructs the new time series as a Brownian fractal with
+        fixed increments.  The ``quality'' of such a reconstruction
+        should be subject to adequate scepticism and scrutiny since,
+        in all probability, the increments in the original data
+        represent a relatively complex process, that may not be
+        ``modeled'' with such a simple methodology.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsshannonmax.eps}
+                    \caption[{\market}, maximum rate of revenue
+                        returns] {{\market}, maximum rate of revenue
+                        returns, per {\timescale}, vs. Shannon
+                        probability. The maximum rate of revenue
+                        returns, per {\timescale}, occurs at a Shannon
+                        probability of {\shannonmax}.}
+                    \label{\SETLABEL:SHANNONMAX0}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsshannonmax-p.tsunfairbrownian-p.eps}
+                    \caption[{\market}, maximum rate of revenue
+                        returns] {{\market}, maximum rate of revenue
+                        returns, per {\timescale}, at a Shannon
+                        probability, of {\shannonmax}, corresponding
+                        to a ``wager'' fraction of {\twoponemax}.}
+                    \label{\SETLABEL:SHANNONMAX1}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        \subidx{fractional}{Brownian motion}
+        \subidx{Brownian motion}{fractional}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \subidx{programs}{tsshannonmax}
+        \subidx{tsshannonmax}{program}
+        If it is assumed that the time series data set, presented in
+        Figure~\ref{\SETLABEL:TS}, constitutes classical Brownian
+        motion, then the Shannon probability can be calculated by
+        counting the total number of {\timescale}s that the {\market}
+        movement was positive, and dividing by the total number of
+        {timescale}s represented in the time series. This quotient is
+        {\pmax}, as compared with the predicted value from the program
+        {\it tsshannonmax}\/ of {\shannonmax}.
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

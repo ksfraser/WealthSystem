@@ -1,0 +1,9 @@
+<html>
+<head>
+<title>Viewing News</title>
+</head>
+<frameset rows="85, *">
+  <frame name="notes" src="$notes_url">
+  <frame name="news" src="$news_url">
+</frameset> 
+</html>

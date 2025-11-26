@@ -1,0 +1,223 @@
+.TH TSTRADESIM 1 "January 17, 2006"
+.SH NAME
+tstradesim \- generate a time series for the tstrade program
+.SH SYNOPSIS
+.nf
+tstradesim [-b] [-r] [-v] infile number
+.fi
+.SH DESCRIPTION
+Tstradesim is for generating a time series for the tstrade program.
+Generates a fractal time series, of many stocks, concurrently.
+
+The input file is organized, one stock per record, with each record
+having up to five fields, of which only the Shannon probability need
+be specified. The fields are sequential, in any order, with field the
+type specified by a single letter-P for Shannon probability, F for
+wager fraction, N for trading volume, and I for initial value. Any
+field that is not one of these letters is assumed to be the stock's
+name. For example:
+
+    ABC, P = 0.51, F = 0.01, N = 1000, I = 31
+    DEF, P = 0.52, F = 0.02, N = 500, I = 4
+    GHI, P = 0.53, F = 0.03, N = 300, I = 65
+
+Naturally, single letter stock names should be avoided, (since P, F,
+N, and I, are reserved tokens.) Any punctuation is for clarity, and
+ignored. Upper or lower case characters may be used. The fields are
+delimited by whitespace, or punctuation. Comment records are are
+signified by a '#' character as the first non whitespace character in
+a record. Blank records are ignored.
+
+The output file structure is a text file consisting of records, in
+temporal order, one record per time series sample.  Blank records are
+ignored, and comment records are signified by a '#' character as the
+first non white space character in the record. Each data record
+represents an equity transaction, consisting of a minium of six
+fields, separated by white space. The fields are ordered by time
+stamp, equity ticker identifier, maximum price in time unit, minimum
+price in time unit, closing price in time unit, and trade volume.  The
+existence of a record with more than 6 fields is used to suspend
+transactions on the equity, concluding with the record, for example:
+
+    1      ABC     38.125  37.875  37.938  333.6
+    2      DEF     3.250   2.875   3.250   7.2
+    3      GHI     64.375  63.625  64.375  335.9
+
+American markets, since 1950, can be emulated with 300 stocks, each
+having p = 0.505, and f = 0.03; p = 0.52, f = 0.03 for 300 stocks
+seems to emulate recent markets.
+
+Note: this program uses the following functions from other references:
+
+    ran1, which returns a uniform random deviate between
+    0.0 and 1.0. See "Numerical Recipes in C: The Art of
+    Scientific Computing," William H. Press, Brian
+    P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+    Cambridge University Press, New York, 1988, ISBN
+    0-521-35465-X, page 210, referencing Knuth.
+
+    gasdev, which returns a normally distributed deviate
+    with zero mean and unit variance, using ran1 () as the
+    source of uniform deviates. See "Numerical Recipes in
+    C: The Art of Scientific Computing," William H. Press,
+    Brian P. Flannery, Saul A. Teukolsky, William
+    T. Vetterling, Cambridge University Press, New York,
+    1988, ISBN 0-521-35465-X, page 217.
+
+    gammln, which returns the log of the results of the
+    gamma function.  See "Numerical Recipes in C: The Art
+    of Scientific Computing," William H. Press, Brian
+    P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+    Cambridge University Press, New York, 1988, ISBN
+    0-521-35465-X, page 168.
+
+The general outline of this program is:
+
+    1) given the Shannon probability, compute the abscissa
+    value that divides the area under the normal curve,
+    into two sections, such that the area to the left of
+    the value, divided by the total area under the normal
+    curve is the Shannon probability-a Newton-Raphson
+    iterated approach using Romberg integration to find
+    the area is used for this
+
+    2) for each record:
+
+        a) compute a Gaussian distributed random number
+
+        b) add the computed abscissa value from 1) above
+        to the Gaussian distributed number
+
+        c) multiply this number by the fraction of
+        cumulative sum to be wagered
+
+        d) multiply this number by the cumulative sum
+
+        e) add this number to the cumulative sum
+
+This program will require finding the value of the normal
+function, given the standard deviation. The method used is
+to use Romberg/trapezoid integration to numerically solve
+for the value.
+
+This program will require finding the functional inverse
+of the normal, ie., Gaussian, function. The method used is
+to use Romberg/trapezoid integration to numerically solve
+the equation:
+
+                    x                2
+                    |   1        - t   / 2
+    F(x) = integral | ------ * e          dt + 0.5
+                    | 2 * pi
+                    0
+
+which has the derivative:
+
+                          2
+             1        - x   / 2
+    f(x) = ------ * e
+           2 * pi
+
+Since F(x) is known, and it is desired to find x,
+
+                    x                2
+                    |   1        - t   / 2
+    F(x) - integral | ------ * e          dt + 0.5 = P(x) = 0
+                    | 2 * pi
+                    0
+
+and the Newton-Raphson method of finding roots would be:
+
+                  P(x)
+    P      = P  - ----
+     n + 1    n   f(x)
+
+As a reference on Newton-Raphson Method of root finding, see
+"Numerical Recipes in C: The Art of Scientific Computing," William
+H. Press, Brian P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+Cambridge University Press, New York, 1988, ISBN 0-521-35465-X, pp
+270.
+
+As a reference on Romberg integration, see "Numerical Recipes in C:
+The Art of Scientific Computing," William H. Press, Brian P. Flannery,
+Saul A. Teukolsky, William T. Vetterling, Cambridge University Press,
+New York, 1988, ISBN 0-521-35465-X, page 124.
+
+As a reference on trapezoid iteration, see "Numerical Recipes in C:
+The Art of Scientific Computing," William H. Press, Brian P. Flannery,
+Saul A. Teukolsky, William T. Vetterling, Cambridge University Press,
+New York, 1988, ISBN 0-521-35465-X, page 120.
+
+As a reference on polynomial interpolation, see "Numerical Recipes in
+C: The Art of Scientific Computing," William H. Press, Brian
+P. Flannery, Saul A. Teukolsky, William T. Vetterling, Cambridge
+University Press, New York, 1988, ISBN 0-521-35465-X, page 90.
+
+.SH OPTIONS
+.TP
+.B -b
+Binomial distribution instead of Gaussian for increments.
+.TP
+.B -r
+Normalize standard deviation of binomial distribution.
+.TP
+.B -v
+Print the version and copyright banner of the program.
+.TP
+.B infile
+Input file name.
+.TP
+.B number
+Number is the number of samples in the time series.
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsderivative(1), tshcalc(1), tshurst(1), tsintegrate(1),
+tslogreturns(1), tslsq(1), tsnormal(1), tsshannon(1),
+tsblack(1), tsbrownian(1), tsdlogistic(1), tsfBm(1),
+tsfractional(1), tsgaussian(1), tsintegers(1),
+tslogistic(1), tspink(1), tsunfairfractional(1),
+tswhite(1), tscoin(1), tsunfairbrownian(1), tsfraction(1),
+tsshannonmax(1), tschangewager(1), tssample(1), tsrms(1),
+tscoins(1), tsavg(1), tsXsquared(1), tsstockwager(1),
+tsshannonwindow(1), tsmath(1), tsavgwindow(1), tspole(1),
+tsdft(1), tsbinomial(1), tsdeterministic(1), tsnumber(1),
+tsrmswindow(1), tsshannonstock(1), tsmarket(1),
+tsstock(1), tsstatest(1), tsunfraction(1),
+tsshannonaggregate(1), tsinstant(1), tsshannonvolume(1),
+tsstocks(1), tsshannonfundamental(1), tstrade(1),
+tstradesim(1), tsrunlength(1), tsunshannon(1),
+tsrootmean(1), tsrunmagnitude(1), tskurtosis(1),
+tskurtosiswindow(1), tsrootmeanscale(1),
+tsscalederivative(1), tsgain(1), tsgainwindow(1)
+tscauchy(1), tslognormal(1), tskalman(1), tsroot(1),
+tslaplacian(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+----------------------------------------------------------------------
+.fi

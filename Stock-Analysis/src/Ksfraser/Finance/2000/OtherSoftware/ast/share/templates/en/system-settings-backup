@@ -1,0 +1,78 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form">
+    <tr>
+      <th colspan="3">System Settings / Backup Options</th>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Backup Method:</b></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="radio" name="backup_type" value="none" $backup_type_none>&nbsp;None<br>
+        <input type="radio" name="backup_type" value="local" $backup_type_local>&nbsp;Local File
+      </td>
+      <td>
+        <input type="radio" name="backup_type" value="ftp" $backup_type_ftp>&nbsp;FTP Server<br>
+        <input type="radio" name="backup_type" value="scp" $backup_type_scp>&nbsp;SCP Server
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Archive Type:</b></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="radio" name="backup_arch" value="tar" $backup_arch_tar>&nbsp;tar<br>
+        <input type="radio" name="backup_arch" value="targz" $backup_arch_targz>&nbsp;tar.gz
+      </td>
+      <td>
+        <input type="radio" name="backup_arch" value="tarbz" $backup_arch_tarbz>&nbsp;tar.bz2
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Append Date to Files:</b></td>
+    </tr>
+    <tr>
+      <td>
+        <input type="radio" name="backup_date" value="yes" $backup_date_yes>&nbsp;yes
+      </td>
+      <td>
+        <input type="radio" name="backup_date" value="no" $backup_date_no>&nbsp;no
+      </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Server Name:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="text" name="backup_server" value="$backup_server" class="awf_inputtext awf_wide_input"></td>
+      <td><div class="awf_small">Name of ftp / ssh server, or blank if using local file.</div></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>File Path:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="text" name="backup_path" value="$backup_path" class="awf_inputtext awf_wide_input"></td>
+      <td><div class="awf_small">Path to local file, or file on remote server</div></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Username:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="text" name="backup_username" value="$backup_username" class="awf_inputtext"></td>
+      <td><div class="awf_small">Username for remote server or blank</div></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Password:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="password" name="backup_password" value="$backup_password" class="awf_inputtext"></td>
+      <td><div class="awf_small">Password for remote server or blank</div></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

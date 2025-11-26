@@ -1,0 +1,72 @@
+From john@johncon.johncon.com  Wed Feb 12 14:18:04 1997
+Received: (from john@localhost) by johncon.johncon.com (8.6.12/8.6.12) id OAA26918 for john-archive@johncon.johncon.com; Wed, 12 Feb 1997 14:18:03 -0800
+Resent-Date: Wed, 12 Feb 1997 14:18:03 -0800
+Resent-From: John Conover <john@johncon.johncon.com>
+Resent-Message-Id: <199702122218.OAA26918@johncon.johncon.com>
+Resent-To: john-archive@johncon.johncon.com
+Message-ID: <330240A7.2BE57ECF@johncon.com>
+X-Mailer: Mozilla 2.01 (X11; I; Linux 1.2.8 i586)
+MIME-Version: 1.0
+CC: john@johncon.johncon.com
+X-URL: http://www.stockmaster.com/sm/faq.html
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+From: John Conover <john@johncon.johncon.com>
+To: stockmaster@stockmaster.com
+Subject: Old MIT server data
+Date: Wed, 12 Feb 1997 14:13:59 -0800
+
+Hi Mark.
+
+I wrote an entropic analysis program for equities, and reformatted
+the data from the old MIT server as a demo, and want to place the
+sources to the program in public domain. Can I include my
+re-formatted data from the old server in the program distribution?
+(I am concerned about copyright restrictions of the ticker data.)
+
+        Thanks for any information,
+
+        John
+
+--
+
+John Conover, john@email.johncon.com, http://www.johncon.com/
+
+From torrance@stockmaster.com  Wed Feb 12 15:41:01 1997
+Received: (from root@localhost) by johncon.johncon.com (8.6.12/8.6.12) with UUCP id PAA27209 for john@johncon.johncon.com; Wed, 12 Feb 1997 15:40:55 -0800
+Received: from stockmaster.com by netcomsv.netcom.com with ESMTP (8.6.12/SMI-4.1)
+        id PAA29677; Wed, 12 Feb 1997 15:37:37 -0800
+Received: from [205.219.91.107] by stockmaster.com (SMI-8.6/SMI-SVR4)
+        id SAA14819; Wed, 12 Feb 1997 18:35:26 -0500
+X-Sender: torrance@www.stockmaster.com
+Message-Id: <v03007806af27fddf6027@[205.219.91.107]>
+In-Reply-To: <330240A7.2BE57ECF@johncon.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+From: Mark Torrance <torrance@stockmaster.com>
+To: John Conover <john@johncon.johncon.com>
+Subject: Re: Old MIT server data
+Date: Wed, 12 Feb 1997 15:09:40 -0800
+
+>Hi Mark.
+>
+>I wrote an entropic analysis program for equities, and reformatted
+>the data from the old MIT server as a demo, and want to place the
+>sources to the program in public domain. Can I include my
+>re-formatted data from the old server in the program distribution?
+>(I am concerned about copyright restrictions of the ticker data.)
+>
+>        Thanks for any information,
+>
+>        John
+>
+>--
+>
+>John Conover, john@email.johncon.com, http://www.johncon.com/
+
+Yes, you can do this.  Copyright protection for reformatted historical
+stock data is murky at best, and the MIT data came from a source who
+claimed he was placing it in the public domain.
+
+--Mark Torrance
+

@@ -1,0 +1,214 @@
+TSINVESTSIM(1)                                                  TSINVESTSIM(1)
+
+
+
+NNAAMMEE
+       tsinvestsim - generate a time series for the tsinvest(1) program
+
+SSYYNNOOPPSSIISS
+       tsinvestsim [-n n] [-v] infile number
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsinvestsim  is  for  generating a time series for the tsinvest(1) pro-
+       gram. Generates a fractal time series, of many equities,  concurrently.
+
+       The  time series’ increments for each equity is generated as a binomial
+       distribution, (which is a reasonably close approximation to a  Gaussian
+       distribution, and is a reasonably close first order approximation to an
+       equity’s value, over time.)
+
+       The input file is organized, one equity per record,  with  each  record
+       having up to four fields, of which only the Shannon probability need be
+       specified. The fields are sequential, in any order, with the field type
+       specified  by  a single letter-P for the Shannon probability, H for the
+       short term, (Markov,) Hurst exponent, F for the wager fraction,  I  for
+       the initial value, and L if the distribution of the marginal increments
+       for a stock is to have exponential leptokurtosis. Any field that is not
+       one of these letters is assumed to be the equity’s name. For example:
+
+           ABC, P = 0.51, F = 0.01, I = 31
+           DEF, P = 0.52, F = 0.02, I = 4, L = 1
+           GHI, P = 0.53, F = 0.03, I = 65
+
+       Naturally,  single  letter equity names should be avoided, (since P, H,
+       F, I, and L, are reserved tokens.) Any punctuation is for clarity,  and
+       ignored.  Upper  or  lower  case characters may be used. The fields are
+       delimited by whitespace, or punctuation. Comment records are are signi-
+       fied  by  a  ’#’  character  as the first non whitespace character in a
+       record. Blank records are ignored.
+
+       The output file structure is a text file consisting of records, in tem-
+       poral  order,  one record per time series sample of each equity.  Blank
+       records are ignored, and comment records are signified by a ’#’ charac-
+       ter  as  the  first  non white space character in the record. Each data
+       record represents an equity transaction,  consisting  of  a  minium  of
+       three  fields, separated by white space. The fields are ordered by time
+       stamp, equity ticker identifier, and closing price.  The existence of a
+       record  with  more than three fields is used to suspend transactions on
+       the equity, concluding with the record, for example:
+
+           0       GHI     62.270000
+           0       DEF     3.967743
+           0       ABC     30.752000
+           1       GHI     64.885340
+           1       DEF     3.951808
+           1       ABC     29.890944
+
+       The index of various American equity markets, since 1950, can be  simu-
+       lated  with  10  equities, each having p = 0.505, and f = 0.03. For the
+       last few years, p = 0.51 to 0.52 should be used, with f = 0.03 for each
+       equity.  In  general,  more than 10 equities will have to be simulated,
+       making the index volatility, ie., the root mean square of  the  normal-
+       ized increments of the index, too small.
+
+
+DDEERRIIVVAATTIIOONN
+       The  equity  value  simulator  produces  a time series, with normal, or
+       Gaussian,  distributed  increments,  approximated   with   a   binomial
+       distribution,  produced by sequential calls to a uniform deviate random
+       number generator, and using the formula:
+
+           V(t) = V(t - 1)(1 + f * F(t))
+
+       where V(t - 1) and V(t) is the previous and next values of  the  equity
+       in the recursion, F(t) is the normal, or Gaussian, distributed fluctua-
+       tions in the equity’s value, of unit variance, and,  f,  is  a  scaling
+       factor.  If  F(t)  is  not zero mean, the Shannon probability, P, of an
+       increase in the equity’s price, (ie., the likelihood  of  an  up  move-
+       ment,) is:
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+       where avg is the offset of the mean, and f = rms, ie., avg is the aver-
+       age growth in the equity’s value, (eg., the average of the increments,)
+       and rms the risk, (eg., the root mean square of the increments.)
+
+       The  Shannon  probability, P, is simulated with an offset in the summa-
+       tion of the uniform deviate random number generator to produce a  bino-
+       mial  distribution-ie., if the threshold, for increase, or decrease, is
+       0.5, (where the uniform deviate values lie between 0 and 1,) then  P  =
+       0.5,  and  avg  =  0. If the threshold is 0.49, then P = 0.51, (and rms
+       always is equal to f,) and so on.
+
+       For more details on the equity price model used, see  the  manual  page
+       for tsinvest(1) for a complete derivation.
+
+       The  short  term,  (Markov,) Hurst exponent specifies persistence, from
+       one time increment to the next. If the Hurst exponent is 0.5, there  is
+       no  persistence,  (ie.,  whether  the  next time increment will have an
+       increase, or decrease in value, is a 50%/50% proposition.)   If  it  is
+       larger  than  0.5,  then there is a propensity for what happened in the
+       last increment to happen in the  next,  (ie.,  a  better  than  50%/50%
+       proposition.)  And,  if the Hurst exponent is less than 0.5, there is a
+       propensity for the opposite of what happened in the last  increment  to
+       happen in the next.
+
+       For  example,  if the Hurst exponent is 0.6, then there is a 60% chance
+       of what happened in the last element of the time series, to  happen  in
+       the next.
+
+       The  way  this  is implemented in tsinvestsim(1), is to find what value
+       the preceeding value must be multiplied by, such that when added to the
+       current value will increase the probability that the current value will
+       do the same thing as the preceeding value-ie., it is a recursive  algo-
+       rithm:
+
+           V(t)  = (G  + (Hvalue * V(t - 1)))
+
+       where  G  is normally, or Gaussian, distributed random variable of unit
+       variance, (approximated by a binomial distribution,) Hvalue is the mul-
+       tiplying  value,  and  V  the  value of an equity at time t, and t - 1,
+       (which will be corrected to unit variance.)
+
+       The value, Hvalue, is calculated by finding x, in the normal, or  Gaus-
+       sian, distribution, F(x), where F(x) is the Hurst exponent.
+
+       For example, if it is desired that the current value of a stock’s value
+       have a persistence of H, meaning that the value of F(x) =  H,  find  x,
+       which  the  previous  stock’s value will be multiplied by, and added to
+       the current value. For example, if H = F(x) =  0.6,  then  x  would  be
+       about  0.25,  meaning  that  the  previous value would be multiplied by
+       0.25, and added to the current value.
+
+       V, of course, does not have unit variance, and must be compensated by a
+       correction factor:
+
+           V(t)  = (G  + (Hvalue * V(t - 1))) * correction
+
+       such that both the current and previous values of V have unit variance,
+       or working with distributions:
+
+               2     2                      2              2
+           V(t)  = (G  + (Hvalue * V(t - 1)) ) * correction
+
+       where V = G = 1:
+
+            2     2              2               2
+           1  = (1  + (Hvalue * 1 )) * correction
+
+       or:
+
+                          2              2
+           1 = (1 + Hvalue ) * correction
+
+       and, finally:
+
+                                             2
+           correction = sqrt (1 / (1 + Hvalue ))
+
+       Obviously, the maximum Hurst exponent, H, that can be  accommodated  is
+       one  standard  deviation, (ie., 0.84,) since the recursion will diverge
+       for values greater.
+
+
+OOPPTTIIOONNSS
+       --nn nn   Number of elements in the binomial distribution, (100).
+
+       --vv     Print the version and copyright banner of this program.
+
+       iinnffiillee Input filename.
+
+       nnuummbbeerr Number of samples in the time series.
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsinvest(1), tsinvestsim(1), tsshannoneffective(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+           http://www.johncon.com/ntropix/
+           http://www.johncon.com/
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 07, 2006                 TSINVESTSIM(1)

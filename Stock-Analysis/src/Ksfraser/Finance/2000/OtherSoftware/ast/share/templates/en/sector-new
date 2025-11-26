@@ -1,0 +1,20 @@
+<form method="POST" action="$save_page">
+  <table class="awf_form">
+    <tr><th class="awf_column_heading" colspan="2">Editing Sector</th></tr>
+    <tr>
+      <td><b>Ticker:</b></td>
+      <td><input type="text" name="sector.symbol" value="$sector.symbol" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td>$market_select</td>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+      <td><input type="text" name="sector.name" value="$sector.name" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

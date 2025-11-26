@@ -1,0 +1,3 @@
+@caption Symbol File
+The symbol file is a text file which contains a list of symbols for this market. It can found in share/symbols. For more information on this file, please see the User Information on the AST web site.
+ 

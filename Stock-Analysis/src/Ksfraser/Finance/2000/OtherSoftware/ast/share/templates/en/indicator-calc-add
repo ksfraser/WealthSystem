@@ -1,0 +1,18 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="indicator.type" value="calc-add">
+  <input type="hidden" name="indicator.create" value="1">
+  <table class="awf_form" width="100%">
+    <tr><th colspan="2">Calculate Indicator</th></tr>
+    <tr><td><b>Name of Field:</b></td><td rowspan="10"><b>Available Fields:</b>&nbsp;<span class="awf_small">(Double click to insert)</span><br><select id="fields" size="14" ondblclick="ast_append(formula2,fields);">$column_options</select></td></tr>
+    <tr><td><input type="text" class="awf_inputtext" name="indicator.field_name" value="$indicator.field_name"></td></tr>
+    <tr><td><b>Prefix:</b><span class="awf_small">(Text shown before the calculation)</span></td></tr>
+    <tr><td><input type="text" class="awf_inputtext awf_wide_input" name="indicator.formula1" value="$indicator.formula1"></td></tr>
+    <tr><td><b>Formula:</b><span class="awf_small">(Mathematical expression for data to show)</span></td></tr>
+    <tr><td><textarea class="awf_inputtext awf_wide_input" name="indicator.formula2" cols="62" rows="6" id="formula2">$indicator.formula2</textarea></td></tr>
+    <tr><td><b>Sufix:</b><span class="awf_small">(Text shown after the calculation)</span></td></tr>
+    <tr><td><input type="text" class="awf_inputtext awf_wide_input" name="indicator.formula3" value="$indicator.formula3"></td></tr>
+    <tr>
+      <td><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

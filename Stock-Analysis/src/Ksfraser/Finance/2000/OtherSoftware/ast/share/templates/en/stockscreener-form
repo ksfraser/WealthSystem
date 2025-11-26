@@ -1,0 +1,30 @@
+<form method="post" action="$save_page">
+  <input type="hidden" value="display" name="action">
+  <table class="awf_form" width="100%">
+    <tr><th colspan="4">Stock Screener</th></tr>
+    <tr><td colspan="4"><b>Market:</b></td></tr>
+    <tr><td colspan="4"><select name="market">$market_options</select></td></tr>
+    <tr><td><b>Pattern:</b></td><td><b>Period:</b></td><td><b>Date Range:</b></td><td><b>Opportunity Type:</b></td></tr>
+    <tr><td><select name="pattern"><option value="">None</option>$pattern_options</select></td><td><select name="period">$period_options</select></td><td><select name="daterange">$daterange_options</select></td><td><select name="opptype">$opptype_options</select></td></tr>
+    <tr><td><b>Price:</b></td><td colspan="3"><b>Volume:</b></td></tr>
+    <tr><td>Price between <input type="text" class="awf_inputtextshort" name="price_low" value="0"> and <input type="text" class="awf_inputtextshort" name="price_high" value="0"></td><td colspan="3">Average Volume between <input type="text" class="awf_inputtextshort" name="vol_low" value="0"> and <input type="text" class="awf_inputtextshort" name="vol_high" value="0"> shares / day</td></tr>
+    <tr><td colspan="4"><b>Earnings:</b></td></tr>
+    <tr><td>EPS between <input type="text" class="awf_inputtextshort" name="eps_low" value="0"> and <input type="text" class="awf_inputtextshort" name="eps_high" value="0"></td><td colspan="3">PE Ratio between <input type="text" class="awf_inputtextshort" name="pe_low" value="0"> and <input type="text" class="awf_inputtextshort" name="pe_high" value="0"></td></tr>
+    <tr><td colspan="4"><b>Earnings Growth:</b></td></tr>
+    <tr><td>EPS growth more than <input type="text" class="awf_inputtextshort" name="eps_grow" value="0"> %</td><td colspan="3">Estimated EPS growth more than <input type="text" class="awf_inputtextshort" name="eps_est_grow" value="0"> %</td></tr>
+    <tr><td colspan="4"><b>Market Capitalization:</b></td></tr>
+    <tr><td colspan="4">Market Capitalization between <input type="text" class="awf_inputtextshort" name="mcap_low" value="0"> and <input type="text" class="awf_inputtextshort" name="mcap_high" value="0"> million</td></tr>
+    <tr><td colspan="4"><b>Dividend Yield:</b></td></tr>
+    <tr><td colspan="4">Dividend Yield between <input type="text" class="awf_inputtextshort" name="div_low" value="0"> and <input type="text" class="awf_inputtextshort" name="div_high" value="0"> %</td></tr>
+    <tr><td colspan="4"><b>Book Value:</b></td></tr>
+    <tr><td colspan="4">Book Ratio between <input type="text" class="awf_inputtextshort" name="book_low" value="0"> and <input type="text" class="awf_inputtextshort" name="book_high" value="0"></td></tr>
+    <tr><td colspan="4"><b>Performance:</b></td></tr>
+    <tr><td>3 year performance at least <input type="text" class="awf_inputtextshort" name="3yrpref" value="0"> % / year</td><td colspan="3">1 year performance at least <input type="text" class="awf_inputtextshort" name="1yrpref" value="0"> %</td></tr>
+    <tr><td>3 month performance at least <input type="text" class="awf_inputtextshort" name="3mnpref" value="0"> %</td><td colspan="3">1 week performance at least <input type="text" class="awf_inputtextshort" name="1wkpref" value="0"> %</td></tr>
+    <tr><td colspan="4"><b>Highs / Lows:</b></td></tr>
+    <tr><td>Between <input type="text" class="awf_inputtextshort" name="52wk_low_low" value="0"> and <input type="text" class="awf_inputtextshort" name="52wk_low_high" value="0"> % above its 52-week low</td><td colspan="3">Between <input type="text" class="awf_inputtextshort" name="52wk_high_low" value="0"> and <input type="text" class="awf_inputtextshort" name="52wk_high_high" value="0"> % below its 52-week high</td></tr>
+    <tr><td colspan="4"><b>Technicals:</b></td></tr>
+    <tr><td>Short term ADX at least <input type="text" class="awf_inputtextshort" name="adx_daily" value="0">,&nbsp;long term ADX at least <input type="text" class="awf_inputtextshort" name="adx_weekly" value="0">&nbsp;<img src="images/help_small.png" alt="help" $tooltip.adx></td><td>ADX periods <input type="text" class="awf_inputtextshort" name="adx_periods" value="14"></td><td><td/></tr>
+    <tr><td colspan="4" align="center"><input type="submit" value="Run Screen"></td></tr>
+  </table>
+</form>

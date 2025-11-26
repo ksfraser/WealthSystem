@@ -1,0 +1,8 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="gamerule.ruletype" value="2">
+<table class="awf_form" width="80%">
+    <tr><th colspan="2">Maximum Securities Rule</th></tr>
+    <tr><td><b>Maximum Number of Securities:</b></td><td><input type="text" class="awf_inputtext" name="max_securities" value="5"></td></tr>
+    <tr><td colspan="2"><input type="submit" value="Save"></td></tr>
+</table>
+</form>

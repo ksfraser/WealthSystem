@@ -1,0 +1,2838 @@
+TSINVEST(1)                                                        TSINVEST(1)
+
+
+
+NNAAMMEE
+       tsinvest - optimal concurrent investments in equities
+
+SSYYNNOOPPSSIISS
+       tsinvest [-a 0|1|2] [-C] [-c] [-D D] [-d 1|2|3|4|5|6] [-I I] [-i]
+                [-j] [-M M] [-m m] [-o o] [-P] [-p] [-q q] [-r] [-s] [-t]
+                [-u] [-v] [filename]
+
+DDEESSCCRRIIPPTTIIOONN
+       Tsinvest is for simulating the optimal gains of multiple equity invest-
+       ments. The program decides which of all available equities to invest in
+       at  any single time, by calculating the instantaneous Shannon probabil-
+       ity and statistics of all equities, and then using statistical  estima-
+       tion  techniques to estimate the accuracy of the calculated statistics.
+
+       The input file structure is a text file consisting of records, in  tem-
+       poral  order,  one record per time series sample of each equity.  Blank
+       records are ignored, and comment records are signified by a ’#’ charac-
+       ter  as  the  first  non white space character in the record. Each data
+       record represents an equity transaction, and consists of exactly  three
+       fields, separated by white space. The fields are ordered by time stamp,
+       equity ticker identifier, and closing price, for example:
+
+           1      ABC     333.6
+           2      DEF     7.2
+           3      GHI     335.9
+
+       The output file structure is a Unix tab delimited text file,  with  the
+       optional  time stamp field, (if the -t argument is given,) the optional
+       index value, (if the -i option is  given,)  the  portfolio  value,  the
+       optional  margin  fraction, (if the -q option is given,) followed by an
+       optional list of the equity ticker identifiers, (if the  -s  option  is
+       given,) each followed by an optional equal, ’=’ character and the frac-
+       tion of the portfolio that should invested in that equity, (if  the  -a
+       option is given,) for example:
+
+           1       999.64  1000.00 0.65    ABC=0.10\
+                                           DEF=0.10 GHI=0.10
+           2       998.19  1010.00 0.65    ABC=0.10\
+                                           DEF=0.10 GHI=0.10
+           3       998.19  1017.55 0.65    ABC=0.11\
+                                           DEF=0.12 GHI=0.08
+           4       997.52  1020.76 0.65    ABC=0.10\
+                                           DEF=0.07 GHI=0.12
+
+       which  at  time  interval  4, the index value was 997.52, the portfolio
+       value was 1020.76, and 65% of the portfolio should be on margin, 10% of
+       the  portfolio’s  total  value  should  be  invested in the equity with
+       equity identifier ABC, 7% in DEF, and, 12% in GHI. The fields  are  tab
+       delimited.
+
+
+IINNTTRROODDUUCCTTIIOONN
+       One  of  the  prevailing  concepts  in financial quantitative analysis,
+       (eg., "financial engineering,") is that equity prices  exhibit  "random
+       walk," (eg., Brownian motion, or fractal,) characteristics. The presen-
+       tation by Brian Arthur [Art95] offers a compelling  theoretical  frame-
+       work  for  the  random walk model.  William A. Brock and Pedro J. F. de
+       Lima [BdL95], among others, have published empirical evidence  support-
+       ing Arthur’s theoretical arguments.
+
+       There is a large mathematical infrastructure available for applications
+       of fractal analysis to equity markets. For  example,  the  publications
+       authored  by Richard M. Crownover [Cro95], Edgar E. Peters [Pet91], and
+       Manfred Schroeder [Sch91] offer formal methodologies, while  the  books
+       by  John L. Casti [Cas90], [Cas94] offer a less formal approach for the
+       popular press.
+
+       There are interesting implications that  can  be  exploited  if  equity
+       prices exhibit fractal characteristics:
+
+           1) It would be expected that equity portfolio
+           volatility would be equal to the root mean square of
+           the individual equity volatilities in the portfolio.
+
+           2) It would be expected that equity portfolio growth
+           would be equal to the linear addition of the growths
+           of the individual equities in the portfolio.
+
+           3) It would be expected that an equity’s price would
+           fluctuate, over time, and the range, of these
+           fluctuations (ie., the maximum price minus the minimum
+           price,) would increase with the square root of time.
+
+           4) It would be expected that the number of equity
+           price transitions in a time interval, (ie., the number
+           of times an equity’s price reaches a local maximum,
+           then reverse direction and decreases to a local
+           minimum,) would increase with the square root of time.
+
+           5) It would be expected that the zero-free voids in an
+           equity’s price, (ie., the length of time an equity’s
+           price is above average, or below average,) would have
+           a cumulative distribution that decreases with the
+           reciprocal of the square root of time.
+
+           6) It would be expected that an equity’s price, over
+           time, would be mean reverting, (ie., if an equity’s
+           price is below its average, there would be a
+           propensity for the equity’s price to increase, and
+           vice versa.)
+
+           7) It would be expected that some equity prices, over
+           time, would exhibit persistence, ie., "price
+           momentum".
+
+       Note  that  1)  and  2)  above can be exploited to formulate an optimal
+       hedging strategy; 3), and 4) would tend to imply that  "market  timing"
+       is  not attainable; 5), and 6) can be exploited to formulate an optimal
+       buy-sell strategy; and 7) would tend to indicate  that,  under  certain
+       circumstances,  "market timing", at least in a probabilistic sense, may
+       be viable.
+
+
+DDEERRIIVVAATTIIOONN
+       As a tutorial, the derivation will start with a simple compound  inter-
+       est  equation.  This  equation will be extended to a first order random
+       walk model of equity prices. Finally, optimizations will derived  based
+       on the random walk model that are useful in optimizing equity portfolio
+       performance.
+
+       If we consider capital, V, invested in a savings account, and calculate
+       the growth of the capital over time:
+
+           V(t) = V(t - 1)(1 + a(t)) ......................(1.1)
+
+       where a(t) is the interest rate at time t, (usually a constant[1].)  In
+       equities, a(t) is not constant, and fluctuates, perhaps being  negative
+       at  certain  times,  (meaning  that the value of the equity decreased.)
+       This fluctuation in an equity’s value can be represented  by  modifying
+       a(t) in Equation (1.1):
+
+           a(t)  = f(t) * F(T) ............................(1.2)
+
+       where  the  product  f  * F is the fluctuation in the equity’s value at
+       time t.  An equity’s value, over time, is similar to  a  simple  tossed
+       coin  game  [Sch91, pp. 128], where f(t) is the fraction of a gambler’s
+       capital wagered on a toss of the coin, at time t, and F(t) is a  random
+       variable[2],  signifying  whether  the  game was a win, or a loss, ie.,
+       whether the gambler’s capital increased or decreased, and by how  much.
+       The amount the gambler’s capital increased or decreased is f(t) * F(t).
+
+       In general, F(t) is a function of a random variable, with  an  average,
+       over time, of avgf, and a root mean square value, rmsf, of unity.  Note
+       that for simple, time invariant, compound interest, F(t) has an average
+       and root mean square, both being unity, and f(t) is simply the interest
+       rate, which is assumed to be constant. For a simple, single coin  game,
+       F(t)  is  a  fixed increment, (ie., either +1 or -1,) random generator.
+       From an analytical perspective, it would be advantageous to measure the
+       statistical  characteristics  of  the generator.  Substituting Equation
+       (1.2) into Equation (1.1)[3]:
+
+           V(t) = V(t - 1)(1 + f(t) * F(t)) ...............(1.3)
+
+       and subtracting V(t - 1) from both sides:
+
+
+           V(t) - V(t - 1) = V(t - 1) (1 + f(t) * F(t)) -
+
+           V(t - 1) .......................................(1.4)
+
+       and dividing both sides by V(t - 1):
+
+           V(t) - V(t - 1)
+           --------------- =
+               V(t - 1)
+
+           V(t - 1) (1 + f(t) * F(t)) - V(t - 1)
+           ------------------------------------- ..........(1.5)
+                        V(t - 1)
+
+       and combining:
+
+           V(t) - V(t - 1)
+           --------------- =
+               V(t - 1)
+
+           (1 + f(t) * F(t) ) - 1 = f(t) * F(t) ...........(1.6)
+
+       We now have a "prescription," or process, for calculating  the  charac-
+       teristics of the random process that determines an equity’s price, over
+       time.  That process is, for each unit of time, subtract  the  value  of
+       the  equity  at  the  previous time from the value of the equity at the
+       current time, and divide this by the value of the equity at the  previ-
+       ous  time.  The  root  mean square[4] of these values are the root mean
+       square value of the random process.  The average of  these  values  are
+       the average of the random process, avgf.  The root mean square of these
+       values can be calculated by any convenient means, and  will  be  repre-
+       sented  by  rms. The average of these values can be found by any conve-
+       nient means, and will be represented by avg[5].  Therefore, if  f(t)  =
+       f, and assuming that it does not vary over time:
+
+           rms = f ........................................(1.7)
+
+       which,  if  there  are  sufficiently  many  samples, is a metric of the
+       equity’s price "volatility," and:
+
+           avg = f * F(t) .................................(1.8)
+
+       and if there are sufficiently many samples, the average of F(t) is sim-
+       ply avgf, or:
+
+           avg = f * avgf .................................(1.9)
+
+       which are the metrics of the equity’s random process. Note that this is
+       the "effective" compound interest rate from Equation (1.1).   Equations
+       (1.7)  and  (1.9)  are  important  equations, since they can be used in
+       portfolio management.  For example, Equation (1.7) states that  portfo-
+       lio  volatility  is calculated as the root mean square sum of the indi-
+       vidual volatilities of the equities in the portfolio.   Equation  (1.9)
+       states  that  the  averages  of the normalized increments of the equity
+       prices add together linearly[6] in the  portfolio.   Dividing  Equation
+       (1.9) by Equation (1.7) results in the two f’s canceling, or:
+
+           avg
+           --- = avgf ....................................(1.10)
+           rms
+
+       There  may  be analytical advantages to "model" F(t) as a simple tossed
+       coin game, (either played with a single coin, or multiple  coins,  ie.,
+       many  coins played at one time, or a single coin played many times[7].)
+       The number of wins minus the number of losses, in many iterations of  a
+       single coin tossing game would be:
+
+           P - (1 - P) = 2P - 1 ..........................(1.11)
+
+       where  P is the probability of a win for the tossed coin.  (This proba-
+       bility is traditionally termed, the "Shannon probability"  of  a  win.)
+       Note  that from the definition of F(t) above, that P = avgf. For a fair
+       coin, (ie., one that comes up with a win 50% of the time,) P = 0.5, and
+       there  is no advantage, in the long run, to playing the game.  However,
+       if P > 0.5, then the optimal fraction of capital wagered on each itera-
+       tion of the single coin tossing game, f, would be 2P - 1.  Note that if
+       multiple coins were used for each  iteration  of  the  game,  we  would
+       expect  that the volatility of the gambler’s capital to increase as the
+       square root of the number of coins used, and  the  growth  to  increase
+       linearly  with  the  number of coins used, irregardless of whether many
+       coins were tossed at once, or one coin was tossed many times, (ie., our
+       random  generator, F(t) would assume a binomial distribution and if the
+       number of coins was very large, then F(t) would assume, essentially,  a
+       Gaussian distribution.)  Many equities have a Gaussian distribution for
+       the random process, F(t).  It may  be  advantageous  to  determine  the
+       Shannon  probability  to  analyze  equity  investment strategies.  From
+       Equation (1.10):
+
+           avg
+           --- = avgf = 2P - 1 ...........................(1.12)
+           rms
+
+       or:
+
+           avg
+           --- + 1 = 2P ..................................(1.13)
+           rms
+
+       and:
+
+               avg
+               --- + 1
+               rms
+           P = ------- ...................................(1.14)
+                  2
+
+       where only the average and root mean square of  the  normalized  incre-
+       ments need to be measured, using the "prescription" or process outlined
+       above.
+
+       Interestingly, what Equation (1.12) states is that  the  "best"  equity
+       investment is not, necessarily, the equity that has the largest average
+       growth.  A better investment criteria is to choose the equity that  has
+       the  largest  growth, while simultaneously having the smallest volatil-
+       ity.
+
+       Continuing with  this  line  of  reasoning,  and  rearranging  Equation
+       (1.12):
+
+           avg = rms * (2P - 1) ..........................(1.15)
+
+       which  is  an  important  equation  since  it states that avg, (and the
+       parameter that should be maximized,) is equal to rms, which is the mea-
+       sure  of  the volatility of the equity’s value, multiplied by the quan-
+       tity, twice the likelihood that the equity’s value will increase in the
+       next time interval, minus unity.
+
+       As  derived  in  the  Section,  OPTIMIZATION, below, the optimal growth
+       occurs when f = rms = 2P - 1. Under optimal conditions, Equation (1.14)
+       becomes:
+
+               rms + 1
+           P = ------- ...................................(1.16)
+                  2
+
+       or, sqrt (avg) = rms, (again, under optimal conditions,) and substitut-
+       ing into Equation (1.14):
+
+               sqrt (avg) + 1
+           P = -------------- ............................(1.17)
+                     2
+
+       giving three different computational methods for measuring the  statis-
+       tics of an equity’s value.
+
+       Note  that,  from  Equations (1.14) and (1.12), that since avgf = avg /
+       rms = (2P - 1), choosing the largest value of the Shannon  probability,
+       P,  will  also choose the largest value of the ratio of avg / rms, rms,
+       or avg, respectively, in Equations (1.14), (1.16), or (1.17). This sug-
+       gests  a  method  for determination of equity selection criteria. (Note
+       that under optimal conditions, all three equations  are  identical-only
+       the  metric  methodology  is  different.  Under non-optimal conditions,
+       Equation (1.14) should be used. Unfortunately, any calculation  involv-
+       ing  the  average  of the normalized increments of an equity value time
+       series will be very "sluggish," meaning that practical issues may  pre-
+       vail,  suggesting  a  preference  for  Equation (1.17).)  However, this
+       would imply that the equities are known to be optimal, ie., rms = 2P  +
+       1, which, although it is nearly true for most equities, is not true for
+       all equities. There is some possibility that optimality can be verified
+       by metrics:
+
+                       2
+           if avg < rms
+
+               then rms = f is too large in Equation (1.12)
+
+                            2
+           else if avg > rms
+
+               then rms = f is too small in Equation (1.12)
+
+                         2
+           else avg = rms
+
+               and the equities time series is optimal, ie., rms
+               = f = 2P - 1 from Equation (1.36), below
+
+
+HHEEUURRIISSTTIICC AAPPPPRROOAACCHHEESS
+       There  have  been  several heuristic approaches suggested, for example,
+       using the absolute value of the normalized increments as an  approxima-
+       tion  to  the root mean square, rms, and calculating the Shannon proba-
+       bility, P by Equation (1.16), using the absolute value, abs, instead of
+       the  rms. The statistical estimate in such a scheme should use the same
+       methodology as in the root mean square.
+
+       Another alternative is to model equity value time  series  as  a  fixed
+       increment  fractal,  ie.,  by  counting the up movements in an equity’s
+       value. The Shannon probability, P, is then calculated by  the  quotient
+       of  the up movements, divided by the total movements. There is an issue
+       with this model, however. Although not common, there  can  be  adjacent
+       time  intervals  where an equity’s value does not change, and it is not
+       clear how the accounting  procedure  should  work.  There  are  several
+       alternatives.  For  example, no changes can be counted as up movements,
+       or as down movements, or disregarded entirely, or counted as both.  The
+       statistical estimate should be performed as in Equation (1.14), with an
+       rms of unity, and an avg that is the Shannon probability itself-that is
+       the definition of a fixed increment fractal.
+
+
+MMAARRKKEETT
+       We  now  have  a  "first order prescription" that enables us to analyze
+       fluctuations in equity values,  although  we  have  not  explained  why
+       equity  values fluctuate the way they do.  For a formal presentation on
+       the subject, see the bibliography in [Art95] which, also,  offers  non-
+       mathematical insight into the subject.
+
+       Consider  a  very  simple  equity  market, with only two people holding
+       equities. Equity value "arbitration" (ie., how equity values are deter-
+       mined,) is handled by one person posting (to a bulletin board,) a will-
+       ingness to sell a given number of equities at a  given  price,  to  the
+       other  person.  There is no other communication between the two people.
+       If the other person buys the equity, then that  is  the  value  of  the
+       equity  at  that  time.   Obviously,  the other person will not buy the
+       equity if the price posted is too high-even if ownership of the  equity
+       is  desired.  For example, the other person could simply decide to wait
+       in hopes that a favorable price will be offered in  the  future.   What
+       this  means  is  that the seller must consider not only the behavior of
+       the other person, but what the other person thinks the seller’s  behav-
+       ior  will  be,  ie.,  the  seller must base the pricing strategy on the
+       seller’s pricing strategy. Such convoluted logical processes are termed
+       "self  referential,"  and  the implication is that the market can never
+       operate in a consistent fashion that can be the  subject  of  deductive
+       analysis  [Pen89,  pp.  101][8].   As pointed out by [Art95, Abstract],
+       these types of indeterminacies  pervade  economics[9].   What  the  two
+       players  do, in absence of a deductively consistent and complete theory
+       of the market, is to rely on inductive reasoning. They form  subjective
+       expectations or hypotheses about how the market operates.  These expec-
+       tations and hypothesis are constantly  formulated  and  changed,  in  a
+       world  that forms from others’ subjective expectations. What this means
+       is that equity values will fluctuate as the expectations and hypothesis
+       concerning  the  future  of  equity values change[10]. The fluctuations
+       created by these indeterminacies in the equity market  are  represented
+       by  the  term  f(t)  * F(t) in Equation (1.3), and since there are many
+       such indeterminacies, we would  anticipate  F(t)  to  have  a  Gaussian
+       distribution.  This is a rather interesting conclusion, since analyzing
+       the aggregate actions of many "agents," each  operating  on  subjective
+       hypothesis in a market that is deductively indeterminate, can result in
+       a system that can not only be analyzed, but optimized.
+
+
+OOPPTTIIMMIIZZAATTIIOONN
+       The only remaining derivation is to  show  that  the  optimal  wagering
+       strategy is, as cited above:
+
+           f = rms = 2P - 1 ..............................(1.18)
+
+       where  f is the fraction of a gambler’s capital wagered on each toss of
+       a coin that has  a  Shannon  probability,  P,  of  winning.   Following
+       [Rez94,  pp.  450], or [Kel56], consider that the gambler has a private
+       wire into the future, (ie., an inductive hypothesis,) who places wagers
+       on  the outcomes of a game of chance.  We assume that the side informa-
+       tion which he receives has a probability, P, of being true, and of 1  -
+       P,  of  being  false.  Let the original capital of gambler be V(0), and
+       V(n) his capital after the n’th wager.  Since the gambler is  not  cer-
+       tain  that  the side information is entirely reliable, he places only a
+       fraction, f, of his capital on each wager.  Thus, subsequent to n  many
+       wagers,  assuming  the independence of successive tips from the future,
+       his capital is:
+
+                          w        l
+           V(n)  = (1 + f)  (1 - f) V (0) ................(1.19)
+
+       where w is the number of times he won, and l = n -  w,  the  number  of
+       times  he lost. These numbers are, in general, values taken by two ran-
+       dom variables, denoted by W and L. According to the law of  large  num-
+       bers:
+
+                         1
+           lim           - W = P .........................(1.20)
+           n -> infinity n
+
+
+                         1
+           lim           - L = q = 1 - P .................(1.21)
+           n -> infinity n
+
+       The  problem  with which the gambler is faced is the determination of f
+       leading to the maximum of the average exponential rate of growth of his
+       capital. That is, he wishes to maximize the value of:
+
+                             1    V(n)
+           G = lim           - ln ---- ...................(1.22)
+               n -> infinity n    V(0)
+
+       with respect to f, assuming a fixed original capital and specified P:
+
+                             W              L
+           G = lim           - ln (1 + f) + - ln (1 - f) .(1.23)
+               n -> infinity n              n
+
+       or:
+
+
+           G = P ln (1 + f) + q ln (1 - f) ...............(1.24)
+
+       which,  by  taking  the  derivative  with respect to f, and equating to
+       zero, can be shown to have a maxima when:
+
+           dG           P - 1        1 - P
+           -- = P(1 + f)      (1 - f)      -
+           df
+
+                         1 - P - 1        P
+           (1 - P)(1 - f)          (1 + f)  = 0 ..........(1.25)
+
+       combining terms:
+
+
+                       P - 1        1 - P
+           0 = P(1 + f)      (1 - f)      -
+
+                         P         P
+           (1 - P)(1 - f)  (1 + f )  .....................(1.26)
+
+       and splitting:
+
+                   P - 1        1 - P
+           P(1 + f)      (1 - f)      =
+
+                         P        P
+           (1 - P)(1 - f)  (1 + f)  ......................(1.27)
+
+       then taking the logarithm of both sides:
+
+           ln (P) + (P - 1) ln (1 + f) + (1 - P) ln (1 - f) =
+
+           ln (1 - P) - P ln (1 - f) + P ln (1 + f) ......(1.28)
+
+       and combining terms:
+
+           (P - 1) ln (1 + f) - P ln (1 + f) +
+
+           (1 - P) ln (1 - f) + P ln (1 - f) =
+
+           ln (1 - P) - ln (P) ...........................(1.29)
+
+       or:
+
+           ln (1 - f) - ln (1 + f) =
+
+           ln (1 - P)  - ln (P)...........................(1.30)
+
+       and performing the logarithmic operations:
+
+              1 - f      1 - P
+           ln ----- = ln ----- ...........................(1.31)
+              1 + f        P
+
+       and exponentiating:
+
+           1 - f   1 - P
+           ----- = ----- .................................(1.32)
+           1 + f     P
+
+       which reduces to:
+
+           P(1 - f) = (1 - P)(1 + f) .....................(1.33)
+
+       and expanding:
+
+           P - Pf = 1 - Pf - P + f .......................(1.34)
+
+       or:
+
+           P = 1 - P + f .................................(1.35)
+
+       and, finally:
+
+           f = 2P - 1 ....................................(1.36)
+
+       Note that Equation (1.24), which, since rms = f, can be rewritten:
+
+           G = P ln (1 + rms) + (1 - P) ln (1 - rms) .....(1.37)
+
+       where G is the average exponential rate of growth in an equity’s value,
+       from  one  time  interval to the next, (ie., the exponentiation of this
+       value minus unity[11] is the "effective interest rate", as expressed in
+       Equation (1.1),) and, likewise, Equation (1.36) can be rewritten:
+
+           rms = 2P - 1 ..................................(1.38)
+
+       and substituting:
+
+           G = P ln (1 + 2P - 1) +
+
+               (1 - P) ln (1 - (2P - 1)) .................(1.39)
+
+       or:
+
+           G = P ln (2P) +
+
+               (1 - P) ln (2 (1 - P)) ....................(1.40)
+
+       using a binary base for the logarithm:
+
+           G = P ln (2P) +
+                   2
+
+               (1 - P) ln (2 (1 - P)) ....................(1.41)
+                         2
+
+       and carrying out the operations:
+
+           G = P ln (2) + P ln (P) +
+                   2          2
+
+               (1 - P) ln (2) + (1 - P) ln (1 - P)) ......(1.42)
+                         2                2
+
+       which is:
+
+           G = P ln (2) + P ln (P) +
+                   2          2
+
+               ln (2) - P ln (2) + (1 - P) ln (1 - P) ....(1.43)
+                 2          2                2
+
+       and canceling:
+
+           G = 1 + P ln (P) + (1 - P) ln (1 - P) .........(1.44)
+                       2                2
+
+       if  the  gambler’s wagering strategy is optimal, ie., f = rms = 2P - 1,
+       which is identical to the equation in [Sch91, pp. 151].
+
+
+FFIIXXEEDD IINNCCRREEMMEENNTT FFRRAACCTTAALL
+       It was mentioned that it would be useful to model equity  prices  as  a
+       fixed increment fractal, ie., an unfair tossed coin game.
+
+       As  above,  consider a gambler, wagering on the iterated outcomes of an
+       unfair tossed coin game. A fraction, f, of the gambler’s  capital  will
+       be  wagered on the outcome of each iteration of the unfair tossed coin,
+       and if the coin comes up heads, with a probability, P, then the gambler
+       wins  the  iteration, (and an amount equal to the wager is added to the
+       gambler’s capital,) and if the coin comes up tails, with a  probability
+       of  1 - P, then the gambler looses the iteration, (and an amount of the
+       wager is subtracted from the gambler’s capital.)
+
+       If we let the outcome of the first coin toss, (ie., whether it came  up
+       as  a  win  or  a  loss,) be c(1) and the outcome of the second toss be
+       c(2), and so on, then the outcome of the n’th toss, c(n), would be:
+
+                  [win, with a probability of P
+           c(n) = [
+                  [loose, with a probability of 1 - P
+
+       for convenience, let a win to be represented by +1, and a loss by -1:
+
+                  [+1, with a probability of P
+           c(n) = [
+                  [-1, with a probability of 1 - P
+
+       for the reason that when we multiply the wager, f, by c(n), it will  be
+       a  positive  number, (ie., the wager will be added to the capital,) and
+       for a loss, it will be a negative number, (ie., the wager will be  sub-
+       tracted from the capital.)  This is convenient, since the increment, by
+       with the gambler’s capital increased or decreased in the n’th iteration
+       of the game is f * c(n).
+
+       If  we  let V(0) be the initial value of the gambler’s capital, V(1) be
+       the value of the gambler’s capital after the  first  iteration  of  the
+       game, then:
+
+           V(1) = V(0) * (1 + c(1) * f(1)) ...............(1.45)
+
+       after the first iteration of the game, and:
+
+           V(2) = V(0) * ((1 + c(1) * f(1)) *
+
+                  (1 + c(2) * f(2)))  ....................(1.46)
+
+       after the second iteration of the game, and, in general, after the n’th
+       iteration of the game:
+
+           V(n) = V(0) * ((1 + c(1) * f(1)) *
+
+                  (1 + c(2) * f(2)) * ...
+
+                  * (1 + c(n) * f(n)) *
+
+                  (1 + c(n + 1) * f(n + 1))) .............(1.47)
+
+       For the normalized increments of the time series of the gambler’s capi-
+       tal,  it would be convenient to rearrange these formulas. For the first
+       iteration of the game:
+
+           V(1) - V(0) = V(0) * (1 + c(1) * f(1)) - V(0) .(1.48)
+
+       or
+
+           V(1) - V(0)   V(0) * (1 + c(1) * f(1)) - V(0)
+           ----------- = ------------------------------- .(1.49)
+              V(0)                   V(0)
+
+       and after reducing, the first normalized  increment  of  the  gambler’s
+       capital time series is:
+
+           V(1) - V(0)
+           ----------- = (1 + c(1) * f(1)) - 1
+              V(0)
+
+                       = c(1) * f(1) .....................(1.50)
+
+       and for the second iteration of the game:
+
+           V(2) = V(0) * ((1 + c(1) * f(1)) *
+
+                  (1 + c(2) * f(2))) .....................(1.51)
+
+       but V(0) * ((1 + c(1) * f(1)) is simply V(1):
+
+           V(2) = V(1) * (1 + c(2) * f(2)) ...............(1.52)
+
+       or:
+
+           V(2) - V(1) = V(1) * (1 + c(2) * f(2)) - V(1) .(1.53)
+
+       which is:
+
+           V(2) - V(1)   V(1) * (1 + c(2) * f(2)) - V(1)
+           ----------- = ------------------------------- .(1.54)
+              V(1)                    V(1)
+
+       and  after  reducing,  the second normalized increment of the gambler’s
+       capital time series is:
+
+           V(2) - V(1)
+           ----------- = 1 + c(2) * f(2)) - 1
+              V(1)
+
+                       = c(2) * f(2) .....................(1.55)
+
+       and it should be obvious that the process can be repeated indefinitely,
+       so,  the n’th normalized increment of the gambler’s capital time series
+       is:
+
+           V(n) - V(n - 1)
+           --------------- = c(n) * f(n) .................(1.56)
+                V(n)
+
+       which is Equation (1.6).
+
+
+DDAATTAA SSEETT SSIIZZEE CCOONNSSIIDDEERRAATTIIOONNSS
+       This section addresses the question "is there  reasonable  evidence  to
+       justify investment in an equity based on data set size?"
+
+       The  Shannon  probability  of  a time series is the likelihood that the
+       value of the time series will increase in the next time  interval.  The
+       Shannon  probability  is measured using the average, avg, and root mean
+       square, rms, of the normalized increments of the time series. Using the
+       rms to compute the Shannon probability, P:
+
+               rms + 1
+           P = ------- ...................................(1.57)
+                  2
+
+       However, there is an error associated with the measurement of rms do to
+       the size of the data set, N, (ie., the number of records  in  the  time
+       series,)  used  in  the calculation of rms. The confidence level, c, is
+       the likelihood that this error is less than some error level, e.
+
+       Over the many time intervals represented in the time series, the  error
+       will  be  greater than the error level, e, (1 - c) * 100 percent of the
+       time-requiring that the Shannon probability, P, be reduced by a  factor
+       of c to accommodate the measurement error:
+
+                rms - e + 1
+           Pc = ----------- ..............................(1.58)
+                     2
+
+       where  the  error level, e, and the confidence level, c, are calculated
+       using statistical estimates, and the product P times c is the effective
+       Shannon  probability  that should be used in the calculation of optimal
+       wagering strategies.
+
+       The error, e, expressed in terms of the standard deviation of the  mea-
+       surement error do to an insufficient data set size, esigma, is:
+
+                     e
+           esigma = --- sqrt (2N) ........................(1.59)
+                    rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence level can be calculated from the cumulative sum,  (ie.,  integra-
+       tion) of the normal distribution, ie.:
+
+           c     esigma
+           -------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                rms - e + 1
+           Pc = ----------- ..............................(1.60)
+                     2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigma) be the  function
+       that  given  esigma,  returns  c,  (ie.,  performs the table operation,
+       above,) then:
+
+                           rms - e + 1
+           P * F(esigma) = -----------
+                                2
+
+                                 rms * esigma
+                           rms - ------------ + 1
+                                  sqrt (2N)
+                         = ---------------------- ........(1.61)
+                                     2
+
+       Then:
+
+                                       rms * esigma
+                                 rms - ------------ + 1
+           rms + 1                      sqrt (2N)
+           ------- * F(esigma) = ---------------------- ..(1.62)
+              2                            2
+
+       or:
+
+                                         rms * esigma
+           (rms + 1) * F(esigma) = rms - ------------ + 1 (1.63)
+                                          sqrt (2N)
+
+       Letting a decision variable, decision, be the iteration  error  created
+       by this equation not being balanced:
+
+                            rms * esigma
+           decision = rms - ------------ + 1
+                              sqrt (2N)
+
+                       - (rms + 1) * F(esigma) ...........(1.64)
+
+       which can be iterated to find F(esigma), which is the confidence level,
+       c.
+
+       Note that from Equation (1.58):
+
+                rms - e + 1
+           Pc = -----------
+                     2
+
+       and solving for rms - e, the effective value  of  rms  compensated  for
+       accuracy of measurement by statistical estimation:
+
+           rms - e = (2 * P * c) - 1 .....................(1.65)
+
+       and substituting into Equation (1.57):
+
+               rms + 1
+           P = -------
+                  2
+
+           rms - e = ((rms + 1) * c) - 1 .................(1.66)
+
+       and defining the effective value of rms as rmseff:
+
+           rmseff = rms - e ..............................(1.67)
+
+       From  Equations  (1.16)  and  (1.17)  it can be seen that if optimality
+       exists, ie., f = 2P - 1, or:
+
+                    2
+           avg = rms  ....................................(1.68)
+
+       or:
+                          2
+           avgeff = rmseff  ..............................(1.69)
+
+       As an example of this algorithm, if  the  Shannon  probability,  P,  is
+       0.51,  corresponding  to  an rms of 0.02, then the confidence level, c,
+       would be 0.996298, or the error level, e, would be 0.003776, for a data
+       set size, N, of 100.
+
+       Likewise,  if  P is 0.6, corresponding to an rms of 0.2 then the confi-
+       dence level, c, would be 0.941584, or the  error  level,  e,  would  be
+       0.070100, for a data set size of 10.
+
+       Robustness  is  an  issue in algorithms that, potentially, operate real
+       time. The traditional means of implementation of statistical  estimates
+       is  to  use an integration process inside of a loop that calculates the
+       cumulative of the normal distribution, controlled by, perhaps, a Newton
+       Method  approximation  using the derivative of cumulative of the normal
+       distribution, ie., the formula for the normal distribution:
+
+                                        2
+                        1           - x   / 2
+           f(x) = ------------- * e           ............(1.70)
+                  sqrt (2 * PI)
+
+       Numerical stability and convergence issues are an issue  in  such  pro-
+       cesses.
+
+       The  Shannon  probability  of  a time series is the likelihood that the
+       value of the time series will increase in the next time  interval.  The
+       Shannon  probability  is measured using the average, avg, and root mean
+       square, rms, of the normalized increments of the time series. Using the
+       avg to compute the Shannon probability, P:
+
+               sqrt (avg) + 1
+           P = -------------- ............................(1.71)
+                     2
+
+       However, there is an error associated with the measurement of avg do to
+       the size of the data set, N, (ie., the number of records  in  the  time
+       series,)  used  in  the calculation of avg. The confidence level, c, is
+       the likelihood that this error is less than some error level, e.
+
+       Over the many time intervals represented in the time series, the  error
+       will  be  greater than the error level, e, (1 - c) * 100 percent of the
+       time-requiring that the Shannon probability, P, be reduced by a  factor
+       of c to accommodate the measurement error:
+
+                sqrt (avg - e) + 1
+           Pc = ------------------ .......................(1.72)
+                        2
+
+       where  the  error level, e, and the confidence level, c, are calculated
+       using statistical estimates, and the product P times c is the effective
+       Shannon  probability  that should be used in the calculation of optimal
+       wagering strategies.
+
+       The error, e, expressed in terms of the standard deviation of the  mea-
+       surement error do to an insufficient data set size, esigma, is:
+
+                     e
+           esigma = --- sqrt (N) .........................(1.73)
+                    rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence level can be calculated from the cumulative sum,  (ie.,  integra-
+       tion) of the normal distribution, ie.:
+
+           c     esigma
+           -------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                sqrt (avg - e) + 1
+           Pc = ------------------ .......................(1.74)
+                        2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigma) be the  function
+       that  given  esigma,  returns  c,  (ie.,  performs the table operation,
+       above,) then:
+
+                           sqrt (avg - e) + 1
+           P * F(esigma) = ------------------
+                                   2
+
+                                       rms * esigma
+                           sqrt [avg - ------------] + 1
+                                         sqrt (N)
+                         = ----------------------------- .(1.75)
+                                        2
+
+       Then:
+
+           sqrt (avg)  + 1
+           --------------- * F(esigma) =
+                  2
+
+                           rms * esigma
+               sqrt [avg - ------------] + 1
+                             sqrt (N)
+               ----------------------------- .............(1.76)
+                            2
+
+       or:
+
+           (sqrt (avg) + 1) * F(esigma) =
+
+                           rms * esigma
+               sqrt [avg - ------------] + 1 .............(1.77)
+                             sqrt (N)
+
+       Letting a decision variable, decision, be the iteration  error  created
+       by this equation not being balanced:
+
+                                   rms * esigma
+           decision = sqrt [avg - ------------] + 1
+                                     sqrt (N)
+
+                      - (sqrt (avg) + 1) * F(esigma) .....(1.78)
+
+       which can be iterated to find F(esigma), which is the confidence level,
+       c.
+
+       There are two radicals that have to be protected from numerical  float-
+       ing point exceptions. The sqrt (avg) can be protected by requiring that
+       avg >= 0, (and returning a confidence level of 0.5, or  possibly  zero,
+       in  this instance-a negative avg is not an interesting solution for the
+       case at hand.)  The other radical:
+
+                       rms * esigma
+           sqrt [avg - ------------] .....................(1.79)
+                         sqrt (N)
+
+       and substituting:
+
+                     e
+           esigma = --- sqrt (N) .........................(1.80)
+                    rms
+
+       which is:
+
+                              e
+                       rms * --- sqrt (N)
+                             rms
+           sqrt [avg - ------------------] ...............(1.81)
+                         sqrt (N)
+
+       and reducing:
+
+           sqrt [avg - e] ................................(1.82)
+
+       requiring that:
+
+           avg >= e ......................................(1.83)
+
+       Note that if e > avg, then Pc < 0.5, which is not an interesting  solu-
+       tion for the case at hand. This would require:
+
+                     avg
+           esigma <= --- sqrt (N) ........................(1.84)
+                     rms
+
+       Obviously, the search algorithm must be prohibited from searching for a
+       solution in this space. (ie., testing for a solution in this space.)
+
+       The solution is to limit the search of the confidence array  to  values
+       that are equal to or less than:
+
+           avg
+           --- sqrt (N) ..................................(1.85)
+           rms
+
+       which can be accomplished by setting integer variable, top, usually set
+       to sigma_limit - 1, to this value.
+
+       Note that from Equation (1.72):
+
+                sqrt (avg - e) + 1
+           Pc = ------------------
+                        2
+
+       and solving for avg - e, the effective value  of  avg  compensated  for
+       accuracy of measurement by statistical estimation:
+
+                                      2
+           avg - e = ((2 * P * c) - 1)  ..................(1.86)
+
+       and substituting into Equation (1.71):
+
+               sqrt (avg) + 1
+           P = --------------
+                     2
+
+                                                 2
+           avg - e = (((sqrt (avg) + 1) * c) - 1)  .......(1.87)
+
+       and defining the effective value of avg as avgeff:
+
+           avgeff = avg - e ..............................(1.88)
+
+       From  Equations  (1.16)  and  (1.17)  it can be seen that if optimality
+       exists, ie., f = 2P - 1, or:
+
+                    2
+           avg = rms  ....................................(1.89)
+
+       or:
+
+           rmseff = sqrt (avgeff) ........................(1.90)
+
+       As an example of this algorithm, if  the  Shannon  probability,  P,  is
+       0.52,  corresponding  to an avg of 0.0016, and an rms of 0.04, then the
+       confidence level, c, would be 0.987108, or the error level, e, would be
+       0.000893, for a data set size, N, of 10000.
+
+       Likewise,  if  P  is 0.6, corresponding to an rms of 0.2, and an avg of
+       0.04, then the confidence level, c, would be  0.922759,  or  the  error
+       level, e, would be 0.028484, for a data set size of 100.
+
+       The  Shannon  probability  of  a time series is the likelihood that the
+       value of the time series will increase in the next time  interval.  The
+       Shannon  probability  is measured using the average, avg, and root mean
+       square, rms, of the normalized increments of  the  time  series.  Using
+       both the avg and the rms to compute the Shannon probability, P:
+
+               avg
+               --- + 1
+               rms
+           P = ------- ...................................(1.91)
+                  2
+
+       However,  there is an error associated with both the measurement of avg
+       and rms do to the size of the data set, N, (ie., the number of  records
+       in the time series,) used in the calculation of avg and rms. The confi-
+       dence level, c, is the likelihood that this error  is  less  than  some
+       error level, e.
+
+       Over  the many time intervals represented in the time series, the error
+       will be greater than the error level, e, (1 - c) * 100 percent  of  the
+       time-requiring  that the Shannon probability, P, be reduced by a factor
+       of c to accommodate the measurement error:
+
+                         avg - ea
+                         -------- + 1
+                         rms + er
+           P * ca * cr = ------------ ....................(1.92)
+                              2
+
+       where the error level, ea, and the confidence level, ca, are calculated
+       using  statistical estimates, for avg, and the error level, er, and the
+       confidence level, cr, are calculated using  statistical  estimates  for
+       rms,  and  the product P * ca * cr is the effective Shannon probability
+       that should be used in the calculation of optimal wagering  strategies,
+       (which is the product of the Shannon probability, P, times the superpo-
+       sition of the two confidence levels, ca, and cr, ie., P * ca * cr = Pc,
+       eg.,  the assumption is made that the error in avg and the error in rms
+       are independent.)
+
+       The error, er, expressed in terms of the standard deviation of the mea-
+       surement error do to an insufficient data set size, esigmar, is:
+
+                     er
+           esigmar = --- sqrt (2N) .......................(1.93)
+                     rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence level can be calculated from the cumulative sum,  (ie.,  integra-
+       tion) of the normal distribution, ie.:
+
+           cr     esigmar
+           --------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                      avg
+                    -------- + 1
+                    rms + er
+           P * cr = ------------ .........................(1.94)
+                         2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigmar) be the function
+       that  given  esigmar,  returns  cr, (ie., performs the table operation,
+       above,) then:
+
+                              avg
+                            -------- + 1
+                            rms + er
+           P * F(esigmar) = ------------ =
+                                 2
+
+                                    avg
+                            ------------------- + 1
+                                  esigmar * rms
+                            rms + -------------
+                                    sqrt (2N)
+                            ----------------------- ......(1.95)
+                                       2
+
+       Then:
+
+           avg
+           --- + 1
+           rms
+           ------- * F(esigmar) =
+              2
+
+                          avg
+                  ------------------- + 1
+                        esigmar * rms
+                  rms + -------------
+                          sqrt (2N)
+                  ----------------------- ................(1.96)
+                             2
+
+       or:
+
+            avg
+           (--- + 1) * F(esigmar) =
+            rms
+
+                          avg
+                  ------------------- + 1 ................(1.97)
+                        esigmar * rms
+                  rms + -------------
+                          sqrt (2N)
+
+       Letting a decision variable, decision, be the iteration  error  created
+       by this equation not being balanced:
+
+                              avg
+           decision =  ------------------- + 1
+                             esigmar * rms
+                       rms + -------------
+                              sqrt (2N)
+
+                          avg
+                       - (--- + 1) * F(esigmar) ..........(1.98)
+                          rms
+
+       which  can  be  iterated  to  find  F(esigmar), which is the confidence
+       level, cr.
+
+       The error, ea, expressed in terms of the standard deviation of the mea-
+       surement error do to an insufficient data set size, esigmaa, is:
+
+                     ea
+           esigmaa = --- sqrt (N) ........................(1.99)
+                     rms
+
+       where N is the data set size = number of records. From this, the confi-
+       dence level can be calculated from the cumulative sum,  (ie.,  integra-
+       tion) of the normal distribution, ie.:
+
+           ca     esigmaa
+           --------------
+           50     0.67
+           68.27  1.00
+           80     1.28
+           90     1.64
+           95     1.96
+           95.45  2.00
+           99     2.58
+           99.73  3.00
+
+       Note that the equation:
+
+                    avg - ea
+                    -------- + 1
+                      rms
+           P * ca = ------------ ........................(1.100)
+                         2
+
+       will require an iterated solution since the cumulative normal distribu-
+       tion is transcendental. For convenience, let F(esigmaa) be the function
+       that  given  esigmaa,  returns  ca, (ie., performs the table operation,
+       above,) then:
+
+                            avg - ea
+                            -------- + 1
+                              rms
+           P * F(esigmaa) = ------------ =
+                                 2
+
+                                  esigmaa * rms
+                            avg - -------------
+                                    sqrt (N)
+                            ------------------- + 1
+                                      rms
+                            ----------------------- .....(1.101)
+                                       2 Then:
+
+           avg
+           --- + 1
+           rms
+           ------- * F(esigmaa) =
+              2
+
+                        esigmaa * rms
+                  avg - -------------
+                          sqrt (N)
+                  ------------------- + 1
+                            rms
+                  ----------------------- ...............(1.102)
+                             2
+
+       or:
+
+            avg
+           (--- + 1) * F(esigmaa) =
+            rms
+
+                        esigmaa * rms
+                  avg - -------------
+                          sqrt (N)
+                  ------------------- + 1 ...............(1.103)
+                            rms
+
+       Letting a decision variable, decision, be the iteration  error  created
+       by this equation not being balanced:
+
+                            esigmaa * rms
+                      avg - -------------
+                              sqrt (N)
+           decision = ------------------- + 1
+                                rms
+
+                  avg
+               - (--- + 1) * F(esigmaa) .................(1.104)
+                  rms
+
+       which  can  be  iterated  to  find  F(esigmaa), which is the confidence
+       level, ca.
+
+       Note that from Equation (1.94):
+
+                      avg
+                    -------- + 1
+                    rms + er
+           P * cr = ------------
+                         2
+
+       and solving for rms + er, the effective value of  rms  compensated  for
+       accuracy of measurement by statistical estimation:
+
+                            avg
+           rms + er = ---------------- ..................(1.105)
+                      (2 * P * cr) - 1
+
+       and substituting into Equation (1.100):
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+                              avg
+           rms + er = -------------------- ..............(1.106)
+                        avg
+                      ((--- + 1) * cr) - 1
+                        rms
+
+       and defining the effective value of avg as rmseff:
+
+           rmseff = rms +/- er ..........................(1.107)
+
+       Note that from Equation (1.100):
+
+                    avg - ea
+                    -------- + 1
+                      rms
+           P * ca = ------------
+                         2
+
+       and  solving  for  avg - ea, the effective value of avg compensated for
+       accuracy of measurement by statistical estimation:
+
+           avg - ea = ((2 * P * ca) - 1) * rms ..........(1.108)
+
+       and substituting into Equation (1.91):
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+                         avg
+           avg - ea = (((--- + 1) * ca) - 1) * rms ......(1.109)
+                         rms
+
+       and defining the effective value of avg as avgeff:
+
+           avgeff = avg - ea ............................(1.110)
+
+       As an example of this algorithm, if  the  Shannon  probability,  P,  is
+       0.51,  corresponding  to  an rms of 0.02, then the confidence level, c,
+       would be 0.983847, or the error level in avg, ea,  would  be  0.000306,
+       and the error level in rms, er, would be 0.001254, for a data set size,
+       N, of 20000.
+
+       Likewise, if P is 0.6, corresponding to an rms of 0.2 then  the  confi-
+       dence level, c, would be 0.947154, or the error level in avg, ea, would
+       be 0.010750, and the error level in rms, er, would be 0.010644,  for  a
+       data set size of 10.
+
+       As  a final discussion to this section, consider the time series for an
+       equity. Suppose that the data set size is finite, and avg and rms  have
+       both  been measured, and have been found to both be positive. The ques-
+       tion that needs to be resolved concerns the  confidence,  not  only  in
+       these  measurements,  but  the  actual  process  that produced the time
+       series. For example, suppose, although there was no  knowledge  of  the
+       fact,  that  the time series was actually produced by a Brownian motion
+       fractal mechanism, with a Shannon probability of exactly 0.5. We  would
+       expect  a  "growth"  phenomena  for extended time intervals [Sch91, pp.
+       152], in the time series, (in point of fact, we would expect the  cumu-
+       lative  distribution of the length of such intervals to be proportional
+       to erf (1 / sqrt (t)).) Note that, inadvertently, such  a  time  series
+       would  potentially justify investment. What the methodology outlined in
+       this section does is to preclude such scenarios by effectively lowering
+       the  Shannon probability to accommodate such issues. In such scenarios,
+       the lowered Shannon probability will cause data sets with larger  sizes
+       to  be "favored," unless the avg and rms of a smaller data set size are
+       "strong" enough in relation to the Shannon probabilities of  the  other
+       equities in the market. Note that if the data set sizes of all equities
+       in the market are small, none will be favored, since they would all  be
+       lowered by the same amount, (if they were all statistically similar.)
+
+       To  reiterate, in the equation avg = rms * (2P - 1), the Shannon proba-
+       bility, P, can be compensated by the size of the data set,  ie.,  Peff,
+       and  used  in the equation avgeff = rms * (2Peff - 1), where rms is the
+       measured value of the root mean square of  the  normalized  increments,
+       and  avgeff  is  the effective, or compensated value, of the average of
+       the normalized increments.
+
+
+DDAATTAA SSEETT DDUURRAATTIIOONN CCOONNSSIIDDEERRAATTIIOONNSS
+       An additional accuracy issue, besides data set size, is the time inter-
+       val  over  which  the data was obtained. There is some possibility that
+       the data set was taken during an extended run length,  either  negative
+       or positive, and the Shannon probability will have to be compensated to
+       accommodate this measurement error. The chances that a run length  will
+       exceed time, t, is [Sch91, pp. 160]:
+
+           1 - erf (1 / sqrt (t)) .......................(1.111)
+
+       or  the Shannon probability, P, will have to be compensated by a factor
+       of:
+
+           erf (1 / sqrt (t)) ...........................(1.112)
+
+       giving a compensated Shannon probability, Pcomp:
+
+           Pcomp = Peff * (1 - erf (1 / sqrt (t))).......(1.113)
+
+       Fortunately, since confidence levels are  calculated  from  the  normal
+       probability  function, the same lookup table used for confidence calcu-
+       lations (ie., the cumulative of a normal distribution,) can be used  to
+       calculate the associated error function.
+
+       To  use  the  value of the normal probability function to calculate the
+       error function, erf (N), proceed as follows; since erf (X /  sqrt  (2))
+       represents the error function associated with the normal curve:
+
+           1) X = N * sqrt (2).
+
+           2) Lookup the value of X in the normal probability function.
+
+           3) Subtract 0.5 from this value.
+
+           4) And, multiply by 2.
+
+       or:
+
+           erf (N) = 2 * (normal (t * sqrt (2)) - 0.5) ..(1.114)
+
+
+PPOORRTTFFOOLLIIOO OOPPTTIIMMIIZZAATTIIOONN
+       Let  K  be  the  number of equities in the equity portfolio, and assume
+       that the capital is invested equally in each of the equities, (ie.,  if
+       V  is  the  capital value of the portfolio, then the amount invested in
+       each equity is V / K.)  The portfolio value, over time, would be a time
+       series  with  a  root  mean  square value of the normalized increments,
+       rmsp, and an average value of the normalized  increments,  avgp.  Obvi-
+       ously,  it would be advantageous to optimize the portfolio growth. From
+       Equation (1.16):
+
+                rmsp + 1
+           Pp = -------- ................................(1.115)
+                   2
+
+       where the root mean square value of the normalized  increments  of  the
+       portfolio  value,  rmsp,  is  the root mean square sum of the root mean
+       square values of the normalized increments of each individual equity:
+
+                         1     2   1     2
+           rmsp = sqrt ((-rms ) + (-rms )  + ...
+                         K   1     K   2
+
+                         1     2
+                  ... + (-rms ) ) .......................(1.116)
+                         K   K
+
+       or:
+
+                  1          2      2            2
+           rmsp = - sqrt (rms  + rms  + ... + rms  ) ....(1.117)
+                  K          1      2            K
+
+       and Pp is the Shannon probability (ie., the likelyhood,) that the value
+       of the portfolio time series will increase in the next time interval.
+
+       Note  that  Equation  (1.16)  presumes that the portfolio’s time series
+       will be optimal, ie., rmsp = sqrt (avgp).  This  is  probably  not  the
+       case,  since rmsp will always be less than the individual values of rms
+       for the equities. Additionally, note that assuming the distribution  of
+       capital,  V  /  K,  invested  in each equity to be identical may not be
+       optimal. It is not clear if there is a formal optimization for the dis-
+       tribution,  and,  perhaps, the application of simulated annealing, lin-
+       ear/mathematical programming, or genetic algorithms to the distribution
+       problem may be of some benefit.
+
+       Again, letting K be the number of equities in the equity portfolio, and
+       assuming that the capital is invested equally in each of the  equities,
+       (ie.,  if  V  is  the  capital  value of the portfolio, then the amount
+       invested in each equity is V / K.)  The  portfolio  value,  over  time,
+       would  be a time series with a root mean square value of the normalized
+       increments, rmsp, and an average value of  the  normalized  increments,
+       avgp.  Obviously,  it  would  be advantageous to optimize the portfolio
+       growth. From Equation (1.17):
+
+                sqrt (avgp) + 1
+           Pp = --------------- .........................(1.118)
+                       2
+
+       where the average value of the normalized increments of  the  portfolio
+       value,  avgp, is the sum of the average values of the normalized incre-
+       ments of each individual equity:
+
+                  1        1             1
+           avgp = - avg  + - avg + ... + - avg  .........(1.119)
+                  K    1   K    2        K    K
+
+       or:
+
+                  1
+           avgp = - (avg  + avg + ... + avg  ) ..........(1.120)
+                  K     1      2           K
+
+       and Pp is the Shannon probability (ie., the likelyhood,) that the value
+       of the portfolio time series will increase in the next time interval.
+
+       Note  that  Equation  (1.17)  presumes that the portfolio’s time series
+       will be optimal, ie., rmsp = sqrt (avgp).  This  is  probably  not  the
+       case,  since rmsp will always be less than the individual values of rms
+       for the equities. Additionally, note that assuming the distribution  of
+       capital,  V  /  K,  invested  in each equity to be identical may not be
+       optimal. It is not clear if there is a formal optimization for the dis-
+       tribution,  and,  perhaps,  the  applications of simulated annealing or
+       genetic algorithms to the distribution problem may be of some  benefit.
+
+       Again, letting K be the number of equities in the equity portfolio, and
+       assuming that the capital is invested equally in each of the  equities,
+       (ie.,  if  V  is  the  capital  value of the portfolio, then the amount
+       invested in each equity is V / K.)  The  portfolio  value,  over  time,
+       would  be a time series with a root mean square value of the normalized
+       increments, rmsp, and an average value of  the  normalized  increments,
+       avgp.  Obviously,  it  would  be advantageous to optimize the portfolio
+       growth. From Equation (1.14):
+
+                avgp
+                ---- + 1
+                rmsp
+           Pp = -------- ................................(1.121)
+                   2
+
+       where the average value of the normalized increments of  the  portfolio
+       value,  avgp, is the sum of the average values of the normalized incre-
+       ments of each individual equity, and rmsp is the root mean  square  sum
+       of  the  root  mean  square values of the normalized increments of each
+       individual equity:
+
+                  1        1             1
+           avgp = - avg  + - avg + ... + - avg  .........(1.122)
+                  K    1   K    2        K    K
+
+       and:
+
+                         1     2   1     2
+           rmsp = sqrt ((-rms ) + (-rms )  + ...
+                         K   1     K   2
+
+                         1     2
+                  ... + (-rms ) ) .......................(1.123)
+                         K   K
+
+       or:
+
+                  1
+           avgp = - (avg  + avg + ... + avg  ............(1.124)
+                  K     1      2           K
+
+       and:
+
+                  1          2      2            2
+           rmsp = - sqrt (rms  + rms  + ... + rms  ) ....(1.125)
+                  K          1      2            K
+
+       and dividing:
+
+                     (avg  + avg + ... + avg  )
+           avgp          1      2           K
+           ---- = -------------------------------- ......(1.126)
+           rmsp            2      2            2
+                  sqrt (rms  + rms  + ... + rms  )
+                           1      2            K
+
+       and Pp is the Shannon probability (ie., the likelyhood,) that the value
+       of the portfolio time series will increase in the next time interval.
+
+       The  portfolio’s average exponential rate of growth, Gp, would be, from
+       Equation (1.37):
+
+           Gp = Pp ln (1 + rmsp) +
+
+                (1 - Pp) ln (1 - rmsp) ..................(1.127)
+
+       where the Shannon probability of the portfolio, Pp,  is  determined  by
+       one of the Equations, (1.115), (1.118), or (1.121).
+
+       Note that assuming the distribution of capital, V / K, invested in each
+       equity to be identical may not be optimal. It is not clear if there  is
+       a  formal optimization for the distribution, and, perhaps, the applica-
+       tions of simulated annealing or genetic algorithms to the  distribution
+       problem  may  be  of  some  benefit.  Additionally,  note that Equation
+       (1.121) should be used for portfolio management, as  opposed  to  Equa-
+       tions (1.115) and (1.118), which are not applicable, (Equations (1.115)
+       and (1.118) are monotonically decreasing on K, the number  of  equities
+       held concurrently.)
+
+       Interestingly,  plots  of  Equation (1.127) using Equations (1.121) and
+       (1.127) to calculate the Shannon probability,  Pp,  of  the  portfolio,
+       with  the number of equities held, K, as a parameter for various values
+       of avg and rms, tends to support the prevailing concept that  the  best
+       number  of equities to hold is approximately 10. There is little advan-
+       tage in holding more, and a distinct disadvantage in holding  less[12].
+
+
+MMEEAANN RREEVVEERRTTIINNGG DDYYNNAAMMIICCSS
+       It can be shown that the number of expected equity value "high and low"
+       transitions scales with the square root of time, meaning that the cumu-
+       lative  distribution  of  the  probability of an equity’s "high or low"
+       exceeding a given time interval is proportional to  the  reciprocal  of
+       the  square root of the time interval, (or, conversely, that the proba-
+       bility of an equity’s "high or low" exceeding a given time interval  is
+       proportional to the reciprocal of the time interval raised to the power
+       3/2 [Sch91, pp. 153]. What this means is that a histogram of the  "zero
+       free" run-lengths of an equity’s price would have a 1 / (l^3/2) charac-
+       teristic, where l is the length of time an equity’s price was above  or
+       below "average.") This can be exploited for a short term trading strat-
+       egy, which is also called "noise trading."
+
+       The rationale proceeds as follows. Let l be the run length,  (ie.,  the
+       number  of  time  intervals,)  that an equity’s value has been above or
+       below average, then the probability that it will continue to do  so  in
+       the next time interval will be:
+
+           Pt = erf (1 / sqrt (l + 1))...................(1.128)
+
+       where  Pt is the "transient" probability. Naturally, it would be desir-
+       able to buy low and sell high. So, if an equity’s price is below  aver-
+       age,  then  the  probability of an upward movement is given by Equation
+       (1.128). If an equity’s price is above average, then, then  the  proba-
+       bility that it will continue the trend is:
+
+           Pt = 1 - erf (1 / sqrt (l + 1)) ..............(1.129)
+
+       Equations  (1.128)  and (1.129) can be used to find the optimal time to
+       trade one equity for another.
+
+       Note that equation (1.37) can be used to find whether an equity’s  cur-
+       rent price is above, or below average:
+
+           G = P ln (1 + rms) + (1 - P) ln (1 - rms)
+
+       by exponentiating both sides of the equation, and subtracting the value
+       from the current price of the equity.
+
+       Note that there is a heuristic involved in this procedure. The original
+       derivation  [Sch91, pp. 152], assumed a fixed increment Brownian motion
+       fractal, (ie., V (n + 1) = V (n) + F  (n)),  which  is  different  than
+       Equation  (1.3), V (n + 1) = V (n) (1 + F (n)). However, simulations of
+       Equation (1.3) tend to indicate that a histogram  of  the  "zero  free"
+       run-lengths  of an equity’s price would have a 1 / (l^3/2) characteris-
+       tic, where l is the length of time an equity’s price was above or below
+       "average."  Note that in both formulas, with identical statistical pro-
+       cesses, the values would, intuitively, be above, or below,  average  in
+       much  the  same  way.  Additionally,  note  that in the case of a fixed
+       increment Brownian motion fractal, the average is known-zero, by  defi-
+       nition.  However,  in this procedure, the average is measured, and this
+       can introduce errors, since the average itself is fluctuating slightly,
+       do to a finite data set size.
+
+       Note,  also,  that  mean reverting functionality was implemented on the
+       infrastructure available in the program, ie., the  measurement  of  avg
+       and  rms to determine the average growth of an equity. There are proba-
+       bly more expeditious implementations, for example, using  a  single  or
+       multi  pole  filter  as  described in APPENDIX 1 to measure the average
+       growth of an equity.
+
+
+PPEERRSSIISSTTEENNCCEE
+       The above derivations assume random walk fractal characteristics  as  a
+       first  order approximation to equity prices. Although adequate for many
+       types of analysis, empirical evidence indicates that instead of  a  50%
+       chance  of  consecutive  like movements, (as in a random walk fractal,)
+       many equity prices have slightly greater than a 50%  chance,  which  in
+       principle,  is  exploitable. The traditional method of determination of
+       persistence is by metrics on  the  Hurst  exponent,  [Pet91,  pp.  61],
+       [Cas94,  pp. 253], [Fed88, pp. 149], and [Sch91, pp. 129]. As an alter-
+       native method, the number of consecutive like movements in an  equity’s
+       price can be tallied, and the coefficient of the resultant distribution
+       determined. For a simple random walk fractal, it will be  the  combina-
+       torics,  ie.,  0.5,  or 50%, of finding two like movements. Persistence
+       means that there is greater than 50%, and is a metric on what is called
+       "price  momentum". Note that this is an exploitable attribute in "noise
+       trading". For example, if the Hurst exponent is greater than 0.5,  then
+       both  up  movements,  and  down  movements,  tend to cluster, ie., such
+       strategies as buying after two consecutive down movements, and  selling
+       after two consecutive up movements, may be viable.
+
+
+OOTTHHEERR PPRROOVVIISSIIOONNSS
+       For  simulation, the equities are represented, one per time unit.  How-
+       ever, in the "real world," an equity can be represented multiple  times
+       in the same time unit, or not at all. This issue is addressed by:
+
+           1) If an equity has multiple representations in a
+           single time unit, (ie., multiple instances with the
+           same time stamp,) only the last is used.
+
+           2) If an equity was not represented in a time unit,
+           then at the end of that time unit, the equity is
+           processed as if it was represented in the time unit,
+           but with no change in value.
+
+       The  advantage  of  this  scheme is that, since fractal time series are
+       self-similar, it does not affect the wagering operations of  the  equi-
+       ties in relation to one another.
+
+
+AAPPPPEENNDDIIXX 11
+           Approximating Statistical Estimates to a Time Series
+           with a Single Pole Filter
+
+       Note:  The  prototype to this program implemented statistical estimates
+       with a single pole filter. The documentation for the implementation was
+       moved to this Appendix. Although the approximation is marginal, reason-
+       ably good results can be obtained with  this  technique.  Additionally,
+       the  time  constants  for  the filters are adjustable, and, at least in
+       principle, provide a means  of  adaptive  computation  to  control  the
+       operational dynamics of the program.
+
+       One  of  the  implications of considering equity prices to have fractal
+       characteristics, ie., random walk or Brownian motion,  is  that  future
+       prices  can  not  be  predicted from past equity price performance. The
+       Shannon probability of a equity price time  series  is  the  likelihood
+       that a equity price will increase in the next time interval. It is typ-
+       ically 0.51, on a day to day bases, (although, occasionally, it will be
+       as  high  as 0.6) What this means, for a typical equity, is that 51% of
+       the time, a equity’s price will increase, and 49% of the time  it  will
+       decrease-and  there  is no possibility of determining which will occur-
+       only the probability.
+
+       However, another implication of considering equity prices to have frac-
+       tal characteristics is that there are statistical optimizations to max-
+       imize portfolio performance. The Shannon probability, P, is related  to
+       the  optimal volatility of a equity’s price, (measured as the root mean
+       square of the normalized increments of the equity’s price time series,)
+       rms,  by  rms  =  2P - 1. Also, the optimized average of the normalized
+       increments is equal to the square of the rms. Unfortunately,  the  mea-
+       surements  of  avg  and rms must be made over a long period of time, to
+       construct a very large data set for analytical purposes do to the  nec-
+       essary  accuracy  requirements.  Statistical  estimation techniques are
+       usually employed to quantitatively determine the size of the  data  set
+       for a given analytical accuracy.
+
+       The  calculation  of  the  Shannon probability, P, from the average and
+       root mean square of the normalized increments,  avg  and  rms,  respec-
+       tively,  will  require  require specialized filtering, (to "weight" the
+       most recent instantaneous  Shannon  probability  more  than  the  least
+       recent,)  and  statistical estimation (to determine the accuracy of the
+       measurement of the Shannon probability.)
+
+       This measurement would  be  based  on  the  normalized  increments,  as
+       derived in Equation (1.6):
+
+           V(t) - V(t - 1)
+           ---------------
+              V(t - 1)
+
+       which,  when averaged over a "sufficiently large" number of increments,
+       is the mean of the normalized increments, avg. The  term  "sufficiently
+       large"  must  be  analyzed  quantitatively. For example, Table I is the
+       statistical estimate for a Shannon probability, P, of  a  time  series,
+       vs,  the  number of records required, based on a mean of the normalized
+       increments = 0.04, (ie., a Shannon probability of 0.6 that is  optimal,
+       ie., rms = (2P - 1) * avg):
+
+            P      avg         e       c     n
+           0.51   0.0004    0.0396  0.7000  27
+           0.52   0.0016    0.0384  0.7333  33
+           0.53   0.0036    0.0364  0.7667  42
+           0.54   0.0064    0.0336  0.8000  57
+           0.55   0.0100    0.0300  0.8333  84
+           0.56   0.0144    0.0256  0.8667  135
+           0.57   0.0196    0.0204  0.9000  255
+           0.58   0.0256    0.0144  0.9333  635
+           0.59   0.0324    0.0076  0.9667  3067
+           0.60   0.0400    0.0000  1.0000  infinity
+
+                        Table I.
+
+       where  avg  is the average of the normalized increments, e is the error
+       estimate in avg, c is the confidence level of the error estimate, and n
+       is  the  number  of  records required for that confidence level in that
+       error estimate.  What Table I means is that if a  step  function,  from
+       zero  to  0.04,  (corresponding  to  a  Shannon probability of 0.6,) is
+       applied to the system, then after 27 records, we would be 70% confident
+       that  the error level was not greater than 0.0396, or avg was not lower
+       than 0.0004, which corresponds to an effective Shannon  probability  of
+       0.51.  Note  that if many iterations of this example of 27 records were
+       performed, then 30% of the time, the average of the time  series,  avg,
+       would be less than 0.0004, and 70% greater than 0.0004. This means that
+       the Shannon probability, 0.6, would have to be reduced by a  factor  of
+       0.85  to accommodate the error created by an insufficient data set size
+       to get the effective Shannon probability of 0.51. Since half  the  time
+       the  error  would be greater than 0.0004, and half less, the confidence
+       level would be 1 - ((1 - 0.85) * 2) = 0.7, meaning that if we  measured
+       a  Shannon  probability of 0.6 on only 27 records, we would have to use
+       an effective Shannon probability of 0.51, corresponding to  an  avg  of
+       0.0004. For 33 records, we would use an avg of 0.0016, corresponding to
+       a Shannon probability of 0.52, and so on.
+
+       Following like reasoning, Table II is the statistical  estimate  for  a
+       Shannon  probability,  P,  of  a time series, vs, the number of records
+       required, based on a root mean square of the  normalized  increments  =
+       0.2, (ie., a Shannon probability of 0.6 that is optimal, ie., rms = (2P
+       - 1) * avg):
+
+            P     rms       e      c     n
+           0.51   0.02    0.18  0.7000  1
+           0.52   0.04    0.16  0.7333  1
+           0.53   0.06    0.14  0.7667  2
+           0.54   0.08    0.12  0.8000  3
+           0.55   0.10    0.10  0.8333  4
+           0.56   0.12    0.08  0.8667  8
+           0.57   0.14    0.06  0.9000  16
+           0.58   0.16    0.04  0.9333  42
+           0.59   0.18    0.02  0.9667  227
+           0.60   0.20    0.00  1.0000  infinity
+
+                        Table II.
+
+       where rms is the average of the normalized increments, e is  the  error
+       estimate in rms, c is the confidence level of the error estimate, and n
+       is the number of records required for that  confidence  level  in  that
+       error  estimate.   What Table II means is that if a step function, from
+       zero to 0.2, (corresponding  to  a  Shannon  probability  of  0.6,)  is
+       applied  to the system, then after 1 records, we would be 70% confident
+       that the error level was not greater than 0.18, or rms  was  not  lower
+       than  0.02,  which  corresponds  to an effective Shannon probability of
+       0.51. Note that if many iterations of this example of  1  records  were
+       performed,  then  30%  of  the  time,  the root mean square of the time
+       series, rms, would be less than 0.01, and 70% greater than  0.02.  This
+       means  that the Shannon probability, 0.6, would have to be reduced by a
+       factor of 0.85 to accommodate the error created by an insufficient data
+       set  size  to get the effective Shannon probability of 0.51. Since half
+       the time the error would be greater than 0.02, and half less, the  con-
+       fidence  level  would be 1 - ((1 - 0.85) * 2) = 0.7, meaning that if we
+       measured a Shannon probability of 0.6 on only 1 record, we  would  have
+       to  use  an  effective Shannon probability of 0.51, corresponding to an
+       rms of 0.02. For 2 records, we would use an rms of 0.06,  corresponding
+       to a Shannon probability of 0.53, and so on.
+
+       And curve fitting to Tables I and II:
+
+            P      avg         e       c
+           0.51   0.0004    0.0396  0.7000
+           0.52   0.0016    0.0384  0.7333
+           0.53   0.0036    0.0364  0.7667
+           0.54   0.0064    0.0336  0.8000
+           0.55   0.0100    0.0300  0.8333
+           0.56   0.0144    0.0256  0.8667
+           0.57   0.0196    0.0204  0.9000
+           0.58   0.0256    0.0144  0.9333
+           0.59   0.0324    0.0076  0.9667
+           0.60   0.0400    0.0000  1.0000
+
+            P     n            pole
+           0.51  27        0.000059243
+           0.52  33        0.000455135
+           0.53  42        0.000357381
+           0.54  57        0.000486828
+           0.55  84        0.000545072
+           0.56  135       0.000526139
+           0.57  255       0.000420259
+           0.58  635       0.000256064
+           0.59  3067      0.000086180
+           0.60  infinity  -----------
+
+                        Table III.
+
+       where the pole frequency, fp, is calculated by:
+
+                          avg
+                  ln (1 - ----)
+                          0.04
+           fp = - ------------ ..........................(1.130)
+                     2 PI n
+
+       which  was  derived from the exponential formula for a single pole fil-
+       ter, vo = vi ( 1 - e^(-t / rc)), where the pole is at 1 /  (2  PI  rc).
+       The average of the necessary poles is 0.000354700, although an order of
+       magnitude smaller could be used, as could 50% larger.
+
+            P     rms       e      c
+           0.51   0.02    0.18  0.7000
+           0.52   0.04    0.16  0.7333
+           0.53   0.06    0.14  0.7667
+           0.54   0.08    0.12  0.8000
+           0.55   0.10    0.10  0.8333
+           0.56   0.12    0.08  0.8667
+           0.57   0.14    0.06  0.9000
+           0.58   0.16    0.04  0.9333
+           0.59   0.18    0.02  0.9667
+           0.60   0.20    0.00  1.0000
+
+            P     n            pole
+           0.51  1         0.016768647
+           0.52  1         0.035514399
+           0.53  2         0.028383290
+           0.54  3         0.027100141
+           0.55  4         0.027579450
+           0.56  8         0.018229025
+           0.57  16        0.011976139
+           0.58  42        0.006098810
+           0.59  227       0.001614396
+           0.60  infinity  -----------
+
+                        Table IV.
+
+       where the pole frequency, fp, is calculated by:
+
+                          rms
+                  ln (1 - ---)
+                          0.2
+           fp = - ------------ ..........................(1.131)
+                     2 PI n
+
+       which was derived from the exponential formula for a single  pole  fil-
+       ter,  vo  =  vi ( 1 - e^(-t / rc)), where the pole is at 1 / (2 PI rc).
+       The average of the necessary poles is 0.019251589, although an order of
+       magnitude smaller could be used, as could 50% larger.
+
+       Tables  I, II, III, and IV represent an equity with a Shannon probabil-
+       ity of 0.6, which is about the maximum that will be seen in the  equity
+       markets.  Tables V and VI represent similar reasoning, but with a Shan-
+       non probability of 0.51, which is at the low  end  of  the  probability
+       spectrum for equity markets:
+
+             P       avg           e          c
+           0.501   0.000004    0.000396  0.964705882
+           0.502   0.000016    0.000384  0.968627451
+           0.503   0.000036    0.000364  0.972549020
+           0.504   0.000064    0.000336  0.976470588
+           0.505   0.000100    0.000300  0.980392157
+           0.506   0.000144    0.000256  0.984313725
+           0.507   0.000196    0.000204  0.988235294
+           0.508   0.000256    0.000144  0.992156863
+           0.509   0.000324    0.000076  0.996078431
+           0.510   0.000400    0.000000  1.000000000
+
+             P      n           pole
+           0.501   10285     0.000000156
+           0.502   11436     0.000000568
+           0.503   13358     0.000001124
+           0.504   16537     0.000001678
+           0.505   22028     0.000002079
+           0.506   32424     0.000002191
+           0.507   55506     0.000001931
+           0.508   124089    0.000001310
+           0.509   524307    0.000000504
+           0.510   infinity  -----------
+
+                        Table V.
+
+       where the pole frequency, fp, is calculated by:
+
+                           avg
+                  ln (1 - ------)
+                          0.0004
+           fp = - --------------- .......................(1.132)
+                     2 PI n
+
+       which  was  derived from the exponential formula for a single pole fil-
+       ter, vo = vi ( 1 - e^(-t / rc)), where the pole is at 1 /  (2  PI  rc).
+       The average of the necessary poles is 0.000001282, although an order of
+       magnitude smaller could be used, as could 70% larger.
+
+             P      rms       e         c
+           0.501   0.002    0.018  0.964705882
+           0.502   0.004    0.016  0.968627451
+           0.503   0.006    0.014  0.972549020
+           0.504   0.008    0.012  0.976470588
+           0.505   0.010    0.010  0.980392157
+           0.506   0.012    0.008  0.984313725
+           0.507   0.014    0.006  0.988235294
+           0.508   0.016    0.004  0.992156863
+           0.509   0.018    0.002  0.996078431
+           0.510   0.020    0.000  1.000000000
+
+             P     n            pole
+           0.501  3         0.005589549
+           0.502  4         0.008878600
+           0.503  5         0.011353316
+           0.504  8         0.010162553
+           0.505  11        0.010028891
+           0.506  19        0.007675379
+           0.507  36        0.005322728
+           0.508  89        0.002878090
+           0.509  415       0.000883055
+           0.510  infinity  -----------
+
+                        Table VI.
+
+       where the pole frequency, fp, is calculated by:
+
+                          rms
+                  ln (1 - ----)
+                          0.02
+           fp = - ------------ ..........................(1.133)
+                     2 PI n
+
+       which was derived from the exponential formula for a single  pole  fil-
+       ter,  vo  =  vi ( 1 - e^(-t / rc)), where the pole is at 1 / (2 PI rc).
+       The average of the necessary poles is 0.006974618, although an order of
+       magnitude smaller could be used, as could 60% larger.
+
+       Table  V  presents  real  issues, in that metrics for equities with low
+       Shannon probabilities may not be attainable with adequate precision  to
+       formulate consistent wagering strategies. (For example, 524307 business
+       days is a little over two millenia-the required size of  the  data  set
+       for day trading.) Another issue is that the pole frequency changes with
+       magnitude of the Shannon probability, as shown by comparison of  Tables
+       III,  V, and IV, VI, respectively. There is some possibility that adap-
+       tive filter techniques could be implemented by dynamically  change  the
+       constants  in  the  statistical estimation filters to correspond to the
+       instantaneous measured Shannon probability. The equations are  defined,
+       below.
+
+       Another alternative is to work only with the root mean square values of
+       the normalized increments, since the pole frequency is not as sensitive
+       to the Shannon probability, and can function on a much smaller data set
+       size for a given accuracy in the statistical estimate. This may  be  an
+       attractive  alternative  if  all that is desired is to rank equities by
+       growth, (ie., pick the top 10,) since, for a given  data  set  size,  a
+       larger Shannon probability will be chosen over a smaller. However, this
+       would imply that the equities are known to be optimal, ie., rms = 2P  +
+       1, which, although it is nearly true for most equities, is not true for
+       all equities. There is some possibility that optimality can be verified
+       by metrics:
+
+                       2
+           if avg < rms
+
+               then rms = f is too large in Equation (1.12)
+
+                            2
+           else if avg > rms
+
+               then rms = f is too small in Equation (1.12)
+
+                         2
+           else avg = rms
+
+               and the equities time series is optimal, ie.,
+               rms = f = 2P - 1 from Equation (1.36)
+
+       These  metrics would require identical statistical estimate filters for
+       both the average and the root mean squared filters, ie., the square  of
+       rms  would  have  the  same  filter  pole  as  avg,  which  would be at
+       0.000001282, and would be conservative for Shannon probabilities  above
+       0.51.
+
+       The  Shannon  probability  can  be  calculated by several methods using
+       Equations (1.6) and (1.14). Equation (1.14):
+
+               avg
+               --- + 1
+               rms
+           P = -------
+                  2
+
+       has two other useful alternative solutions if it is  assumed  that  the
+       equity  time  series is optimal, ie., rms = 2P - 1, and by substitution
+       into Equation (1.14):
+
+               rms + 1
+           P = ------- ..................................(1.134)
+                  2
+
+       and:
+
+               sqrt (avg) + 1
+           P = -------------- ...........................(1.135)
+                     2
+
+       Note that in Equation (1.14) the confidence levels listed in  Tables  I
+       and II should be multiplied together, and a new table made for the quo-
+       tient of the average and the root mean square of the normalized  incre-
+       ments, avg and rms respectively. However, with a two order of magnitude
+       difference in the pole frequencies for avg and rms, the  response  time
+       of the statistical estimate approximation is dominated by the avg pole.
+
+       The decision criteria will be based on variations of the Shannon proba-
+       bility,  P,  and  the  average  and  root mean square of the normalized
+       increments, avg and rms, respectively. Note that from Equation  (1.14),
+       avg  =  rms (2P - 1), which can be optimized/maximized. P can be calcu-
+       lated from Equations (1.14), (1.61), or (1.62). The measurement of  the
+       average,  avg,  and root mean square, rms, of the normalized increments
+       can use different filter parameters than the root mean square of multi-
+       plier,  ie., there can be an rms that uses different filter parameters,
+       than the RMS in the equation, avg = RMS  (2P  -  1).  By  substitution,
+       Equation  (1.14)  will have a decision criteria of the largest value of
+       RMS * avg / rms, Equation (1.61) will have a decision criteria  of  the
+       largest  value  of  RMS * rms, and Equation (1.62) will have a decision
+       criteria of RMS * sqrt (avg), or avg.  These interpretations  offer  an
+       alternative  to the rather sluggish filters shown in Tables I, III, and
+       V, since there can be two sets of filters, one to perform a statistical
+       estimate  approximation  to  the  Shannon probability, and the other to
+       perform a statistical estimate on rms, which can be several  orders  of
+       magnitude  faster  than  the  filters used for the Shannon probability,
+       enhancing dynamic operation.
+
+       As a review of the methodology used to construct Tables I, II, III, IV,
+       V, and VI, the size of the data set was obtained using the tsstatest(1)
+       program, which can be approximated by a single pole low pass  recursive
+       discreet time filter [Con78], with the pole frequency at 0.000053 times
+       the time series sampling frequency, for the average of  the  normalized
+       increments of the time series, avg. (The rationale behind this value is
+       that if we consider an equity with a measured  Shannon  probability  of
+       0.51-a  typical value-and we wish to include an uncertainty in the pre-
+       cision of this value based on the size of the data set,  then  we  must
+       decrease  the Shannon probability by a factor of 0.960784314. This num-
+       ber comes from the fact that a Shannon probability, P’, would be (0.5 /
+       0.51)  *  P  =  0.980392157  *  P = 0.51 * 0.980392157 = 0.5, a Shannon
+       probability below which, no wager should be made, (as an absolute lower
+       limit.)   But  if  such  a scenario is set up as an experiment that was
+       performed many times, it would be expected that half the time, the mea-
+       sured  value  Shannon  probability would be greater than 0.51, and half
+       less, than the "real" value of the Shannon probability. So the  Shannon
+       probability must be reduced by a factor of c = 1 - 2(1 - 0.980392157) =
+       0.960784314. This value is the  confidence  level  in  the  statistical
+       estimate  of  the  measurement  error  of the average of the normalized
+       increments, avg, which for a Shannon probability  of  0.51  is  0.0004,
+       since the root mean square, rms, of the normalized increments of a time
+       series with a Shannon probability of 0.51 is 0.02,  and,  if  the  time
+       series  is optimal, where avg = (2P - 1) * rms, then avg = 0.0004.  So,
+       we now have the error level, 0.0004, and the required confidence level,
+       0.960784314,  and  the  number  of  required records, ie., the data set
+       size, would be 9773, from the tsstatest(1) program. From this it can be
+       calculated  that the response to a unit step function, of a filter with
+       the pole frequency at 0.000053 at the 9773’th  record  is  0.960784314.
+       Note  that  at  the single pole filter will provide an approximation to
+       the statistical estimate that is low for values below this;  for  exam-
+       ple,  by comparison, at 2083 records it will give a confidence level of
+       0.5, and the tsstatest(1) program will give a confidence level  of  0.5
+       at  1046  records-a  sizeable  error, but in a conservative direction.)
+       Likewise, for the rms, with a Shannon  probability  of  0.51,  the  rms
+       would be 0.02. For an error level of 0.02, below which no wagers should
+       be made, and a confidence level, c, of c = 1 - 2(1 - (0.5  /  0.51))  =
+       0.960784314,  the  data set size would be between 3 and 4 records, or a
+       pole frequency of 0.13 to 0.18. These two values, an rms pole of  0.15,
+       and  an  avg  pole of 0.000053 probably represent the highest bandwidth
+       that is attainable.
+
+       The advantage of the discreet time recursive single pole filter approx-
+       imation  to  a statistical estimate is that it requires only 3 lines of
+       code in the implementation-two for initialization, and one in the  cal-
+       culation  construct.  A  "running  average" methodology would offer far
+       greater accuracy as an approximation to the statistical estimate,  how-
+       ever  the  memory  requirements for the average could be prohibitive if
+       many equities were being tracked concurrently, (see Table V,) and  com-
+       putational  resource  requirements  for circular buffer operation could
+       possible be an issue. The other alternative would be to perform a  true
+       statistical estimate, however the architecture of a recursive algorithm
+       implementation may be formidable.
+
+       The single pole low pass filter is implemented from the following  dis-
+       crete time equation:
+
+           v      = I * k2 + v  * k1 ....................(1.136)
+            t + 1             t
+
+       where  I  is  the value of the current sample in the time series, v are
+       the value of the output time series, and k1 and k2 are constants deter-
+       mined from the following equations:
+
+                 -2 * p * pi
+           k1 = e            ............................(1.137)
+
+       and:
+
+           k2 = 1 - k1 ..................................(1.138)
+
+       where p is a constant that determines the frequency of the pole-a value
+       of unity places the pole at the sample frequency of the time series.
+
+
+AAPPPPEENNDDIIXX 22
+           Number of Concurrently Held Equities
+
+       Note: The prototype to this program was implemented with a user config-
+       urable  fixed number of equities in the equity portfolio, as determined
+       by the reasoning outlined  in  this  Appendix.   This  methodology  was
+       superceded  by  dynamically  determining the number of equities held as
+       outlined in the Section, PORTFOLIO OPTIMIZATION.
+
+       The remaining issue is the number of equities held  concurrently.  Mea-
+       suring the average and root mean square of the normalized increments of
+       many equities (600 equities selected from all three American markets, 1
+       January, 1993 to 1 May, 1996,) resulted in an average Shannon probabil-
+       ity of 0.52, and an average root mean square of the  normalized  incre-
+       ments of 0.03. Only infrequently was a volatility found that exceed the
+       optimal, ie., where rms = 2P - 1, by a factor of  3,  (approximately  a
+       one  sigma  limit.)  However,  once, (approximately a 3 sigma limit,) a
+       factor of slightly in excess of 10 was found for a  short  interval  of
+       time.   There is a possibility that the equities with the maximum Shan-
+       non probability and maximum growth will also have a volatility that  is
+       3  times  too  large. From footnote [5], the volatilities add root mean
+       square, meaning that to reduce the capital volatility by a factor 3,  9
+       equities  would  have  to  be held concurrently, (the reciprocal of the
+       square root of 9 is 1 / 3.) There is some possibility that the  optimal
+       number  of  equities concurrently held could be dynamically implemented
+       with an  adaptive  computation  control  construct.  For  example,  the
+       volatility  of the capital could be measured, and the optimal number of
+       concurrently held equities adjusted dynamically, or  the  instantaneous
+       volatility  of all equities held could be calculated, and the root mean
+       square of the volatilities calculated, as the  investment  is  made  in
+       each  equity.  Such  a control loop is complicated by the fact that the
+       equities invested in can have a minimum  Shannon  probability  require-
+       ment,  or a minimum decision criteria specified, ie., there may ambigu-
+       ous stipulations that effect the number of equities held  concurrently.
+
+       This, also, seems consistent Equation (1.127),
+
+           Gp = Pp ln (1 + rmsp) +
+
+                (1 - Pp) ln (1 - rmsp)
+
+       and substituting Equation (1.121) for Pp:
+
+                avgp
+                ---- + 1
+                rmsp
+           Gp = -------- ln (1 + rmsp) +
+                    2
+
+                    avgp
+                1 - ----
+                    rmsp
+                -------- ln (1 - rmsp) ..................(1.139)
+                   2
+
+       and  iterating  plots of equities with similar statistical characteris-
+       tics as a parameter, (ie., using a P of 0.51, etc.,  and  plotting  the
+       portfolio  gain,  Gp, with the number of equities held as a parameter.)
+       There seems to be little advantage in holding  more  than  10  equities
+       concurrently, which is also consistent with the advice of many brokers.
+
+
+AAPPPPEENNDDIIXX 33
+           Number of Concurrently Held Equities, and Number of Days Held
+
+       For n many equities, (assuming an  ergotic  Brownian  motion  model  of
+       equity  prices,)  and  an equal investment in each, the averages of the
+       marginal increments add linearly in the portfolio:
+
+                  avg    avg          avg
+                     1      2            n
+           avgp = ---- + ---- + ... + ---- =
+                   n      n            n
+
+               1
+               - (avg  + avg  + ... + avg ) ............ (1.140)
+               n     1      2            n
+
+       where avgp is the average  of  the  marginal  increments  in  portfolio
+       value. The root mean square of the marginal increments, rmsp, is:
+
+                                  2             2
+           rmsp = sqrt ((rms  / n)  + (rms  / n)  + ...
+                            1             2
+
+                           2    1          2      2
+               + (rms  / n) ) = - sqrt (rms  + rms  + ...
+                     n          n          1      2
+
+                  2
+               rms  ) .................................. (1.141)
+                  n
+
+       and the ratio:
+
+                     avg  + avg  + ... + avg
+           avgp         1      2            n
+           ---- = ------------------------------- ...... (1.142)
+           rmsp            2      2            2
+                  sqrt (rms  + rms  + ... + rms )
+                           1      2            n
+
+       is  useful  in  the  calculation  of the Shannon probability, P, of the
+       portfolio, P = (avgp / rmsp + 1) / 2, which is the likelihood that  the
+       portfolio  will  increase in value on any given day. Assuming all equi-
+       ties have identical fractal statistics, the  average  of  the  marginal
+       increments in the portfolio’s value would be avg, (ie., n many, divided
+       by n,) and the root mean square of the marginal increments,  (ie.,  the
+       volatility,) would be rms / sqrt (n), (ie., sqrt (n) / n.)
+
+       For  one equity, held N many days, (assuming an ergotic Brownian motion
+       model of equity prices,) the average of the marginal increments at  the
+       end of the N’th day would be the sum of the daily marginal increments:
+
+           avgp = avg  + avg  + ... + avg  ............. (1.143)
+                     1      2            N
+
+       and  the  root mean square of the marginal increments at the end of the
+       N’th day would be:
+
+           rmsp = sqrt (rms  + rms  + ... + rms ) ...... (1.144)
+                           1      2            N
+
+       and the ratio:
+
+                     avg  + avg  + ... + avg
+           avgp         1      2            N
+           ---- = ------------------------------- ...... (1.145)
+           rmsp   sqrt (rms  + rms  + ... + rms )
+                           1      2            N
+
+       is useful in the calculation of the  Shannon  probability,  P,  of  the
+       portfolio,  P = (avgp / rmsp + 1) / 2, which is the likelihood that the
+       portfolio will increase in value at the end of the  N’th  day.  If  the
+       statistics  are  stationary  for  N many days, then: the average of the
+       marginal increments in the portfolio’s value would be N * avg, (ie.,  N
+       many,)  and  the  root  mean square of the marginal increments would be
+       sqrt (N) * rms, (ie., the square root of N many.)
+
+       Combining Equations (1.142) and (1.145), (again, assuming all  equities
+       have identical fractal statistics, and an ergotic Brownian motion model
+       of equity prices,) the average of the marginal increments, avgp, of the
+       portfolio, for n many equities, held N many days, would be:
+
+           avgp = N * avg .............................. (1.146)
+
+       and the root mean square, rmsp:
+
+                        N
+           rmsp = sqrt (-) * rms ....................... (1.147)
+                        n
+
+       Note that if rmsp = avgp, then the Shannon probability, (ie., the like-
+       lihood of an up movement,) from Equation (1.14) would be unity,  imply-
+       ing a no risk investment strategy:
+
+                                         N
+           avgp = rmsp = N * avg = sqrt (-) * rms ...... (1.148)
+                                         n
+
+       and solving:
+
+                          rms
+           sqrt (n * N) = --- .......................... (1.150)
+                          avg
+
+       For  example,  if  rms  =  0.02,  and avg = 0.0004, (typical for the US
+       equity markets,) then n * N = 2500, or holding  10  equities,  for  250
+       trading days, (or about a calendar year,) would be a safe strategy.
+
+       However, if the averages of the marginal increments for the stocks dif-
+       fer, and/or if the root mean square of the marginal increments for  the
+       stocks  differ,  the optimum fraction, f, of the portfolio to invest in
+       each stock, n, can be approximated from Equation (1.36).
+
+           f  = 2P  - 1 .................................(1.151)
+            n     n
+
+       where:
+
+                avg
+                   n
+                ---- + 1
+                rms
+                   n
+           P  = -------- ................................(1.152)
+            n       2
+
+       The heuristic arguments justifying the approximation are that in a uni-
+       verse  of  stocks,  by investing in each and every stock, the portfolio
+       growth characteristics will be a nearly smooth exponential,  since  the
+       root mean square of the marginal increments of the stocks add root mean
+       square, and the average of the marginal increments,  add  linearly,  as
+       per  Equations  (1.143)  and (1.144). Equation (1.151) assumes that the
+       remainder of the portfolio:
+
+           1 - f  .......................................(1.152)
+                n
+
+       is not at risk. If there are sufficiently many stocks in the portfolio,
+       then Equation (1.151) can be used to hedge the fluctuations in value of
+       the n’th stock, against the combined values of the other stocks in  the
+       portfolio, which is regarded, taken cumulative, as stable.
+
+       However,  Equation (1.150) indicates that there is very little marginal
+       utility in adding more than ten stocks to the portfolio, implying  that
+       Equation (1.151) would be an adequate approximation to optimizing asset
+       allocation in the portfolio.
+
+       Note that for the approximation to be valid, 0.0 << avg << rms  <<  1.0
+       for  all  stocks  in  the  universe with a sufficiently large number of
+       choices.
+
+       APPENDIX 4
+
+           Optimal Margin Buying
+
+       It is usually, but not always, the case that a well balanced  portfolio
+       will  not  have  sufficient risk to simultaneously maximize the portfo-
+       lio’s gain, Gp, while at the same time minimizing the risk of investing
+       in the portfolio. From Equation (1.151), the optimal value at risk, (f,
+       which is VaR,) should equal rmsp, or the margin factor, M, would be:
+
+               2Pp - 1
+           M = -------  .................................(1.153)
+                rmsp
+
+       where the fraction of the portfolio bought on margin would be 1 - (1  /
+       M).
+
+
+FFOOOOTTNNOOTTEESS
+       [1]  For example, if a = 0.06, or 6%, then at the end of the first time
+       interval the capital would have increased to  1.06  times  its  initial
+       value.   At  the  end  of  the second time interval it would be (1.06 *
+       1.06), and so on.  What Equation (1.1) states is that the  way  to  get
+       the value, V in the next time interval is to multiply the current value
+       by 1.06. Equation (1.1) is nothing more than  a  "prescription,"  or  a
+       process  to  make  an exponential, or "compound interest" mechanism. In
+       general, exponentials can always be constructed by multiplying the cur-
+       rent  value  of  the  exponential by a constant, to get the next value,
+       which in turn, would be multiplied by the same constant to get the next
+       value,  and so on.  Equation (1.1) is a construction of V (t) = exp(kt)
+       where k = ln(1 + a). The advantage of representing exponentials by  the
+       "prescription"  defined in Equation (1.1) is analytical expediency. For
+       example, if you have data that is an exponential,  the  parameters,  or
+       constants,  in Equation (1.1) can be determined by simply reversing the
+       "prescription," ie., subtracting the previous value, (at time t  -  1,)
+       from  the  current value, and dividing by the previous value would give
+       the exponentiating constant, (1 + at). This process  of  reversing  the
+       "prescription"  is  termed  calculating  the  "normalized  increments."
+       (Increments are simply the difference between two values in  the  expo-
+       nential,  and  normalized increments are this difference divided by the
+       value of the exponential.) Naturally, since one usually has  many  data
+       points over a time interval, the values can be averaged for better pre-
+       cision-there is a large mathematical infrastructure dedicated to  these
+       types  of precision enhancements, for example, least squares approxima-
+       tion to the normalized increments, and statistical estimation.
+
+       [2] "Random variable" means  that  the  process,  F(t),  is  random  in
+       nature, ie., there is no possibility of determining what the next value
+       will be. However, F can be analyzed using statistical  methods  [Fed88,
+       pp.  163],  [Sch91,  pp.  128]. For example, F typically has a Gaussian
+       distribution for equity prices [Cro95, pp. 249], in which case  the  it
+       is  termed  a  "fractional Brownian motion," or simply a "fractal" pro-
+       cess. In the case of a single tossed coin, it is termed  "fixed  incre-
+       ment fractal," "Brownian," or "random walk" process.  The determination
+       of the statistical characteristics of F(t) are the essence of analysis.
+       Fortunately,  there is a large mathematical infrastructure dedicated to
+       the subject. For example, F could be verified as having a Gaussian dis-
+       tribution using, perhaps, Chi-Square techniques. Frequently, it is con-
+       venient, from an analytical standpoint, to "model" F using a mathemati-
+       cally  simpler  process  [Sch91, pp. 128]. For example, multiple itera-
+       tions of tossing a coin can be used to approximate a Gaussian distribu-
+       tion, since the distribution of many tosses of a coin is binomial-which
+       if the number of coins tossed is sufficient will represent  a  Gaussian
+       distribution  to  any  required precision [Sch91, pp. 144], [Fed88, pp.
+       154].
+
+       [3] Equation (1.3) is interesting in many other respects.  For example,
+       adding  a  single term, m * V(t - 1), to the equation results in V(t) =
+       v(t - 1) (1 + f(t) * F(t) + m * V(t - 1)) which is the  "logistic,"  or
+       ’S’  curve equation,(formally termed the "discreet time quadratic equa-
+       tion,") and has been used successfully in many unrelated fields such as
+       manufacturing  operations, market and economic forecasting, and analyz-
+       ing disease epidemics [Mod92, pp. 131]. There  is  continuing  research
+       into  the  application  of  an additional "non-linear" term in Equation
+       (1.3) to model equity value non-linearities. Although there  have  been
+       modest  successes,  to  date,  the  successes  have  not  proven  to be
+       exploitable in a systematic fashion [Pet91, pp. 133].  The  reason  for
+       the  interest  is that the logistic equation can exhibit a wide variety
+       of behaviors, among them, "chaotic." Interestingly, chaotic behavior is
+       mechanistic,  but  not  "long term" predictable into the future. A good
+       example of such a system is the weather. It  is  an  important  concept
+       that  compound  interest,  the  logistic function, and fractals are all
+       closely related.
+
+       [4] In this Section, "root mean square" is used to mean the variance of
+       the  normalized  increments.  In Brownian motion fractals, this is com-
+       puted by sigmatotal^2 = sigma1^2 + sigma2^2 ... However, in many  frac-
+       tals,  the  variances are not calculated by adding the squares, (ie., a
+       power of 2,) of the values-the power may be "fractional," ie.,  3  /  2
+       instead of 2, for example [Sch91, pp. 130], [Fed88, pp.  178]. However,
+       as a first order approximation, the variances of the normalized  incre-
+       ments of equity prices can be added root mean square [Cro95, kpp. 250].
+       The so called "Hurst" coefficient determines the process  to  be  used.
+       The  Hurst coefficient is range of the equity values over a time inter-
+       val, divided by the standard deviation of the values over the interval,
+       and  its  determination is commonly called "R / S" analysis. As pointed
+       out in [Sch91, pp. 157] the errors committed in such simplified assump-
+       tions  can  be  significant-however, for analysis of equities, squaring
+       the variances seems to be a reasonably accurate simplification.
+
+       [5] For example, many calculators have averaging and root  mean  square
+       functionality,  as do many spreadsheet programs-additionally, there are
+       computer source codes available for both.  See  the  programs  tsrms(1)
+       and tsavg(1).  The method used is not consequential.
+
+       [6]  There  are  significant  implications  do  to the fact that equity
+       volatilities are calculated root mean square.  For example, if  capital
+       is  invested  in  N many equities, concurrently, then the volatility of
+       the capital will be rms / sqrt (N) of an individual  equity’s  volatil-
+       ity,  rms, provided all the equites have similar statistical character-
+       istics. But the growth in the capital will be unaffected, ie., it would
+       be  statistically  similar  to  investing  all  the capital in only one
+       equity. What this means is that capital, or portfolio,  volatility  can
+       be  minimized  without  effecting portfolio growth-ie., volatility risk
+       can addressed.  There are further applications.  For example,  Equation
+       (1.6) could be modified by dividing both the normalized increments, and
+       the square of the normalized increments by the  daily  trading  volume.
+       The quotient of the normalized increments divided by the trading volume
+       is the instantaneous, average, avg,  of  the  equity,  on  a  per-share
+       basis.   Likewise,  the  square  root  of  the square of the normalized
+       increments divided by the daily trading  volume  is  the  instantaneous
+       root  mean  square,  rmsf, of the equity on a per-share basis, ie., its
+       instantaneous volatility of the equity.  (Note that these instantaneous
+       values are the statistical characteristics of the equity on a per-share
+       bases, similar to a coin toss, and not on time.)  Additionally, it  can
+       be  shown  that  the range-the maximum minus the minimum-of an equity’s
+       value over a time interval will increase with the square root of of the
+       size  of  the  interval of time [Fed88, pp. 178]. Also, it can be shown
+       that the number of expected equity value  "high  and  low"  transitions
+       scales  with  the square root of time, meaning that the cumulative dis-
+       tribution of the probability of an equity’s "high or low"  exceeding  a
+       given  time  interval  is  proportional to the reciprocal of the square
+       root of the time interval, (or, conversely, that the probability of  an
+       equity’s  "high or low" exceeding a given time interval is proportional
+       to the reciprocal of the time interval raised to the power 3/2  [Sch91,
+       pp.  153].  What this means is that a histogram of the "zero free" run-
+       lengths of an equity’s price would have a 1 /  (l^3/2)  characteristic,
+       where  l  is  the  length  of time an equity’s price was above or below
+       "average.")
+
+       [7] Here the "model" is to consider two black boxes, one with an equity
+       "ticker"  in  it,  and the other with a casino game of a tossed coin in
+       it. One could then either invest  in  the  equity,  or,  alternatively,
+       invest  in the tossed coin game by buying many casino chips, which con-
+       stitutes the starting capital for the tossed coin game.  Later,  either
+       the  equity is sold, or the chips "cashed in." If the statistics of the
+       equity value over time is similar to the statistics of the coin  game’s
+       capital, over time, then there is no way to determine which box has the
+       equity, or the tossed coin game. The advantage of this  model  is  that
+       gambling  games,  such  as  the  tossed  coin,  have a large analytical
+       infrastructure, which, if the two black  boxes  are  statistically  the
+       same,  can be used in the analysis of equities.  The concept is that if
+       the value of the equity, over time, is  statistically  similar  to  the
+       coin  game’s capital, over time, then the analysis of the coin game can
+       be used on equity values.  Note that in the case  of  the  equity,  the
+       terms in f(t) * F(t) can not be separated. In this case, f = rms is the
+       fraction of the equity’s value, at any time,  that  is  "at  risk,"  of
+       being  lost, ie., this is the portion of a equity’s value that is to be
+       "risk managed."  This is usually addressed through probabilistic  meth-
+       ods,  as  outlined  below  in  the discussion of Shannon probabilities,
+       where an optimal wagering strategy is determined. In the  case  of  the
+       tossed coin game, the optimal wagering strategy is to bet a fraction of
+       the capital that is equal to f = rms = 2P - 1 [Sch91,  pp.  128,  151],
+       where  P is the Shannon probability. In the case of the equity, since f
+       = rms is not subject to manipulation, the strategy is to  select  equi-
+       ties  that  closely  approximate  this  optimization,  and the equity’s
+       value, over time, on the average, would increase in a  similar  fashion
+       to  the  coin  game.   As  another alternative, various equities can be
+       invested in concurrently to exercise control over portfolio volatility.
+       The growth of either investment would be equal to avg = rms^2, on aver-
+       age, for each iteration of the coin game, or time unit of  equity/port-
+       folio  investment.  This is an interesting concept from risk management
+       since it maximizes the gain in the capital, while, simultaneously, min-
+       imizing risk exposure to the capital.
+
+       [8]  Penrose, referencing Russell’s paradox, presents a very good exam-
+       ple of logical contradiction in a self-referential system.  Consider  a
+       library  of  books.  The librarian notes that some books in the library
+       contain their titles, and some do not, and wants to add two index books
+       to  the  library,  labeled "A" and "B," respectively; the "A" book will
+       contain the list of all of the titles of books in the library that con-
+       tain their titles; and the "B" book will contain the list of all of the
+       titles of the books in the library that do not  contain  their  titles.
+       Now,  clearly, all book titles will go into either the "A" book, or the
+       "B" book, respectively, depending on whether it contains its title,  or
+       not.  Now,  consider  in  which book, the "A" book or the "B" book, the
+       title of the "B" book is going to be placed-no matter  which  book  the
+       title  is  placed, it will be contradictory with the rules. And, if you
+       leave it out, the two books will be incomplete.
+
+       [9] [Art95] cites the "El Farol Bar" problem as an example. Assume  one
+       hundred  people  must  decide independently each week whether go to the
+       bar. The rule is that if a person predicts that more than, say, 60 will
+       attend,  it will be too crowded, and the person will stay home; if less
+       than 60 is predicted, the person will go to the bar. As trivial as this
+       seems,  it destroys the possibility of long-run shared, rational expec-
+       tations.  If all believe few will go, then all will go, thus invalidat-
+       ing  the expectations. And, if all believe many will go, then none will
+       go, likewise invalidating those expectations.  Predictions of how  many
+       will  attend  depend on others’ predictions, and others’ predictions of
+       others’ predictions. Once again, there is no rational means  to  arrive
+       at deduced a-priori predictions. The important concept is that expecta-
+       tion formation is a self-referential process in systems involving  many
+       agents  with  incomplete  information  about the future behavior of the
+       other agents.  The  problem  of  logically  forming  expectations  then
+       becomes  ill-defined,  and rational deduction, can not be consistent or
+       complete. This indeterminacy of expectation-formation is by no means an
+       anomaly  within  the  real economy. On the contrary, it pervades all of
+       economics and game theory.
+
+       [10] Interestingly, the system described is a stable  system,  ie.,  if
+       the  players have a hypothesis that changing equity positions may be of
+       benefit, then  the  equity  values  will  fluctuate-a  self  fulfilling
+       prophecy.   Not all such systems are stable, however.  Suppose that one
+       or both players suddenly discover that equity values  can  be  "timed,"
+       ie.,  there  are  certain  times  when  equities  can be purchased, and
+       chances are that the equity values  will  increase  in  the  very  near
+       future.  This  means that at certain times, the equites would have more
+       value, which would soon be arbitrated away. Such a scenario  would  not
+       be stable.
+
+       [11]  Note  that  in a time interval of sufficiently many tosses of the
+       coin, say N many, that there will be PN many wins, and (1  -  P)N  many
+       losses. In each toss, the gambler’s capital, V, increased, or decreased
+       by an amount f = rms. So, after the first iteration, the gambler’s cap-
+       ital would be V(1) = V(0) (1 + rms F(1)), and after the second would be
+       V(2) = V(0) (1 + rms F(1)) (1 + rms F(2)), and after the N’th,  V(N)  =
+       V(0)  (1  +  rms  F(1))  (1  + rms F(2)) ... (1 + rms F(N)), where F is
+       either plus or minus unity.  Since the multiplications are  transitive,
+       the  terms  may be rearranged, and there will be PN many wins, and (1 -
+       P) many losses, or V(N) = V(0) * (1 + rms)^(P) * (1  -  rms)^(1  -  P).
+       Dividing  both sides by V(0), the starting value of the gambler’s capi-
+       tal, and taking the logarithm of both sides,  results  in  ln  (V(N)  /
+       V(0))  =  P  ln (1 + rms) + (1 - P) ln (1 - rms), which is the equation
+       for G = ln (V(N) / V(0)), the average exponential rate of growth over N
+       many  tosses,  providing  that  N  is sufficiently large. Note that the
+       "effective interest rate" as expressed in Equation (1.1), is  a  =  exp
+       (G) - 1.
+
+       [12] If the plotting program "gnuplot" is available, then the following
+       commands will plot Equation (1.127) using the method of computation for
+       the Shannon probability from Equations (1.121) through (1.126), (1.115)
+       through (1.117), and, (1.118) through (1.120), respectively.
+
+           plot [1:50] ((1 + (0.02 / sqrt (x))) **
+               ((((0.0004 / 0.02) * sqrt (x)) + 1) / 2)) *
+               ((1 - (0.02 / sqrt (x))) **
+               ((1 - ((0.0004 / 0.02) * sqrt (x))) / 2))
+
+           plot [1:50] ((1 + (0.02 / sqrt (x))) **
+               (((0.02 / sqrt (x)) + 1) / 2)) *
+               ((1 - (0.02 / sqrt (x))) **
+               ((1 - (0.02 / sqrt (x))) / 2))
+
+           plot [1:50] ((1 + (sqrt (0.0004) / sqrt (x))) **
+               ((sqrt (0.0004) + 1) / 2)) *
+               ((1 - (sqrt (0.0004) / sqrt (x))) **
+               ((1 - sqrt (0.0004)) / 2))
+
+
+BBIIBBLLIIOOGGRRAAPPHHYY
+       [Art95] W. Brian Arthur.  "Complexity in Economic  and  Financial  Mar-
+       kets."    Complexity,   1,   pp.  20-25,  1995.   Also  available  from
+       http://www.santafe.edu/arthur, February 1995.
+
+       [BdL95] William A. Brock and Pedro  J.  F.  de  Lima.  "Nonlinear  time
+       series,  complexity  theory,  and  finance."  To appear in "Handbook of
+       Statistics Volume 14: Statistical Methods in  Finance,"  edited  by  G.
+       Maddala  and  C. Rao. New York: North Holland, forthcoming. Also avail-
+       able from http://www.santafe.edu/sfi/publications, March 1995.
+
+       [Cas90] John L. Casti. "Searching for Certainty." William  Morrow,  New
+       York, New York, 1990.
+
+       [Cas94] John L. Casti. "Complexification." HarperCollins, New York, New
+       York, 1994.
+
+       [Con78] John Conover. "An analog, discrete time, single  pole  filter."
+       Fairchild Journal of Semiconductor Progress, 6(4), July/August 1978.
+
+       [Cro95]  Richard  M.  Crownover.  "Introduction to Fractals and Chaos."
+       Jones and Bartlett Publishers International, London, England, 1995.
+
+       [Fed88] Jens Feder. "Fractals." Plenum Press, New York, New York, 1988.
+
+       [Kel56]  J.  L.  Kelly, Jr. "A New Interpretation of Information Rate",
+       Bell   System    Tech.    J.    vol.    35,    pp.    917-926,    1956,
+       http://www.bjmath.com/bjmath/kelly/kelly.pdf.
+
+       [Mod92]  Theodore Modis. "Predictions." Simon & Schuster, New York, New
+       York, 1992.
+
+       [Pen89] Roger Penrose. "The  Emperor’s  New  Mind."  Oxford  University
+       Press, New York, New York, 1989.
+
+       [Pet91]  Edgar  E.  Peters.   "Chaos and Order in the Capital Markets."
+       John Wiley & Sons, New York, New York, 1991.
+
+       [Rez94] Fazlollah M. Reza.  "An Introduction  to  Information  Theory."
+       Dover Publications, New York, New York, 1994.
+
+       [Sch91]  Manfred Schroeder. "Fractals, Chaos, Power Laws."  W. H. Free-
+       man and Company, New York, New York, 1991.
+
+
+OOPPTTIIOONNSS
+       --aa 00||11||22
+              Optimize asset allocation for each stock held, (0):
+                  -a 0: equal asset allocation.
+                  -a 1: maximize gain.
+                  -a 2: minimize risk.
+
+       --CC     Don’t compensate the Shannon probability, P, for data set  size.
+
+       --cc     Compensate  the Shannon probability, P, for run length duration.
+
+       --DD DD   Minimum growth in value of  an  equity,  as  calculated  by  the
+              method specified by the -d argument, (1.0).
+
+       --dd 11||22||33||44||55||66
+              Method of calculating growth in value of an equity, G, (1):
+                  -d 1: G = (1 + rms)^P * (1 - rms)^(1 - P),
+                        P = ((avg / rms) + 1) / 2.
+                  -d 2: G = (1 + rms)^P * (1 - rms)^(1 - P),
+                        P = (rms + 1) / 2.
+                  -d 3: G = (1 + sqrt (avg))^P *
+                            (1 - sqrt (avg))^(1 - P),
+                        P = (sqrt (avg) + 1) / 2.
+                  -d 4: G = (1 + rms)^P * (1 - rms)^(1 - P),
+                        P = erf (1 / sqrt (run length)).
+                  -d 5: G = (1 + rms)^P * (1 - rms)^(1 - P),
+                        P = Hurst exponent =
+                        short term persistence.
+                  -d 6: G = random.
+
+       --II II   I = initial capital, (1000).
+
+       --ii     Print the average index of all stocks in the output time series.
+
+       --jj     Index = average value of stocks,  instead  of  average  balanced
+              growth.
+
+       --MM MM   Maximum number of stocks to invest in concurrently, (10).
+
+       --mm mm   Minimum number of stocks to invest in concurrently, (10).
+
+       --oo oo   Maximum acceptable marginal increment in stock’s value, (1).
+
+       --PP     Preclude calculating statistics for stocks not updated in inter-
+              val.
+
+       --pp     Preclude investing in stocks not updated in interval.
+
+       --qq qq   Maximum margin fraction, (0.0)
+
+       --rr     Dump internal data on exit, as comments in  tsinvestsim(1)  for-
+              mat.
+
+       --ss     Print the names of stocks held in the output time series.
+
+       --tt     Print the time stamps in the output time series.
+
+       --uu     Reverse the sense of the decision criteria.
+
+       --vv     Print the version and copyright banner of this program.
+
+       ffiilleennaammee
+              Input filename.
+
+
+PPOORRTTFFOOLLIIOO AADDMMIINNIISSTTRRAATTIIOONN
+       Note  that  the  options  -d,  -D, -M, and, -m, form an "envelope" that
+       determines how the portfolio will be administered.  The  administrative
+       rules are as follows:
+
+           1) The -d option specifies how the growth factor for
+           equities will be estimated, (the default is to use
+           both avg and rms to calculate the Shannon probability,
+           P, for the equation G = (1 + rms)^P * (1 - rms)^(1 -
+           P).)
+
+           2) The -D option specifies the minimum estimated
+           growth factor of an equity for inclusion in the
+           portfolio, (the default is 1.0.) No equities will be
+           invested in with growth factors less than or equal to
+           this value. (If no equities have growth factors
+           greater than this value, then none will be invested
+           in.)
+
+           3) The -M option specifies the maximum number of
+           equities invested in, during each time interval, (the
+           default is 10,) subject to the constraint imposed by
+           the -D option.
+
+           4) The -m option specifies the minimum number of
+           equities invested in, during each time interval, (the
+           default is 10,) subject to the constraint imposed by
+           the -D option, (and the -M option if the -m and -M
+           options are ambiguous-ie., if the minimum number of
+           equities specified by the -m option is greater than
+           the maximum number of equities specified by the -M
+           option, then the -M option will prevail.)
+
+               A) Under conditions where the portfolio volatility
+               is estimated to be too large, then the -m option
+               may be violated in an attempt to lower the
+               volatility of the portfolio by adding equities to
+               the portfolio. However, any such attempt is
+               subject to the constraints imposed by the -D and
+               -M option.
+
+
+WWAARRNNIINNGGSS
+       There is little or no provision for handling numerical exceptions.
+
+SSEEEE AALLSSOO
+       tsinvest(1), tsinvestsim(1), tsshannoneffective(1)
+
+DDIIAAGGNNOOSSTTIICCSS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AAUUTTHHOORRSS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+           john@email.johncon.com (John Conover)
+
+           http://www.johncon.com/ntropix/
+           http://www.johncon.com/
+
+       ----------------------------------------------------------------------
+
+
+
+                               January 07, 2006                    TSINVEST(1)

@@ -1,0 +1,395 @@
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# The data may be viewed using gnuplot, with the command
+# "gnuplot plot"
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/25 02:38:39 $
+# $Id: plot,v 0.0 2006/01/25 02:38:39 john Exp $
+# $Log: plot,v $
+# Revision 0.0  2006/01/25 02:38:39  john
+# Initial version
+#
+#
+set grid
+show grid
+set title "Normal Distribution of Increments"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsbrownian.tsderivative.tsnormal" with lines, "tsbrownian.tsderivative.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution of Increments"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tswhite.tsintegrate.tsnormal" with lines, "tswhite.tsintegrate.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "Hurst Coefficient Graphs"
+show title
+set xlabel "log (time)"
+show xlabel
+set ylabel "log (R / S)"
+show ylabel
+plot "tsfBm-h0.0.tshurst" with lines, "tsfBm-h0.1.tshurst" with lines, "tsfBm-h0.3.tshurst" with lines, "tsfBm-h0.5.tshurst" with lines, "tsfBm-h0.7.tshurst" with lines, "tsfBm-h0.9.tshurst" with lines, "tsfBm-h1.0.tshurst" with lines
+pause -1
+#
+set grid
+show grid
+set title "Normal Distribution of Increments"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.5.tsnormal" with lines, "tsfBm-h0.5.tsnormal-f" with steps
+pause -1
+#
+set grid
+show grid
+set title "H Parameter Graphs"
+show title
+set xlabel "log (time)"
+show xlabel
+set ylabel "log (stddev)"
+show ylabel
+plot "tsfBm-h0.0.tshcalc" with lines, "tsfBm-h0.1.tshcalc" with lines, "tsfBm-h0.3.tshcalc" with lines, "tsfBm-h0.5.tshcalc" with lines, "tsfBm-h0.7.tshcalc" with lines, "tsfBm-h0.9.tshcalc" with lines, "tsfBm-h1.0.tshcalc" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction"
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction.tsrms" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction.tslsq" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tschangewager" with lines
+pause -1
+#
+set grid
+show grid
+set title "Shannon Probability vs. Maximum Revenue"
+show title
+set xlabel "Shannon Probability"
+show xlabel
+set ylabel "Maximum Revenue"
+show ylabel
+plot "tscoin.tsshannonmax" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tssample" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction.tsavg" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction.tskalman" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction.tsavgwindow" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Fraction of Cumulative Returns, Gain/Loss"
+show ylabel
+plot "tscoin.tsfraction.tsrmswindow" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin" with lines, "tscoin.tspole-p0.01" with lines
+pause -1
+#
+set grid
+show grid
+set title "Frequency data"
+show title
+set xlabel "Frequency"
+show xlabel
+set ylabel "Magnitude"
+show ylabel
+plot "tscoin.tsdft-s" with lines, 1 / (x**2) with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Logarithm of Revenue"
+show ylabel
+plot "tscoin.tsmath-l" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Logarithm of Range"
+show ylabel
+plot "tscoin.tsroot-l" with lines
+pause -1
+#
+set grid
+show grid
+set title "Xn-1 vs. Xn"
+show title
+set xlabel "Xn-1"
+show xlabel
+set ylabel "Xn"
+show ylabel
+plot "tsdlogistic.tsdeterministic" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Cumulative Returns"
+show ylabel
+plot "tscoin.tsfraction.tsunfraction" with lines
+pause -1
+#
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Root Mean Square of Normalized Increments"
+show ylabel
+plot "tscoin.tsinstant" with lines
+pause -1
+#
+set grid
+show grid
+set title "Distribution of Run Lengths"
+show title
+set xlabel "Run Length"
+show xlabel
+set ylabel "Probability of Run Length"
+show ylabel
+plot [1:50] "tsfractional.tsrunlength.cut-f1.4" with lines, 1 / (2 * (x ** 1.5)) with lines
+pause -1
+#
+set grid
+show grid
+set title "Cumulative Distribution of Run Lengths"
+show title
+set xlabel "Cumulative Run Length"
+show xlabel
+set ylabel "Cumulative Probabilty of Run Length"
+show ylabel
+plot [1:50] "tsfractional.tsrunlength.cut-f1.7" with lines, 1 / sqrt (x) with lines, erf (1 / sqrt (x)) with lines
+pause -1
+#
+set grid
+show grid
+set title "Cumulative Distribution of Consecutive Like Movements"
+show title
+set xlabel "Consecutive Like Movements"
+show xlabel
+set ylabel "Cumulative Probability"
+show ylabel
+plot "tsfBm-h0.0.tsrootmean" with lines, "tsfBm-h0.1.tsrootmean" with lines, "tsfBm-h0.3.tsrootmean" with lines, "tsfBm-h0.5.tsrootmean" with lines, "tsfBm-h0.7.tsrootmean" with lines, "tsfBm-h0.9.tsrootmean" with lines, "tsfBm-h1.0.tsrootmean" with lines
+pause -1
+#
+set grid
+show grid
+set title "Magnitude of Run Lengths"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Magnitude"
+show ylabel
+plot [1:100] "tsfBm-h0.0.tsrunmagnitude" with lines, "tsfBm-h0.1.tsrunmagnitude" with lines, "tsfBm-h0.3.tsrunmagnitude" with lines, "tsfBm-h0.5.tsrunmagnitude" with lines, "tsfBm-h0.7.tsrunmagnitude" with lines, "tsfBm-h0.9.tsrunmagnitude" with lines, "tsfBm-h1.0.tsrunmagnitude" with lines
+pause -1
+#
+set grid
+show grid
+set title "Persistence"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Probability"
+show ylabel
+plot [1:100] "tsfBm-h0.0.tsrootmeanscale" with lines, "tsfBm-h0.1.tsrootmeanscale" with lines, "tsfBm-h0.3.tsrootmeanscale" with lines, "tsfBm-h0.5.tsrootmeanscale" with lines, "tsfBm-h0.7.tsrootmeanscale" with lines, "tsfBm-h0.9.tsrootmeanscale" with lines, "tsfBm-h1.0.tsrootmeanscale" with lines
+pause -1
+#
+set grid
+show grid
+set title "Marginal Gain"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Gain"
+show ylabel
+plot "tscoin.tsgain" with lines
+pause -1
+#
+set grid
+show grid
+set title "Marginal Gain"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Gain"
+show ylabel
+plot "tscoin.tsgainwindow" with lines
+pause -1
+#
+set grid
+show grid
+set title "Derivative of Hurst Exponent"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Slope"
+show ylabel
+plot [1:3] "tsfBm-h0.0.tshurst.tsscalederivative" with lines, "tsfBm-h0.1.tshurst.tsscalederivative" with lines, "tsfBm-h0.3.tshurst.tsscalederivative" with lines, "tsfBm-h0.5.tshurst.tsscalederivative" with lines, "tsfBm-h0.7.tshurst.tsscalederivative" with lines, "tsfBm-h0.9.tshurst.tsscalederivative" with lines, "tsfBm-h1.0.tshurst.tsscalederivative" with lines
+pause -1
+#
+set grid
+show grid
+set title "Coefficient of Excess Kurtosis"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Coefficient"
+show ylabel
+plot "tsfBm-h0.0.tskurtosis" with lines, "tsfBm-h0.1.tskurtosis" with lines, "tsfBm-h0.3.tskurtosis" with lines, "tsfBm-h0.5.tskurtosis" with lines, "tsfBm-h0.7.tskurtosis" with lines, "tsfBm-h0.9.tskurtosis" with lines, "tsfBm-h1.0.tskurtosis" with lines
+pause -1
+#
+set grid
+show grid
+set title "Coefficient of Excess Kurtosis"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Coefficient"
+show ylabel
+plot "tsfBm-h0.0.tskurtosiswindow" with lines, "tsfBm-h0.1.tskurtosiswindow" with lines, "tsfBm-h0.3.tskurtosiswindow" with lines, "tsfBm-h0.5.tskurtosiswindow" with lines, "tsfBm-h0.7.tskurtosiswindow" with lines, "tsfBm-h0.9.tskurtosiswindow" with lines, "tsfBm-h1.0.tskurtosiswindow" with lines
+pause -1

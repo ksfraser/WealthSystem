@@ -1,0 +1,1 @@
+plot [t=:] "data.tsfraction" with lines,  -0.019736 + 0.000314 * t with lines,  0.027085 with lines,  "data.tsfraction.tsrms" with lines, "data.tsfraction.tsavg" with lines, 0.206930 with lines

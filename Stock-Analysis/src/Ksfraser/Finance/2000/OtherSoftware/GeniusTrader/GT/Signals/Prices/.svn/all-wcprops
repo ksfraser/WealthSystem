@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices
+END
+InsidePrevious.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/InsidePrevious.pm
+END
+Unchange.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/Unchange.pm
+END
+GapUp.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/GapUp.pm
+END
+GapDown.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/GapDown.pm
+END
+Advance.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/Advance.pm
+END
+RecordPriceHigh.pm
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/RecordPriceHigh.pm
+END
+Decline.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/Decline.pm
+END
+RecordPriceLow.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Prices/RecordPriceLow.pm
+END

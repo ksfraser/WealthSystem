@@ -1,0 +1,2971 @@
+# translation of asthtml.po to Deutsch
+# translation of asthtml.po to
+# Header entry was created by KBabel!
+# type: td
+#: FIXME:0
+# Michael Williamson <mswilliamson@uwaterloo.ca>, 2007.
+# Tilo <tc@tc-world.de>, 2007.
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2007-01-24 17:00+0100\n"
+"Project-Id-Version: asthtml\n"
+"Language-Team: Deutsch <de@li.org>\n"
+"X-Generator: KBabel 1.11.4\n"
+"MIME-Version: 1.0\n"
+"Last-Translator: Tilo <tc@tc-world.de>\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "$change&nbsp;($changep %)"
+msgstr "$change&nbsp;($changep %)"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "$changep %"
+msgstr "$changep %"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "$div_yield %"
+msgstr "$div_yield %"
+
+# type: form
+#: FIXME:0
+#, fuzzy
+msgid "$fields I was unable to determine the name of this security. You may have selected the market incorrectly. If you know the market is correct, please enter the company name below:"
+msgstr "$fields I was unable to determine the name of this security. You may have selected the market incorrectly. If you know the market is correct, please enter the company name below:"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "$yield %"
+msgstr "$yield %"
+
+# type: input
+#: FIXME:0
+msgid "% / year"
+msgstr "% / Jahr"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "% above its 52-week low"
+msgstr "% above its 52-week low"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "% below its 52-week high"
+msgstr "% below its 52-week high"
+
+# type: textarea
+#: FIXME:0
+#, fuzzy
+msgid "&lt;describe how to reproduce error&gt; Message: $message_text File: $file Line: $line Function: $function Error Type: $exception_info Stack Trace: $stack_trace_text Parameters: $parameters Version: $version Language: $language Crypto: $crypto TA-lib Version: $talibver Compression: $compression SQL Support: $sql OS: $os $osver Bit Size: $bitlen bits Server: $server User Agent: $ua Contact: $email"
+msgstr "&lt;describe how to reproduce error&gt; Message: $message_text File: $file Line: $line Function: $function Error Type: $exception_info Stack Trace: $stack_trace_text Parameters: $parameters Version: $version Language: $language Crypto: $crypto TA-lib Version: $talibver Compression: $compression SQL Support: $sql OS: $os $osver Bit Size: $bitlen bits Server: $server User Agent: $ua Contact: $email"
+
+# type: textarea
+#: FIXME:0
+#, fuzzy
+msgid "&lt;describe the bug&gt; Version: $version Language: $language Crypto: $crypto TA-lib Version: $talibver Compression: $compression SQL Support: $sql OS: $os $osver Bit Size: $bitlen bits Server: $server User Agent: $ua Contact: $contact"
+msgstr "&lt;describe the bug&gt; Version: $version Language: $language Crypto: $crypto TA-lib Version: $talibver Compression: $compression SQL Support: $sql OS: $os $osver Bit Size: $bitlen bits Server: $server User Agent: $ua Contact: $contact"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp"
+msgstr "&nbsp"
+
+# type: td
+#: FIXME:0 FIXME:0
+msgid "&nbsp; minutes"
+msgstr "&nbsp; Minuten"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;%"
+msgstr "&nbsp;%"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;&nbsp;"
+msgstr "&nbsp;&nbsp;"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Add a new column based on a calculation"
+msgstr "&nbsp;Füge eine neue Spalte beruhend auf einer Kalkulation hinzu"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Add an image to a column"
+msgstr "&nbsp;Add an image to a column"
+
+# type: img
+#: FIXME:0
+msgid "&nbsp;Add to Worksheet"
+msgstr "&nbsp;Hinzufügen zum Arbeitsblatt"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Admin"
+msgstr "&nbsp;Admin"
+
+# type: img
+#: FIXME:0
+msgid "&nbsp;Alerts"
+msgstr "&nbsp;Alarme"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Append a calculation to a column"
+msgstr "&nbsp;Hinzufügenn einer Rechnvorschrift zu einer Spalte"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Change the colour of column data"
+msgstr "&nbsp;Farbänderung der Werte in der Spalte"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Checked / Unchecked&nbsp;"
+msgstr "&nbsp;Checked / Unchecked&nbsp;"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Colour code ups/downs"
+msgstr "&nbsp;Colour code ups/downs"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Configure"
+msgstr "&nbsp;Konfigurieren"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Consolidated&nbsp;&nbsp;"
+msgstr ""
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Debug"
+msgstr "&nbsp;Debug"
+
+# type: input
+#: FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0
+msgid "&nbsp;Disabled"
+msgstr ""
+
+# type: input
+#: FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0
+msgid "&nbsp;Enabled"
+msgstr ""
+
+# type: img
+#: FIXME:0
+msgid "&nbsp;Enter either the number of shares you wish to purchase, or the approximate value of shares you wish to purchase."
+msgstr "&nbsp;Geben Sie entweder die Anzahl der Aktien, oder den Näherungswert der Aktien ein die Sie kaufen wollen."
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;FTP Server"
+msgstr "&nbsp;FTP Server"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;I would like to add a market/market ticker."
+msgstr "&nbsp;I would like to add a market/market ticker."
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;I would like to add an index or sub-sector of a market."
+msgstr "&nbsp;I would like to add an index or subsector of a market."
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;I would like to add an index or sub-sector which is not part of AST"
+msgstr "&nbsp;I would like to add an index or subsector which is not part of AST"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;I would like to add an individual security."
+msgstr "&nbsp;I would like to add an individual security."
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Local File"
+msgstr "&nbsp;Local File"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Logarithmic Scaling"
+msgstr "&nbsp;Logarithmic Scaling"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Modify Default Views"
+msgstr "&nbsp;Modify Default Views"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Modify View Library"
+msgstr "&nbsp;Modify View Library"
+
+# type: img
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;News"
+msgstr "&nbsp;News"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;None"
+msgstr "&nbsp;Nichts"
+
+# type: img
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Pattern Scanner"
+msgstr "&nbsp;Pattern Scanner"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Positive / Neutral / Negative&nbsp;"
+msgstr "&nbsp;Positive / Neutral / Negative&nbsp;"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Public"
+msgstr "&nbsp;Public"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;SCP Server"
+msgstr "&nbsp;SCP Server"
+
+# type: img
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Search by Company Name"
+msgstr "&nbsp;Search by Company Name"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Set Alert at this target price."
+msgstr ""
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Set Alert for stop loss"
+msgstr ""
+
+# type: img
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Take Memo"
+msgstr "&nbsp;Take Memo"
+
+# type: input
+#: FIXME:0
+msgid "&nbsp;Trailing stop loss"
+msgstr ""
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;Unrestricted&nbsp;"
+msgstr "&nbsp;Unrestricted&nbsp;"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;tar"
+msgstr "&nbsp;tar"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;tar.bz2"
+msgstr "&nbsp;tar.bz2"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "&nbsp;tar.gz"
+msgstr "&nbsp;tar.gz"
+
+# type: small
+#: FIXME:0
+msgid "(* Does not include competitions)"
+msgstr ""
+
+# type: small
+#: FIXME:0
+#, fuzzy
+msgid "(Bypasses user restrictions for this user)"
+msgstr "(Bypasses user restrictions for this user)"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "(Current price is $curprice)"
+msgstr "(Current price is $curprice)"
+
+# type: span
+#: FIXME:0
+#, fuzzy
+msgid "(Double click to insert)"
+msgstr "(Double click to insert)"
+
+# type: small
+#: FIXME:0
+#, fuzzy
+msgid "(Leave blank to automatically fill-in)"
+msgstr "(Leave blank to automatically fill-in)"
+
+# type: span
+#: FIXME:0
+#, fuzzy
+msgid "(Mathematical expression for data to show)"
+msgstr "(Mathematical expression for data to show)"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "(Please describe what you did to cause this)"
+msgstr "(Please describe what you did to cause this)"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "(Sent with message of alert)"
+msgstr "(Sent with message of alert)"
+
+# type: small
+#: FIXME:0
+#, fuzzy
+msgid "(Set to 0 for no maximum)"
+msgstr "(Set to 0 for no maximum)"
+
+# type: span
+#: FIXME:0
+msgid "(Text shown after the calculation)"
+msgstr "(Text der nach einer Berechnung angezeigt wird)"
+
+# type: span
+#: FIXME:0
+msgid "(Text shown before the calculation)"
+msgstr "(Text der vor einer Berechnung angezeigt wird)"
+
+# type: small
+#: FIXME:0
+msgid "(a Yahoo symbol which starts with ^)"
+msgstr "(ein Yahoo Symbol beginnt mit ^)"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "(c) Michael Williamson, 2005, 2006"
+msgstr "(c) Michael Williamson, 2005, 2006"
+
+# type: span
+#: FIXME:0
+msgid "(comma separated - e.g. 25,40)"
+msgstr "(Komma separiert - z.B. 25,40)"
+
+# type: div
+#: FIXME:0
+msgid "(from Yahoo)"
+msgstr "(von Yahoo)"
+
+# type: span
+#: FIXME:0
+#, fuzzy
+msgid "(hover over the chart to display price information)"
+msgstr "(hover over the chart to display price information)"
+
+# type: span
+#: FIXME:0
+msgid "(leave blank or zero to auto-detect)"
+msgstr "(Null oder leer lassen für automatische Erkennung)"
+
+# type: small
+#: FIXME:0
+msgid "(leave blank to auto-detect)"
+msgstr "(Null oder leer lassen)"
+
+# type: td
+#: FIXME:0
+msgid "(loss as a percentage of current price e.g. 10% means the current price less 10%)"
+msgstr ""
+
+# type: span
+#: FIXME:0
+#, fuzzy
+msgid "(optional)"
+msgstr "(optional)"
+
+# type: span
+#: FIXME:0
+#, fuzzy
+msgid "* You can use &#36;symbol, or &#36;ysymbol in the url."
+msgstr "* You can use &#36;symbol, or &#36;ysymbol in the url."
+
+# type: div
+#: FIXME:0
+msgid "* will be used on emails sent by AST"
+msgstr "* wird in Emails  verwendet die von AST versendet werden"
+
+# type: b
+#: FIXME:0
+msgid "*IMPORTANT*"
+msgstr "*WICHTIG*"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid ",&nbsp;long term ADX at least"
+msgstr ",&nbsp;long term ADX at least"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "1 week performance at least"
+msgstr "1 week performance at least"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "1 year performance at least"
+msgstr "1 year performance at least"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "3 month performance at least"
+msgstr "3 month performance at least"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "3 year performance at least"
+msgstr "3 year performance at least"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "ADX periods"
+msgstr "ADX periods"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "AST User Registration"
+msgstr "AST User Registration"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Add Check"
+msgstr "Add Check"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Add Checklist"
+msgstr "Add Checklist"
+
+# type: a
+#: FIXME:0
+msgid "Add Index"
+msgstr "Index hinzufügen"
+
+# type: a
+#: FIXME:0
+msgid "Add Market"
+msgstr "Markt hinzufügen"
+
+# type: b
+#: FIXME:0
+msgid "Add New Currency:"
+msgstr "Neue Währung hinzufügen:"
+
+# type: th
+#: FIXME:0
+msgid "Add Portfolios to Consolidation"
+msgstr ""
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Add Section Heading"
+msgstr "Add Section Heading"
+
+# type: th
+#: FIXME:0
+msgid "Add Sort"
+msgstr "Suche hinzufügen"
+
+# type: a
+#: FIXME:0
+msgid "Add Stock"
+msgstr "Börse hinzufügen"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Add symbol to Market Watch"
+msgstr "Add symbol to MarketWatch"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Add to Worksheet"
+msgstr "Add to Worksheet"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Add total"
+msgstr "Add total"
+
+# type: b
+#: FIXME:0
+msgid "Admin Email Address:"
+msgstr "Admin Email Adresse:"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker - First Run"
+msgstr "Advanced Stock Tracker - First Run"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker - Input Error"
+msgstr "Advanced Stock Tracker - Input Error"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker - Login"
+msgstr "Advanced Stock Tracker - Login"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker - Permission Error"
+msgstr "Advanced Stock Tracker - Permission Error"
+
+# type: title
+#: FIXME:0
+msgid "Advanced Stock Tracker - User Restriction Error"
+msgstr ""
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker Login"
+msgstr "Advanced Stock Tracker Login"
+
+# type: form
+#: FIXME:0
+msgid "Advanced Stock Tracker pulls its data from external sources, namely Yahoo! Finance. Yahoo!'s terms of service do not allow for commercial use of Yahoo's data. In order to use Advanced Stock Tracker, you must agree to be bound the terms of Yahoo!'s data agreement. For more information on"
+msgstr "Advanced Stock Tracker bezieht seine Daten von externen Quellen, namentlich Yahoo! Finance. Yahoo's Bedingungen erlauben keine kommerzielle Nutzung der Daten von Yahoo. Um Advanced Stock Tracker benutzen zu können, müssen Sie  den Nutzungsbedingungen Yahoo's  zustimmen."
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker version $version"
+msgstr "Advanced Stock Tracker Version $version"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Advanced Stock Tracker"
+msgstr "Advanced Stock Tracker"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Alert Type:"
+msgstr "Alert Type:"
+
+# type: td
+#: FIXME:0
+msgid "Alerts:"
+msgstr ""
+
+# type: option
+#: FIXME:0
+#, fuzzy
+msgid "All Markets"
+msgstr "All Markets"
+
+# type: td
+#: FIXME:0
+msgid "All fields are required. Please make sure that you enter a valid email address. AST will email you with a password when your account is created."
+msgstr "Alle Felder werden benötigt. Bitte stellen Sie sicher, dass Sie eine korrekte E-Mail Adresse eingegeben haben. AST wird Ihnen eine E-Mail mit einem Passwort zuschicken, wenn Ihr Benutzerkonto erstellt wurde."
+
+# type: b
+#: FIXME:0
+msgid "Allow anonymous usage statistics:&nbsp;&nbsp;"
+msgstr "Erlaube anonyme Verwendungsstatistik:&nbsp;&nbsp;"
+
+# type: b
+#: FIXME:0
+msgid "Allow user registrations:&nbsp;&nbsp;"
+msgstr "Erlaube Benutzerregistrierung:&nbsp;&nbsp;"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Allows you specify an expression which can be used to group columns."
+msgstr "Erlaubt es einen Ausdruck anzugeben, mit dem Spalten gruppiert werden k&#246;nnen."
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Allows you to choose which columns show up in the view and which do not."
+msgstr "Erm&#246;glicht es auszuw&#228;hlen welche Spalten in den Ansichten sichtbar und welche unsichtbar sind."
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "An Error Occurred Generating This Page"
+msgstr "An Error Occurred Generating This Page"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Apply to Field:"
+msgstr "Apply to Field:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Approximate purchase price:"
+msgstr "Approximate purchase price:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Archive Type:"
+msgstr "Archive Typ:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Assets:"
+msgstr "Assets:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Authentication Algorithm:"
+msgstr "Authentication Algorithm:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Authentication Method:"
+msgstr "Authentifizierungsart:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Authentication Salt:"
+msgstr "Authentication Salt:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Available Columns"
+msgstr "Available Columns"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Available Fields:"
+msgstr "Available Fields:"
+
+# type: th
+#: FIXME:0
+msgid "Available Markets"
+msgstr ""
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Average Volume between"
+msgstr "Average Volume between"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Backup Method:"
+msgstr "Backup Variante:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Balance Sheet"
+msgstr "Balance Sheet"
+
+# type: td
+#: FIXME:0 FIXME:0
+#, fuzzy
+msgid "Between"
+msgstr "Between"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "BigCharts Prefix:"
+msgstr "BigCharts Prefix:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Book Ratio between"
+msgstr "Book Ratio between"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Book Value / Share:"
+msgstr "Book Value / Share:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Book Value:"
+msgstr "Book Value:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Buy Shares In:"
+msgstr "Buy Shares In:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Buy Shares"
+msgstr "Buy Shares"
+
+# type: td
+#: FIXME:0
+msgid "By Michael Williamson"
+msgstr "von Michael Williamson"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Calculate Indicator"
+msgstr "Calculate Indicator"
+
+# type: td
+#: FIXME:0
+msgid "Cash available for investment: &#36;$cash"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Category:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Change %:"
+msgstr "Change %:"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Change (%):"
+msgstr "Change (%):"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Change Password"
+msgstr "Passwort &#228;ndern"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Change the order in which columns are displayed."
+msgstr "&#196;ndern der Reihenfolge in dem die Spalten dargestellt werden."
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Change the order in which the rows are displayed."
+msgstr "Change the order in which the rows are displayed."
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Change which columns have totals."
+msgstr "Change which Spalten have totals."
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Change:"
+msgstr "Change:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Changing password for user $user.fullname"
+msgstr "Changing password for user $user.fullname"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Chart Configuration"
+msgstr "Chart Konfiguration"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Chart Type:"
+msgstr "Chart Type:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Checklist Type"
+msgstr "Checklist Type"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Click here if you do not want to wait."
+msgstr "Click here if you do not want to wait."
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Close Window"
+msgstr "Close Window"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Colour Indicator"
+msgstr "Colour Indicator"
+
+# type: b
+#: FIXME:0
+msgid "Colour:"
+msgstr "Farbe:"
+
+# type: b
+#: FIXME:0
+msgid "Column:"
+msgstr "Spalte:"
+
+# type: b
+#: FIXME:0
+msgid "Comment:"
+msgstr "Kommentar:"
+
+# type: b
+#: FIXME:0
+msgid "Commission:"
+msgstr "Gebühr:"
+
+# type: th
+#: FIXME:0
+msgid "Commissions Rule"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Company Name:"
+msgstr "Firmemname:"
+
+# type: th
+#: FIXME:0
+msgid "Company Search"
+msgstr "Firmensuche"
+
+# type: td
+#: FIXME:0
+msgid "Comparisons:"
+msgstr "Vergleiche:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Condition:"
+msgstr "Condition:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Confirm Action"
+msgstr "Confirm Action"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Confirm Password:"
+msgstr "Confirm Password:"
+
+# type: b
+#: FIXME:0
+msgid "Confirm:"
+msgstr "Bestätigung:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Create New Alert"
+msgstr "Create New Alert"
+
+# type: th
+#: FIXME:0
+msgid "Create New Rule"
+msgstr ""
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Create New View"
+msgstr "Create New View"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Currency Id:"
+msgstr "Currency Id:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Currency:"
+msgstr "Currency:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Daily Price Alert - Edit"
+msgstr "Daily Price Alert - Edit"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Database DSN:"
+msgstr "Database DSN:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Database Settings"
+msgstr "Database Settings"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Database Table:"
+msgstr "Database Table:"
+
+# type: b
+#: FIXME:0
+msgid "Date Added:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Date Range:"
+msgstr "Date Range:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Commission:"
+msgstr "Standard Geb&#252;hr:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Currency:"
+msgstr "Standard W&#228;hrung:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Group Name:"
+msgstr "Default Group Name:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Language:"
+msgstr "Default Language:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Market:"
+msgstr "Default Market:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Page:"
+msgstr "Standard Seite:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default Stop Loss (%):"
+msgstr "Standard Stop Loss (%):"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Default"
+msgstr "Default"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Description:"
+msgstr "Description:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Detail Quote Engine:"
+msgstr "Detail Quote Engine:"
+
+# type: th
+#: FIXME:0
+msgid "Disable Selling Rule"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Dividend Date:"
+msgstr "Dividenden Datum:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Dividend Per Share:"
+msgstr "Dividend Per Share:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Dividend Quote Engine:"
+msgstr "Dividend Quote Engine:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Dividend Yield between"
+msgstr "Dividend Yield between"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Dividend Yield:"
+msgstr "Dividend Yield:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Dividends:"
+msgstr "Dividends:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "EPS between"
+msgstr "EPS between"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "EPS growth more than"
+msgstr "EPS growth more than"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "EPS:"
+msgstr "EPS:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Earnings Growth:"
+msgstr "Earnings Growth:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Earnings:"
+msgstr "Earnings:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Columns"
+msgstr "Edit Columns"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Comparison Information"
+msgstr "Edit Comparison Information"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Default Grouping"
+msgstr "Edit Default Grouping"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Feed"
+msgstr "Edit Feed"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Filter"
+msgstr "Edit Filter"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Game"
+msgstr "Edit Game"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Grouping"
+msgstr "Edit Grouping"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "Edit Indicators"
+msgstr "Bearbeite Indikatoren"
+
+# type: th
+#: FIXME:0
+msgid "Edit Portfolio Information"
+msgstr ""
+
+# type: th
+#: FIXME:0 FIXME:0
+msgid "Edit Portfolio"
+msgstr ""
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Edit Record"
+msgstr "Edit Record"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Screen Information"
+msgstr "Edit Screen Information"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "Edit Totals"
+msgstr "Endsummen bearbeiten"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Edit Worksheet Information"
+msgstr "Edit Worksheet Information"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Editing Sector"
+msgstr "Editing Sector"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Editing User"
+msgstr "Editing User"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Email Address:"
+msgstr "Email Addresse:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Email Field:"
+msgstr "Email Field:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "End Date:"
+msgstr "End Date:"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Enter your statement below:"
+msgstr "Enter your statement below:"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Error"
+msgstr "Error"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Estimated EPS growth more than"
+msgstr "Estimated EPS growth more than"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Execute Market Order (Sell)"
+msgstr "Execute Market Order (Sell)"
+
+# type: b
+#: FIXME:0
+msgid "Feature Access:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Field:"
+msgstr "Field:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "File Name:"
+msgstr "File Name:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "File Path:"
+msgstr "Datei Pfad:"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "First Run Wizard"
+msgstr "First Run Wizard"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Forget Password?"
+msgstr "Passwort vergessen?"
+
+# type: b
+#: FIXME:0
+msgid "Formula:"
+msgstr "Formel:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Full Name:"
+msgstr "Full Name:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Fullname Field:"
+msgstr "Fullname Field:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Globe Investor Sufix:"
+msgstr "Globe Investor Sufix:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Gnuplot Path:"
+msgstr "Gnuplot Verzeichnis:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Grant Permissions to:"
+msgstr "Grant Permissions to:"
+
+# type: b
+#: FIXME:0
+msgid "Group Name:"
+msgstr "Gruppenname:"
+
+# type: NOTYPE
+#: FIXME:0
+msgid "Hello $fullname, Welcome to Advanced Stock Tracker. Advanced Stock Tracker is a web-base portfolio and research tool. You can visit the homepage at http://ast.sourceforge.net. Your account has been successfully created. You can login using the credentials listed below: Username: $username Password: $password Thank you for using Advanced Stock Tracker."
+msgstr "Hallo $fullname, Willkommen bei Advanced Stock Tracker. Advanced Stock Tracker ist ein web-basiertes Aktienbestand und Recherche-Werkzeug. Sie können die Homepage besuchen unter http://ast.sourceforge.net. Ihr Benutzerkonto wurde erfolgreich erstellt. Sie können sich mit folgenden unten angezeigten Daten einloggen:  Benutzername: $username Passwort: $password Danke das Sie Advanced Stock Tracker benutzen."
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Hi-light Pattern:"
+msgstr "Hilight Pattern:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Hidden Columns"
+msgstr "Hidden Columns"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "High:"
+msgstr "High:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Highs / Lows:"
+msgstr "Highs / Lows:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Historical Quote Engine:"
+msgstr "Historical Quote Engine:"
+
+# type: input
+#: FIXME:0
+msgid "I found the following companies on your statement. Please make sure that the information below is correct:"
+msgstr "Folgende Firmen konnten über Ihre Anweisung gefunden werden. Bitte stellen Sie sicher, dass die untenstehenden Informationen richtig sind."
+
+# type: br
+#: FIXME:0
+msgid "If you switch to SQL authentication, and it doesn't work you can find errors in var/log/sqlauth_log. If you need to get back into AST to change these settings then run ast from the command line with the argument --reset-default-auth."
+msgstr "Wenn Sie auf SQL Authentifizierung umschalten und es funktioniert nicht wie erhofft, finden sich unter /var/log/sqlauth_log die Fehler. Wenn Sie in AST die Einstellungen ändern wollen, dann starten Sie ast über die Kommandozeile mit dem Parameter --reset-default-auth."
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Image Indicator"
+msgstr "Image Indicator"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Image Size:"
+msgstr "Image Size:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Image:"
+msgstr "Image:"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "In function $function"
+msgstr "In function $function"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Income Statement"
+msgstr "Income Statement"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "Incorrect Permissions"
+msgstr "Incorrect Permissions"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Indicators allow you to change the colour of text, add new calculations or create new columns based on a formula or expression."
+msgstr "Indikatoren erlauben es die Farbe des Textes zu &#228;ndern, neue Berechnungen hinzuzuf&#252;gen, oder neue Spalten basierend auf einer Formel oder Gleichung zu erstellen."
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Indicators"
+msgstr "Indicators"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Initial Cash:"
+msgstr "Initial Cash:"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "Input Error"
+msgstr "Input Error"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Invalid username or password."
+msgstr "Ung&uuml;ltiger Username oder Passwort."
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Last Modified: $report_date"
+msgstr "Last Modified: $report_date"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Last Price:"
+msgstr "Last Price:"
+
+# type: span
+#: FIXME:0
+#, fuzzy
+msgid "Last:"
+msgstr "Last:"
+
+# type: div
+#: FIXME:0 FIXME:0 FIXME:0
+#, fuzzy
+msgid "Leave blank if not available."
+msgstr "Leave blank if not available."
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Liabilities:"
+msgstr "Liabilities:"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Logged in as:"
+msgstr "Eingeloggt als:"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Login Failed"
+msgstr "Login Failed"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Login Successful"
+msgstr "Login Successful"
+
+# type: center
+#: FIXME:0
+#, fuzzy
+msgid "Login successful, redirecting in 3 seconds."
+msgstr "Login successful, redirecting in 3 seconds."
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Low:"
+msgstr "Low:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "MACD Crossover Alert - Edit"
+msgstr "MACD Crossover Alert - Edit"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Market Capitalization between"
+msgstr "Market Capitalization between"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Capitalization:"
+msgstr "Market Capitalization:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Close:"
+msgstr "Market Close:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Id:"
+msgstr "Market Id:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Key:"
+msgstr "Market Key:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Open:"
+msgstr "Market Open:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Market Order (Purchase)"
+msgstr "Market Order (Purchase)"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Time-zone:"
+msgstr "Market Timezone:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market Timezone:"
+msgstr "Market Timezone:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Market Watch ["
+msgstr "Market Watch ["
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Market:"
+msgstr "Market:"
+
+# type: b
+#: FIXME:0
+msgid "Max Players:"
+msgstr "Maximale Spieler:"
+
+# type: b
+#: FIXME:0
+msgid "Maximum Investment:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Maximum Number of Alerts:"
+msgstr "Maximalanzahl der Alarme:"
+
+# type: b
+#: FIXME:0
+msgid "Maximum Number of Comparisons:"
+msgstr "Maximalanzahl der Vergleiche:"
+
+# type: b
+#: FIXME:0
+msgid "Maximum Number of Portfolios:"
+msgstr "Maximalanzahl der Portfolios:"
+
+# type: b
+#: FIXME:0
+msgid "Maximum Number of Securities Worksheets:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Maximum Number of Securities:"
+msgstr "Maximalanzahl der Wertpapiere:"
+
+# type: b
+#: FIXME:0
+msgid "Maximum Number of Worksheets:"
+msgstr ""
+
+# type: th
+#: FIXME:0
+msgid "Maximum Securities Rule"
+msgstr ""
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "Maybe you need to"
+msgstr "Maybe you need to"
+
+# type: b
+#: FIXME:0
+msgid "Min Price:"
+msgstr "Preisminimum:"
+
+# type: b
+#: FIXME:0
+msgid "Minimum Investment:"
+msgstr ""
+
+# type: th
+#: FIXME:0
+msgid "Minimum Price Rule"
+msgstr ""
+
+# type: th
+#: FIXME:0
+msgid "Minimum/Maximum Investment Rule"
+msgstr ""
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Misc Ratios"
+msgstr "Misc Ratios"
+
+# type: b
+#: FIXME:0
+msgid "Mobile Address:"
+msgstr "Mobile Adresse:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Mobile Email Address:"
+msgstr "Mobile Email Adresse:"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "More Options"
+msgstr "More Options"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Moving Average Crossover Alert - Edit"
+msgstr "Moving Average Crossover Alert - Edit"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Moving Average Type:"
+msgstr "Moving Average Type:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Moving Averages:"
+msgstr "Moving Averages:"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "My broker is:"
+msgstr "My broker is:"
+
+# type: b
+#: FIXME:0
+msgid "Name of Field:"
+msgstr "Name des Feldes:"
+
+# type: div
+#: FIXME:0
+msgid "Name of ftp / ssh server, or blank if using local file."
+msgstr "Name des ftp / ssh Backupservery, leer lassen wenn lokale Datei genutzt wird."
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Name:"
+msgstr "Name:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Net Income:"
+msgstr "Net Income:"
+
+# type: b
+#: FIXME:0
+msgid "New Password:"
+msgstr "Neues Passwort:"
+
+# type: option
+#: FIXME:0
+#, fuzzy
+msgid "None"
+msgstr "None"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Note: $name"
+msgstr "Note: $name"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Note:"
+msgstr "Note:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Number Of Shares:"
+msgstr "Number Of Shares:"
+
+# type: input
+#: FIXME:0 FIXME:0
+#, fuzzy
+msgid "Off"
+msgstr "Off"
+
+# type: input
+#: FIXME:0 FIXME:0
+#, fuzzy
+msgid "On&nbsp;&nbsp;"
+msgstr "On&nbsp;&nbsp;"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Open:"
+msgstr "Open:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Opportunity Type:"
+msgstr "Opportunity Type:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "P/E:"
+msgstr "P/E:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "PE Ratio between"
+msgstr "PE Ratio between"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "PE Ratio:"
+msgstr "PE Ratio:"
+
+# type: b
+#: FIXME:0
+msgid "Password Field:"
+msgstr "Passwort Feld:"
+
+# type: th
+#: FIXME:0
+msgid "Password Reset"
+msgstr "Passwort Reset"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Password for remote server or blank"
+msgstr "Passwort des Backupservers oder leer lassen"
+
+# type: b
+#: FIXME:0
+msgid "Password:"
+msgstr "Passwort:"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Path to local file, or file on remote server"
+msgstr "Pfad zur lokalen Datei, oder Filename auf dem Backupserver"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Pattern:"
+msgstr "Pattern:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Performance:"
+msgstr "Performance:"
+
+# type: b
+#: FIXME:0
+msgid "Period:"
+msgstr "Zeitspanne:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Please check the box that applies below:"
+msgstr "Please check the box that applies below:"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Please contact your administrator if the problem persists."
+msgstr "Please contact your administrator if the problem persists."
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Please enter your email address below to lookup your account. An email will be sent to you with your new password."
+msgstr "Please enter your email address below to lookup your account. An email will be sent to you with your new password."
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "Please press your browser's"
+msgstr "Please press your browser's"
+
+# type: td
+#: FIXME:0
+msgid "Please select the type of rule you wish to add from the list below."
+msgstr ""
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Please select the type of the check list you would like to create below. You can add to this list be clicking on the \"Modify Checklist Types\" link to the left."
+msgstr "Please select the type of the check list you would like to create below. You can add to this list be clicking on the \"Modify Checklist Types\" link to the left."
+
+# type: b
+#: FIXME:0
+msgid "Portfolio Name:"
+msgstr ""
+
+# type: td
+#: FIXME:0
+msgid "Portfolio:"
+msgstr ""
+
+# type: small
+#: FIXME:0
+#, fuzzy
+msgid "Powered By Advanced Stock Tracker (AST) version $app_version"
+msgstr "Powered By Advanced Stock Tracker (AST) version $app_version"
+
+# type: small
+#: FIXME:0
+#, fuzzy
+msgid "Powered By Advanced Stock Tracker (AST)"
+msgstr "Powered By Advanced Stock Tracker (AST)"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Prefix:"
+msgstr "Prefix:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Price Added At:"
+msgstr "Price Added At:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Price Change Alert - Edit"
+msgstr "Price Change Alert - Edit"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Price High/Low Alert - Edit"
+msgstr "Price High/Low Alert - Edit"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Price Paid:"
+msgstr "Price Paid:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Price Sold At:"
+msgstr "Price Sold At:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Price Target Alert - Edit"
+msgstr "Price Target Alert - Edit"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Price between"
+msgstr "Price between"
+
+# type: b
+#: FIXME:0
+msgid "Price:"
+msgstr "Preis:"
+
+# type: b
+#: FIXME:0
+msgid "Purchase Date:"
+msgstr "Kaufdatum:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Quote Settings"
+msgstr "Quote Settings"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "ROE:"
+msgstr "ROE:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Real-time Quote Engine:"
+msgstr "Realtime Quote Engine:"
+
+# type: b
+#: FIXME:0
+msgid "Recommendation:"
+msgstr "Empfehlung:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Record Dividend For:"
+msgstr "Record Dividend For:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Record Dividend"
+msgstr "Record Dividend"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Register"
+msgstr "Registrieren"
+
+# type: div
+#: FIXME:0
+msgid "Registration is currently closed. User accounts may only be created by the administrator. We apologise for the inconvenience."
+msgstr "Die Registrierung ist momentan gesperrt. Userkonten können nur vom Administrator angelegt werden. Bitte entschuldigen Sie diese Unannehmlichkeit. Wir bitten um Ihr Verständnis."
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Reorder Columns"
+msgstr "Reorder Columns"
+
+# type: td
+#: FIXME:0
+msgid "Reports:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Risk Rating:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "Rule"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Sale Date:"
+msgstr "Sale Date:"
+
+# type: b
+#: FIXME:0
+msgid "Sales:"
+msgstr "Handel:"
+
+# type: b
+#: FIXME:0
+msgid "Sector:"
+msgstr "Sektor:"
+
+# type: a
+#: FIXME:0 FIXME:0
+msgid "Security Information"
+msgstr "Wertpapier Information"
+
+# type: b
+#: FIXME:0
+msgid "Select Available markets:"
+msgstr "Auswahl verfügbarer Markte:"
+
+# type: th
+#: FIXME:0
+msgid "Select Index"
+msgstr "Auswahl des Index"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Select Indicator Type"
+msgstr "Select Indicator Type"
+
+# type: form
+#: FIXME:0
+msgid "Select Market:&nbsp;"
+msgstr "Auswahl des Marktes:&nbsp;"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Select Sector"
+msgstr "Select Sector"
+
+# type: th
+#: FIXME:0
+msgid "Select Security"
+msgstr "Wertpapierauswahl"
+
+# type: th
+#: FIXME:0
+msgid "Select a file to upload"
+msgstr "Wähle eine Datei zum Hochladen"
+
+# type: td
+#: FIXME:0
+msgid "Select the list of portfolios you would like to include in this consolidated portfolio"
+msgstr ""
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Select worksheet to add $name to:"
+msgstr "Select worksheet to add $name to:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Sell Shares In:"
+msgstr "Sell Shares In:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Sell Shares"
+msgstr "Sell Shares"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Send To:"
+msgstr "Send To:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Send the current price every day at market"
+msgstr "Send the current price every day at market"
+
+# type: b
+#: FIXME:0
+msgid "Sendmail Path:"
+msgstr "Sendmail Verzeichnis:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Server Name:"
+msgstr "Server Name:"
+
+# type: small
+#: FIXME:0
+msgid "Set to 0 for no maximum."
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Shares:"
+msgstr "Shares:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "Short term ADX at least"
+msgstr "Short term ADX at least"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Average Direction Movement Index (ADX)&nbsp;&nbsp;"
+msgstr "Show Average Direction Movement Index (ADX)&nbsp;&nbsp;"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Bollinger Bands"
+msgstr "Show Bollinger Bands"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show MACD"
+msgstr "Show MACD"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Momentum"
+msgstr "Show Momentum"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Money Flow Index (MFI)"
+msgstr "Show Money Flow Index (MFI)"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show OBV"
+msgstr "Show OBV"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Parabolic SAR"
+msgstr "Show Parabolic SAR"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Relative Strength Index (RSI)"
+msgstr "Show Relative Strength Index (RSI)"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Stochastic"
+msgstr "Show Stochastic"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Volume"
+msgstr "Show Volume"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "Show Williams %R"
+msgstr "Show Williams %R"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "Show/Hide Columns"
+msgstr "Zeige/verstecke Spalten"
+
+# type: h2
+#: FIXME:0
+#, fuzzy
+msgid "Sort Order"
+msgstr "Sortierreihenfolge"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Sort Order:"
+msgstr "Sort Order:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Stack Trace:"
+msgstr "Stack Trace:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Start Date:"
+msgstr "Start Date:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Stochastic Alert - Edit"
+msgstr "Stochastic Alert - Edit"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Stock Screener"
+msgstr "Stock Screener"
+
+# type: td
+#: FIXME:0
+msgid "Stock Screener:"
+msgstr ""
+
+# type: a
+#: FIXME:0 FIXME:0
+msgid "Stop Loss &amp; Target"
+msgstr ""
+
+# type: th
+#: FIXME:0
+msgid "Stop Loss Alert"
+msgstr "Stop Loss Alarm"
+
+# type: b
+#: FIXME:0
+msgid "Stop Loss:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Style:"
+msgstr "Style:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Subject:"
+msgstr "Subject:"
+
+# type: th
+#: FIXME:0 FIXME:0
+#, fuzzy
+msgid "Submit Bug"
+msgstr "Submit Bug"
+
+# type: h3
+#: FIXME:0
+msgid "Successfully changed password."
+msgstr "Passwort erfolgreich geändert."
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Sufix:"
+msgstr "Sufix:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Summary:"
+msgstr "Summary:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Symbol File:"
+msgstr "Symbol File:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Symbol:"
+msgstr "Symbol:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "System Settings - Authentication"
+msgstr "Systemeinstellungen - Authentifizierung"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "System Settings / Backup Options"
+msgstr "Systemeinstellungen / Backupoptionen"
+
+# type: th
+#: FIXME:0
+msgid "System Settings / User Restrictions"
+msgstr ""
+
+# type: th
+#: FIXME:0
+msgid "System Settings"
+msgstr "Systemeinstellungen"
+
+# type: b
+#: FIXME:0
+msgid "Target Price:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Technicals:"
+msgstr "Technicals:"
+
+# type: form
+#: FIXME:0
+msgid "Thank you for choosing Advanced Stock Tracker. Your installation is almost complete. We just need a few pieces of information from you to properly configure your system. Please provide an administrator's password. After you will be able to login into Advanced Stock Tracker using the username"
+msgstr "Danke das sie sich für Advanced Stock Tracker entschieden haben. Ihre Installation ist fast komplett.  Wir benötigen nur noch ein paar Informationen von Ihnen um das System richtig zu konfigurieren. Bitte wählen Sie ein Administrator Passwort. Danach können sich in Advanced Stock Tracker mit Ihrem Usernamen anmelden. "
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "The filter feature allows you to specify a formula which controls which records are shown and which are hidden. You must specify a boolean formula, and records whose formula evaluates to false are hidden."
+msgstr "Mit dem Filter Merkmal ist es m&#246;glich eine Formel anzugeben die festlegt welche Werte angezeigt und welche unsichtbar sind. Geben Sie eine bool'sche Formel an. Werte, die von der Formel als falsch evaluiert werden, sind unsichtbar."
+
+# type: br
+#: FIXME:0
+msgid "The final piece of information needed is the language you would like to run AST under. Each individual user may have their own language preference, only non-user specific pages such as the login screen will be shown in the system language. You can change this option later by going to System Settings page from the Setup Menu. If you do not see your language listed below, you may wish to translate AST into another language. See the AST home page at"
+msgstr "Abschließend benötigen Sie noch eine Einstellung für die Sprache mit der AST gestartet werden soll. Jeder User kann seine bevorzugte Sprache einstellen. Nur nicht User spezifische Seiten wie die Login-Seiten werden in der Systemsprache angezeigt. Diese Optionen können Sie später in den Systemeinstellungen unter dem Setup Menü ändern. Falls Sie Ihre bevorzugte Sprache weiter unten nicht wiederfinden, möchten Sie vielleicht AST in eine andere Sprache übersetzen. Informieren Sie sich auf der AST Homepage unter"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "The import statement feature of AST allows you to build your portfolio by importing your account statement from a supported broker. Please select your broker below. If you do not see you broker in the list, please submit a bug using the link to the left. Make sure you include a sample of your statement and the name of your broker."
+msgstr "The import statement feature of AST allows you to build your portfolio by importing your account statement from a supported broker. Please select your broker below. If you do not see you broker in the list, please submit a bug using the link to the left. Make sure you include a sample of your statement and the name of your broker."
+
+# type: b
+#: FIXME:0
+msgid "The registration is complete, thank you! You will be sent an email shortly with the password for your account."
+msgstr "Die Registrierung ist komplett. Vielen Dank! Wir werden Ihnen in Kürze eine E-Mail mit dem Passwort für Ihren Useraccount schicken."
+
+# type: NOTYPE
+#: FIXME:0
+msgid "The symbol '$symbol' you entered is not valid. Maybe you would like one of the following:"
+msgstr "Das Symbol '$symbol' was Sie eingegeben haben ist ungültig. Eventuell benötigen Sie eines der folgenden:"
+
+# type: td
+#: FIXME:0
+msgid "There are no options for this rule, it simply forbids selling in this game. To add this rule press save."
+msgstr ""
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "Thrown from $file:$line"
+msgstr "Thrown from $file:$line"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Ticker Symbol:"
+msgstr "Ticker Symbol:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Ticker:"
+msgstr "Ticker:"
+
+# type: b
+#: FIXME:0
+msgid "Time:"
+msgstr "Zeit:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Total Type:"
+msgstr "Total Type:"
+
+# type: b
+#: FIXME:0
+msgid "Trade Commission:"
+msgstr "Handelsprovision"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Try Again"
+msgstr "Neuer Versuch"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "Type: $exception_info"
+msgstr "Type: $exception_info"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Type:"
+msgstr "Type:"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Url:"
+msgstr "Url:"
+
+# type: small
+#: FIXME:0
+msgid "Use control + click to select multiple markets."
+msgstr ""
+
+# type: th
+#: FIXME:0
+msgid "User Preferences"
+msgstr "Benutzer Einstellungen"
+
+# type: h2
+#: FIXME:0
+msgid "User Restriction"
+msgstr "Benutzer Einschränkung"
+
+# type: b
+#: FIXME:0
+msgid "Username Field:"
+msgstr "Benutzernamens Feld:"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Username for remote server or blank"
+msgstr "Username des Backupservers oder leer lassen"
+
+# type: b
+#: FIXME:0
+msgid "Username:"
+msgstr "Benutzername:"
+
+# type: div
+#: FIXME:0
+msgid "Usually /bin/bzip2"
+msgstr "Üblicherweise /bin/bzip2"
+
+# type: div
+#: FIXME:0
+msgid "Usually /bin/gzip"
+msgstr "Üblicherweise /bin/gzip"
+
+# type: div
+#: FIXME:0
+msgid "Usually /usr/bin/gnuplot"
+msgstr "Üblicherweise /usr/bin/gnuplot"
+
+# type: div
+#: FIXME:0
+msgid "Usually /usr/bin/pwgen"
+msgstr "Üblicherweise /usr/bin/pwgen"
+
+# type: div
+#: FIXME:0
+msgid "Usually /usr/bin/tar"
+msgstr "Üblicherweise /usr/bin/tar"
+
+# type: div
+#: FIXME:0
+msgid "Usually /usr/lib/sendmail"
+msgstr "Üblicherweise /usr/lib/sendmail"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "View Name:"
+msgstr "View Name:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "View Properties"
+msgstr "Ansichtseigenschaften"
+
+# type: a
+#: FIXME:0
+msgid "View]"
+msgstr "Ansicht]"
+
+# type: title
+#: FIXME:0
+#, fuzzy
+msgid "Viewing News"
+msgstr "Viewing News"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Viewing permissions for $user.fullname ($user.username)"
+msgstr "Viewing permissions for $user.fullname ($user.username)"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "Visit"
+msgstr "Visit"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Volume Alert - Edit"
+msgstr "Volume Alert - Edit"
+
+# type: b
+#: FIXME:0
+msgid "Volume:"
+msgstr "Volumen:"
+
+# type: h1
+#: FIXME:0
+#, fuzzy
+msgid "Welcome to Advanced Stock Tracker"
+msgstr "Welcome to Advanced Stock Tracker"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "When the MACD signal crosses"
+msgstr "When the MACD signal crosses"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "When the prices crosses"
+msgstr "When the prices crosses"
+
+# type: td
+#: FIXME:0
+msgid "When the volume increases by more than"
+msgstr "When the volume increases by more than "
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "When the"
+msgstr "When the"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Worksheet Name:"
+msgstr "Worksheet Name:"
+
+# type: th
+#: FIXME:0
+#, fuzzy
+msgid "Worksheet"
+msgstr "Worksheet"
+
+# type: td
+#: FIXME:0
+msgid "Worksheet:"
+msgstr ""
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "Yahoo Symbol:"
+msgstr "Yahoo Symbol:"
+
+# type: h1
+#: FIXME:0
+#, fuzzy
+msgid "Yahoo! Finance Data Agreement"
+msgstr "Yahoo! Finance Data Agreement"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "Yahoo!'s usage policy"
+msgstr "Yahoo!'s usage policy"
+
+# type: div
+#: FIXME:0
+#, fuzzy
+msgid "Yield:"
+msgstr "Yield:"
+
+# type: br
+#: FIXME:0
+msgid "You also need to provide an email address for system use. This email address will be used as the reply address for all emails sent be AST. For example, it will be the reply address on all alerts. Please note that if you provide an invalid email address your outgoing mail server may reject the email. You can change this email address later by going into the System Settings from the Setup menu."
+msgstr "Sie benötigen eine E-Mail Adresse um das System zu nutzen. Diese E-Mail-Adresse wird als Antwortadresse genutzt werden für alle Mails die AST verschickt, z.B. wird es die Zieladresse für alle Alarme sein. Bitte beachten: falls Sie eine ungültige E-Mail Adresse angeben verwirft Ihr ausgehender Mailserver die Mail. Die E-Mail-Adresse können Sie später in den Systemeinstellungen im Setupmenue ändern."
+
+# type: div
+#: FIXME:0
+msgid "You do not have permission to access this page."
+msgstr "Sie haben keine Berechtigung auf diese Seite zuzugreifen."
+
+# type: div
+#: FIXME:0
+msgid "Your account restrictions do not permit you to access this page."
+msgstr "Die Berechtigungen Ihres Accounts erlauben Ihnen nicht auf diese Seite zuzugreifen."
+
+# type: div
+#: FIXME:0
+msgid "Your account restrictions do not permit you to have more than $limitval alerts."
+msgstr "Die Berechtigungen Ihres Accounts erlauben Ihnen nicht mehr als $limitval Alarme."
+
+# type: div
+#: FIXME:0
+msgid "Your account restrictions do not permit you to have more than $limitval comparisons."
+msgstr "Die Berechtigungen Ihres Accounts erlauben Ihnen nicht mehr als $limitval Vergleiche."
+
+# type: div
+#: FIXME:0
+msgid "Your account restrictions do not permit you to have more than $limitval portfolios (excluding competitions)."
+msgstr "Die Berechtigungen Ihres Accounts erlauben Ihnen nicht mehr als $limitval Portfolios (ausgenommen Wettbewerbe)."
+
+# type: div
+#: FIXME:0
+msgid "Your account restrictions do not permit you to have more than $limitval securities in one worksheet."
+msgstr "Die Berechtigungen Ihres Accounts erlauben Ihnen nicht mehr als $limitval Wertpapiere in einem Arbeitsblatt."
+
+# type: div
+#: FIXME:0
+msgid "Your account restrictions do not permit you to have more than $limitval worksheets."
+msgstr "Die Berechtigungen Ihres Accounts erlauben nur $limitval Arbeitsblätter."
+
+# type: h3
+#: FIXME:0
+msgid "Your password has been reset. You will receive an email shortly which will contain your new password and your username."
+msgstr "Ihr Passwort wurde zurückgesetzt. In Kürze werden Sie eine Email mit Ihrem neuen Passwort und Usernamen erhalten."
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "admin"
+msgstr "admin"
+
+# type: img_alt
+#: FIXME:0
+msgid "alerts"
+msgstr "Alarme"
+
+# type: form
+#: FIXME:0
+#, fuzzy
+msgid "and the password you provide here."
+msgstr "and the password you provide here."
+
+# type: input
+#: FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0 FIXME:0
+msgid "and"
+msgstr "und"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "as a different user."
+msgstr "as a different user."
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "ast.sourceforge.net"
+msgstr "ast.sourceforge.net"
+
+# type: script
+#: FIXME:0
+#, fuzzy
+msgid "ast_save_focus(indicatorform.formula1);"
+msgstr "ast_save_focus(indicatorform.formula1);"
+
+# type: a
+#: FIXME:0
+msgid "back"
+msgstr "zurück"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "button and correct the error."
+msgstr "button and correct the error."
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "bzip2 Path:"
+msgstr "bzip2 Verzeichnis:"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "chart."
+msgstr "chart."
+
+# type: form
+#: FIXME:0
+#, fuzzy
+msgid "click"
+msgstr "click"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "column order"
+msgstr "column order"
+
+# type: a
+#: FIXME:0
+#, fuzzy
+msgid "edit"
+msgstr "edit"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "error"
+msgstr "error"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "filter"
+msgstr "filter"
+
+# type: img_alt
+#: FIXME:0
+msgid "find"
+msgstr "finde"
+
+# type: br
+#: FIXME:0
+#, fuzzy
+msgid "for more information on translation. Please select your language below:"
+msgstr "for more information on translation. Please select your language below:"
+
+# type: img_alt
+#: FIXME:0
+msgid "groups"
+msgstr "Gruppen"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "gzip Path:"
+msgstr "gzip Verzeichnis:"
+
+# type: img_alt
+#: FIXME:0 FIXME:0
+msgid "help"
+msgstr "Hilfe"
+
+# type: a
+#: FIXME:0
+msgid "here"
+msgstr "hier"
+
+# type: img_alt
+#: FIXME:0
+msgid "hide columns"
+msgstr "verstecke Spalten"
+
+# type: img_alt
+#: FIXME:0
+msgid "indicator"
+msgstr "Indikatoren"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "memo"
+msgstr "memo"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "million"
+msgstr "million"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "moving average."
+msgstr "moving average."
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "news"
+msgstr "news"
+
+# type: td
+#: FIXME:0
+msgid "or as percentage:"
+msgstr "oder als Prozentwert"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "over the MACD on the"
+msgstr "over the MACD on the"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "over the"
+msgstr "over the"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "patterns"
+msgstr "patterns"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "percent above the average volume."
+msgstr "percent above the average volume."
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "percent in one"
+msgstr "percent in one"
+
+# type: img_alt
+#: FIXME:0
+msgid "portfolio"
+msgstr ""
+
+# type: b
+#: FIXME:0
+msgid "pwgen Path:"
+msgstr "pwgen Verzeichnis:"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "question"
+msgstr "question"
+
+# type: input
+#: FIXME:0
+#, fuzzy
+msgid "shares / day"
+msgstr "shares / day"
+
+# type: a
+#: FIXME:0 FIXME:0 FIXME:0
+msgid "show"
+msgstr "zeige"
+
+# type: img_alt
+#: FIXME:0
+msgid "sort"
+msgstr "ordnen"
+
+# type: td
+#: FIXME:0
+#, fuzzy
+msgid "stochastic %D goes"
+msgstr "stochastic %D goes"
+
+# type: b
+#: FIXME:0
+#, fuzzy
+msgid "tar Path:"
+msgstr "tar Verzeichnis:"
+
+# type: td
+#: FIXME:0
+msgid "the price changes more than"
+msgstr "der Preis ändert sich mehr als"
+
+# type: td
+#: FIXME:0
+msgid "the price reaches"
+msgstr "der Preis erreicht"
+
+# type: td
+#: FIXME:0
+msgid "the prices reaches a new"
+msgstr "der Preis erreicht einen neuen"
+
+# type: img_alt
+#: FIXME:0
+#, fuzzy
+msgid "totals"
+msgstr "totals"
+
+# type: a
+#: FIXME:0
+msgid "try again"
+msgstr "erneuter Versuch"
+
+# type: script
+#: FIXME:0
+#, fuzzy
+msgid "var ac;"
+msgstr "var ac;"
+
+# type: img_alt
+#: FIXME:0
+msgid "warning"
+msgstr "Warnung"
+
+# type: img_alt
+#: FIXME:0
+msgid "welcome"
+msgstr "Willkommen"
+
+# type: img_alt
+#: FIXME:0
+msgid "worksheet"
+msgstr "Arbeitsblatt"
+
+# type: img_alt
+#: FIXME:0
+msgid "yahoo web services"
+msgstr "yahoo web Service"
+

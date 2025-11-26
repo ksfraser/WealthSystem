@@ -1,0 +1,11 @@
+<table>
+  <tr><td rowspan="3"><img src="$report_icon"></td>
+      <td><h1>$report_name</h1></td>
+  </tr>
+  <tr>
+      <td>$report_desc</td>
+  </tr>
+  <tr>
+    <td>Last Modified: $report_date</td>
+  </tr>
+</table>

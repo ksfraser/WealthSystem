@@ -1,0 +1,336 @@
+TSMARKET(1)							   TSMARKET(1)
+
+
+
+NAME
+       tsmarket - simulate a multiple company industrial market time series
+
+SYNOPSIS
+       tsmarket [-c n] [-f fraction] [-i value] [-p probability]
+		[-t] [-v] number
+
+DESCRIPTION
+       tsmarket  is for market simulation by fractional brownian noise genera-
+       tion, with unfair bias, and cumulative  sum-generates  a  time  series.
+       The  idea  is  to produce a 1/f squared power spectrum distribution for
+       each company in an industrial market by running a cumulative sum  on  a
+       Gaussian  power	spectrum  distribution. The aggregate of all companies
+       participating in the market is obtained by summing  the	production  of
+       the  individual	companies.   The  program accepts an unfair bias and a
+       wager factor, and the number of companies in the  market.   See	"Frac-
+       tals",  Jens  Feder,  Plenum  Press,  New  York,  New  York, 1988, ISBN
+       0-306-42851-2, pp 172.
+
+       As an example, consider the Semiconductor Industry  Association	(SIA,)
+       historical  time  series data for the integrated circuit marketplace in
+       North America:
+
+	   From the program tsshannonwindow, the Shannon
+	   probability, P = 0.758207.
+
+	   From the programs tsfraction and tsrms, the root mean
+	   square value of the normalized increments, rms =
+	   0.087396.
+
+	   From the programs tsfraction and tsavg, the average of
+	   the normalized increments, avg = 0.045132.
+
+       Interestingly, the optimal rms value would be rms = 2P - 1 =  0.516414,
+       if  the	SIA time series could be represented a Brownian fractal, (ie.,
+       represented as a gambler's capital time series in an unfair  coin  toss
+       game. See "Fractals, Chaos, Power Laws," Manfred Schroeder, W. H. Free-
+       man and Company, New York, New York, 1991, ISBN 0-7167-2136-8, pp 128.)
+
+       For this analysis, it is assumed that:
+
+	   1) Each company acts independently, and will receive
+	   cash flow from the market.
+
+	   2) Some of this cash flow will be diverted into new
+	   product manufacturing, development, etc., which in
+	   turn will go back into the market, which in turn will
+	   create cash flow, and so on-but there is a random
+	   element in this process.
+
+	   3) Analysis of the SIA graph yields that it is
+	   probably a fractal, (fractional Brownian variety,)
+	   with a fairly accurate distribution of the normalized
+	   increments that appears to be Gaussian in nature, a
+	   range that appears to increase with the square root of
+	   time, and an exponential curvature. These are
+	   indicative of system that can be modeled by as a
+	   gambler's capital in an unfair coin toss game, or
+	   Brownian fractal.
+
+       To  analyze the SIA time series, it is interesting to note that the avg
+       is 0.045132, which would be  the  sum  total  of  the  average  of  all
+       companies  in the market. If the individual companies are assumed to be
+       operating optimally, (and all identical,) then the  rms	would  be  the
+       square root of the avg, which is 0.212442934.  This would be the amount
+       "wagered" in each iteration of the unfair coin game, (which is a Brown-
+       ian  fractal,)  and the Shannon probability would be 0.212442934 = 2P -
+       1, or P = 0.606221467.
+
+       Using the program tsmarket:
+
+	   tsmarket -p 0.6 -c n 2500 > data
+
+       The variable n was altered to approximate the statistical data  of  the
+       SIA numbers. The best seems to be with n = 5:
+
+	   from tsshannonwindow, P = 0.744495
+	   from tsfraction and tsrms, rms = 0.102880
+	   from tsfraction and tsavg, avg = 0.050307
+
+       which  compares	favorably, to about +/- 5%, with the original SIA num-
+       bers:
+
+	   from tsshannonwindow, P = 0.758207
+	   from tsfraction and tsrms, rms = 0.087396
+	   from tsfraction and tsavg, avg = 0.045132
+
+       which would tend to indicate that  the  constituent  companies  in  the
+       aggregate  are  operating  optimally,  and that the measurements on the
+       aggregate sum of the market, ie., the SIA  numbers,  would  indicate  a
+       higher  Shannon probability, P, and a smaller root mean square value of
+       the normalized increments, rms.
+
+       The reason is as follows:
+
+	   1) Consider a market that is supplied by a single
+	   company. The time series for the market could be
+	   represented, at least statistically, as an unfair coin
+	   tossing game, (see tscoins(1),) with each time unit of
+	   manufacturing going into the marketplace, the
+	   marketplace returning cash to the company's P & L,
+	   which is distributed to the company's operations to
+	   manufacture more product, and so on. But there is an
+	   element of randomness in this process that represents
+	   the aggregate of customer desires and market
+	   forces-this is assumed be a central limit phenomena,
+	   ie., it can be represented as a random variable with a
+	   normal, (Gaussian,) distribution. Note, that like the
+	   gambler, the company's operations managers are
+	   continually wagering on the future-and each wager may,
+	   or may not prove to be a successful.  It is further
+	   assumed that the company will commit capital to
+	   enhancing its market position, (ie., increase
+	   manufacturing capacity, develop new products, etc.,)
+	   and, as above, the decision to do so will contain an
+	   element of risk, and will sometimes work out, and
+	   sometimes not.
+
+	   2) Now consider that another company decides to
+	   participate in the marketplace-under the same scenario
+	   of 1), above. If everything else is equal, we would
+	   expect the market, eventually, to be divided equally
+	   between the two companies, or each company would have
+	   half the market.  When the second company was added to
+	   the market, the first company's contribution to the
+	   marketplace was cut in half-and its root mean square
+	   value of its normalized increments contribution to the
+	   marketplace was also cut in half. The second company's
+	   contribution to the marketplace is the remaining one
+	   half, and its contribution to the root mean square
+	   value of its normalized increments is the same as the
+	   first company's. (The point is that the contributions
+	   to the marketplace add linearly, but the contribution
+	   of to the normalized increments of the marketplace add
+	   root mean square-so we would expect the root mean
+	   square value of the normalized increments to decrease
+	   when the number of participants in the marketplace
+	   changes from one to two-since the value of the
+	   normalized increments for each company is proportional
+	   to the contribution to its the market.)  Think of it
+	   as a Gaussian noise generator. If we cut the root mean
+	   square value (amplitude,) of the noise generator in
+	   one half, and add an identical noise generator, the
+	   resulting noise output of both generators will be the
+	   square root of two, divided by two.
+
+	   3) Or in general, the root mean square value of the
+	   normalized increments of a marketplace time series
+	   will be proportional to one over the square root of
+	   the number of companies in the market.
+
+       Note: these programs use the following functions from other references:
+
+	   ran1, which returns a uniform random deviate between
+	   0.0 and 1.0. See "Numerical Recipes in C: The Art of
+	   Scientific Computing," William H. Press, Brian
+	   P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+	   Cambridge University Press, New York, 1988, ISBN
+	   0-521-35465-X, page 210, referencing Knuth.
+
+	   gasdev, which returns a normally distributed deviate
+	   with zero mean and unit variance, using ran1 () as the
+	   source of uniform deviates. See "Numerical Recipes in
+	   C: The Art of Scientific Computing," William H. Press,
+	   Brian P. Flannery, Saul A. Teukolsky, William
+	   T. Vetterling, Cambridge University Press, New York,
+	   1988, ISBN 0-521-35465-X, page 217.
+
+	   gammln, which returns the log of the results of the
+	   gamma function.  See "Numerical Recipes in C: The Art
+	   of Scientific Computing," William H. Press, Brian
+	   P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+	   Cambridge University Press, New York, 1988, ISBN
+	   0-521-35465-X, page 168.
+
+       The general outline of this program is:
+
+	   1) given the Shannon probability, compute the abscissa
+	   value that divides the area under the normal curve,
+	   into two sections, such that the area to the left of
+	   the value, divided by the total area under the normal
+	   curve is the Shannon probability-a Newton-Raphson
+	   iterated approach using Romberg integration to find
+	   the area is used for this
+
+	   2) for each record:
+
+	       a) for each company
+
+		   i) compute a gaussian distributed random
+		   number
+
+		   ii) add the computed abscissa value from 1)
+		   above to the gaussian distributed random
+		   number
+
+		   iii) multiply this number by the fraction of
+		   aggregate sum of the market to be wagered
+
+		   iv) add this number to the cumulative sum for
+		   the company
+
+		   v) add this number to the temporary aggregate
+		   sum of the market
+
+	       b) add the temporary aggregate sum of the market
+	       to the aggregate sum of the market
+
+       This  program  will  require  finding the value of the normal function,
+       given the standard deviation. The method used is to use	Romberg/trape-
+       zoid integration to numerically solve for the value.
+
+       This program will require finding the functional inverse of the normal,
+       ie., Gaussian, function. The method used is  to	use  Romberg/trapezoid
+       integration to numerically solve the equation:
+
+			   x		    2
+			   |   1	- t   / 2
+	   F(x) = integral | ------ * e 	 dt + 0.5
+			   | 2 * pi
+			   0
+
+       which has the derivative:
+
+				 2
+		    1	     - x   / 2
+	   f(x) = ------ * e
+		  2 * pi
+
+       Since F(x) is known, and it is desired to find x,
+
+			   x		    2
+			   |   1	- t   / 2
+	   F(x) - integral | ------ * e 	 dt + 0.5 = P(x)
+			   | 2 * pi
+			   0
+
+							   = 0
+
+       and the Newton-Raphson method of finding roots would be:
+
+			 P(x)
+	   P	  = P  - ----
+	    n + 1    n	 f(x)
+
+       As a reference on Newton-Raphson Method of root finding, see "Numerical
+       Recipes in C: The Art of Scientific Computing," William H. Press, Brian
+       P.  Flannery,  Saul A. Teukolsky, William T. Vetterling, Cambridge Uni-
+       versity Press, New York, 1988, ISBN 0-521-35465-X, pp 270.
+
+       As a reference on Romberg integration, see "Numerical Recipes in C: The
+       Art of Scientific Computing," William H. Press, Brian P. Flannery, Saul
+       A. Teukolsky, William T. Vetterling, Cambridge  University  Press,  New
+       York, 1988, ISBN 0-521-35465-X, page 124.
+
+       As a reference on trapezoid iteration, see "Numerical Recipes in C: The
+       Art of Scientific Computing," William H. Press, Brian P. Flannery, Saul
+       A.  Teukolsky,  William	T. Vetterling, Cambridge University Press, New
+       York, 1988, ISBN 0-521-35465-X, page 120.
+
+       As a reference on polynomial interpolation, see "Numerical  Recipes  in
+       C:  The	Art of Scientific Computing," William H. Press, Brian P. Flan-
+       nery, Saul A. Teukolsky, William T.  Vetterling,  Cambridge  University
+       Press, New York, 1988, ISBN 0-521-35465-X, page 90.
+
+OPTIONS
+       -c n   Number of companies in the market.
+
+       -f fraction
+	      Fraction of reserves to be wagered, (0 <= fraction <= 1)
+
+       -i value
+	      Initial value of aggregate market.
+
+       -p probability
+	      Shannon probability, (0.5 <= probability <= 1.0)
+
+       -t     Sample's time will be included in the output time series.
+
+       -v     Print the version and copyright banner of the program.
+
+       number Number of data points in the output time series.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),   tshcalc(1),	tshurst(1),  tsintegrate(1),  tslogre-
+       turns(1), tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1),  tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),    tsunfairbrownian(1),    tsfraction(1),   tsshannonmax(1),
+       tschangewager(1),   tssample(1),   tsrms(1),   tscoins(1),    tsavg(1),
+       tsXsquared(1),  tsstockwager(1),  tsshannonwindow(1), tsmath(1), tsavg-
+       window(1),  tspole(1),  tsdft(1),  tsbinomial(1),   tsdeterministic(1),
+       tsnumber(1),	tsrmswindow(1),     tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),   tsshannonvolume(1),	tsstocks(1),  tsshannonfundamental(1),
+       tstrade(1),  tstradesim(1),  tsrunlength(1),  tsunshannon(1),   tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error  messages for incompatible arguments, failure to allocate memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 		   TSMARKET(1)

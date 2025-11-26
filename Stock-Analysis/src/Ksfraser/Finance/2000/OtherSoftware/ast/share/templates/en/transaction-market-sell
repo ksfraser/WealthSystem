@@ -1,0 +1,22 @@
+ 
+<form method="post" action="$save_page">
+  <input type="hidden" name="transaction.type" value="2">
+  <input type="hidden" name="transaction.price2" value="0">
+  <input type="hidden" name="transaction.portfolio_id" value="$portfolio_id">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Execute Market Order (Sell)</th>
+    </tr>
+    <tr>
+      <td><b>Sell Shares In:</b></td>
+      <td>$company_name</td>
+    </tr>
+    <tr>
+      <td><b>Number Of Shares:</b></td>
+      <td><input name="transaction.quantity" value="$transaction.quantity" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Sell">
+    </tr>
+  </table>
+</form>

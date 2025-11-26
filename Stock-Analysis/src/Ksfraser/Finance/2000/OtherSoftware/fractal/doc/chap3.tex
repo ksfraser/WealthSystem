@@ -1,0 +1,725 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: chap3.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: chap3.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+\chapter{A Metric Methodology}
+    \label{methodology}
+
+    \subidx{increments}{see time series increments}
+
+    This chapter outlines the methodology used in the construction of
+    the data presented in appendix~\ref{markets}. The reader is
+    assumed to have remedial knowledge of computing concepts,
+    statistics, and manipulation of time series data sets.
+
+    \section{General Concepts}
+        \label{generalconcepts}
+
+        \idx{time series}
+        \idx{cumulative sum}
+        \idx{random process}
+        Consider a time series, of interest because it appears to have
+        exponentially increasing rate of revenue returns, presumably
+        as a result of a process similar to that discussed in
+        Section~\ref{areturns} in Chapter~\ref{general}, and, further,
+        appears to have characteristics of a random process as
+        discussed in Chapter~\ref{general} in
+        Section~\ref{analyticalgame}. Then, from
+        Equation~\ref{iteration1}:
+
+        \begin{eqnarray}
+            \frac{R_{n + 1} - R_n}{R_n} & = & F_n \cdot f_n
+            \label{iteration2}
+        \end{eqnarray}
+
+        \noindent where $\frac{R_{n + 1} - R_n}{R_n}$ can be
+        calculated from the time series by the following algorithm:
+
+        \subidx{incremental rate of revenue returns}{calculation}
+        \subidx{rate of revenue returns}{incremental, calculation}
+        \vspace{0.25in}
+        \begin{bf}
+            \begin{quotation}
+
+                \vspace{0.1in}\noindent sequentially, for each value
+                in the time series:
+
+                \begin{quotation}
+
+                    \vspace{0.1in}\noindent subtract the last value in
+                    the time series from the this, the current, value
+                    in the time series
+
+                    \vspace{0.1in}\noindent divide this difference by
+                    the last value in the time series
+
+                    \vspace{0.1in}\noindent print the quotient
+
+                \end{quotation}
+
+            \end{quotation}
+        \end{bf}
+        \vspace{0.25in}
+
+        \subidx{incremental returns}{time series}
+        \subidx{rate of revenue returns}{decomposition}
+        \subidx{programs}{tsfraction}
+        \subidx{tsfraction}{program}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{programs}
+        \subidx{incremental returns}{average}
+        \subidx{incremental returns}{mean}
+        \subidx{incremental returns}{least squares fit}
+        This will make a new time series, similar to the series shown
+        schematically in Figure~\ref{WSFOCS}, and defined by
+        Equations~\ref{Fequation} and~\ref{requation}. This new time
+        series is the time series of the increments. It is important
+        to note that this process ``decomposes'' the fractal time
+        series into the time series of the underlying mechanisms that
+        created the time series.  The program {\it tsfraction}\/,
+        described briefly in appendix~\ref{programs}, can perform this
+        function. It is important to note that the new time series
+        contains the fraction of the rate of revenue returns, won or
+        lost in each iteration of the game, $\frac{R_{n + 1} -
+        R_n}{R_n}$. $R_{n + 1} - R_{n}$ is the amount won or lost,
+        depending on whether $R_{n + 1}$ is larger, or smaller than
+        $R_{n}$, respectively, and dividing this value by $R_n$
+        calculates the fraction of the rate of revenue returns won or
+        lost in the iteration. An initial assumption of this section
+        is that the ``wins'' and ``losses'' are the result of a random
+        process. Averaging all values, of $\frac{R_{n + 1} -
+        R_n}{R_n}$ will give the average fraction of the rate of
+        revenue returns won for all iterations in the time
+        series. This can be calculated by finding the mean, perhaps
+        using the program {\it tsnormal}\/, or by a least squares fit
+        of the new time series, perhaps using the program {\it
+        tslsq}\/, both of which are described in
+        appendix~\ref{programs}. Additionally, since, from
+        Equation~\ref{returnequation}:
+
+        \begin{equation}
+            \frac{R_{N}}{R_{0}} = \left(1 + f\right)^{PN} \left(1 - f\right)^{\left(1 - P\right)N}
+        \end{equation}
+
+        \noindent for $N$ many records in the time series, and, on the
+        average, from Equation~\ref{requation1},
+
+        \begin{equation}
+            R\left(t\right) = \left[\left(1 + f\right)^{P} \left(1 - f\right)^{1 - P}\right]^{t}
+            \label{requation2}
+        \end{equation}
+
+        \noindent where $R(t)$ can be used to find the constants in
+        the general form of Equation~\ref{eequation}:
+
+        \begin{equation}
+            f\left(t\right) = e^{kt}
+        \end{equation}
+
+        \subidx{programs}{tslogreturns}
+        \subidx{tslogreturns}{programs}
+        \noindent which was an initial assumption in this section. The
+        program {\it tslogreturns}\/, or perhaps tslsq using the
+        exponential fit argument, -p, can be also be used to find the
+        average exponential fit to the cumulative returns represented
+        by the original time series.
+
+        \subidx{fractional}{Brownian motion}
+        \subidx{Brownian motion}{fractional}
+        \subidx{fixed increments}{Brownian motion}
+        \subidx{Brownian motion}{fixed increments}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+        \subidx{programs}{tsrms}
+        \subidx{tsrms}{program}
+        \subidx{incremental returns}{root mean square}
+        \subidx{root mean square}{incremental returns}
+
+        Additionally, it is important to note that since the new time
+        series, derived above in this section, contains the fraction
+        of rate of revenue returns won or lost in each iteration of
+        the game, that the absolute value of this time series is the
+        time series of the fraction of the rate of revenue returns
+        wagered in each iteration of the game\footnote{The absolute
+        value of the normalized increments, when averaged, is related
+        to the root mean square of the increments by a constant. If
+        the normalized increments are a fixed increment, the constant
+        is unity. If the normalized increments have a Gaussian
+        distribution, the constant is $\approx 0.8$ depending on the
+        accuracy of of ``fit'' to a Gaussian distribution.}, assuming
+        the original time series has characteristics of fractional
+        Brownian motion, or could be ``modeled'' by Brownian motion
+        with fixed increments. The absolute value, for each increment
+        could be calculated by simply removing the all negative signs,
+        and then averaging with, perhaps, the programs {\it
+        tsnormal}\/ or {\it tslsq}\/. Alternately, the root mean
+        square value of the time series may be calculated, perhaps
+        using the program {\it tsrms}\/, which is described in
+        appendix~\ref{programs}. The average value or root mean square
+        value is the parameter $f$ in Equations~\ref{iteration2}
+        and~\ref{requation2}, assuming that $f$ is constant.
+
+        \subidx{probability}{Shannon}
+        \subidx{Shannon}{probability}
+        \subidx{Shannon probability}{calculating from signs of increments}
+        Note, also, that if the total number of records, $N$ is
+        sufficiently large, then the probability of a ``win'' in any
+        iteration, $P$, can be determined by counting the number of
+        positive values in the new time series of the increments, and
+        dividing this number by the total number of records, $N$, in
+        the time series.
+
+        All of these values, $\frac{R_{n + 1} - R_n}{R_n}$, $f$, and
+        $P$, are related by Equation~\ref{pequation}:
+
+        \begin{equation}
+            P = \frac{\ln \left(\frac{\frac{R_{n+1}}{R_{n}}}{\left(1 - f\right)}\right)}{\ln \left(\frac{\left(1 + f\right)}{\left(1 - f\right)}\right)}
+        \end{equation}
+
+        \subidx{speculative games}{modeling}
+        \subidx{programs}{tsnormal}
+        \subidx{tsnormal}{program}
+        \subidx{histogram}{increments}
+        \subidx{time series increments}{histogram}
+        \noindent which can be used as a subjective evaluation of how
+        accurate the ``model'' is. Additionally, the program {\it
+        tsnormal}\/ can be used to plot a histogram of the increments
+        for evaluation of the distribution of the increments,
+        consistent with the presentation in Chapter~\ref{general},
+        Section~\ref{crp}.
+
+        \subidx{probability}{Shannon}
+        \subidx{Shannon}{probability}
+        \subidx{time series increments}{relation of root mean square, and average or mean}
+        As an additional metric for the Shannon probability, $P$, from
+        Equation~\ref{avg}:
+
+        \begin{equation}
+            avg = rms \left[P - \left(1 - P\right)\right] = rms \left(2P - 1\right)
+            \label{metricvalues}
+        \end{equation}
+
+        \noindent where $avg$ and $rms$ can be measured, or:
+
+        \begin{equation}
+            \frac{avg}{rms} = 2P - 1
+        \end{equation}
+
+        \noindent or:
+
+        \begin{equation}
+            P = \frac{\frac{avg}{rms} + 1}{2}
+            \label{metricvalues1}
+        \end{equation}
+
+    \section{Procedure}
+
+        \subidx{time series analysis}{software methodology}
+        \subidx{programs}{tsfraction}
+        \subidx{tsfraction}{program}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+        \subidx{programs}{tsnormal}
+        \subidx{tsnormal}{program}
+        \subidx{programs}{tsrms}
+        \subidx{tsrms}{program}
+        \subidx{programs}{tshurst}
+        \subidx{tshurst}{program}
+        \subidx{programs}{tshcalc}
+        \subidx{tshcalc}{program}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{programs}{tsshannon}
+        \subidx{tsshannon}{program}
+        \subidx{programs}{tsshannonmax}
+        \subidx{tsshannonmax}{program}
+        \subidx{programs}{tslogreturns}
+        \subidx{tslogreturns}{program}
+        \subidx{tsfraction}{use in analytical methodology}
+        \subidx{tslsq}{use in analytical methodology}
+        \subidx{tsnormal}{use in analytical methodology}
+        \subidx{tsrms}{use in analytical methodology}
+        \subidx{tshurst}{use in analytical methodology}
+        \subidx{tshcalc}{use in analytical methodology}
+        \subidx{tsunfairbrownian}{use in analytical methodology}
+        \subidx{tsshannon}{use in analytical methodology}
+        \subidx{tsshannonmax}{use in analytical methodology}
+        \subidx{tslogreturns}{use in analytical methodology}
+        The following procedure is executed in the~..x/markets
+        directory from a ``Makefile'' using the Unix utility make(1).
+        The programs {\it tsfraction}\/, {\it tslsq}\/, {\it
+        tsnormal}\/, {\it tsrms}\/, {\it tshurst}\/, {\it tshcalc}\/,
+        {\it tsunfairbrownian}, {\it tsshannonmax}\/, {\it
+        tsshannon}\/, and {\it tslogreturns}\/ are described briefly
+        in appendix~\ref{programs}, and in addition have online manual
+        pages which can be viewed by the Unix utility man(1). In depth
+        descriptions of the programs is available in the program
+        sources.
+
+        \subidx{time series increments}{root mean square}
+        \subidx{time series increments}{mean}
+        \subidx{time series increments}{standard deviation}
+        Note that many of the parametric values in the analysis of the
+        fractal time series data set are derived by different
+        methodologies. This is for comparative consistency
+        verification. See Section~\ref{verm}.
+
+        \begin{enumerate}
+
+            \item Run the program {\it tsfraction}\/ on the fractal
+            time series data set to produce a time series of the
+            increments.
+
+            \item Run the program {\it tslsq}\/, with the -p option,
+            on the time series of the increments to produce the least
+            squares fit formula for the average of the increments in
+            the time series of the increments.
+
+            \item Run the program {\it tsnormal}\/, with the -p
+            option, on the time series of the increments to produce
+            the mean and standard deviation for the average of the
+            increments in the time series of the increments.
+
+            \item Run the program {\it tsrms}\/ on the time series of
+            the increments to produce a time series of the root mean
+            square of the time series of the increments.
+
+            \item Run the program {\it tsrms}\/, with the -p option,
+            on the time series of the increments to produce the root
+            mean square of the time series of the increments.
+
+            \item Using the Unix utility sed(1), remove any negative
+            signs from the time series of the increments to produce a
+            time series of the absolute value of the time series of
+            the increments.
+
+            \item Run the program {\it tslsq}\/, with the -p option,
+            on the time series of the absolute value of the increments
+            to produce the least squares fit formula for the absolute
+            value of the increments.
+
+            \item Run the program {\it tsnormal}\/, with the -p
+            option, on the time series of the absolute value of the
+            increments to produce the mean and standard deviation for
+            the average of the time series of the absolute value of
+            the increments.
+
+            \item Run the program {\it tsnormal}\/, with the options
+            -t -s 30, on the time series of the increments to produce
+            a time series graph of the bell curve of the distribution
+            of the increments in the time series of the increments.
+
+            \item Run the program {\it tsnormal}\/, with the options
+            -t -s 30 -f, on the time series of the increments to
+            produce a time series graph of the distribution of the
+            increments in the time series of the increments.
+
+            \item Run the program {\it tsXsquared}\/ on the
+            distribution of the increments to produce a $\chi^2$
+            confidence level that the distribution of the increments
+            does have a Gaussian distribution.
+
+            \item Run the program {\it tsstatest}\/ on the
+            distribution of the increments to produce an estimation of
+            the size of the required data set for reasonable accuracy.
+
+            \item Run the program {\it tsderivative}\/ on the time
+            series of the increments to produce the first derivative
+            of the time series of the increments. Additionally, run
+            the program {\it tsnormal}\/, with the options -t -s 30,
+            and -t -s 30 -f to produce a time series graph of the
+            distribution of the first derivative of the increments.
+
+            \item Run the program {\it tsderivative}\/ on the time
+            series of the increments to produce the second derivative
+            of the time series of the increments.  Additionally, run
+            the program {\it tsnormal}\/, with the options -t -s 30,
+            and -t -s 30 -f to produce a time series graph of the
+            distribution of the second derivative of the increments.
+
+            \item Run the program {\it tshurst}\/ on the time series
+            to produce a graph of the Hurst coefficient of the time
+            series.
+
+            \item Run the program {\it tslsq}\/, with the -p option,
+            on the graph of the Hurst coefficient of the time series
+            to produce the least squares fit formula for the Hurst
+            coefficient of the time series.
+
+            \item Run the program {\it tshcalc}\/ on the time series
+            to produce a graph of the H parameter of the time series
+            of the increments.
+
+            \item Run the program {\it tslsq}\/, with the -p option,
+            on the graph of the H parameter of the time series of the
+            increments to produce the least squares fit formula for
+            the H parameter of the time series of the increments.
+
+            \item Run the program {\it tsunfairbrownian}\/, with the
+            -f option and the root mean square value of the time
+            series of the increments, on the fractal time series data
+            set to produce a simulation of the fractal time series
+            data set.
+
+            \item Run the program {\it tsfraction}\/ on the simulation
+            of the fractal time series data set to produce a time
+            series of the increments of the simulation of the fractal
+            time series data set.
+
+            \item Run the program {\it tsnormal}\/, with the -p
+            option, on the simulation of the time series of the
+            increments to produce the mean and standard deviation for
+            the average of the increments in the simulation of the
+            time series of the increments.
+
+            \item Run the program {\it tsnormal}\/, with the options
+            -t -s 30, on the simulation of the time series of the
+            increments to produce a time series graph of the bell
+            curve of the distribution of the increments in the
+            simulation of the time series of the increments.
+
+            \item Run the program {\it tsnormal}\/, with the options
+            -t -s 30 -f, on the simulation of the time series of the
+            increments to produce a time series graph of the
+            distribution of the increments in the simulation of the
+            time series of the increments.
+
+            \item Run the program {\it tsshannonmax}\/ on the fractal
+            time series data set to produce a graph of the maximum
+            Shannon probability for the fractal time series data set.
+
+            \item Run the program {\it tsshannonmax}\/, with the -p
+            option, on the fractal time series data set to produce the
+            value of the maximum Shannon probability for the fractal
+            time series data set.
+
+            \item Run the program {\it tslogreturns}\/, with the -p
+            option, on the fractal time series data set to produce the
+            value of the logarithmic returns of the fractal time
+            series data set.
+
+            \item Run the program {\it tsshannon}\/ with the value of
+            the logarithmic returns of the fractal time series data
+            set to produce the value of the Shannon probability for
+            the fractal time series data set.
+
+            \item Run the program {\it tslsq}\/, with the -e -p
+            options, on the fractal time series data set to produce
+            the value of the coefficient of the exponential returns
+            for the fractal time series data set.
+
+            \item Run the program {\it tsshannon}\/ with the value of
+            the coefficient of the exponential returns of the fractal
+            time series data set to produce the value of the Shannon
+            probability for the fractal time series data set.
+
+            \item Use the Unix utility egrep(1) with the argument ``-e
+            -'' on the time series of the increments to ``filter''
+            records containing a negative sign. Pipe this time series
+            to the Unix utility wc(1) to produce a count of the
+            records in the time series of the increments with negative
+            signs.
+
+            \item Use the Unix utility wc(1) on the time series of the
+            increments to produce a count of the records in the time
+            series of the increments.
+
+            \item Use the Unix utility awk(1) divide the count of the
+            records in the time series of the increments with negative
+            signs, by the count of the records in the time series of
+            the increments, and subtracting from unity, to produce the
+            value of the maximum Shannon probability for the time
+            series of the increments.
+
+        \end{enumerate}
+
+        In addition, the Unix utility awk(1) is used to parse and
+        reformat data from this procedure into {\LaTeX} macros for
+        direct import into this manuscript. Appendix~\ref{markets} is
+        machine generated.
+
+    \section{Description of the Usage of the Programs in the Procedure}
+
+        \subidx{programs}{tsfraction}
+        \subidx{tsfraction}{program}
+        The time series of the increments was made using the program
+        {\it tsfraction}\/, which essentially implements the formula
+        of Equation~\ref{iteration2}, for the fractal time series data
+        set.
+
+        \subidx{time series increments}{root mean square}
+        The root mean square of the time series of the increments is
+        calculated using the program {\it tsrms}\/. The program, also,
+        is used to produce a running graph of the root mean square
+        process.
+
+        \subidx{time series increments}{mean}
+        \subidx{time series increments}{standard deviation}
+        The average, ie., mean, and standard deviation of the
+        increments of the time series of the increments is calculated
+        using the program {\it tsnormal}\/.
+
+        \subidx{time series increments}{root mean square}
+        \subidx{time series increments}{mean}
+        \subidx{time series increments}{standard deviation}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \subidx{programs}{tsshannonmax}
+        \subidx{tsshannonmax}{program}
+        \subidx{time series increments}{root mean square, mean, standard deviation, alternative calculations}
+        \subidx{time series increments}{mean, calculation}
+        \subidx{time series increments}{root mean square, calculation}
+        \subidx{time series increments}{standard deviation, calculation}
+        The root mean square, mean, and standard deviation of the time
+        series of the increments are the metric values of
+        Equation~\ref{metricvalues}. The Shannon probability was
+        calculated by three different methods. One, using the program
+        {\it shannonmax}\/, which produces the maximum Shannon
+        probability from the original fractal time series data set;
+        another, by counting the number of records with negative signs
+        in the time series of the increments; and last, by using the
+        program {\it tsshannon}\/, which calculates the Shannon
+        probability from the logarithmic returns of the fractal time
+        series data set.
+
+        \subidx{programs}{tsnormal}
+        \subidx{tsnormal}{program}
+        \subidx{Gaussian}{increment property}
+        \subidx{increment property}{Gaussian}
+        \subidx{time series increments}{normalized histogram, calculation}
+        The normalized histogram and bell curve of the time series
+        graphs, in each analysis, was made by first using the program
+        {\it tsfraction}\/ to find the increments of the time
+        series. Then the program {\it tsnormal}\/ was run on the
+        increment time series, with 30 intervals, ie., -s 30 argument,
+        to provide the data for the bell curve. The program {\it
+        tsnormal}\/ was executed again, with -f -s 30 arguments, to
+        provide the histogram. See~\cite[pp. 250]{Crownover} for the
+        rationale. If the bell curve and the histogram are
+        approximately the same, then Gaussian increment property,
+        ``property 2'' as described in~\cite[pp. 245]{Crownover}, is
+        validated, and the time series probably represents a
+        fractional Brownian motion. Additionally, the program is used
+        with the options -t -s 30, and -t -s 30 -f to produce a time
+        series graph of the distribution of the first and second
+        derivative of the increments---these are useful for comparison
+        of the distributions with the standard ``white noise'' for a
+        ``qualitative'' verification of the cumulative sum process in
+        empirical data.
+
+        \subidx{programs}{thshurst}
+        \subidx{thshurst}{program}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+        \subidx{Hurst coefficient}{calculation}
+        \subidx{time series increments}{Hurst coefficient, calculation}
+        The Hurst coefficient graph, in each analysis, was made by
+        running the program {\it tshurst}\/ on the time series.
+        See~\cite[pp. 153]{Feder},~\cite[pp. 253]{Casti:C},~\cite[pp. 493]{Peitgen},~\cite[pp. 172]{Cambel},~\cite[pp. 62]{Peters:CAOITCM},
+        or,~\cite[pp. 129]{Schroeder}, for the rationale. The program
+        {\it tslsq}\/ was used on this Hurst coefficient data, with
+        the -p argument, to calculate the least squares approximation
+        to the Hurst coefficient.
+
+        \subidx{programs}{tshcalc}
+        \subidx{thshcalc}{program}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+        \subidx{H parameter}{calculation}
+        \subidx{time series increments}{H parameter, calculation}
+        The H parameter graph, in each analysis, was made by running
+        the program {\it tshcalc}\/ on the time series.
+        See~\cite[pp. 249]{Crownover} for the rationale. The program
+        {\it tslsq}\/ was used on the H parameter data, with the -p
+        argument, to calculate the least squares approximation to the
+        H parameter data.
+
+        \subidx{programs}{tslogreturns}
+        \subidx{tslogreturns}{program}
+        \subidx{programs}{tslsq}
+        \subidx{tslsq}{program}
+        \subidx{fiscal strategy}{optimum}
+        For the optimum fiscal strategy, the program {\it
+        tslogreturns}\/ was run on the fractal time series data set
+        with the -p option to print the formulas for the logarithmic
+        returns. As an alternative, the program {\it tslsq}\/ was used
+        with the -e and -p options to print the formulas for a least
+        squares exponential fit to the fractal time series data
+        set. This renders a slightly more accurate set of formulas,
+        but was not used in the analysis to be consistent
+        with~\cite[pp. 81]{Peters:CAOITCM}
+
+        \subidx{programs}{tsshannon}
+        \subidx{tsshannon}{program}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        For the calculation of the Shannon probability, the program
+        {\it tsshannon}\/ was run with the formulas derived from the
+        {\it tslogreturns}\/ program, above. The formulas were parsed
+        with a Bourne shell script, using the Unix stream editor,
+        sed(1), and presented to the program {\it tsshannon}\/ via the
+        command line.
+
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \subidx{programs}{tsunfairbrownian}
+        \subidx{tsunfairbrownian}{program}
+        \subidx{fiscal strategy}{simulation}
+        \subidx{time series}{simulation}
+        \subidx{strategy}{simulation}
+        For the simulations, the program {\it tsunfairbrownian}\/ was
+        used. This program performs the inverse function of {\it
+        tsfraction}\/. Given a Shannon probability, or alternatively,
+        the fraction of the cumulative sum to be ``wagered'' on each
+        element in the time series of the increments of the fractal
+        time series data set, a simulated fractal time series data set
+        can be produced that has the ``wager'' altered to the metric
+        values calculated above. This simulation can be analyzed using
+        the procedure outlined herein, and the characteristics of the
+        simulation compared against the original.
+
+        \subidx{Hurst coefficient}{relation to spectral exponent}
+        \subidx{spectral exponent}{relation to Hurst coefficient}
+        \idx{Fourier analysis}
+        In this way, the data analysis and reduction were largely
+        automated for each of the individual markets studied. It
+        should be reiterated that the data analysis methodology
+        presented here is remedial by contemporary standards for such
+        issues. A more formal approach has been suggested
+        by~\cite[pp. 259]{Crownover} using Fourier analysis do derive
+        the spectral exponent of a time series. The program {\it
+        tsdft}\/, described briefly in appendix~\ref{programs}, can
+        perform this function.  The Hurst coefficient is related to
+        the spectral exponent, by the relation:
+
+        \begin{equation} \beta = 2H + 1 \end{equation}
+
+        \noindent where $\beta$ is the Fourier spectral exponent, and
+        $H$ is the Hurst
+        coefficient,~\cite[pp. 130]{Schroeder},~\cite[pp. 262]{Crownover},~\cite[pp. 207]{Cambel}. This
+        methodology is difficult to implement without manual
+        intervention, but produces superior accuracies.
+
+        Additionally, the Hurst coefficient is related to the Shannon
+        probability of a time series as derived in
+        Chapter~\ref{general}. A Shannon probability of 0.5 should
+        give a far term Hurst coefficient of 0.5. Other values of
+        Shannon probability and Hurst coefficient are related,
+        however, there are known accuracy issues with the methodology
+        of deriving the Hurst
+        coefficient. See~\cite[pp. 156]{Feder},~\cite[pp. 27]{Brock}.
+
+        \idx{fractal analysis}
+        \idx{fractal dimension}
+        \subidx{fractal dimension}{relation to Hurst coefficient}
+        \subidx{Hurst coefficient}{Relation to fractal dimension}
+        Additionally, there are methods of fractal analysis that
+        address concepts of fractal dimension. The fractal dimension
+        of a time series is related to the Hurst coefficient by the
+        following
+        relationship,~\cite[pp. 196]{Feder},~\cite[pp. 495]{Peitgen}:
+
+        \begin{equation} D = 2 - H \end{equation}
+
+        \noindent where $D$ is the fractal dimension, and $H$ is the
+        Hurst coefficient.
+
+    \section{Verification Methodology}
+        \label{verm}
+
+        As a cursory verification methodology:
+
+        \begin{enumerate}
+
+            \item Using the mean and root mean square values of the
+            normalized increments of the time series data, and the
+            Shannon probability as calculated by counting the total
+            number of records that the market movement was positive,
+            in relation to the total number of records in the data
+            set, verify the accuracy of the equality in
+            Equation~\ref{metricvalues1}.
+
+            \item Compare the Shannon probability, as found by the
+            {\it tsshannonmax}\/ program to the value of the Shannon
+            probability as calculated by counting the total number of
+            records that the market movement was positive, in relation
+            to the total number of records in the data set
+
+            \item Compare the four methods of calculating the
+            logarithmic returns:
+
+            \begin{itemize}
+
+                \item By calculation based on the mean of the
+                normalized increments.
+
+                \item By the calculation of the constant in the least
+                squares approximation to the normalized increments.
+
+                \item By the calculation of the exponential least
+                squares fit to the original time series data set, with
+                the program {\it tslsq}\/.
+
+                \item By the calculation of the logarithmic returns,
+                with the program {\it tslogreturns}\/.
+
+            \end{itemize}
+
+            \item Using the mean, standard deviation, and the root
+            mean square of the normalized increments, and the Shannon
+            probability as calculated by counting the total number of
+            records that the market movement was positive, in relation
+            to the total number of records in the data set, verify the
+            accuracy of the equality of Equation~\ref{stddev9}.
+
+            \item Compare the accuracy of the equality of the absolute
+            value and root mean square of the normalized
+            increments\footnote{The absolute value of the normalized
+            increments, when averaged, is related to the root mean
+            square of the increments by a constant. If the normalized
+            increments are a fixed increment, the constant is
+            unity. If the normalized increments have a Gaussian
+            distribution, the constant is $\approx 0.8$ depending on
+            the accuracy of of ``fit'' to a Gaussian distribution.}.
+
+        \end{enumerate}
+
+        Note that the numerical manipulations are relatively simple,
+        and can be implemented with simple awk(1) scripts.
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

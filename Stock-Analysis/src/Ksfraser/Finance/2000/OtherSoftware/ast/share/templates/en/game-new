@@ -1,0 +1,13 @@
+<form method="post" action="$save_page">
+    <table class="awf_form" width="80%">
+        <tr><th colspan="2">Edit Game</th></tr>
+        <tr><td><b>Name:</b></td><td><input type="text" name="game.name" value="$game.name" class="awf_inputtext awf_wide_input"></td></tr>
+        <tr><td><b>Description:</b></td><td><input type="text" name="game.description" value="$game.description" class="awf_inputtext awf_wide_input"></td></tr>
+       <tr><td><b>Start Date:</b></td><td> <select name="game.start-month">$start_month_options</select>/<select name="game.start-day">$start_day_options</select>/<select name="game.start-year">$start_year_options</select></td></tr>
+        <tr><td><b>End Date:</b></td><td> <select name="game.end-month">$end_month_options</select>/<select name="game.end-day">$end_day_options</select>/<select name="game.end-year">$end_year_options</select></td></tr>
+        <tr><td><b>Max Players:</b></td><td><input type="text" name="game.max_players" value="$game.max_players" class="awf_inputtextshort">&nbsp;<small>(Set to 0 for no maximum)</small></td></tr>
+        <tr><td><b>Initial Cash:</b></td><td><input type="text" name="game.initial_cash" value="$game.initial_cash" class="awf_inputtextshort"></td></tr>
+        <tr><td><b>Currency:</b></td><td><select name="game.currency_id">$currency_options</select></td></tr>
+        <tr><td colspan="2"><input type="submit"></td></tr>
+    </table>
+</form>

@@ -1,0 +1,23 @@
+<html>
+  <head>
+    <title>Add to Worksheet</title>
+    <link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="$stylesheet">
+  </head>
+  <body>
+      <table class="awf_form" width="100%">
+        <tr>
+          <th>$name</th>
+        </tr>
+        <tr>
+          <td>$message</td>
+        </tr>
+        <tr>
+          <td>[ <a href="$edit_page">Edit Record</a> ]</td>
+        </tr>
+        <tr>
+          <td>[ <a href="#" onclick="javascript:window.close();">Close Window</a> ]</td>
+        </tr>
+      </table>
+  </body>
+</html>

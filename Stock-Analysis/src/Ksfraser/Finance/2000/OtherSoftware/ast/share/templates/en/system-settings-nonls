@@ -1,0 +1,71 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">System Settings</th>
+    </tr>
+    <tr>
+      <td><b>Admin Email Address:</b></td>
+      <td><input type="text" name="admin_email" value="$admin_email"><div class="awf_small">* will be used on emails sent by AST</div></td>
+    </tr>
+    <tr>
+      <td><b>Sendmail Path:</b></td>
+      <td><input type="text" name="sendmail_path" value="$sendmail_path"><div class="awf_small">Usually /usr/lib/sendmail</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Allow anonymous usage statistics:&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.sysset_usagestats></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="radio" $anon_stats_on name="anon_stats" value="on">On&nbsp;&nbsp;<input type="radio" $anon_stats_off name="anon_stats" value="off">Off</td>
+    </tr>
+<!--    <tr>
+      <td><b>Font Path:</b></td>
+      <td><input type="text" name="settings.font_path" value=".font_path"><div class="awf_small">Usually /usr/share/fonts/corefonts</small></td>
+    </tr>
+    <tr>
+      <td><b>Font Name:</b></td>
+      <td><input type="text" name="settings.font_name" value=".font_name"><div class="awf_small">Such as arial.ttf</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="checkbox" name="settings.offline" .offline>&nbsp;Offline</td>
+    </tr>
+    <tr>
+      <td><b>Offline Message:</b></td>
+      <td><input type="text" name="settings.offline_message" value=".offline_message"></td>
+    </tr>
+    <tr>
+      <th colspan="2">Backup Options</th>
+    </tr>
+    <tr>
+      <td><b>Backup Method:</b></td>
+      <td><select name="settings.backup_method">backupmethod_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Archive As:</b></td>
+      <td><select name="settings.backup_archiver">backuparchiver_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Location:</b></td>
+      <td><input type="text" name="settings.backup_location" value=".backup_location"><div class="awf_small">Set to local path or server/remote_path, or command to execute</div></td>
+    </tr>
+    <tr>
+      <td><b>Username:</b></td>
+      <td><input type="text" name="settings.backup_username" value=".backup_username"><div class="awf_small">For ftp/scp</div></td>
+    </tr>
+    <tr>
+      <td><b>Password:</b></td>
+      <td><input type="password" name="settings.backup_password" value=".backup_password"><div class="awf_small">For ftp/scp</div></td>
+    </tr>
+    <tr>
+      <td><b>Encrypt:</b></td>
+      <td><input type="checkbox" name="settings.backup_encrypt" .backup_encrypt>Encrypt backup file using gpg</td>
+    </tr>
+    <tr>
+      <td><b>Encrypt Target:</b></td>
+      <td><select name="settings.backup_encrypt_to">backupencrypt_options</select></td>
+    </tr>-->
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

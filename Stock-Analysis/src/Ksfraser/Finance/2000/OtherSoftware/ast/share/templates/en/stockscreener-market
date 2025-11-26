@@ -1,0 +1,17 @@
+<form method="post" action="$save_page">
+    $hidden_fields
+    <table class="awf_form" width="80%">
+        <tr>
+            <th>Select Market</th>
+        </tr>
+        <tr>
+            <td>Please select the market you wish to run this screen against.</td>
+        </tr>
+        <tr>
+            <td><select name="market">$market_options</select></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="Run"></td>
+        </tr>
+    </table>
+</form>

@@ -1,0 +1,82 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+This directory contains the data constructions for all markets, and
+fabricated test cases. There are 3 commands that can be issued from
+the top level:
+
+    1) make, which will enter into the directories, and make the data
+    construct for each and all specific directories/markets/data
+
+    2) make clean, which will enter into the directories, and remove
+    all deciduous files-leaving only those files which are required in
+    the ../doc directory for inclusion in the LaTeX documentation
+
+    3) make realclean, which will enter into the directories, and
+    remove all files constructed, leaving only the starting data, and
+    link files into the Master directory
+
+Each directory/data can be constructed/reconstructed individually by
+"cd"'ing to the directory and using one of the commands above, since
+all Makefile files, plot files, etc., are common and "ln -s"'ed to the
+files in the Master directory.
+
+The Master directory contains a Makefile, plot, and gnuplot file. The
+Makefile is "ln -s"'ed to each market/data directory. The plot file is
+also linked into each market/data directory, and can be used to
+preview the data constructed with the command "gnuplot plot". The
+gnuplot file is run from the Makefile, and makes the encapsulated
+postscript files that will be included in the ../doc LaTeX
+documentation.
+
+Additionally, maketex.awk is an awk(1) script, and is executed from
+the Master/Makefile during construction of the data in each
+market/data directory, and makes a file, parameters.tex, that when
+"input{.../parameters.tex}" from LaTeX, will load the data constructed
+in each directory into LaTeX for formatting into the document in
+../doc. The other awk scripts, 3divide.awk, and cumulativeproduct, are
+used for calculational issues from the Makefile. See the scripts for
+documentation.
+
+To add a new market, make a new directory, establish links to
+../Master/Makefile, ../Master/gnuplot, ../Master/plot, copy the data
+for the market as the file name "data", and type make. The data file
+should be a time series, one record per time value, in temporal
+sequential order. See the documentation to the program "tsfraction"
+for other specifics on the data file syntax. To include the market
+data into the LaTeX documentation in ../doc, see appc.tex and appd.tex
+for templates. The directory should be included in this directories
+Makefile, in the 3 sections, all, clean, and realclean if the
+directory is to be included in a "top down" compile.
+
+In general, the directories with names beginning with us.* are
+directories containing example data and constructions from various
+departments of the United States Government. The directories with
+names beginning with ts* are test cases, where the data files were
+constructed, in one form or another, from the programs in
+../simulation, and are generally used as examples, and/or software or
+methodological construct testing.  There is a NOTES file, that is an
+executable shell script, that will construct the data file in these
+directories. All other directories, excepting the Master directory,
+contain data files and constructions for various market segments, and
+contain a NOTES file that is a dummy, and links the data for the
+market segments as the data file.

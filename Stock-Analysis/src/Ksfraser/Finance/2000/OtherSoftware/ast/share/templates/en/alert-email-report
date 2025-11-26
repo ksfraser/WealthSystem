@@ -1,0 +1,173 @@
+<html>
+    <head>
+    <style type="text/css">
+
+BODY
+{
+  font-family: Geneva, Arial, Helvetica, sans-serif;
+  background-color: #efefef;
+  padding: 0;
+  margin: 0;
+}
+
+HTML
+{
+  padding: 0;
+  margin: 0;
+}
+
+TABLE.awf_table
+{
+  font: normal 76%/150% Geneva, Arial, Helvetica, sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 0 0 0;
+  color: #000;
+  padding: 0 0 0 0;
+}
+
+TABLE.awf_table TR TD
+{
+  padding: 0.5em 0.5em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+TABLE.awf_table TR TD.awf_numeric
+{
+  text-align: right;
+}
+
+TH.awf_column_heading
+{
+  font-size: 1.2em;
+  color: #fff;
+  padding: 0.5em 0.5em;
+  border: 1px solid #fff;
+  border-width: 1px 1px;
+  background: #45A4E4;
+  text-decoration: none;
+}
+
+TH.awf_column_heading A, TH.awf_column_heading A:hover, TH.awf_column_heading A:visited
+{ 
+  color: #fff;
+  background: #45A4E4;
+  text-decoration: none;
+}
+
+TABLE.awf_table TR.awf_odd_row TD
+{
+  border-color: #fff;
+  background: #C1D1F0;
+}
+
+TABLE.awf_table TR.awf_total TD
+{
+  background: #45A4E4;
+}
+
+TABLE.awf_table TR.awf_even_row TD
+{
+  border-color: #fff;
+  background: #DDE6F7;
+}
+
+TABLE.awf_table tr:hover td, TABLE.awf_table tr:hover td a
+{
+  color: #D50000;
+}
+
+IMG
+{
+  border: none;
+}
+
+a img{border:0 solid #f00;}
+
+.awf_small
+{
+  font-size: 0.5em;
+}
+
+a.active
+{
+  color:#000; 
+  background:#fff;
+} 
+
+IMG.ast_chart
+{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.awf_colour_green
+{
+  FONT-WEIGHT: bolder;
+  COLOR: rgb(0,128,0);
+}
+
+.awf_colour_red
+{
+  FONT-WEIGHT: bolder;
+  COLOR: rgb(255,0,0);
+}
+
+.awf_colour_blue
+{
+  FONT-WEIGHT: bolder;
+  COLOR: rgb(0,0,192);
+}
+
+.awf_total_label
+{
+  font-weight: bolder;
+  color: #ccc;
+  padding-left: 1em;
+  font-size: 0.8em;
+}
+
+TABLE.awf_form
+{
+  font: normal 76%/150% Geneva, Arial, Helvetica, sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #000;
+  background: #FFF;
+  border-color: #f00;
+  margin: auto auto;
+}
+
+TABLE.awf_form TR TD
+{
+  padding: 0.1em 0.1em;
+  vertical-align: middle;
+  border-color: #fff;
+  background: #E2EFFF;
+}
+
+TABLE.awf_form TR TH
+{
+  font-size: 1.2em;
+  color: #fff;
+  padding: 0.5em 0.5em;
+  border: 1px solid #fff;
+  border-width: 1px 1px;
+  background: #45A4E4;
+}
+    </style>
+    </head>
+    <body>
+<h1>$report_name</h1>
+$report_description
+<br>
+<br>
+$report_table
+<br>
+<small>This email has been sent to you because you subscribed to alerts of this type in Advanced Stock Tracker.  You can unsubscribe from these alerts by <a href="$server_url?process=alerts">logging in<a/> to Advanced Stock Tracker and <a href="$server_url?process=alerts">disabling these alerts or deleting</a> them.</small><br><br>
+<small>
+Powered by <a href="http://ast.sourceforge.net/">Advanced Stock Tracker</a>&nbsp;(c) 2005, 2006, 2007 Michael Williamson<br><br>
+    </body>
+</html>

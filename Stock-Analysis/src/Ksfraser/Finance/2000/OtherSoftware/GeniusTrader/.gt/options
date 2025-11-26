@@ -1,0 +1,17 @@
+DB::module Text
+DB::text::directory /home/rhertzog/geniustrader/data
+# relying on DB::Text defaults for sample database access
+
+Brokers::module SelfTrade
+
+Path::Font::Arial /usr/X11R6/lib/X11/fonts/TrueType/arial.ttf
+Path::Font::Courier /usr/X11R6/lib/X11/fonts/TrueType/couri.ttf
+Path::Font::Times /usr/X11R6/lib/X11/fonts/TrueType/times.ttf
+
+Analysis::ReferenceTimeFrame year
+
+#Graphic::BackgroundColor black
+#Graphic::ForegroundColor white
+
+Aliases::Global::TFS    SY:TFS 50 10|CS:SY:TFS
+Aliases::Global::TFS[]  SY:TFS #1 #2|CS:SY:TFS #1|CS:Stop:Fixed #3

@@ -1,0 +1,18 @@
+<table width="100%" class="awf_form">
+<tr>
+    <td rowspan="4" width="10%"><img src="images/portfolio_big.png" alt="portfolio"></td>
+    <th colspan="2">$portfolio.name ($portfolio.symbol)</th>
+</tr>
+<tr>
+    <td width="30%"><b>Shares Held:</td></td>
+    <td>$portfolio.shares_held</td>
+</tr>
+<tr>
+    <td><b>Cost Base:</td></td>
+    <td>$portfolio.cost_base</td>
+</tr>
+<tr>
+    <td><b>Realised Dividends:</td></td>
+    <td>$portfolio.dividends</td>
+</tr>
+</table><br>

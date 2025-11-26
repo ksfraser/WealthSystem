@@ -1,0 +1,10 @@
+<form method="post" action="$save_page">
+  <table class="awf_form" width="100%">
+    <tr>
+      <th>Edit Default Grouping</th>
+    </tr>
+    <tr><td><b>Default Group Name:</b></td></tr>
+    <tr><td><input type="text" class="awf_inputtext" name="name" value="$name"></td></tr>
+    <tr><td><input type="submit" value="Save"></td></tr>
+  </table>
+</form>

@@ -1,0 +1,1041 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+    http://www.johncon.com/ntropix/
+    http://www.johncon.com/
+
+------------------------------------------------------------------------------
+
+Description:
+
+    Tsinvest is for simulating the optimal gains of multiple equity
+    investments. The program decides which of all available equities
+    to invest in at any single time, by calculating the instantaneous
+    Shannon probability and statistics of all equities, and then using
+    statistical estimation techniques to estimate the accuracy of the
+    calculated statistics.
+
+    The tsinvest home page is at http://www.johncon.com/ntropix/.
+
+    To build the program, gunzip the source files, and tar xvf
+    tsinvest.tar.  Cd to the tsinvest directory, and type "make".
+
+    To install the executables, cp tsinvest tsinvestsim
+    tsshannoneffective to a directory in your executable path. The
+    tsinvest.1, tsinvestsim.1, and tsshannoneffective.1 files are the
+    nroff sources to the man pages.  The catman pages,
+    tsinvest.catman, tsinvestsim.catman, and,
+    tsshannoneffective.catman, are also included.
+
+    If there are compile time issues, see the file INSTALL.
+
+Inventory:
+
+    tsinvest is the equity investment program.
+
+    tsinvestsim is the equity market simulation program.
+
+    tsshannoneffective is a program that uses statistical estimation
+    techniques to compute the maximum effective Shannon probability
+    that can be used. It is a fragment from the tsinvest program, and
+    is included separately as a tutorial on the large data set
+    required for accurate analysis of equity values.
+
+    tsinvestdb is a C source code template for programs that
+    manipulate the tsinvest(1) time series database(s). It contains
+    the hash algorithm look up tables for expedient development of
+    specialized database systems. The example application is a syntax
+    verification program for the tsinvest(1) time series database
+    format and structure.
+
+    csv2tsinvest is a C source code template for programs that that
+    convert different time series formats and structures to the
+    tsinvest(1) time series database(s) format.  The example
+    application is the Yahoo! historical stock price database
+    spreadsheet format, csv, available from http://chart.yahoo.com/d
+    by specifying "Download Spreadsheet Format" at the bottom of the
+    page when requesting the time series for a stock.
+
+    stocks is a fragment of the daily "ticker" of the US stock
+    exchanges, consisting of 454 equities, from January 1, 1993, to
+    June 6, 1996, as supplied by http://www.ai.mit.edu/stocks.html.
+
+    stocks.names is the names, and corporate web sites, of various
+    equities in the file, stocks, as supplied by
+    http://www.ai.mit.edu/stocks.html.
+
+    stocks.symbols is the names, and ticker symbols of various equities
+    in the file, stocks, as supplied by
+    http://www.ai.mit.edu/stocks.html.
+
+    stocks.copyright is correspondence between Mark Torrance of
+    http://www.ai.mit.edu/stocks.html and myself concerning copyright
+    issues of the reformatted historical equity data contained in the
+    file, stocks.
+
+    QA.METRICS is listing of the quality assurance process and metrics
+    on the tsinvest suite of programs.
+
+    tests is a directory that contains data files for the tsinvestsim
+    program for regression testing of the tsinvest and tsinvestsim
+    programs.
+
+Quick start:
+
+    tsinvest -d 1 -i -s -t stocks
+
+        will analyze the 454 equities with an algorithm that is
+        similar to human "graph watching" where the attempt is to
+        maximize gains while at the same time minimizing risk in
+        assembling the portfolio.
+
+    tsinvest -d 2 -i -s -t stocks
+
+        will analyze the 454 equities with a short term "high
+        volatility" algorithm, similar to "noise trading" when
+        assembling the portfolio.
+
+    tsinvest -d 3 -i -s -t stocks
+
+        will analyze the 454 equities with an algorithm that is
+        similar to human "graph watching", where the attempt is to
+        maximize average gains when assembling the portfolio.
+
+    tsinvest -d 4 -i -s -t stocks
+
+        will analyze the 454 equities with a mean reversion short term
+        "noise trading" algorithm when assembling the
+        portfolio.
+
+    tsinvest -d 5 -i -s -t stocks
+
+        will analyze the 454 equities with a "persistence", or
+        "momentum", algorithm when assembling the portfolio.
+
+    tsinvest -d 6 -i -s -t stocks
+
+        will analyze the 454 equities, but pick stocks at random when
+        assembling the portfolio.
+
+    tsinvest -v
+
+        will print the command line options available in the program.
+
+    tsinvestsim tests/optimal.data 10000 | tsinvest -d2 -i -s -t
+
+        will simulate a market, for 10000 days, where the file
+        optimal.data is an example data file for simulating a
+        "typical" American market.
+
+    tsshannoneffective 0.0004 0.02 1000
+
+        will print out the effective Shannon probability for an equity
+        with a measured Shannon probability of 0.51, (about typical
+        for the American markets,) with a data set that is 1000 days
+        long. The idea is to iterate this command, (like, maybe, 10000
+        days should be next,) so that Peff is greater than 0.5. If you
+        invest in an equity with a smaller Peff, you are not
+        investing, you are gambling-but that can be fun too.
+
+Demonstration:
+
+    Some demonstrative results from various command line arguments,
+    Arg, for the tsinvest program operating on the file, stocks, (a
+    daily fragment of the US stock exchange's "ticker", consisting of
+    454 equities, from January 1, 1993, to June 6, 1996.) The average
+    gain, I, of the index of all equities in the file is 1.00095 per
+    day, or, 1.27123, per year, measured with the tsgain(1) program,
+    using the -p option, and 253 trading days per year. The daily
+    portfolio gain, g, and yearly gain, G, calculated the same way,
+    and, the portfolio value, V, at the end of the simulation,
+    (approximately 2.5 years, starting with an initial value of
+    1000.00,) for comparison against the gain in the index of all
+    equities, 1880.83, is shown in the following table:
+
+    Arg  -d1         -d2         -d3         -d4         -d5         -d6
+         -p -P       -p -P       -p -P       -p -P       -p -P       -p -P
+     g   1.00123     1.00286     1.00058     1.00184     1.00329     1.00156
+     G   1.36548     2.05760     1.15683     1.59096     2.29622     1.48420
+    G/I  1.07414     1.61859     0.91001     1.25151     1.80629     1.16753
+     V   2271.14     6689.01     1466.46     3398.48     8922.95     2827.94
+
+    Arg  -d1 -m0     -d2 -m0     -d3 -m0     -d4 -m0     -d5 -m0     -d6 -m0
+         -p -P       -p -P       -p -P       -p -P       -p -P       -p -P
+     g   1.00120     1.00281     1.00051     1.00137     1.00329     1.00156
+     G   1.35448     2.03386     1.13798     1.41429     2.81419     1.48420
+    G/I  1.06549     1.59991     0.89518     1.11254     2.21376     1.16753
+     V   2222.14     6485.44     1403.77     2860.06     15367.59    2827.94
+
+    Arg  -d1 -u      -d2 -u      -d3 -u      -d4 -u      -d5 -u      -d6 -u
+         -p -P       -p -P       -p -P       -p -P       -p -P       -p -P
+     g   1.00299     1.00028     1.00000     1.00156     1.00177     1.00048
+     G   2.12941     1.07204     1.00000     1.48121     1.56466     1.12966
+    G/I  1.67508     0.84331     0.78664     1.16518     1.23082     0.88864
+     V   7319.13     1200.94     1000.00     2814.55     3252.13     1378.17
+
+    Arg  -d1 -u -m0  -d2 -u -m0  -d3 -u -m0  -d4 -u -m0  -d5 -u -m0  -d6 -u -m0
+         -p -P       -p -P       -p -P       -p -P       -p -P       -p -P
+     g   1.00299     1.00031     1.00000     1.00032     1.00251     1.00048
+     G   2.12941     1.08021     1.00000     1.08294     1.88748     1.12966
+    G/I  1.67508     0.84974     0.78664     0.85189     1.48477     0.88864
+     V   7319.13     1225.46     1000.00     1239.29     5733.41     1378.17
+
+                                 TABLE I
+
+    Note that the average gain, I, is not a traditional index, (the
+    traditional index has a gain of 1.00051 per day, or 1.13884 per
+    year, starting at 25.79, and ending at 36.32, for the 666 days,
+    using the -j option to tsinvest-which means to calculate the index
+    as the average value of all stocks, ie., the sum of the values,
+    divided by the number of stocks.) The rationale for not using the
+    -j option can be found in Table I, and the -d6 option. With
+    balancing, (ie., maintaining equal investments in each stock,)
+    picking the stocks at random will almost "beat the market." The
+    average gain, I, is a fair comparison, or benchmark, for the
+    strategies, (it is the value obtained by maintaining an equal
+    investment in all stocks, at all times.)
+
+    In Table I, the demonstration is to alter the wagering strategies,
+    and see if the results make sense. For example, the -u argument
+    makes the program do the exact opposite of the -d specification,
+    ie., -d1 means to use both avg and rms in the computation of the
+    Shannon probability, and select the equities that have the highest
+    growth rates, as predicted using the calculated Shannon
+    probability. The -u makes the program choose the equities with the
+    lowest growth, (which can be negative growth, implying a short
+    strategy may be advisable,) using the calculated Shannon
+    probability. The -d2 argument means only use rms in the
+    calculation of the Shannon probability, the -d3 means use only
+    avg, the -d4 means use mean reversion as the equity selection
+    criteria, the -d5 means use persistence as the equity selection
+    criteria, and the -d6 means choose the equities at random. (Note,
+    also, that the simulations assume perfect market liquidity, (ie.,
+    the program can recommend buying or selling equities at the
+    current price of the equity,) and assumes there are no broker,
+    transaction costs, or posting fees-which is hypothetically
+    presumptuous. In general, it would be difficult, if not
+    impossible, to achieve the gains listed in the Table I.)
+
+    Obviously, any equity selection strategy should beat selecting
+    equities at random, and any good strategy should beat the average
+    index, (because investing equally in all equities in a market is a
+    viable strategy, ie., wagering on futures.) And, any good strategy
+    should be far superior to its opposite, ie., using the -u option.
+
+    Also, as expected, Table I shows that equity pro forma is heavily
+    influenced by rms, (in general, larger rms means larger growth,
+    but not always,) as shown by the -d2 option, (the -d4 option
+    produces similar results, as would be expected.) The -d6
+    simulations produced results, in all four cases, that were within
+    parity of the average index, which, also would be expected.
+
+    Some of the simulations are data set anomalies-the data in the
+    file, stocks, covers a period that is one of the largest "run ups"
+    in the history of the US equity markets. It would be inappropriate
+    to jump to conclusions that this is a "typical," or useful,
+    scenario.
+
+    Interestingly, including the -c option to compensate the Shannon
+    probability, P, for run length duration, (ie., that the time
+    interval chosen for the analysis, by serendipity, was a positive
+    run length of long duration,) the program does not significantly
+    invest in any equities using the -d1, -d2, or -d3 option. The time
+    interval represented in the file, stocks, is one of the longest
+    positive run length excursions in the century, and as expected,
+    compensating the Shannon probability accommodates the duration by
+    not investing on such a short duration simulation. (The
+    implication is that the time interval chosen was a "bubble.")
+
+    Also, any good strategy should be simulated, using long simulation
+    periods, perhaps using the tsinvestsim program on various market
+    scenarios-for example there are several such scenarios in the
+    directory, tests, which is a collection of "fabricated" market
+    scenarios, like "bear" markets, markets where the differences
+    between equity growths are very small, etc. A typical simulation
+    will use simulation periods of about a hundred thousand days,
+    (about 4 centuries,) which takes several hours. The reason for the
+    large simulation period is that simulation periods that are
+    shorter than this, (you can verify this with the
+    tsshannoneffective program,) can be misleading, ie., you may be
+    simulating a scenario that is a fugitive from the laws of
+    statistics. For example from the directory, tests:
+
+        The file, non-volatile.data:
+
+            A test file of a market with 300 equities, with too little
+            volatility, ie., rms < 2P - 1, with Shannon probabilities,
+            P, ranging, in a linear fashion, from 0.51 to
+            0.51299. (Real markets go from about 0.505 to 0.560, or
+            so, and are typically, non-volatile.)  The volatility is
+            50% too low.
+
+            The daily gain in value of the index, i, should be
+            1.000266, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000327.
+
+            This file is intended to test whether the tsinvest(1)
+            program can exploit markets where the difference in the
+            growth rates of equities is not large. Ideally, what should
+            happen, after many days, (say, 100,000,) is that the
+            equities invested in are 299, 298, 297, ..., and the value
+            of the capital should be greater than the value of the
+            average index.
+
+        The file, non-volatile.equal.antipersistent.data:
+
+            A test file for tsinvestsim(1), of a market with 300
+            equities, with too little volatility, ie., rms < 2P - 1,
+            with Shannon probabilities, P, identical, and equal to
+            0.51, and an antipersistence, H, ranging, in a linear
+            fashion, from 0.4 to 0.5. (Real markets have Shannon
+            probabilities that go from about 0.505 to 0.560, or so,
+            and antipersistences running from about 0.400 to 0.500, or
+            so.) The volatility is 50% too low. This is a good "bear"
+            market simulation.
+
+            The daily gain in value of the index, i, should be
+            1.000200, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000195. The gain in value of
+            a portfolio of the top ten equites, g, based on the
+            selection criteria of antipersistence, (ie., the -d5
+            option,) should be about 1.001997, (assuming a probability
+            of an up movement of 1 - H, or about 0.6.)
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index. There is no strategic advantage in investing in any
+            stock over any other stock-in point of fact, the optimal
+            strategy is to invest equally in all 300 equities.  Anything
+            less than this will result in a loss, in comparison to the
+            average index of all equities.
+
+        The file, non-volatile.equal.data:
+
+            A test file of a market with 300 equities, with too little
+            volatility, ie., rms < 2P - 1, with Shannon probabilities,
+            P, identical, and equal to 0.51. (Real markets go from
+            about 0.505 to 0.560, or so.) The volatility is 50% too
+            low. This is a good "bear" market simulation.
+
+            The daily gain in value of the index, i, should be
+            1.000200, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000195.
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.
+
+        The file, non-volatile.equal.persistent.data:
+
+            A test file of a market with 300 equities, with too little
+            volatility, ie., rms < 2P - 1, with Shannon probabilities,
+            P, identical, and equal to 0.51, and a persistence, H,
+            ranging, in a linear fashion, from 0.5 to 0.6. (Real
+            markets have Shannon probabilities that go from about
+            0.505 to 0.560, or so, and persistences running from about
+            0.500 to 0.600, or so.) The volatility is 50% too
+            low. This is a good "bear" market simulation.
+
+            The daily gain in value of the index, i, should be
+            1.000200, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000195. The gain in value of
+            a portfolio of the top ten equites, g, based on the
+            selection criteria of antipersistence, (ie., the -d5
+            option,) should be about 1.001997, (assuming a probability
+            of an up movement of H, or about 0.6.)
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index. There is no strategic advantage in investing in any
+            stock over any other stock-in point of fact, the optimal
+            strategy is to invest equally in all 300 equities.  Anything
+            less than this will result in a loss, in comparison to the
+            average index of all equities.
+
+        The file, optimal.data:
+
+            A test file of a market with 300 equities, all optimal, ie.,
+            rms = 2P - 1, with Shannon probabilities, P, ranging, in a
+            linear fashion, from 0.51 to 0.51299. (Real markets go
+            from about 0.505 to 0.560, or so.)
+
+            The daily gain in value of the index, i, should be
+            1.000531, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000637.
+
+            This file is intended to test whether the tsinvest(1)
+            program can exploit markets where the difference in the
+            growth rates of equities is not large. Ideally, what should
+            happen, after many days, (say, 100,000,) is that the
+            equities invested in are 299, 298, 297, ..., and the value
+            of the capital should be greater than the value of the
+            average index.
+
+        The file, optimal.equal.antipersistent.data:
+
+            A test file for tsinvestsim(1), of a market with 300
+            equities, all optimal, ie., rms = 2P - 1, with Shannon
+            probabilities, P, identical, and equal to 0.51, and a
+            antipersistence, H, ranging, in a linear fashion, from 0.4
+            to 0.5. (Real markets have Shannon probabilities that go
+            from about 0.505 to 0.560, or so, and antipersistences
+            running from about 0.400 to 0.500.)
+
+            The daily gain in value of the index, i, should be
+            1.000399, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000380. The gain in value of
+            a portfolio of the top ten equites, g, based on the
+            selection criteria of antipersistence, (ie., the -d5
+            option,) should be about 1.003988, (assuming a probability
+            of an up movement of 1 - H, or about 0.6.)
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.  There is no strategic advantage in investing in
+            any stock over any other stock-in point of fact, the
+            optimal strategy is to invest equally in all 300 equities.
+            Anything less than this will result in a loss, in
+            comparison to the average index of all equities.
+
+        The file, optimal.equal.data:
+
+            A test file of a market with 300 equities, all optimal, ie.,
+            rms = 2P - 1, with Shannon probabilities, P, identical,
+            and equal to 0.51. (Real markets go from about 0.505 to
+            0.560, or so.)
+
+            The daily gain in value of the index, i, should be
+            1.000399, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000380.
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.
+
+        The file, optimal.equal.persistent.data:
+
+            A test file of a market with 300 equities, all optimal, ie.,
+            rms = 2P - 1, with Shannon probabilities, P, identical,
+            and equal to 0.51, and a persistence, H, ranging, in a
+            linear fashion, from 0.5 to 0.6. (Real markets have
+            Shannon probabilities that go from about 0.505 to 0.560,
+            or so, and persistences running from about 0.500 to
+            0.600.)
+
+            The daily gain in value of the index, i, should be
+            1.000399, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000380. The gain in value of
+            a portfolio of the top ten equites, g, based on the
+            selection criteria of antipersistence, (ie., the -d5
+            option,) should be about 1.003988, (assuming a probability
+            of an up movement of H, or about 0.6.)
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.  There is no strategic advantage in investing in
+            any stock over any other stock-in point of fact, the
+            optimal strategy is to invest equally in all 300 equities.
+            Anything less than this will result in a loss, in
+            comparison to the average index of all equities.
+
+        The file, volatile.data:
+
+            A test file of a market with 300 equities, all too volatile,
+            ie., rms > 2P - 1, with Shannon probabilities, P, ranging,
+            in a linear fashion, from 0.51 to 0.51299. (Real markets
+            go from about 0.505 to 0.560, or so, and are typically,
+            non-volatile, but some equities exhibit volatility.) The
+            volatility is 50% too high.
+
+            The daily gain in value of the index, i, should be
+            1.000796, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000931.
+
+            This file is intended to test whether the tsinvest(1)
+            program can exploit markets where the difference in the
+            growth rates of equities is not large. Ideally, what should
+            happen, after many days, (say, 100,000,) is that the
+            equities invested in are 299, 298, 297, ..., and the value
+            of the capital should be greater than the value of the
+            average index.
+
+        The file, volatile.equal.antipersistent.data:
+
+            A test file for tsinvestsim(1), of a market with 300
+            equities, all too volatile, ie., rms > 2P - 1, with Shannon
+            probabilities, P, identical, and equal to 0.51, and a
+            antipersistence, H, ranging, in a linear fashion, from 0.4
+            to 0.5. (Real markets have Shannon probabilities that go
+            from about 0.505 to 0.560, or so, and antipersistences
+            running from about 0.400 to 0.500, or so.)  The volatility
+            is 50% too high.
+
+            The daily gain in value of the index, i, should be
+            1.000599, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000555. The gain in value of
+            a portfolio of the top ten equites, g, based on the
+            selection criteria of antipersistence, (ie., the -d5
+            option,) should be about 1.005973, (assuming a probability
+            of an up movement of 1 - H, or about 0.6.)
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.  There is no strategic advantage in investing in
+            any stock over any other stock-in point of fact, the
+            optimal strategy is to invest equally in all 300 equities.
+            Anything less than this will result in a loss, in
+            comparison to the average index of all equities.
+
+        The file, volatile.equal.data:
+
+            A test file of a market with 300 equities, all too volatile,
+            ie., rms > 2P - 1, with Shannon probabilities, P,
+            identical, and equal to 0.51. (Real markets go from about
+            0.505 to 0.560, or so.)  The volatility is 50% too high.
+
+            The daily gain in value of the index, i, should be
+            1.000599, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000555.
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.
+
+        The file, volatile.equal.persistent.data:
+
+            A test file of a market with 300 equities, all too volatile,
+            ie., rms > 2P - 1, with Shannon probabilities, P,
+            identical, and equal to 0.51, and a persistence, H,
+            ranging, in a linear fashion, from 0.5 to 0.6. (Real
+            markets have Shannon probabilities that go from about
+            0.505 to 0.560, or so, and persistences running from about
+            0.500 to 0.600, or so.)  The volatility is 50% too high.
+
+            The daily gain in value of the index, i, should be
+            1.000599, and the gain in value of a portfolio of the top
+            ten equities, g, should be 1.000555. The gain in value of
+            a portfolio of the top ten equites, g, based on the
+            selection criteria of antipersistence, (ie., the -d5
+            option,) should be about 1.005973, (assuming a probability
+            of an up movement of H, or about 0.6.)
+
+            This file is intended to test how well the tsinvest(1)
+            program does in a market where there is nothing to
+            exploit.  Ideally, what should happen, after many days,
+            (say, 100,000,) is that value of the capital should be
+            less than, but nearly equal to, the value of the average
+            index.  There is no strategic advantage in investing in
+            any stock over any other stock-in point of fact, the
+            optimal strategy is to invest equally in all 300 equities.
+            Anything less than this will result in a loss, in
+            comparison to the average index of all equities.
+
+        The file, crash-up.data:
+
+            A test file for tsinvestsim(1), of a deteriorating market
+            with 300 equities, simulating the US equity markets for
+            3,254 trading days between 15 August, 1921, and 6 June,
+            1932, inclusive. During the 2,401 trading day period
+            between 15 August, 1921 and 7 September, 1929, the US
+            equity markets had a substantial gain of about 5.7X in
+            value, (DJIA values of 66.02 to 375.44.) During the 853
+            trading day period between 7 September, 1929, and 6 June,
+            1932, the markets had a significant reversal, loosing
+            about 90% of their 7 September, 1929 value, (DJIA values
+            of 375.44 to 42.68,) for about a 30% loss on the decade
+            1921-1931, and did not regain their 7 September, 1929
+            values until mid 1956.
+
+            This file is intended to test how well the tsinvest(1)
+            program does in adverse market conditions.
+
+        The file, crash-down.data:
+
+            This file is machine generated from the crash-up.data
+            file. The file crash-up.data represents the escalation in
+            equity values, from 1921 on, and the file crash-down.data
+            represents the deterioration in equity values, from 1929
+            on.
+
+        The file, stocks.data:
+
+            This file is a "trick" file, and has its own section,
+            below.
+
+        The file losers.data:
+
+            A test file for tsinvest(1), of a market with 49 equities,
+            all decreasing in value. This file was generated by
+            dumping the internal data structures of the tsinvest(1)
+            program after it had completed execution of the file
+            "stocks", (a daily fragment of the US stock exchange's
+            "ticker", consisting of 454 equities, from January 1,
+            1993, to June 6, 1996, as supplied by
+            http://www.ai.mit.edu/stocks.html,) using the -r option,
+            (the -p -P options were used, also,) to make a new file
+            for tsinvest(1).
+
+            Note that the -D0 and -j options were used; normally, the
+            tsinvest(1) program will not invest in stocks that are
+            declining in value-the -D0 option over rides this default
+            behavior, and forces the program to commit to managing
+            investments in stocks that are declining in value; and the
+            -j option prints the average of the stocks, as opposed to
+            the average balanced growth.
+
+    And arranging the results of the simulations of these files in
+    tabular form for the different wagering strategies:
+
+    non-volatile.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000265     1.000265     1.000265     1.000265     1.000265
+         I   1.069334     1.069334     1.069334     1.069334     1.069334
+         g   1.000288     1.000317     1.000295     1.000275     1.000270
+         G   1.075573     1.083491     1.077479     1.072042     1.070687
+        G/I  1.005834     1.013239     1.007618     1.002533     1.001266
+
+    non-volatile.equal.antipersistent.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000176     1.000176     1.000176     1.000176     1.000176
+         I   1.045530     1.045530     1.045530     1.045530     1.045530
+         g   1.000166     1.000180     1.000166     1.000177     1.001925
+         G   1.042889     1.046589     1.042889     1.045795     1.626706
+        G/I  0.974736     1.001012     0.997474     1.000253     1.555867
+
+    non-volatile.equal.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000199     1.000199     1.000199     1.000199     1.000199
+         I   1.051631     1.051631     1.051631     1.051631     1.051631
+         g   1.000193     1.000200     1.000192     1.000196     1.000178
+         G   1.050036     1.051897     1.049770     1.050833     1.046059
+        G/I  0.998483     1.000253     0.998231     0.992414     0.994702
+
+    non-volatile.equal.persistent.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000226     1.000226     1.000226     1.000226     1.000226
+         I   1.058837     1.058837     1.058837     1.058837     1.058837
+         g   1.000253     1.000231     1.000255     1.000226     1.001915
+         G   1.066093     1.060177     1.066633     1.058837     1.622603
+        G/I  1.006853     1.001266     1.007362     1.000000     1.532438
+
+    optimal.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000530     1.000530     1.000530     1.000530     1.000530
+         I   1.143455     1.143455     1.143455     1.143455     1.143455
+         g   1.000553     1.000616     1.000575     1.000579     1.000523
+         G   1.150125     1.168592     1.156540     1.157710     1.141433
+        G/I  1.005833     1.021984     1.011444     1.012467     0.998232
+
+    optimal.equal.antipersistent.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000352     1.000352     1.000352     1.000352     1.000352
+         I   1.093125     1.093125     1.093125     1.093125     1.093125
+         g   1.000322     1.000351     1.000320     1.000325     1.003843
+         G   1.084862     1.092848     1.084313     1.085686     2.639041
+        G/I  0.992441     0.999747     0.991939     0.993195     2.414217
+
+    optimal.equal.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000399     1.000399     1.000399     1.000399     1.000399
+         I   1.106196     1.106196     1.106196     1.106196     1.106196
+         g   1.000377     1.000390     1.000378     1.000379     1.000346
+         G   1.100058     1.103681     1.100336     1.100614     1.091467
+        G/I  0.994452     0.997726     0.994703     0.994955     0.986685
+
+    optimal.equal.persistent.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000453     1.000453     1.000453     1.000453     1.000453
+         I   1.121406     1.121406     1.121406     1.121406     1.121406
+         g   1.000499     1.000451     1.000496     1.000452     1.003821
+         G   1.134527     1.120839     1.133666     1.121122     2.624449
+        G/I  1.011700     0.999494     1.010933     0.999747     2.340320
+
+    volatile.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000800     1.000800     1.000800     1.000800     1.000800
+         I   1.224239     1.224239     1.224239     1.224239     1.224239
+         g   1.000780     1.001055     1.000848     1.000877     1.000622
+         G   1.218064     1.305746     1.239184     1.248301     1.170367
+        G/I  0.994957     1.066578     1.012208     1.019655     0.955996
+
+    volatile.equal.antipersistent.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000536     1.000536     1.000536     1.000536     1.000536
+         I   1.145191     1.145191     1.145191     1.145191     1.145191
+         g   1.000400     1.000730     1.000451     1.000517     1.005375
+         G   1.106476     1.202764     1.120839     1.139702     3.881545
+        G/I  0.966193     1.050274     0.978735     0.995207     3.389430
+
+    volatile.equal.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000600     1.000600     1.000600     1.000600     1.000600
+         I   1.163874     1.163874     1.163874     1.163874     1.163874
+         g   1.000555     1.000647     1.000556     1.000558     1.000336
+         G   1.150706     1.177788     1.150997     1.151580     1.088710
+        G/I  0.988686     1.011954     0.988936     0.989436     0.935419
+
+    volatile.equal.persistent.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   1.000679     1.000679     1.000679     1.000679     1.000679
+         I   1.187356     1.187356     1.187356     1.187356     1.187356
+         g   1.000736     1.000696     1.000728     1.000670     1.005578
+         G   1.204590     1.192470     1.202156     1.184657     4.084963
+        G/I  1.014515     1.004307     1.012465     0.997727     3.440387
+
+    crash-up.data:
+
+        Arg  -d1 -c       -d2 -c       -d3 -c       -d4 -c       -d5 -c
+         i   1.000791     1.000791     1.000791     1.000791     1.000791
+         I   1.221456     1.221456     1.221456     1.221456     1.221456
+         g   1.000772     1.000000     1.000000     1.000897     1.001220
+         G   1.215035     1.000000     1.000000     1.254628     1.361343
+        G/I  0.995208     0.818695     0.818695     1.027158     1.114525
+
+    crash-up.data follwed by crash-down.data:
+
+        Arg  -d1 -c       -d2 -c       -d3 -c       -d4 -c       -d5 -c
+         i   0.999866     0.999866     0.999866     0.999866     0.999866
+         I   0.966664     0.966664     0.966664     0.966664     0.966664
+         g   1.000134     1.000000     1.000000     0.999950     1.000450
+         G   1.034480     1.000000     1.000000     0.987429     1.120555
+        G/I  1.070156     1.031871     1.031871     1.021481     1.159198
+
+    losers.data:
+
+        Arg  -d1          -d2          -d3          -d4          -d5
+         i   0.999987     0.999987     0.999987     0.999987     0.999987
+         I   0.996716     0.996716     0.996716     0.996716     0.996716
+         g   0.999364     1.001251     0.999413     1.001209     0.999845
+         G   0.851327     1.372049     0.861953     1.357564     0.915410
+        G/I  0.854131     1.376569     0.864793     1.362037     0.964709
+
+    losers.data:
+
+        Arg  -d1 -m0      -d2 -m0      -d3 -m0      -d4 -m0      -d5 -m0
+         i   0.999987     0.999987     0.999987     0.999987     0.999987
+         I   0.996716     0.996716     0.996716     0.996716     0.996716
+         g   0.999291     1.001649     0.999388     1.000336     1.000943
+         G   0.835738     1.517180     0.856515     1.088710     1.269301
+        G/I  0.838491     1.512218     0.859337     1.092297     1.273483
+
+                                 TABLE II
+
+    compares results for various command line arguments, Arg, for the
+    tsinvest program, on the different files, where the average gain,
+    i, is the gain in index value of all equities in the file per day,
+    and I per year, (as measured with the tsgain(1) program, using the
+    -p option, and 253 trading days per year,) the portfolio gain, g,
+    and the yearly gain, G, calculated the same way.  (Note that all
+    strategies made money-that is not the issue. The issue is to
+    resolve whether they beat a simple strategy, like investing
+    equally in every equity in the market, or a derivative on the
+    index. Note that the simulations assume perfect market liquidity,
+    ie., the program can recommend buying or selling equities at the
+    current price of the equity, and assumes there are no broker,
+    transaction costs, or posting fees-which is hypothetically
+    presumptuous. In general, it would be difficult, if not
+    impossible, to achieve the gains listed in Table II.)
+
+    The file, stocks.data, is a "trick" file. It is a test file for
+    tsinvestsim(1), of a market with 454 equities. This file was
+    generated by dumping the internal data structures of the
+    tsinvest(1) program after it had completed execution of the file
+    stocks, (a daily fragment of the US stock exchange's "ticker",
+    consisting of 454 equities, from January 1, 1993, to June 6, 1996,
+    as supplied by http://www.ai.mit.edu/stocks.html,) using the -r
+    option, to make a new file for tsinvestsim(1), tests/stocks.data,
+    and is intended to test how well the tsinvestsim(1) and
+    tsinvest(1) programs model real markets. The data output from the
+    tsinvest(1) program should be similar to the real, and dumped
+    data.
+
+    Specifically, the following table, Table III, should be similar to
+    Table I.
+
+    Some demonstrative results from various command line arguments,
+    Arg, for the tsinvest program operating on the file, stocks.data,
+    (a fabricated daily fragment of the US stock exchange's "ticker",
+    consisting of 454 equities, from January 1, 1993, to June 6,
+    1996.) The average gain, I, of the index of all equities in the
+    file is 1.00116 per day, or, 1.34018, per year, measured with the
+    tsgain(1) program, using the -p option, and 253 trading days per
+    year. The daily portfolio gain, g, and yearly gain, G, calculated
+    the same way, and, the portfolio value, V, at the end of the
+    simulation, (approximately 2.5 years, starting with an initial
+    value of 1000.00,) for comparison against the gain in the index of
+    all equities, 2173.59, is shown in the following table:
+
+    Arg  -d1         -d2         -d3         -d4         -d5         -d6
+
+     g   1.00622     1.00448     1.00607     1.00281     1.00392     1.00092
+     G   4.80565     3.09457     4.61962     2.03437     2.69211     1.26131
+    G/I  3.58582     2.30907     3.44702     1.51798     2.00877     0.94115
+     V   64315.75    20014.23    57927.31    6582.01     13828.37    1850.89
+
+    Arg  -d1 -m0     -d2 -m0     -d3 -m0     -d4 -m0     -d5 -m0     -d6 -m0
+
+     g   1.00629     1.00378     1.00608     1.00581     1.00249     1.00192
+     G   4.89098     2.59943     4.63009     4.33265     1.87703     1.26131
+    G/I  3.64949     1.93961     3.45483     3.23288     1.40058     0.94115
+     V   67421.90    12520.24    58283.01    48738.66    5408.38     1850.89
+
+    Arg  -d1 -u      -d2 -u      -d3 -u      -d4 -u      -d5 -u      -d6 -u
+
+     g   0.99926     1.00063     1.00000     1.00153     0.99981     1.00179
+     G   0.82983     1.17244     1.00000     1.47225     0.95282     1.57020
+    G/I  0.61920     0.87484     0.74617     1.09855     0.71097     1.17163
+     V   609.57      1524.55     1000.00     2790.15     879.70      3308.50
+
+    Arg  -d1 -u -m0  -d2 -u -m0  -d3 -u -m0  -d4 -u -m0  -d5 -u -m0  -d6 -u -m0
+
+     g   0.99926     1.00061     1.00000     1.00125     1.00442     1.00071
+     G   0.82983     1.16771     1.00000     1.37205     3.05507     1.57020
+    G/I  0.61920     0.87131     0.74617     1.02378     2.27960     1.17163
+     V   609.57      1509.02     1000.00     2358.66     19226.82    3308.50
+
+                                 TABLE III
+
+Comments:
+
+    The file, stocks, was chosen for a reason. It is typical of the
+    data available through inexpensive services on the Internet-the
+    data is very incomplete, (about 15% of the data for all equities
+    represented in the file is missing, ie., there are "holes" in the
+    time series data for all equities.) The -p and -P options for the
+    tsinvest(1) program are reasonably effective in addressing
+    incomplete data set issues.
+
+    Additionally, there are only 671 data points represented in the
+    file, stocks. As a "rule of thumb," many analysts argue that an
+    absolute minimum of 2,500 data points are required to produce a
+    reasonably accurate analysis-although the tsshannoneffective(1)
+    program disputes this assumption as being very optimistic. The -c
+    and -C options for the tsinvest(1) program provide a reasonably
+    effective method in addressing limited data set size issues.
+
+    But how well do these options and the equity price models used in
+    the tsinvest(1) program work?
+
+    If the equity price model used internally in the tsinvest(1)
+    program is reasonably accurate, (ie., if real equity markets
+    behave like the model says they should,) then a simulation on real
+    equity data by the tsinvest(1) program could be concluded with a
+    dump of the statistical data acquired in the simulation-and this
+    data used by the tsinvestsim(1) program to make a data set for a
+    hypothetical equity market, which could be compared against data
+    set for the real market. Note that although no equity's graph will
+    be recognizable, (each equity's price time series is generated by
+    a random number generator in the tsinvestsim(1) program,) the
+    comparison of the outputs of the tsinvest(1) program for both real
+    and hypothetical data sets should be similar. (The data is
+    presented in Table I and Table III, for comparison.)
+
+    This verification, (and regression testing,) was the reason the
+    files, stocks, and, tests/stocks.data, were included in the
+    distribution. (Note that the time interval represented by the
+    file, stocks, was one of the highest equity value growth periods
+    in the 20'th century-only equaled by the time interval 1921-1929.)
+
+    With some confidence in the equity price model used in the
+    tsinvest(1) program-and its ability to address "real world" data
+    set issues-a matrix of "typical" market scenarios, (from the
+    historical data of the US equity markets for the the 20'th
+    century,) was constructed using the tsinvestsim(1) program. These
+    are theoretical markets, (ie., what the tsinvest(1) program should
+    be doing, and how it should be optimizing portfolio growth in each
+    scenario, can be calculated.) The matrix, on one axis, was for low
+    volatility, optimal volatility, and, high volatility markets. On
+    the other axis, were equity markets where some equities had a long
+    term growth advantage, (ie., the portfolio growth could be
+    optimized,) and equity markets where no equity had a long term
+    growth advantage, (ie., the portfolio growth could not be
+    optimized.) In each case where no equity had a long term growth
+    advantage, the equity markets had antipersistence, no persistence,
+    and persistent characteristics.
+
+    Each of these 15 market scenarios was simulated, using the
+    tsinvestsim(1) and tsinvest(1) programs, with all optimization
+    options, (ie., the -d 1, -d 2, -d 3, -d 4, and -d 5 options,) for
+    100,000 days, (the tsshannoneffective(1) program says a minimum of
+    32,000 days would be required for a 50% confidence, and 100,000,
+    for a two sigma-97%-confidence in the accuracy of the simulation.)
+    The files used were, tests/non-volatile*, tests/optimal*, and,
+    tests/volatile*, which are included in the distribution for
+    verification and regression testing. The results of the
+    simulations on these files are tabulated in Table II.
+
+    With some confidence in the equity price model used in the
+    tsinvest(1) program-and its ability to address "real world" data
+    set issues-and its ability to handle at least "high growth" and
+    "typical" market scenarios, (from data in the the 20'th century,)
+    a test file, tests/crash-up.data, was created to test how the
+    tsinvest(1) program would handle a "crashing" market that was
+    preceeded by a long time interval of very high growth.  (Note
+    simulating only the "crash" is not very interesting-it results in
+    the tsinvest(1) program simply not engaging the market, at all-it
+    just refuses to invest.)  Unfortunately, the individual daily
+    closes for equities in the time period no longer exist. But the
+    indices do, and a data set for a hypothetical equity market that
+    has similar index characteristics can be created by the
+    tsinvestsim(1) program. The file, tests/crash-up.data, is included
+    in the distribution for verification and regression testing, and
+    the simulations on these files are tabulated at the bottom of
+    Table II. The file, tests/crash-up.data, represents the run up in
+    equity values from 1921 to late 1929, and the file,
+    tests/crash-down.data, (which is machine manufactured from the
+    file, tests/crash-up.data,) represents the deteriorating equity
+    market circumstances of late 1929 to 1932.
+
+    By no means should the inclusion of the 1929-1932 "crash" scenario
+    in the tsinvest(1) program regression test suite be taken to imply
+    that a "crash" of the US equity markets is eminent-it might be,
+    and might not be, (and, although it is inevitable that a "crash"
+    will happen someday, one should be sceptical of anyone that claims
+    to know when.)  The "crash" scenario was included for the specific
+    reason of completeness of data set regression testing that spanned
+    the 20'th century. Nothing more, or less. In fact, such "crashes"
+    as the 1929-1932 scenario are quite rare. Using the methodology
+    that is used internally in the tsinvest(1) program, one can
+    estimate the probability of such a "crash" happening with a pocket
+    calculator. The root mean square of the marginal returns of the
+    DJIA is about a percent, per day, (meaning that for 68% of the
+    time, ie., one standard deviation, the day-to-day fluctuations of
+    the DJIA is less than +/- 1%.) The actual 1929-1932 "crash" was a
+    very complex scenario, falling about 20%, then bouncing back, at
+    least twice. What was devastating was the long term, continuous,
+    deterioration that occurred between mid 1930, and late 1931, when
+    the market deteriorated to about 10% of its 1929 value, (ie., in
+    about about 400 trading days.) So, it would be expected that the
+    standard deviation of the value of the DJIA at the end of any 400
+    day time interval be about sqrt (400) * 0.01, or about 0.2,
+    (meaning that if we look at all possible 400 day time intervals of
+    the DJIA, we would expect the increase, or decrease, to be less
+    than 20%, 68% of the time.) What are the chances that the DJIA's
+    value would decrease 90% in any 400 day time interval?  That is a
+    0.9 / 0.2 = 4.5 sigma probability, or about, once every 294,000
+    trading days, or about once every 1,200 years, (ignoring
+    persistence, or leptokurtotic effects in the estimation, which
+    would make chances larger.)
+
+    Naturally, it would be desirable to have some confidence that the
+    tsinvest(1) program has some capability of addressing such low
+    probability events, which accounts for why the simulation is in
+    the distribution.
+
+Conclusions and Cautions:
+
+    Note that there was no "holy grail" solution for the different
+    market scenarios of the 20'th century. The options that made
+    significant money in the high growth time intervals, did not do as
+    well as other options in deteriorating market scenarios.  However,
+    most options, in most times, had modestly better portfolio growth
+    than the index, (and in all cases, the portfolio growth was
+    reasonably close to the growth of the index, irregardless of
+    market circumstances, or options used.) So which option should be
+    used? It depends on what one is trying to do-these are engineered
+    solutions, (that's why it is called, "financial engineering.")
+
+    Perhaps, a better way of looking at the tsinvest(1) program is to
+    consider it as a financial engineering "tool kit," or "work
+    bench", that can analyze, using different option and wagering
+    strategies, simultaneously, on real time current market data,
+    (ie., perhaps something like, the -d 5 option to optimize a short
+    term decision process with risk mitigation, and, simultaneously,
+    the -d 1 option to optimize long term decisions, risk management,
+    and hedging, etc.)
+
+    It is suggested that the tsinvest(1) program be run on market data
+    sets with different time intervals. For example, sampling the
+    market's time series at two day intervals, to the present, three
+    day intervals to the present, four, five, and six days to the
+    present, and so on, for the different options used.  It is, also,
+    recommended that this process be iterated for different durations
+    into the past, (ie., from many days, to many years, and in
+    between, so combinations, of say, sampling at one day intervals,
+    then at five day intervals, for both months and then years into
+    the past, for example.)
+
+    Note that it is a significant and demanding database issue, and a
+    template, tsinvestdb.c, is included in the distribution to
+    construct programs that operate on tsinvest(1) databases, such as
+    data blades, filters, time sampling, etc.
+
+    Also, stock ticker data formats and structures vary widely, and a
+    template, csv2tsinvest.c, is included in the distribution as an
+    example of a "hook" program to convert the spreadsheet format,
+    csv, used by the Yahoo! stock price historical database to the
+    tsinvest(1) time series database(s) format.
+
+    As a cautionary note, it is, obviously, presumptuous to rely on
+    computer analysis without subjecting the data to
+    scrutiny. Although computer analysis can be helpful, there is no
+    substitute for diligence and meticulous care in any kind of an
+    investment. In general, those that use computer analysis
+    effectively will do modestly better than those that don't use
+    computer analysis at all-but those that rely totally on
+    computational methods, in general, will fare poorly. Enough said.
+
+    As a last note, the program sources have a large amount of
+    internal documentation, much of it duplicated in the man(1)
+    pages-the tsinvest(1) program is less than a thousand lines of
+    active code, out of six thousand total lines in the source file.
+    If you want to work on it, read the man(1) page, then see the
+    section on program architecture in the source, Probably the invest
+    () and statistics () functions will be of the most interest.
+
+    John Conover
+    john@email.johncon.com
+    January 7, 2006

@@ -1,0 +1,26 @@
+<form method="post" action="$save_page">
+  <input type="hidden" name="transaction.type" value="4">
+  <input type="hidden" name="transaction.commission" value="0">
+  <input type="hidden" name="transaction.price2" value="0">
+  <input type="hidden" name="transaction.portfolio_id" value="$portfolio_id">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Sell Shares</th>
+    </tr>
+    <tr>
+      <td><b>Record Dividend For:</b></td>
+      <td>$company_name</td>
+    </tr>
+    <tr>
+      <td><b>Dividend Date:</b></td>
+      <td colspan="2"><select name="transaction.date-month">$month_options</select>/<select name="transaction.date-day">$day_options</select>/<select name="transaction.date-year">$year_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Number Of Shares:</b></td>
+      <td><input name="transaction.quantity" value="$transaction.quantity"></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save">
+    </tr>
+  </table>
+</form>

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory
+END
+ChannelBreakout.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/ChannelBreakout.pm
+END
+MarketPrice.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/MarketPrice.pm
+END
+StopOnExtreme.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/StopOnExtreme.pm
+END
+SignalClosingPrice.pm
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/SignalClosingPrice.pm
+END
+MinimumSlippage.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/MinimumSlippage.pm
+END
+ClosedToClose.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/ClosedToClose.pm
+END
+MaximumSlippage.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/OrderFactory/MaximumSlippage.pm
+END

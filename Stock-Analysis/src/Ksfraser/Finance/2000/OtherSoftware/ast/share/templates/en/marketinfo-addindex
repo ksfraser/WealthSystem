@@ -1,0 +1,19 @@
+<form method="post" action="$save_page" name="marketinfo">
+  <input type="hidden" name="marketinfo.market" value="-1">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Select Index</th>
+    </tr>
+    <tr>
+      <td><b>Symbol:</b></td>
+      <td><input type="text" name="marketinfo.symbol" value="^"></td>
+    </tr>
+    <tr>
+      <td><b>Name:</b></td>
+      <td><input type="text" name="marketinfo.name"></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

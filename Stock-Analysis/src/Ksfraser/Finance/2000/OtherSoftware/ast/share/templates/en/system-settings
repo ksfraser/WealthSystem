@@ -1,0 +1,56 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">System Settings</th>
+    </tr>
+    <tr>
+      <td><b>Admin Email Address:</b></td>
+      <td><input type="text" name="admin_email" value="$admin_email" class="awf_inputtext"><div class="awf_small">* will be used on emails sent by AST</div></td>
+    </tr>
+    <tr>
+      <td><b>Server URL:</b></td>
+      <td><input type="text" name="server_url" value="$server_url" class="awf_inputtext"></td>
+    </tr>
+    <tr>
+      <td><b>Default Language:</b></td>
+      <td><select name="language">$language_options</select></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Allow anonymous usage statistics:&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.sysset_usagestats></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="radio" $anon_stats_on name="anon_stats" value="on">On&nbsp;&nbsp;<input type="radio" $anon_stats_off name="anon_stats" value="off">Off</td>
+    </tr>
+        <tr>
+      <td colspan="2"><b>Allow user registrations:&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.sysset_register></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="radio" $enable_registration_on name="enable_registration" value="on">On&nbsp;&nbsp;<input type="radio" $anon_stats_off name="enable_registration" value="off">Off</td>
+    </tr>
+    <tr>
+        <td><b>Server Timezone:</b></td>
+        <td><select name="timezone">$timezone_options</select></td>
+    </tr>
+
+<!--    <tr>
+      <td><b>Font Path:</b></td>
+      <td><input type="text" name="settings.font_path" value=".font_path"><div class="awf_small">Usually /usr/share/fonts/corefonts</small></td>
+    </tr>
+    <tr>
+      <td><b>Font Name:</b></td>
+      <td><input type="text" name="settings.font_name" value=".font_name"><div class="awf_small">Such as arial.ttf</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="checkbox" name="settings.offline" .offline>&nbsp;Offline</td>
+    </tr>
+    <tr>
+      <td><b>Offline Message:</b></td>
+      <td><input type="text" name="settings.offline_message" value=".offline_message"></td>
+    </tr>
+-->
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

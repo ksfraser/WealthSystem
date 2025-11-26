@@ -1,0 +1,1540 @@
+#: ../defaults/en//test.po:13
+msgid "1.0\\n\""
+msgstr ""
+
+#: ../defaults/en//test.po:9
+msgid "2007-01-17  6:55-0500\\n\""
+msgstr ""
+
+#: ../defaults/en//checklistchecks:722 ../defaults/en//checklistchecks:728 ../defaults/en//checklistchecks:734 ../defaults/en//checklistchecks:740
+msgid "A bear trap occurs if prices breakout downward and then climb above the double top high. Score negative if a bear trap occurs, positive if it does not."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:950
+msgid "A bear trap occurs if prices falls less than 10% on the breakout and then rises above the formation high. Score negative if a bear trap occurs. Positive if there is no bear trap."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:236 ../defaults/en//checklistchecks:1106 ../defaults/en//checklistchecks:1304 ../defaults/en//checklistchecks:1403 ../defaults/en//checklistchecks:1520
+msgid "A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs and is not predicted."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1187
+msgid "A bear trap occurs when prices drop less than 10% then climb above formation top. Positive score if trap occurs."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:455 ../defaults/en//checklistchecks:461 ../defaults/en//checklistchecks:467 ../defaults/en//checklistchecks:473 ../defaults/en//checklistchecks:1100 ../defaults/en//checklistchecks:1181 ../defaults/en//checklistchecks:1298 ../defaults/en//checklistchecks:1397 ../defaults/en//checklistchecks:1514 ../defaults/en//checklistchecks:1583
+msgid "A bull trap occurs if prices rise by less than 10% then return to low of the bottom. Score negative if trap occurs, otherwise score positive."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:887 ../defaults/en//checklistchecks:1001
+msgid "A bull trap occurs if prices rise less than 10% on the breakout and then fall below the formation low. Score negative if a bull trap occurs. Positive if there is no bull trap."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:971
+msgid "A partial decline occurs if the last zag in the rectangle does not travel the full distance. Score positive if no partial decline occurs. Score negative if a partial decline occurs."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:698 ../defaults/en//checklistchecks:704 ../defaults/en//checklistchecks:710 ../defaults/en//checklistchecks:716 ../defaults/en//checklistchecks:1292 ../defaults/en//checklistchecks:1391 ../defaults/en//checklistchecks:1508
+msgid "A pullback after the breakout if the price returns to the confirmation level. Score negative if a pullback occurs. Otherwise score positive."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:944
+msgid "A pullback occurs when the price returns to the breakout price with in 30 days of the breakout. Score positive if no pullback occurs. Negative if a pullback occurs."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1286 ../defaults/en//checklistchecks:1385 ../defaults/en//checklistchecks:1502
+msgid "A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback does not occur, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:431 ../defaults/en//checklistchecks:437 ../defaults/en//checklistchecks:443 ../defaults/en//checklistchecks:449 ../defaults/en//checklistchecks:995 ../defaults/en//checklistchecks:1577
+msgid "A throwback occurs when price returns to breakout price with-in 30 days. A positive score if the throwback occurs, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:881
+msgid "A throwback occurs when the price returns to the breakout price with in 30 days of the breakout. Score positive if no throwback occurs. Negative if a throwback occurs."
+msgstr ""
+
+#: ../defaults/en//markets:32 ../defaults/en//markets:38
+msgid "AMEX"
+msgstr ""
+
+#: ../defaults/en//markets:272
+msgid "AMS"
+msgstr ""
+
+#: ../defaults/en//users:6
+msgid "ANDDCOKCDOIEOKFLGGPACMEBKAMOFDFIMANEJKHJ"
+msgstr ""
+
+#: ../defaults/en//portfolios:4
+msgid "AST Default Portfolio"
+msgstr ""
+
+#: ../defaults/en//worksheets:4
+msgid "AST Default Worksheet"
+msgstr ""
+
+#: ../defaults/en//markets:107 ../defaults/en//markets:113
+msgid "ASX"
+msgstr ""
+
+#: ../defaults/en//markets:114
+msgid "AUD"
+msgstr ""
+
+#: ../defaults/en//users:7
+msgid "Administrator"
+msgstr ""
+
+#: ../defaults/en//markets:33
+msgid "American Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:88
+msgid "Ascending Scallops (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:83
+msgid "Ascending Scallops (Bullish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:108
+msgid "Ascending Triangles (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:103
+msgid "Ascending Triangles (Bullish)"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:22 ../defaults/en//checklistchecks:73
+msgid "Aspect Ratio"
+msgstr ""
+
+#: ../defaults/en//currencies:27
+msgid "Australian Dollar"
+msgstr ""
+
+#: ../defaults/en//markets:108
+msgid "Australian Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//comparisonviews:4
+msgid "Automatically Generated Default Comparison"
+msgstr ""
+
+#: ../defaults/en//sectors:183
+msgid "Automobiles & Parts"
+msgstr ""
+
+#: ../defaults/en//markets:497
+msgid "BARC"
+msgstr ""
+
+#: ../defaults/en//markets:503
+msgid "BARCELONA"
+msgstr ""
+
+#: ../defaults/en//markets:398
+msgid "BERLIN"
+msgstr ""
+
+#: ../defaults/en//markets:392
+msgid "BERLN"
+msgstr ""
+
+#: ../defaults/en//markets:512
+msgid "BILBA"
+msgstr ""
+
+#: ../defaults/en//markets:518
+msgid "BILBAO"
+msgstr ""
+
+#: ../defaults/en//markets:197
+msgid "BOV"
+msgstr ""
+
+#: ../defaults/en//markets:203
+msgid "BOVESPA"
+msgstr ""
+
+#: ../defaults/en//markets:204
+msgid "BRL"
+msgstr ""
+
+#: ../defaults/en//markets:257
+msgid "BRU"
+msgstr ""
+
+#: ../defaults/en//markets:182 ../defaults/en//markets:188
+msgid "BSE"
+msgstr ""
+
+#: ../defaults/en//sectors:228 ../defaults/en//sectors:251
+msgid "Banks"
+msgstr ""
+
+#: ../defaults/en//markets:498
+msgid "Barcelona Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:286 ../defaults/en//checklistchecks:292 ../defaults/en//checklistchecks:298 ../defaults/en//checklistchecks:304
+msgid "Base Type"
+msgstr ""
+
+#: ../defaults/en//sectors:168
+msgid "Basic Resources"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:235 ../defaults/en//checklistchecks:721 ../defaults/en//checklistchecks:727 ../defaults/en//checklistchecks:733 ../defaults/en//checklistchecks:739 ../defaults/en//checklistchecks:949 ../defaults/en//checklistchecks:1105 ../defaults/en//checklistchecks:1186 ../defaults/en//checklistchecks:1303 ../defaults/en//checklistchecks:1402 ../defaults/en//checklistchecks:1519
+msgid "Bear Trap"
+msgstr ""
+
+#: ../defaults/en//markets:393
+msgid "Berlin Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//markets:513
+msgid "Bilbao Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//sectors:286
+msgid "Biotechnology"
+msgstr ""
+
+#: ../defaults/en//markets:183
+msgid "Bombay Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//currencies:43
+msgid "Brazilian Real"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:85 ../defaults/en//checklistchecks:160 ../defaults/en//checklistchecks:166 ../defaults/en//checklistchecks:406 ../defaults/en//checklistchecks:412 ../defaults/en//checklistchecks:418 ../defaults/en//checklistchecks:424 ../defaults/en//checklistchecks:673 ../defaults/en//checklistchecks:679 ../defaults/en//checklistchecks:685 ../defaults/en//checklistchecks:691 ../defaults/en//checklistchecks:874 ../defaults/en//checklistchecks:982 ../defaults/en//checklistchecks:1087 ../defaults/en//checklistchecks:1093 ../defaults/en//checklistchecks:1168 ../defaults/en//checklistchecks:1174 ../defaults/en//checklistchecks:1279 ../defaults/en//checklistchecks:1378 ../defaults/en//checklistchecks:1489 ../defaults/en//checklistchecks:1495 ../defaults/en//checklistchecks:1633
+msgid "Breakout Volume"
+msgstr ""
+
+#: ../defaults/en//currencies:19
+msgid "British Pound"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:18
+msgid "Broadening Top (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:13
+msgid "Broadening Top (Bullish)"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:454 ../defaults/en//checklistchecks:460 ../defaults/en//checklistchecks:466 ../defaults/en//checklistchecks:472 ../defaults/en//checklistchecks:886 ../defaults/en//checklistchecks:1000 ../defaults/en//checklistchecks:1099 ../defaults/en//checklistchecks:1180 ../defaults/en//checklistchecks:1297 ../defaults/en//checklistchecks:1396 ../defaults/en//checklistchecks:1513 ../defaults/en//checklistchecks:1582
+msgid "Bull Trap"
+msgstr ""
+
+#: ../defaults/en//markets:9 ../defaults/en//markets:84
+msgid "CAD"
+msgstr ""
+
+#: ../defaults/en//markets:242 ../defaults/en//markets:248
+msgid "CSE"
+msgstr ""
+
+#: ../defaults/en//currencies:3
+msgid "Canadian Dollar"
+msgstr ""
+
+#: ../defaults/en//sectors:7
+msgid "Canadian Mining Index"
+msgstr ""
+
+#: ../defaults/en//sectors:163
+msgid "Chemicals"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:38
+msgid "Compare companies by PE Ratio"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:22
+msgid "Compares EPS Growth"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:46
+msgid "Compares Market Capitalization"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:30
+msgid "Compares Return-on-Equity"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:14
+msgid "Compares dividend yields"
+msgstr ""
+
+#: ../defaults/en//sectors:369
+msgid "Computer Hardware"
+msgstr ""
+
+#: ../defaults/en//sectors:374
+msgid "Computer Service"
+msgstr ""
+
+#: ../defaults/en//sectors:412
+msgid "Computer Technology"
+msgstr ""
+
+#: ../defaults/en//sectors:271
+msgid "Computers"
+msgstr ""
+
+#: ../defaults/en//sectors:110
+msgid "Comsumer Staples"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:124 ../defaults/en//checklistchecks:217 ../defaults/en//checklistchecks:310 ../defaults/en//checklistchecks:316 ../defaults/en//checklistchecks:322 ../defaults/en//checklistchecks:328 ../defaults/en//checklistchecks:577 ../defaults/en//checklistchecks:583 ../defaults/en//checklistchecks:589 ../defaults/en//checklistchecks:595 ../defaults/en//checklistchecks:832 ../defaults/en//checklistchecks:913 ../defaults/en//checklistchecks:1033 ../defaults/en//checklistchecks:1045 ../defaults/en//checklistchecks:1231 ../defaults/en//checklistchecks:1237 ../defaults/en//checklistchecks:1336 ../defaults/en//checklistchecks:1342 ../defaults/en//checklistchecks:1447 ../defaults/en//checklistchecks:1453 ../defaults/en//checklistchecks:1558 ../defaults/en//checklistchecks:1603
+msgid "Consolidation Region"
+msgstr ""
+
+#: ../defaults/en//sectors:173
+msgid "Construction & Materials"
+msgstr ""
+
+#: ../defaults/en//sectors:12
+msgid "Consumer Discreet"
+msgstr ""
+
+#: ../defaults/en//sectors:477
+msgid "Consumer Discret"
+msgstr ""
+
+#: ../defaults/en//sectors:105 ../defaults/en//sectors:417
+msgid "Consumer Discrete"
+msgstr ""
+
+#: ../defaults/en//sectors:296 ../defaults/en//sectors:354
+msgid "Consumer Goods"
+msgstr ""
+
+#: ../defaults/en//sectors:301 ../defaults/en//sectors:359
+msgid "Consumer Services"
+msgstr ""
+
+#: ../defaults/en//sectors:17 ../defaults/en//sectors:422 ../defaults/en//sectors:482
+msgid "Consumer Staples"
+msgstr ""
+
+#: ../defaults/en//markets:243
+msgid "Copenhagen Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//markets:407
+msgid "DUS"
+msgstr ""
+
+#: ../defaults/en//markets:413
+msgid "DUSSELDORF"
+msgstr ""
+
+#: ../defaults/en//comparisonviews:3
+msgid "Default Comparison"
+msgstr ""
+
+#: ../defaults/en//portfolios:3
+msgid "Default Portfolio"
+msgstr ""
+
+#: ../defaults/en//worksheets:3
+msgid "Default Worksheet"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:6
+msgid "Default portfolio view"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:98
+msgid "Descending Scallops (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:93
+msgid "Descending Scallops (Bullish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:118
+msgid "Descending Triangles (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:113
+msgid "Descending Triangles (Bullish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:23
+msgid "Diamond (Bearish)"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:13
+msgid "Dividends"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:28
+msgid "Double Bottom (Adam & Adam)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:33
+msgid "Double Bottom (Adam & Eve)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:38
+msgid "Double Bottom (Eve & Adam)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:43
+msgid "Double Bottom (Eve & Eve)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:48
+msgid "Double Top (Adam & Adam) (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:53
+msgid "Double Top (Adam & Eve) (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:58
+msgid "Double Top (Eve & Adam) (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:63
+msgid "Double Top (Eve & Eve) (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:3
+msgid "Down Trend line Breakout"
+msgstr ""
+
+#: ../defaults/en//markets:408
+msgid "Dusseldorf Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//test.po:15
+msgid "ENCODING\""
+msgstr ""
+
+#: ../defaults/en//views-worksheet:21
+msgid "EPS"
+msgstr ""
+
+#: ../defaults/en//markets:144 ../defaults/en//markets:234 ../defaults/en//markets:249 ../defaults/en//markets:264 ../defaults/en//markets:279 ../defaults/en//markets:294 ../defaults/en//markets:309 ../defaults/en//markets:399 ../defaults/en//markets:414 ../defaults/en//markets:429 ../defaults/en//markets:444 ../defaults/en//markets:459 ../defaults/en//markets:474 ../defaults/en//markets:489 ../defaults/en//markets:504 ../defaults/en//markets:519
+msgid "EUR"
+msgstr ""
+
+#: ../defaults/en//markets:278
+msgid "EURONEXT-AMS"
+msgstr ""
+
+#: ../defaults/en//markets:263
+msgid "EURONEXT-BRU"
+msgstr ""
+
+#: ../defaults/en//markets:308
+msgid "EURONEXT-LIS"
+msgstr ""
+
+#: ../defaults/en//markets:293
+msgid "EURONEXT-PAR"
+msgstr ""
+
+#: ../defaults/en//sectors:22 ../defaults/en//sectors:115 ../defaults/en//sectors:306 ../defaults/en//sectors:339 ../defaults/en//sectors:427 ../defaults/en//sectors:487
+msgid "Energy"
+msgstr ""
+
+#: ../defaults/en//currencies:11
+msgid "Euro"
+msgstr ""
+
+#: ../defaults/en//markets:273
+msgid "Euronext Amsterdam"
+msgstr ""
+
+#: ../defaults/en//markets:258
+msgid "Euronext Brussels"
+msgstr ""
+
+#: ../defaults/en//markets:303
+msgid "Euronext Lisbon"
+msgstr ""
+
+#: ../defaults/en//markets:288
+msgid "Euronext Paris"
+msgstr ""
+
+#: ../defaults/en//markets:422
+msgid "FRANK"
+msgstr ""
+
+#: ../defaults/en//markets:428
+msgid "FRANKFURT"
+msgstr ""
+
+#: ../defaults/en//test.po:11
+msgid "FULL NAME <EMAIL@ADDRESS>\\n\""
+msgstr ""
+
+#: ../defaults/en//sectors:238
+msgid "Financial Services"
+msgstr ""
+
+#: ../defaults/en//sectors:27 ../defaults/en//sectors:120 ../defaults/en//sectors:256 ../defaults/en//sectors:344 ../defaults/en//sectors:432 ../defaults/en//sectors:492
+msgid "Financials"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:826 ../defaults/en//checklistchecks:1552
+msgid "Flat Base"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:45
+msgid "Flat"
+msgstr ""
+
+#: ../defaults/en//sectors:188
+msgid "Food & Beverage"
+msgstr ""
+
+#: ../defaults/en//markets:423
+msgid "Frankfurt Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:4 ../defaults/en//checklisttypes:9 ../defaults/en//checklisttypes:14 ../defaults/en//checklisttypes:19 ../defaults/en//checklisttypes:24 ../defaults/en//checklisttypes:29 ../defaults/en//checklisttypes:34 ../defaults/en//checklisttypes:39 ../defaults/en//checklisttypes:44 ../defaults/en//checklisttypes:49 ../defaults/en//checklisttypes:54 ../defaults/en//checklisttypes:59 ../defaults/en//checklisttypes:64 ../defaults/en//checklisttypes:69 ../defaults/en//checklisttypes:74 ../defaults/en//checklisttypes:79 ../defaults/en//checklisttypes:84 ../defaults/en//checklisttypes:89 ../defaults/en//checklisttypes:94 ../defaults/en//checklisttypes:99 ../defaults/en//checklisttypes:104 ../defaults/en//checklisttypes:109 ../defaults/en//checklisttypes:114 ../defaults/en//checklisttypes:119 ../defaults/en//checklisttypes:124 ../defaults/en//checklisttypes:129 ../defaults/en//checklisttypes:134 ../defaults/en//checklisttypes:139
+msgid "From Trading Classical Chart Patterns, Bulkowski 2002"
+msgstr ""
+
+#: ../defaults/en//markets:99
+msgid "GBP"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1192 ../defaults/en//checklistchecks:1198
+msgid "Gap"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:40 ../defaults/en//checklistchecks:241 ../defaults/en//checklistchecks:478 ../defaults/en//checklistchecks:484 ../defaults/en//checklistchecks:490 ../defaults/en//checklistchecks:496 ../defaults/en//checklistchecks:745 ../defaults/en//checklistchecks:751 ../defaults/en//checklistchecks:757 ../defaults/en//checklistchecks:763 ../defaults/en//checklistchecks:1006 ../defaults/en//checklistchecks:1408 ../defaults/en//checklistchecks:1525 ../defaults/en//checklistchecks:1639
+msgid "Gaps"
+msgstr ""
+
+#: ../defaults/en//sectors:291
+msgid "Gold Mining"
+msgstr ""
+
+#: ../defaults/en//sectors:32 ../defaults/en//sectors:497
+msgid "Gold"
+msgstr ""
+
+#: ../defaults/en//markets:437
+msgid "HAMB"
+msgstr ""
+
+#: ../defaults/en//markets:443
+msgid "HAMBURG"
+msgstr ""
+
+#: ../defaults/en//markets:69
+msgid "HKD"
+msgstr ""
+
+#: ../defaults/en//markets:62 ../defaults/en//markets:68
+msgid "HKSE"
+msgstr ""
+
+#: ../defaults/en//markets:438
+msgid "Hamburg Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:68
+msgid "Head-and-Shoulders Bottom"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:73
+msgid "Head-and-Shoulders Top (Bearish)"
+msgstr ""
+
+#: ../defaults/en//sectors:37 ../defaults/en//sectors:125 ../defaults/en//sectors:198 ../defaults/en//sectors:311 ../defaults/en//sectors:349 ../defaults/en//sectors:437 ../defaults/en//sectors:502
+msgid "Health Care"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1564
+msgid "Higher Right Bottoms"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1621
+msgid "Higher Right Top"
+msgstr ""
+
+#: ../defaults/en//currencies:15
+msgid "Hong Kong Dollar"
+msgstr ""
+
+#: ../defaults/en//markets:63
+msgid "Hong Kong Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//markets:324
+msgid "IDR"
+msgstr ""
+
+#: ../defaults/en//markets:189 ../defaults/en//markets:339
+msgid "INR"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:74
+msgid "If the downward angle is between 48 and 90 degrees, it is negative, between 24 and 48 is neutral and between 0 and 24 is positive."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:23
+msgid "If the downward angle is between 52 and 90 degrees, it is negative, between 12 and 42 is neutral and between 0 and 12 is positive."
+msgstr ""
+
+#: ../defaults/en//currencies:39
+msgid "Indian Rupee"
+msgstr ""
+
+#: ../defaults/en//currencies:51
+msgid "Indonesia Rupiahs"
+msgstr ""
+
+#: ../defaults/en//sectors:178
+msgid "Industrial Goods & Services"
+msgstr ""
+
+#: ../defaults/en//sectors:42 ../defaults/en//sectors:130 ../defaults/en//sectors:261 ../defaults/en//sectors:364 ../defaults/en//sectors:442 ../defaults/en//sectors:507
+msgid "Industrials"
+msgstr ""
+
+#: ../defaults/en//sectors:47 ../defaults/en//sectors:135 ../defaults/en//sectors:407 ../defaults/en//sectors:512
+msgid "Information Technology"
+msgstr ""
+
+#: ../defaults/en//sectors:233 ../defaults/en//sectors:266
+msgid "Insurance"
+msgstr ""
+
+#: ../defaults/en//currencies:22
+msgid "JPY"
+msgstr ""
+
+#: ../defaults/en//markets:317 ../defaults/en//markets:323
+msgid "JSE"
+msgstr ""
+
+#: ../defaults/en//markets:318
+msgid "Jakarta Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//currencies:23
+msgid "Japanese Yen"
+msgstr ""
+
+#: ../defaults/en//markets:362 ../defaults/en//markets:368
+msgid "KOREA"
+msgstr ""
+
+#: ../defaults/en//markets:347
+msgid "KOSDA"
+msgstr ""
+
+#: ../defaults/en//markets:348 ../defaults/en//markets:353
+msgid "KOSDAQ"
+msgstr ""
+
+#: ../defaults/en//markets:354 ../defaults/en//markets:369
+msgid "KRW"
+msgstr ""
+
+#: ../defaults/en//markets:363
+msgid "Korea Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//test.po:12
+msgid "LANGUAGE <LL@li.org>\\n\""
+msgstr ""
+
+#: ../defaults/en//markets:302
+msgid "LIS"
+msgstr ""
+
+#: ../defaults/en//markets:92 ../defaults/en//markets:98
+msgid "LSE"
+msgstr ""
+
+#: ../defaults/en//markets:93
+msgid "London Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//markets:137 ../defaults/en//markets:143
+msgid "MLSE"
+msgstr ""
+
+#: ../defaults/en//markets:227 ../defaults/en//markets:233
+msgid "MSE"
+msgstr ""
+
+#: ../defaults/en//markets:452
+msgid "MUNIC"
+msgstr ""
+
+#: ../defaults/en//markets:458
+msgid "MUNICH"
+msgstr ""
+
+#: ../defaults/en//markets:228
+msgid "Madrid Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//sectors:92 ../defaults/en//sectors:537
+msgid "Manufacturing"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:53
+msgid "Margins"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:45
+msgid "Market Cap"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:52 ../defaults/en//checklistchecks:103 ../defaults/en//checklistchecks:196 ../defaults/en//checklistchecks:202 ../defaults/en//checklistchecks:253 ../defaults/en//checklistchecks:526 ../defaults/en//checklistchecks:532 ../defaults/en//checklistchecks:538 ../defaults/en//checklistchecks:544 ../defaults/en//checklistchecks:793 ../defaults/en//checklistchecks:799 ../defaults/en//checklistchecks:805 ../defaults/en//checklistchecks:811 ../defaults/en//checklistchecks:898 ../defaults/en//checklistchecks:955 ../defaults/en//checklistchecks:1018 ../defaults/en//checklistchecks:1117 ../defaults/en//checklistchecks:1123 ../defaults/en//checklistchecks:1204 ../defaults/en//checklistchecks:1210 ../defaults/en//checklistchecks:1309 ../defaults/en//checklistchecks:1315 ../defaults/en//checklistchecks:1420 ../defaults/en//checklistchecks:1426 ../defaults/en//checklistchecks:1537 ../defaults/en//checklistchecks:1588 ../defaults/en//checklistchecks:1651
+msgid "Market Capitalization"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:46 ../defaults/en//checklistchecks:97 ../defaults/en//checklistchecks:184 ../defaults/en//checklistchecks:190 ../defaults/en//checklistchecks:247 ../defaults/en//checklistchecks:502 ../defaults/en//checklistchecks:508 ../defaults/en//checklistchecks:514 ../defaults/en//checklistchecks:520 ../defaults/en//checklistchecks:769 ../defaults/en//checklistchecks:775 ../defaults/en//checklistchecks:781 ../defaults/en//checklistchecks:787 ../defaults/en//checklistchecks:892 ../defaults/en//checklistchecks:1012 ../defaults/en//checklistchecks:1111 ../defaults/en//checklistchecks:1414 ../defaults/en//checklistchecks:1531 ../defaults/en//checklistchecks:1645
+msgid "Market Trend"
+msgstr ""
+
+#: ../defaults/en//sectors:52 ../defaults/en//sectors:140 ../defaults/en//sectors:316 ../defaults/en//sectors:379 ../defaults/en//sectors:447 ../defaults/en//sectors:517
+msgid "Materials"
+msgstr ""
+
+#: ../defaults/en//sectors:208
+msgid "Media"
+msgstr ""
+
+#: ../defaults/en//markets:138
+msgid "Milan Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:37
+msgid "Mixed Currency"
+msgstr ""
+
+#: ../defaults/en//markets:453
+msgid "Munich Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//markets:17
+msgid "NASD"
+msgstr ""
+
+#: ../defaults/en//markets:23
+msgid "NASDAQ"
+msgstr ""
+
+#: ../defaults/en//markets:219
+msgid "NOK"
+msgstr ""
+
+#: ../defaults/en//markets:338
+msgid "NSE_INDIA"
+msgstr ""
+
+#: ../defaults/en//markets:332
+msgid "NSI"
+msgstr ""
+
+#: ../defaults/en//markets:47 ../defaults/en//markets:53
+msgid "NYSE"
+msgstr ""
+
+#: ../defaults/en//markets:18
+msgid "Nasdaq"
+msgstr ""
+
+#: ../defaults/en//markets:333
+msgid "National Stock Exchange of India"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:838 ../defaults/en//checklistchecks:919
+msgid "Necklines"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:47 ../defaults/en//checklistchecks:1013 ../defaults/en//checklistchecks:1112 ../defaults/en//checklistchecks:1415 ../defaults/en//checklistchecks:1532 ../defaults/en//checklistchecks:1646
+msgid "Negative if market is rising, positive if market is falling."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:242 ../defaults/en//checklistchecks:485 ../defaults/en//checklistchecks:758
+msgid "Negative if price gap on breakout. Positive if no price gap."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:218 ../defaults/en//checklistchecks:311 ../defaults/en//checklistchecks:323 ../defaults/en//checklistchecks:329 ../defaults/en//checklistchecks:578 ../defaults/en//checklistchecks:584 ../defaults/en//checklistchecks:590 ../defaults/en//checklistchecks:596 ../defaults/en//checklistchecks:833 ../defaults/en//checklistchecks:914 ../defaults/en//checklistchecks:1034 ../defaults/en//checklistchecks:1046 ../defaults/en//checklistchecks:1232 ../defaults/en//checklistchecks:1238 ../defaults/en//checklistchecks:1448 ../defaults/en//checklistchecks:1454 ../defaults/en//checklistchecks:1559 ../defaults/en//checklistchecks:1604
+msgid "Negative if there is a horizontal consolidation region before the pattern, otherwise positive."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:869
+msgid "Negative if volume is rising, positive if volume is falling."
+msgstr ""
+
+#: ../defaults/en//markets:48
+msgid "New York Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//currencies:47
+msgid "Norwegian Krone"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:61
+msgid "Notes"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:10
+msgid "Number of Touches"
+msgstr ""
+
+#: ../defaults/en//markets:247
+msgid "OMXC20.CO"
+msgstr ""
+
+#: ../defaults/en//markets:212 ../defaults/en//markets:218
+msgid "OSE"
+msgstr ""
+
+#: ../defaults/en//markets:123
+msgid "OTC BB"
+msgstr ""
+
+#: ../defaults/en//markets:122 ../defaults/en//markets:128
+msgid "OTCBB"
+msgstr ""
+
+#: ../defaults/en//sectors:158
+msgid "Oil & Gas"
+msgstr ""
+
+#: ../defaults/en//markets:213
+msgid "Oslo Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//test.po:8
+msgid "PACKAGE VERSION\\n\""
+msgstr ""
+
+#: ../defaults/en//markets:287
+msgid "PAR"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:37
+msgid "PE Ratio"
+msgstr ""
+
+#: ../defaults/en//markets:307
+msgid "PSI.NX"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:172 ../defaults/en//checklistchecks:970
+msgid "Partial Decline"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:178
+msgid "Partial Rise"
+msgstr ""
+
+#: ../defaults/en//sectors:193
+msgid "Personal & Household Goods"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:5
+msgid "Portfolio"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:554
+msgid "Positive for intermediate term (3 to 6 months), negative otherwise."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:269
+msgid "Positive for long term (more than 3 months), negative for shorter than 3 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1427
+msgid "Positive for mid caps and small caps, negative for large caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1316
+msgid "Positive for mid caps, negative for large caps, neutral for small caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:812
+msgid "Positive for mid caps, negative for small caps or large caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:572
+msgid "Positive for short term (0 to 3 months), negative otherwise."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:212 ../defaults/en//checklistchecks:275
+msgid "Positive for short term (less than 3 months), negative for longer than 3 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:281
+msgid "Positive for short term (less than 3 months), or long term (more than 6 months). Negative for 3 to 6 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:263
+msgid "Positive for short term (less than 6 months), negative for longer than 6 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:560 ../defaults/en//checklistchecks:566
+msgid "Positive for short to intermediate term (0 to 6 months), negative otherwise."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:53 ../defaults/en//checklistchecks:104 ../defaults/en//checklistchecks:197 ../defaults/en//checklistchecks:899 ../defaults/en//checklistchecks:956 ../defaults/en//checklistchecks:1589
+msgid "Positive for small caps or large caps, negative for mid caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:203 ../defaults/en//checklistchecks:254 ../defaults/en//checklistchecks:527 ../defaults/en//checklistchecks:533 ../defaults/en//checklistchecks:545 ../defaults/en//checklistchecks:800 ../defaults/en//checklistchecks:1124 ../defaults/en//checklistchecks:1211 ../defaults/en//checklistchecks:1538
+msgid "Positive for small caps or mid caps, negative for large caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1205 ../defaults/en//checklistchecks:1310
+msgid "Positive for small caps, negative for large caps and neutral for mid caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1421
+msgid "Positive for small caps, negative for large caps or mid caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1652
+msgid "Positive for small caps, negative for large caps, neutral for mid caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1118
+msgid "Positive for small caps, negative for mid caps or large caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:539 ../defaults/en//checklistchecks:806
+msgid "Positive for small caps, negative for mid caps, neutral for large caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:794
+msgid "Positive for small caps, negative for mid or large caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1019
+msgid "Positive for small caps, negative large caps, neutral for mid caps."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:161 ../defaults/en//checklistchecks:167 ../defaults/en//checklistchecks:407 ../defaults/en//checklistchecks:413 ../defaults/en//checklistchecks:425 ../defaults/en//checklistchecks:875
+msgid "Positive if breakout volume is above average, negative if breakout volume below average volume."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:86 ../defaults/en//checklistchecks:674 ../defaults/en//checklistchecks:680 ../defaults/en//checklistchecks:686 ../defaults/en//checklistchecks:692 ../defaults/en//checklistchecks:983 ../defaults/en//checklistchecks:1088 ../defaults/en//checklistchecks:1094 ../defaults/en//checklistchecks:1169 ../defaults/en//checklistchecks:1175 ../defaults/en//checklistchecks:1280 ../defaults/en//checklistchecks:1379 ../defaults/en//checklistchecks:1490 ../defaults/en//checklistchecks:1496
+msgid "Positive if breakout volume is above average, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:419
+msgid "Positive if breakout volume is below average, negative if breakout volume above average volume."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:377
+msgid "Positive if height is shorter than 16% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1256
+msgid "Positive if height is taller than 10% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:989 ../defaults/en//checklistchecks:1262 ../defaults/en//checklistchecks:1361
+msgid "Positive if height is taller than 11% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1163 ../defaults/en//checklistchecks:1355
+msgid "Positive if height is taller than 12% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:230
+msgid "Positive if height is taller than 13% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1478
+msgid "Positive if height is taller than 14% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:632 ../defaults/en//checklistchecks:1472
+msgid "Positive if height is taller than 16% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:365 ../defaults/en//checklistchecks:626 ../defaults/en//checklistchecks:638 ../defaults/en//checklistchecks:932
+msgid "Positive if height is taller than 17% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:143 ../defaults/en//checklistchecks:149 ../defaults/en//checklistchecks:359 ../defaults/en//checklistchecks:371 ../defaults/en//checklistchecks:644 ../defaults/en//checklistchecks:1070
+msgid "Positive if height is taller than 18% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:863 ../defaults/en//checklistchecks:1064 ../defaults/en//checklistchecks:1616
+msgid "Positive if height is taller than 20% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1157
+msgid "Positive if height is taller than 24% of the breakout price."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:98
+msgid "Positive if market is rising, negative if market is falling."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:908
+msgid "Positive if pattern length is 3 months or less, negative if the pattern is longer than 3 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:821
+msgid "Positive if pattern length is 3 months or less, neutral if the pattern is 3 to 6 months and negative if the pattern is longer than 6 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:113
+msgid "Positive if pattern length is 3 months or longer, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:119
+msgid "Positive if pattern length is 3 months to 6 months, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:41 ../defaults/en//checklistchecks:1007 ../defaults/en//checklistchecks:1409 ../defaults/en//checklistchecks:1526 ../defaults/en//checklistchecks:1640
+msgid "Positive if price gap on breakout. Negative if no price gap."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1199
+msgid "Positive if price gaps down on breakout, negative if it does not."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1193
+msgid "Positive if price gaps up on breakout, negative if it does not."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:479 ../defaults/en//checklistchecks:491 ../defaults/en//checklistchecks:497 ../defaults/en//checklistchecks:746 ../defaults/en//checklistchecks:752 ../defaults/en//checklistchecks:764
+msgid "Positive if price gaps upward on breakout. Negative if price does not gap."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:92
+msgid "Positive if price is in the bottom 2/3 of the yearly price range. Negative if the price is in the top 1/3 of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:35
+msgid "Positive if price is in the highest or lowest third of its yearly range. Negative if price is in middle third."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:608
+msgid "Positive if price is in the highest or middle third of its yearly range. Negative if price is in the lowest third."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:602 ../defaults/en//checklistchecks:614 ../defaults/en//checklistchecks:620 ../defaults/en//checklistchecks:1571 ../defaults/en//checklistchecks:1610
+msgid "Positive if price is in the highest third of its yearly range. Negative if price is in the lowest or middle third."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:827
+msgid "Positive if the base (top of pattern) is flat, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:341 ../defaults/en//checklistchecks:353
+msgid "Positive if the current price is in the bottom or top third of its yearly range, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:137 ../defaults/en//checklistchecks:335
+msgid "Positive if the current price is in the bottom third of its yearly range, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:347
+msgid "Positive if the current price is in the middle third of its yearly range, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:857
+msgid "Positive if the current price is in the top third of its yearly range, negative if it is in the middle third and neutral if it is in the bottom third."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:131 ../defaults/en//checklistchecks:224
+msgid "Positive if the current price is in the top third of its yearly range, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:926
+msgid "Positive if the left shoulder has a higher low than the right, neutral if both shoulders are equal. Negative otherwise."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:845
+msgid "Positive if the left shoulder has a higher low than the right, or if both shoulders are equal. Negative otherwise."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:509 ../defaults/en//checklistchecks:515 ../defaults/en//checklistchecks:770 ../defaults/en//checklistchecks:776 ../defaults/en//checklistchecks:782 ../defaults/en//checklistchecks:788
+msgid "Positive if the market is falling, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:185 ../defaults/en//checklistchecks:191 ../defaults/en//checklistchecks:248 ../defaults/en//checklistchecks:503 ../defaults/en//checklistchecks:521 ../defaults/en//checklistchecks:893
+msgid "Positive if the market is rising, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:839
+msgid "Positive if the neckline (the peaks on either side of the head) are downward sloping, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:920
+msgid "Positive if the neckline (the peaks on either side of the head) are upward sloping or horizontal, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:287 ../defaults/en//checklistchecks:293 ../defaults/en//checklistchecks:299 ../defaults/en//checklistchecks:305
+msgid "Positive if the pattern has flat base, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:68
+msgid "Positive if the trend line is longer than 137 days."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:17
+msgid "Positive if the trend line is longer than 139 days."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:11
+msgid "Positive if there are more than 4 touches."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:125 ../defaults/en//checklistchecks:317 ../defaults/en//checklistchecks:1337 ../defaults/en//checklistchecks:1343
+msgid "Positive if there is a horizontal consolidation region before the pattern, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:173
+msgid "Positive if there is a partial decline, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:179
+msgid "Positive if there is a partial rise, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:62
+msgid "Positive if touches are spaced 28 days or more apart on average."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:5
+msgid "Positive if touches are spaced 29 days or more apart on average."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1598
+msgid "Positive if trend formation (down trend before the pattern) is between 3 and 6 months, neutral if it is less than 3 months and otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1547
+msgid "Positive if trend formation (up trend before the pattern) is longer than 6 months, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:383 ../defaults/en//checklistchecks:389 ../defaults/en//checklistchecks:395
+msgid "Positive if volume is falling, negative if volume is rising."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:155 ../defaults/en//checklistchecks:401 ../defaults/en//checklistchecks:938
+msgid "Positive if volume is rising, negative if volume is falling."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:29 ../defaults/en//checklistchecks:80 ../defaults/en//checklistchecks:662 ../defaults/en//checklistchecks:668 ../defaults/en//checklistchecks:1076 ../defaults/en//checklistchecks:1082 ../defaults/en//checklistchecks:1274 ../defaults/en//checklistchecks:1373
+msgid "Positive is volume is declining, negative if volume is increasing."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1268 ../defaults/en//checklistchecks:1367 ../defaults/en//checklistchecks:1484
+msgid "Positive is volume is increasing, negative if volume is declining."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:650 ../defaults/en//checklistchecks:656
+msgid "Positive is volume is rising, negative if volume is declining."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:851
+msgid "Positive right shoulder has a higher volume than the left shoulder. Negative if the left shoulder has a higher volume than the right."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1553
+msgid "Positive score for a flat base, negative score otherwise."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:112 ../defaults/en//checklistchecks:118 ../defaults/en//checklistchecks:820 ../defaults/en//checklistchecks:907 ../defaults/en//checklistchecks:964 ../defaults/en//checklistchecks:1027 ../defaults/en//checklistchecks:1039 ../defaults/en//checklistchecks:1132 ../defaults/en//checklistchecks:1138 ../defaults/en//checklistchecks:1219 ../defaults/en//checklistchecks:1225 ../defaults/en//checklistchecks:1324 ../defaults/en//checklistchecks:1330 ../defaults/en//checklistchecks:1435 ../defaults/en//checklistchecks:1441
+msgid "Price Trend Leading to Pattern"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1133
+msgid "Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is 3 months long or longer, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1028 ../defaults/en//checklistchecks:1040 ../defaults/en//checklistchecks:1139
+msgid "Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is between 0 and 3 months long, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:965
+msgid "Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is between 0 and 6 months long, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1436
+msgid "Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 3 months long, or negative if longer than 6 months."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1220 ../defaults/en//checklistchecks:1226 ../defaults/en//checklistchecks:1442
+msgid "Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 3 months long, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1325 ../defaults/en//checklistchecks:1331
+msgid "Price trend leading to pattern is length of time the stock has been going in the direction you intend to play. Positive if price trend leading to the pattern is shorter (or equal to) than 6 months long, otherwise negative."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:943
+msgid "Pullback"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:697 ../defaults/en//checklistchecks:703 ../defaults/en//checklistchecks:709 ../defaults/en//checklistchecks:715 ../defaults/en//checklistchecks:1291 ../defaults/en//checklistchecks:1390 ../defaults/en//checklistchecks:1507
+msgid "Pullbacks"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:29
+msgid "ROE"
+msgstr ""
+
+#: ../defaults/en//sectors:57 ../defaults/en//sectors:321 ../defaults/en//sectors:384 ../defaults/en//sectors:452 ../defaults/en//sectors:522
+msgid "Real Estate"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:78
+msgid "Rectangle"
+msgstr ""
+
+#: ../defaults/en//sectors:97 ../defaults/en//sectors:331 ../defaults/en//sectors:399 ../defaults/en//sectors:467 ../defaults/en//sectors:542
+msgid "Resources"
+msgstr ""
+
+#: ../defaults/en//sectors:203
+msgid "Retail"
+msgstr ""
+
+#: ../defaults/en//sectors:82
+msgid "S&P/TSX 300"
+msgstr ""
+
+#: ../defaults/en//sectors:87
+msgid "S&P/TSX 60"
+msgstr ""
+
+#: ../defaults/en//sectors:72
+msgid "S&P/TSX Midcap"
+msgstr ""
+
+#: ../defaults/en//sectors:77
+msgid "S&P/TSX Smallcap"
+msgstr ""
+
+#: ../defaults/en//markets:167 ../defaults/en//markets:173
+msgid "SAX"
+msgstr ""
+
+#: ../defaults/en//markets:174
+msgid "SEK"
+msgstr ""
+
+#: ../defaults/en//markets:159
+msgid "SGD"
+msgstr ""
+
+#: ../defaults/en//markets:152 ../defaults/en//markets:158
+msgid "SGX"
+msgstr ""
+
+#: ../defaults/en//markets:467
+msgid "STG"
+msgstr ""
+
+#: ../defaults/en//markets:473
+msgid "STUTTGART"
+msgstr ""
+
+#: ../defaults/en//markets:198
+msgid "Sao Paolo Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1565
+msgid "Score positive if right bottom is higher than 2nd bottom."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1622
+msgid "Score positive if right bottom is lower than 2nd bottom."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1634
+msgid "Score positive if the break out volume is above average, score negative if the break out volume is below average."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:977
+msgid "Score positive if the rectangle occurs in the bottom 2/3 of the yearly price range. Score negative if it occurs in the top third of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1145
+msgid "Score positive if the scallop occurs in the bottom 1/3 of the yearly price range. Score negative if it occurs in the top 2/3 of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1052
+msgid "Score positive if the scallop occurs in the bottom 2/3 of the yearly price range. Score negative if it occurs in the top third of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1058
+msgid "Score positive if the scallop occurs in the top 1/3 or bottom 1/3 of the yearly price range. Score negative if it occurs in the middle third of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1151
+msgid "Score positive if the scallop occurs in the top 2/3 of the yearly price range. Score neutral if it occurs in the bottom third of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1349
+msgid "Score positive if the triangle occurs in the bottom 1/3 of the yearly price range. Score neutral if it occurs in the middle third of the yearly price range, score negative if the triangle occurs in the lowest 1/3 of the yearly range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1460
+msgid "Score positive if the triangle occurs in the bottom or top 1/3 of the yearly price range, score negative if the triangle occurs in the middle 1/3 of the yearly range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1466
+msgid "Score positive if the triangle occurs in the top 1/3 of the yearly price range, score negative if the triangle occurs in the top 1/3 of the yearly range, otherwise score neutral."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1244
+msgid "Score positive if the triangle occurs in the top 1/3 of the yearly price range. Score negative if it occurs in the bottom 2/3 of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1250
+msgid "Score positive if the triangle occurs in the top 2/3 of the yearly price range. Score neutral if it occurs in the bottom third of the yearly price range."
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1628
+msgid "Score positive if the volume trend is rising, score negative if the volume trend is declining."
+msgstr ""
+
+#: ../defaults/en//views-portfolio:13
+msgid "Securities Sold"
+msgstr ""
+
+#: ../defaults/en//feeds:8 ../defaults/en//feeds:13 ../defaults/en//feeds:18
+msgid "Seeking Alpha"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:844 ../defaults/en//checklistchecks:925
+msgid "Shoulder Lows"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:850
+msgid "Shoulder Volume"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:6
+msgid "Shows current prices of securities."
+msgstr ""
+
+#: ../defaults/en//views-worksheet:54
+msgid "Shows estimate margins"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:22
+msgid "Shows how close the current prices are to stop losses and targets"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:62
+msgid "Shows notes taken for different securities"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:38
+msgid "Shows portfolio in mixed currencies"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:30
+msgid "Shows portfolio performance on a year-to-date basis"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:14
+msgid "Shows the gains on all of your sales."
+msgstr ""
+
+#: ../defaults/en//currencies:31
+msgid "Singapore Dollar"
+msgstr ""
+
+#: ../defaults/en//markets:153
+msgid "Singapore Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//currencies:55
+msgid "South Korea Won"
+msgstr ""
+
+#: ../defaults/en//markets:168
+msgid "Stockholm Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:21
+msgid "Stop Loss"
+msgstr ""
+
+#: ../defaults/en//markets:468
+msgid "Stuttgart Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//currencies:35
+msgid "Swedish Krona"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:128
+msgid "Symmetrical Triangles (Bearish)"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:123
+msgid "Symmetrical Triangles (Bullish)"
+msgstr ""
+
+#: ../defaults/en//markets:377 ../defaults/en//markets:383
+msgid "TSE"
+msgstr ""
+
+#: ../defaults/en//markets:78
+msgid "TSX Venture"
+msgstr ""
+
+#: ../defaults/en//markets:2 ../defaults/en//markets:8
+msgid "TSX"
+msgstr ""
+
+#: ../defaults/en//markets:77
+msgid "TSX-V"
+msgstr ""
+
+#: ../defaults/en//markets:384
+msgid "TWD"
+msgstr ""
+
+#: ../defaults/en//currencies:59
+msgid "Taiwan New Dollars"
+msgstr ""
+
+#: ../defaults/en//markets:378
+msgid "Taiwan Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:142 ../defaults/en//checklistchecks:148 ../defaults/en//checklistchecks:229 ../defaults/en//checklistchecks:358 ../defaults/en//checklistchecks:364 ../defaults/en//checklistchecks:370 ../defaults/en//checklistchecks:376 ../defaults/en//checklistchecks:625 ../defaults/en//checklistchecks:631 ../defaults/en//checklistchecks:637 ../defaults/en//checklistchecks:643 ../defaults/en//checklistchecks:862 ../defaults/en//checklistchecks:931 ../defaults/en//checklistchecks:988 ../defaults/en//checklistchecks:1615
+msgid "Tall or Short Pattern"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1063 ../defaults/en//checklistchecks:1069 ../defaults/en//checklistchecks:1156 ../defaults/en//checklistchecks:1162
+msgid "Tall or Short Scallop"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1255 ../defaults/en//checklistchecks:1261 ../defaults/en//checklistchecks:1354 ../defaults/en//checklistchecks:1360 ../defaults/en//checklistchecks:1471 ../defaults/en//checklistchecks:1477
+msgid "Tall or Short Triangle"
+msgstr ""
+
+#: ../defaults/en//sectors:243
+msgid "Technology"
+msgstr ""
+
+#: ../defaults/en//sectors:62 ../defaults/en//sectors:145 ../defaults/en//sectors:218 ../defaults/en//sectors:281 ../defaults/en//sectors:389 ../defaults/en//sectors:457 ../defaults/en//sectors:527
+msgid "Telecommunications"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:430 ../defaults/en//checklistchecks:436 ../defaults/en//checklistchecks:442 ../defaults/en//checklistchecks:448 ../defaults/en//checklistchecks:880 ../defaults/en//checklistchecks:994 ../defaults/en//checklistchecks:1285 ../defaults/en//checklistchecks:1384 ../defaults/en//checklistchecks:1501 ../defaults/en//checklistchecks:1576
+msgid "Throwback"
+msgstr ""
+
+#: ../defaults/en//markets:3
+msgid "Toronto Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:4 ../defaults/en//checklistchecks:61
+msgid "Touch Spacing"
+msgstr ""
+
+#: ../defaults/en//sectors:276
+msgid "Transportation"
+msgstr ""
+
+#: ../defaults/en//sectors:213
+msgid "Travel & Leisure"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:1546 ../defaults/en//checklistchecks:1597
+msgid "Trend Formation Length"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:211 ../defaults/en//checklistchecks:262 ../defaults/en//checklistchecks:268 ../defaults/en//checklistchecks:274 ../defaults/en//checklistchecks:280 ../defaults/en//checklistchecks:553 ../defaults/en//checklistchecks:559 ../defaults/en//checklistchecks:565 ../defaults/en//checklistchecks:571
+msgid "Trend Length"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:16 ../defaults/en//checklistchecks:67
+msgid "Trend line Length"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:133
+msgid "Triple Bottom"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:138
+msgid "Triple Top (Bearish)"
+msgstr ""
+
+#: ../defaults/en//currencies:7
+msgid "US Dollar"
+msgstr ""
+
+#: ../defaults/en//markets:24 ../defaults/en//markets:39 ../defaults/en//markets:54 ../defaults/en//markets:129
+msgid "USD"
+msgstr ""
+
+#: ../defaults/en//checklisttypes:8
+msgid "Up Trend line Breakout (Bearish)"
+msgstr ""
+
+#: ../defaults/en//sectors:67 ../defaults/en//sectors:150 ../defaults/en//sectors:223 ../defaults/en//sectors:326 ../defaults/en//sectors:394 ../defaults/en//sectors:462 ../defaults/en//sectors:532
+msgid "Utilities"
+msgstr ""
+
+#: ../defaults/en//markets:83
+msgid "VSE"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:28 ../defaults/en//checklistchecks:79 ../defaults/en//checklistchecks:154 ../defaults/en//checklistchecks:382 ../defaults/en//checklistchecks:388 ../defaults/en//checklistchecks:394 ../defaults/en//checklistchecks:400 ../defaults/en//checklistchecks:649 ../defaults/en//checklistchecks:655 ../defaults/en//checklistchecks:661 ../defaults/en//checklistchecks:667 ../defaults/en//checklistchecks:868 ../defaults/en//checklistchecks:937 ../defaults/en//checklistchecks:1075 ../defaults/en//checklistchecks:1081 ../defaults/en//checklistchecks:1267 ../defaults/en//checklistchecks:1273 ../defaults/en//checklistchecks:1366 ../defaults/en//checklistchecks:1372 ../defaults/en//checklistchecks:1483 ../defaults/en//checklistchecks:1627
+msgid "Volume Trend"
+msgstr ""
+
+#: ../defaults/en//views-worksheet:5
+msgid "Watch List"
+msgstr ""
+
+#: ../defaults/en//markets:483
+msgid "XETRA Stock Exchange"
+msgstr ""
+
+#: ../defaults/en//markets:482 ../defaults/en//markets:488
+msgid "XETRA"
+msgstr ""
+
+#: ../defaults/en//test.po:10
+msgid "YEAR-MO-DA HO:MI+ZONE\\n\""
+msgstr ""
+
+#: ../defaults/en//feeds:3
+msgid "Yahoo! Finance"
+msgstr ""
+
+#: ../defaults/en//views-portfolio:29
+msgid "Year-to-date"
+msgstr ""
+
+#: ../defaults/en//checklistchecks:34 ../defaults/en//checklistchecks:91 ../defaults/en//checklistchecks:130 ../defaults/en//checklistchecks:136 ../defaults/en//checklistchecks:223 ../defaults/en//checklistchecks:334 ../defaults/en//checklistchecks:340 ../defaults/en//checklistchecks:346 ../defaults/en//checklistchecks:352 ../defaults/en//checklistchecks:601 ../defaults/en//checklistchecks:607 ../defaults/en//checklistchecks:613 ../defaults/en//checklistchecks:619 ../defaults/en//checklistchecks:856 ../defaults/en//checklistchecks:976 ../defaults/en//checklistchecks:1051 ../defaults/en//checklistchecks:1057 ../defaults/en//checklistchecks:1144 ../defaults/en//checklistchecks:1150 ../defaults/en//checklistchecks:1243 ../defaults/en//checklistchecks:1249 ../defaults/en//checklistchecks:1348 ../defaults/en//checklistchecks:1459 ../defaults/en//checklistchecks:1465 ../defaults/en//checklistchecks:1570 ../defaults/en//checklistchecks:1609
+msgid "Yearly Price Range"
+msgstr ""
+
+#: ../defaults/en//users:5
+msgid "admin"
+msgstr ""
+
+#: ../defaults/en//test.po:14
+msgid "text/plain; charset=CHARSET\\n\""
+msgstr ""
+

@@ -1,0 +1,127 @@
+TSBINOMIAL(1)							 TSBINOMIAL(1)
+
+
+
+NAME
+       tsbinomial - generate a binomial distribution time series
+
+SYNOPSIS
+       tsbinomial [-f fraction] [-i value] [-n n] [-p probability]
+		  [-r] [-s] [-t] [-v] number
+
+DESCRIPTION
+       Tsbinomial  is  for generating binomial distribution noise, with unfair
+       bias, and cumulative sum-generates a time series.  The idea is to  pro-
+       duce  a 1/f squared power spectrum distribution by running a cumulative
+       sum on a binomial distribution. The program accepts a  an  unfair  bias
+       and a wager factor. See "Fractals," Jens Feder, Plenum Press, New York,
+       New York, 1988, ISBN 0-306-42851-2, pp. 154, as suggested by Hurst.
+
+       This program is a modification of the program tscoin. The  wager  frac-
+       tion  is  computed by first calculating the optimal wager fraction, f =
+       2P - 1, where P is the Shannon probability, and f is the optimal  wager
+       fraction,  (which  is  the root mean square = standard deviation of the
+       normalized increments of the time series,) and then reducing this value
+       by  the	standard  deviation of the binomial distribution, which is the
+       square root of the number of elements in  the  distribution,  ie.,  the
+       root  mean square of the normalized increments of the cumulative sum is
+       the same as the standard deviation of the binomial  distribution.   See
+       "Fractals,"  Jens  Feder,  Plenum Press, New York, New York, 1988, ISBN
+       0-306-42851-2, pp. 155.
+
+       Note: these programs use the following functions from other references:
+
+	   ran1, which returns a uniform random deviate between
+	   0.0 and 1.0. See "Numerical Recipes in C: The Art of
+	   Scientific Computing," William H. Press, Brian
+	   P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+	   Cambridge University Press, New York, 1988, ISBN
+	   0-521-35465-X, page 210, referencing Knuth.
+
+	   gasdev, which returns a normally distributed deviate
+	   with zero mean and unit variance, using ran1 () as the
+	   source of uniform deviates. See "Numerical Recipes in
+	   C: The Art of Scientific Computing," William H. Press,
+	   Brian P. Flannery, Saul A. Teukolsky, William
+	   T. Vetterling, Cambridge University Press, New York,
+	   1988, ISBN 0-521-35465-X, page 217.
+
+	   gammln, which returns the log of the results of the
+	   gamma function.  See "Numerical Recipes in C: The Art
+	   of Scientific Computing," William H. Press, Brian
+	   P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+	   Cambridge University Press, New York, 1988, ISBN
+	   0-521-35465-X, page 168.
+
+OPTIONS
+       -f fraction
+	      Fraction of reserves to be wagered, (0 <= fraction <= 1)
+
+       -i value
+	      Initial value of cash reserves
+
+       -n n   Number of elements in the binomial distribution.
+
+       -p probability
+	      Shannon probability, (0.5 <= probability <= 1.0)
+
+       -r     Do not normalize the standard deviation = fraction.
+
+       -s     Print  the  cumulative  sum  of  the  binomial distribution time
+	      series.
+
+       -t     Sample's time will be included in the output time series.
+
+       -v     Print the version and copyright banner of the program.
+
+       number Number of data points in the output time series.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1), tsstockwager(1), tsshannonwindow(1),  tsmath(1),	tsavg-
+       window(1),   tspole(1),	tsdft(1),  tsbinomial(1),  tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),	   tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 		 TSBINOMIAL(1)

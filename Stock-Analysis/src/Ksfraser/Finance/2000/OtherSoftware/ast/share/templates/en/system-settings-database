@@ -1,0 +1,32 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Database Settings</th>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Database DSN:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="sql_dsn" value="$sql_dsn" class="awf_inputtext"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Username:</b></td>
+    </tr>
+    <tr>
+      <td><input type="text" name="sql_user" value="$sql_user" class="awf_inputtext"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>Password:</b></td>
+    </tr>
+    <tr>
+      <td><input type="password" name="sql_password" value="$sql_password" class="awf_inputtext"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

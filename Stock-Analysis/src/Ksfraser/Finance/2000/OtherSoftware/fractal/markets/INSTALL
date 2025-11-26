@@ -1,0 +1,54 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+There is no installation procedure for the files and data in this
+directory.  This is a working directory that compiles data from the
+various markets and fabricated test cases that are to be included in
+the ../doc LaTeX documentation. See the README in this directory for
+operational details concerning the construction of the data.
+
+See the file ../doc/colophon.tex for the programs required to
+construct the data in this directory and subdirectories. All programs
+are in freely available via anonymous ftp, and include:
+
+    1) TeX and LaTeX
+    2) gnuplot
+
+In addition, the following programs, although not essential, were used
+in the construction of the data and documentation:
+
+    1) gnu emacs
+    2) dvips
+    3) rcs
+    4) ispell
+    5) gnuindex
+
+The following LaTeX and emacs macros were used:
+
+    1) AucTeX.el
+    2) epsf.sty
+    3) fancyheadings.sty
+    4) gnuindex.sty
+    5) rcs.sty
+
+Availability, usage, and ftp addresses are explained in
+../doc/colophon.tex.

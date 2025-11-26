@@ -1,0 +1,129 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+These are programs that are useful when attempting to simulate fractal
+time series data. The programs include:
+
+    tsblack - black noise generator-generates a time series
+
+    tsbrownian - brownian noise generator-generates a time series
+
+    tsdlogistic - discreet logistic function generator-generates a
+    time series
+
+    tsfBm - fractional brownian noise generator-generates a time
+    series
+
+    tsfractional - fractional brownian noise generator-generates a time
+    series
+
+    tsgaussian - gaussian noise generator-generates a time series
+
+    tsintegers - consecutive integer generator-generates a time series
+
+    tslogistic - logistic function generator-generates a time series
+
+    tspink - pink noise generator-generates a time series
+
+    tsunfairbrownian - unfair returns of a time series
+
+    tsunfairfractional - unfair returns of a time series
+
+    tswhite - white noise generator-generates a time series
+
+    tscoin  - generate an unfair coin toss time series
+
+    tscoins - generate an unfair coins toss time series
+
+    tsstockwager - Simulate the portfolio gains time series of a stock
+
+    tsbinomial - generate a binomial distribution time series
+
+    tsshannonstock - simulate the optimal gains of a stock investment
+    using Shannon probability
+
+    tsmarket - simulate a multiple company industrial market time
+    series
+
+    tsstock - simulate the optimal gains of a stock investment
+
+    tsstocks - simulate the optimal gains of multiple stock
+    investments
+
+    tstrade - optimal trade of multiple concurrent stock investments
+
+    tstradesim - generate a time series for the tstrade program
+
+    tscauchy - cauchy distributed generator-generates a time series
+
+    tslognormal - make a log-normal/leptokurtotic distribution of a
+    time series' increments
+
+    tslaplacian - Laplacian noise generator-generates a time series
+
+There is compatability among the file structures used, where
+applicable.  The input file structure is a text file consisting of
+records, in temporal order, one record per time series sample.  Blank
+records are ignored, and comment records are signified by a '#'
+character as the first non white space character in the record. Data
+records must contain at least one field, which is the data value of
+the sample, but may contain many fields-if the record contains many
+fields, then the first field is regarded as the sample's time, and the
+last field as the sample's value at that time.
+
+The programs are written in ANSI standard C, but there is little or no
+provisions for handling numerical exceptions. Usually, a great deal of
+analytical skill is required in an interactive analysis of fractal
+time series, and should probably not be attempted by the novice for
+other than academic purposes. The user should consult, and have a
+thorough knowledge of the concepts presented in the following
+references:
+
+    "Fractals, Chaos, Power Laws," Manfred Schroeder, W. H. Freeman
+    and Company, New York, New York, 1991, ISBN 0-7167-2136-8.
+
+    "Numerical Recipes in C: The Art of Scientific Computing," William
+    H. Press, Brian P. Flannery, Saul A. Teukolsky, William
+    T. Vetterling, Cambridge University Press, New York, 1988, ISBN
+    0-521-35465-X.
+
+    "The Art of Modeling Dynamic Systems", Foster Morrison, John Wiley
+    & Sons, New York, New York, 1991.
+
+    "Predictions", Theodore Modis, Simon & Schuster, New York, New
+    York, 1992, ISBN 0-471-52004-7.
+
+     "Complexification," John L. Casti, HarperCollins, New York, New
+     York, 1994, ISBN 0-06-016888-9.
+
+    "Chaos and Order in the Capital Markets," Edgar E. Peters, John
+    Wiley & Sons, New York, New York, 1991, ISBN 0-471-53372-6.
+
+    "Applied Chaos Theory: A Paradigm for Complexity," A. B. Cambel.
+    Academic Press, San Diego, California, 1993, ISBN 0-12-155940-8.
+
+    "Introduction to Fractals and Chaos", Richard M. Crownover, Jones
+    and Bartlett Publishers International, London, England, 1995, ISBN
+    0-86720-464-8.
+
+    "Fractals", Jens Feder, Plenum Press, New York, New York, 1988,
+    ISBN 0-306-42851-2.

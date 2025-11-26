@@ -1,0 +1,17 @@
+<form method="post" action="$save_page">
+  <table class="awf_form" width="100%">
+    <tr>
+      <th colspan="3">Edit Columns</th>
+    </tr>
+    <tr>
+      <th width="46%">Available Columns</th>
+      <td></td>
+      <th width="46%">Hidden Columns</th>
+    </tr>
+    <tr>
+      <td><select width="100%" name="available_columns" multiple size="20">$available</select></td>
+      <td valign="middle"><input type="submit" value="-->" name="direction"><br><input type="submit" value="<--" name="direction"></td>
+      <td><select width="100%" name="hidden_columns" multiple size="20">$hidden</select></td>
+    </tr>
+  </table>
+</form> 

@@ -1,0 +1,10 @@
+<form method="post" action="$save_page">
+<table class="awf_form">
+    <tr><th colspan="2">AST User Registration</th></tr>
+    <tr><td colspan="2">All fields are required. Please make sure that you enter a valid email address. AST will email you with a password when your account is created.</td></tr>
+    <tr><td><b>Username:</b></td><td><input type="text" name="user.username" class="awf_inputtext"></td></tr>
+    <tr><td><b>Full Name:</b></td><td><input type="text" name="user.fullname" class="awf_inputtext"></td></tr>
+    <tr><td><b>Email Address:</b></td><td><input type="text" name="email" class="awf_inputtext"></td></tr>
+    <tr><td colspan="2"><input type="submit"></td></tr>
+</table>
+</form>

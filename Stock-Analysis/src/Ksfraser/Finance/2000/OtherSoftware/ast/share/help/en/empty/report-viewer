@@ -1,0 +1,6 @@
+@caption Reports - No Data Available
+There is no data available for this report. This is likely because AST is
+not setup correctly on your system. For reports to be generated you must 
+setup AST in your crontab. Cron is the UNIX daemon responsible for running 
+scheduled tasks. For more information on see the 
+<a href="http://ast.sourceforge.net/index.php?option=com_content&task=view&id=41&Itemid=29">AST installation guide</a>.

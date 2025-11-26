@@ -1,0 +1,20 @@
+<form method="POST" action="$save_page">
+  <input type="hidden" name="symbol" value="$symbol">
+  <input type="hidden" name="market" value="$market">
+  <table width="100%" class="awf_form">
+    <tr>
+      <th colspan="2">Edit Split</th>
+    </tr>
+    <tr>
+      <td><b>Split Date:</b></td>
+      <td><select name="split.date-month">$month_options</select>/<select name="split.date-day">$day_options</select>/<select name="split.date-year">$year_options</select></td>
+    </tr>
+    <tr>
+      <td><b>Split Details:</b></td>
+      <td><input name="split.old_shares" value="$split.old_shares" class="awf_inputtextshort"> shares for <input name="split.new_shares" value="$split.new_shares" class="awf_inputtextshort"> shares</td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

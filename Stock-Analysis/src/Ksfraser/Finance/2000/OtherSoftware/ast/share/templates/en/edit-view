@@ -1,0 +1,23 @@
+<table class="awf_form">
+  <tr>
+    <th colspan="4">View Properties</th>
+  </tr>
+  <tr>
+    <td width="5%" valign="top"><img src="images/filter.png" alt="filter"></td>
+    <td width="45%"><a href="$filter_link"><h2>Edit Filter</h2></a>The filter feature allows you to specify a formula which controls which records are shown and which are hidden. You must specify a boolean formula, and records whose formula evaluates to false are hidden.</td>
+    <td width="5%"><img src="images/hidecolumns.png" alt="hide columns"></td>
+    <td width="45%"><a href="$columns_link"><h2>Show/Hide Columns</h2></a>Allows you to choose which columns show up in the view and which do not.</td>
+  </tr>
+  <tr>
+    <td><img src="images/sort.png" alt="sort"></td><td><a href="$sort_link"><h2>Sort Order</h2></a>Change the order in which the rows are displayed.</td>
+    <td><img src="images/indicator.png" alt="indicator"></td><td><a href="$indicator_link"><h2>Edit Indicators</h2></a>Indicators allow you to change the colour of text, add new calculations or create new columns based on a formula or expression.</td>
+  </tr>
+  <tr>
+    <td><img src="images/columnorder.png" alt="column order"></td><td><a href="$order_link"><h2>Reorder Columns</h2></a>Change the order in which columns are displayed.</td>
+    <td><img src="images/groups.png" alt="groups"></td><td><a href="$groups_link"><h2>Edit Grouping</h2></a>Allows you specify an expression which can be used to group columns.</td>
+  </tr>
+  <tr>
+    <td><img src="images/totals.png" alt="totals"></td><td><a href="$totals_link"><h2>Edit Totals</h2></a>Change which columns have totals.</td>
+    <td></td><td></td>
+  </tr>
+</table>

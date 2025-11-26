@@ -1,0 +1,25 @@
+<script type="text/javascript">
+  function choose_symbol(s)
+  {
+    document.getElementById('selected_symbol').value = s;
+    document.getElementById('symbol_search').value='false'; /* don't want to search anymore */
+    document.getElementById('symbolfrm').submit();
+  }
+</script>
+<form method="post" action="$target" name="symbolfrm">
+  $fields
+  <input type="hidden" name="selected_symbol" id="selected_symbol" value="">
+  <input type="hidden" name="symbol_search" id="symbol_search" value="true">
+  <table class="awf_form" width="60%">
+    <tr>
+      <th>Company Search</th>
+    </tr>
+    <tr>
+      <td><b>Company Name:</b>
+    </tr>
+    <tr>
+      <td><input type="text" name="company" value="$company" class="awf_inputtext">&nbsp;<input type="submit" value="Search"></td>
+    </tr>
+  </table>
+</form> 
+$search_result

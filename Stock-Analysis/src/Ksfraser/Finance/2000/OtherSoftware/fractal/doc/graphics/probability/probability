@@ -1,0 +1,83 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make files for plotting the root mean square, standard deviation,
+# mean, Shannon probability, and maximum Shannon probability as a
+# function of the number of iterations sampled
+#
+# requires probability.awk and can be plotted with gnuplot using the
+# command "gnuplot plot"
+#
+# As an additional issue, the file "mean" should be linear as a function
+# of N, at least in principle. The general formula for these files, as a
+# function of the sampling period, N, is mean = rms (2P - 1). If the
+# input file is time sampled, then the formula is mean N = rms sqrt(N)
+# (2P - 1) sqrt (N), and the "mean" file should be linear, with a slope
+# of the mean as a function of N. To exercise this:
+#
+#     ../../../simulation/tscoin -p 0.51 150000 > data.2
+#     ../../../utilities/tssample -i 10 data.2 > data.1
+#
+# Not too much precision should be expected.
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/08 23:52:59 $
+# $Id: probability,v 0.0 2006/01/08 23:52:59 john Exp $
+# $Log: probability,v $
+# Revision 0.0  2006/01/08 23:52:59  john
+# Initial version
+#
+#
+#
+# The echo that permits '\c' concatination
+#
+ECHO=/bin/echo
+#
+iteration=1
+#
+rm -f probabilitymax rms mean stddev sprobability
+trap "rm -f data.1 data data.tsfraction data.tsfraction.tsrms-p data.tsfraction.tsnormal-p data.tsfraction.tsnormal-p.mean data.tsfraction.tsnormal-p.stddev data.tslogreturns-p data.tslogreturns-p.tsshannon data.tslogreturns-p.tsshannon.probability data.tsfraction.pmaxdenominator data.tsfraction.pmaxnumerator; exit" 0 1 2 3 9 15
+../../../simulation/tscoin -p 0.51 150000 > data.1
+#
+while [ ${iteration} -le 100 ]
+do
+    echo "probability ${iteration}" 1>&2
+    ../../../utilities/tssample -i ${iteration} data.1 > data
+    ../../../utilities/tsfraction data > data.tsfraction
+    ../../../utilities/tsrms -p data.tsfraction > data.tsfraction.tsrms-p
+    ../../../utilities/tsnormal -p data.tsfraction > data.tsfraction.tsnormal-p
+    sed 's/ .*//' data.tsfraction.tsnormal-p > data.tsfraction.tsnormal-p.mean
+    sed 's/.* //' data.tsfraction.tsnormal-p > data.tsfraction.tsnormal-p.stddev
+    ../../../utilities/tslogreturns -p data > data.tslogreturns-p
+    ../../../utilities/tsshannon `sed "s/^.*2\^(//" data.tslogreturns-p | sed "s/t)//"` > data.tslogreturns-p.tsshannon
+    sed 's/^C(//' data.tslogreturns-p.tsshannon | sed 's/).*//' > data.tslogreturns-p.tsshannon.probability
+    wc data.tsfraction | sed 's/ *//' | sed 's/ .*//' > data.tsfraction.pmaxdenominator
+    egrep ^- data.tsfraction | wc | sed 's/ *//' | sed 's/ .*//' > data.tsfraction.pmaxnumerator
+    ${ECHO} "${iteration}" " `cat data.tsfraction.pmaxnumerator data.tsfraction.pmaxdenominator | awk -f probability.awk`" >> probabilitymax
+    ${ECHO} "${iteration}" " `cat data.tsfraction.tsrms-p`" >> rms
+    ${ECHO} "${iteration}" " `cat data.tsfraction.tsnormal-p.mean`" >> mean
+    ${ECHO} "${iteration}" " `cat data.tsfraction.tsnormal-p.stddev`" >> stddev
+    ${ECHO} "${iteration}" " `cat data.tslogreturns-p.tsshannon.probability`" >> sprobability
+    iteration=`expr ${iteration} + 1`
+done
+rm -f data.1 data data.tsfraction data.tsfraction.tsrms-p data.tsfraction.tsnormal-p data.tsfraction.tsnormal-p.mean data.tsfraction.tsnormal-p.stddev data.tslogreturns-p data.tslogreturns-p.tsshannon data.tslogreturns-p.tsshannon.probability data.tsfraction.pmaxdenominator data.tsfraction.pmaxnumerator

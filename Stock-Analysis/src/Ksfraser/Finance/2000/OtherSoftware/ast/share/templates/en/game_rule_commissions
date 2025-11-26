@@ -1,0 +1,8 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="gamerule.ruletype" value="4">
+<table class="awf_form" width="80%">
+    <tr><th colspan="2">Commissions Rule</th></tr>
+    <tr><td><b>Trade Commission:</b></td><td><input type="text" class="awf_inputtext" name="commissions" value="20"></td></tr>
+    <tr><td colspan="2"><input type="submit" value="Save"></td></tr>
+</table>
+</form>

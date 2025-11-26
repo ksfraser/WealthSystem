@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/578/trunk/GT/Signals/Generic
+END
+Equal.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/Equal.pm
+END
+Below.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/Below.pm
+END
+Decrease.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/Decrease.pm
+END
+CrossOverDown.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/CrossOverDown.pm
+END
+True.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/True.pm
+END
+Or.pm
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/geniustrader/!svn/ver/578/trunk/GT/Signals/Generic/Or.pm
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Generic/README
+END
+NewTimeFrame.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/NewTimeFrame.pm
+END
+Repeated.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/Repeated.pm
+END
+Increase.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/Increase.pm
+END
+False.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/False.pm
+END
+CrossOverUp.pm
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/CrossOverUp.pm
+END
+Above.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/Above.pm
+END
+Not.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Signals/Generic/Not.pm
+END
+And.pm
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/Signals/Generic/And.pm
+END

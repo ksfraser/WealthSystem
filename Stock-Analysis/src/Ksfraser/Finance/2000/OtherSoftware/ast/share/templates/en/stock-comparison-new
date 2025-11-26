@@ -1,0 +1,89 @@
+<script type="text/javascript" language="javascript" charset="utf-8">var ac;</script>
+<br>
+<table class="awf_form" width="60%">
+  <tr>
+    <td><a href="#" onclick="javascript:ast_comparison_show_form('form1');">Add Stock</a></td>
+    <td><a href="#" onclick="javascript:ast_comparison_show_form('form2');">Add Market</a></td>
+    <td><a href="#" onclick="javascript:ast_comparison_show_form('form3');">Add Index</a></td>
+    <td><a href="#" onclick="javascript:ast_comparison_show_form('form4');">Add Portfolio</a></td>
+  </tr>
+  <tr>
+    <td colspan="4" id="form1" style="display: none">
+      <form method="post" action="$save_page">
+        <table class="awf_form" width="100%">
+          <tr>
+            <td><b>Market:</b></td>
+            <td><select name="comparison.market" id="market" onchange="javascript: ac.setParameters('prefix=&amp;market='+$('market').value);">$market_options</select></td>
+          </tr>
+          <tr>
+            <td><b>Symbol:</b></td>
+            <td><input type="text" style="awf_inputtext" name="comparison.symbol" id="symbol" autocomplete="off"><div id="symbolupdate" class="awf_dropmenu" style="display: none"></div></td>
+          </tr>
+          <tr>
+            <td><input type="submit" value="Add"></td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4" id="form2" style="display: none">
+      <form method="post" action="$save_page">
+        <table class="awf_form" width="100%">
+          <tr>
+            <td><b>Market:</b></td>
+            <td><select name="comparison.market">$market_options</select></td>
+          </tr>
+          <tr>
+            <td><input type="submit" value="Add"></td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4" id="form3" style="display: $marketdisplay">
+      <form method="post" action="$save_page" id="secform">
+        <table class="awf_form" width="100%">
+          <tr>
+            <td><b>Market:</b></td>
+            <td><select name="comparison.market" onchange="javascript:secform.action='$refresh_page';document.getElementById('secform').submit();">$market_options</select></td>
+          </tr>
+          <tr>
+            <td><b>Sector:</b></td>
+            <td><select name="sector">$sector_options</select></td>
+          </tr>
+          <tr>
+            <td><input type="submit" value="Add"></td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="4" id="form4" style="display: none">
+      <form method="post" action="$save_page">
+        <input type="hidden" name="comparison.market" value="0">
+        <table class="awf_form" width="100%">
+          <tr>
+            <td><b>Portfolio:</b></td>
+            <td><select name="comparison.symbol">$portfolio_options</select></td>
+          </tr>
+          <tr>
+            <td><input type="submit" value="Add"></td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+</table>
+<br>
+<script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+ac = new Ajax.Autocompleter('symbol','symbolupdate','?process=ajax-symbol-list',{select:'awf_selectiontext', parameters: 'prefix=comparison.&market=' + $('market').value});
+// ]]>
+</script>

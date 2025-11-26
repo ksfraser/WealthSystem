@@ -1,0 +1,29 @@
+<form method="POST" enctype="multipart/form-data" action="http://sourceforge.net/tracker/?func=add&amp;group_id=148045&amp;atid=770268">
+  <input type="hidden" name="group_id" value="148045">
+  <input type="hidden" name="atid" value="770268">
+  <input type="hidden" NAME="func" value="postadd">
+  <input type="hidden" NAME="category_id" value="100"><!-- 100 is none. -->
+  <input type="hidden" NAME="artifact_group_id" value="100">
+  <table class="awf_form">
+    <tr><th class="awf_column_heading">Submit Bug</th></tr>
+    <tr><td><b>Summary:</b></td></tr>
+    <tr><td><input type="text" name="summary" size="35" maxlength="60" class="awf_inputtext awf_wide_input" value="[$version] "></td></tr>
+    <tr><td><b>Description:</b></td></tr>
+    <tr><td><div class="awf_small">(Please describe what you did to cause this)</div></td></tr>
+    <tr><td><textarea rows="10" cols="100" name="details">&lt;describe the bug&gt;
+
+Version: $version
+Language: $language
+Crypto: $crypto
+TA-lib Version: $talibver
+Compression: $compression
+SQL Support: $sql
+OS: $os $osver
+Bit Size: $bitlen bits
+Server: $server
+User Agent: $ua
+Contact: $contact
+    </textarea></td></tr>
+   <tr><td><input type="submit" name="submit" value="SUBMIT"></td></tr>
+  </table>
+</form>

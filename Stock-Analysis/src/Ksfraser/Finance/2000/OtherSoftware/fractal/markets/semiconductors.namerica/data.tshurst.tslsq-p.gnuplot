@@ -1,0 +1,1 @@
+plot [t=:] "data.tshurst" with lines, -0.453667 + 0.714241 * t with lines, -1.026868 + 0.998014 * t with lines

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svnroot/geniustrader/!svn/ver/583/trunk/GT/TradeFilters
+END
+AcceptAll.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/AcceptAll.pm
+END
+MaxOpenTrades.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/MaxOpenTrades.pm
+END
+AroonTrend.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/AroonTrend.pm
+END
+Generic.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/583/trunk/GT/TradeFilters/Generic.pm
+END
+FollowTrend.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/FollowTrend.pm
+END
+LongOnly.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/LongOnly.pm
+END
+OneTrade.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/OneTrade.pm
+END
+ShortOnly.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/470/trunk/GT/TradeFilters/ShortOnly.pm
+END

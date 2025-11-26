@@ -1,0 +1,8 @@
+<form method="post" action="$save_page">
+<input type="hidden" name="gamerule.ruletype" value="5">
+<table class="awf_form" width="80%">
+    <tr><th colspan="2">Disable Selling Rule</th></tr>
+    <tr><td colspan="2">There are no options for this rule, it simply forbids selling in this game. To add this rule press save.</td></tr>
+    <tr><td colspan="2"><input type="submit" value="Save"></td></tr>
+</table>
+</form>

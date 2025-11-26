@@ -1,0 +1,46 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
+<title>Advanced Stock Tracker - First Run</title>
+<link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+<link rel="stylesheet" type="text/css" href="$stylesheet">
+</head>
+<body>
+<div id="container">
+<div id="top">
+  <div id="awf_logo"><img src="images/ast-banner.png" alt="" width="422" height="70" /></div>
+  <div id="awf_title">First Run Wizard</div>
+  <div id="awf_logo_text">Advanced Stock Tracker</div>
+  <div id="awf_author_text">By Michael Williamson</div>
+</div>
+<div id="content">
+<br>
+<h1>Welcome to Advanced Stock Tracker</h1>
+<div class="awf_error">$message</div>
+<form method="post" action="$save_page">
+Thank you for choosing Advanced Stock Tracker. Your installation is almost complete. We just need a few pieces of information from you to properly configure your system. Please provide an administrator's password. After you will be able to login into Advanced Stock Tracker using the username <b>admin</b> and the password you provide here.<br><br>
+<b>Password:</b><br>
+<input type="password" name="passwd" class="awf_inputtext"><br><br>
+<b>Confirm Password:</b><br>
+<input type="password" name="confpasswd" class="awf_inputtext"><br>
+<br><br>
+You also need to provide an email address for system use. This email address will be used as the reply address for all emails sent be AST. For example, it will be the reply address on all alerts. Please note that if you provide an invalid email address your outgoing mail server may reject the email. You can change this email address later by going into the System Settings from the Setup menu.<br><br>
+<b>Email Address:</b><br>
+<input type="text" name="email" class="awf_inputtext"><br>
+<br><br>
+The final piece of information needed is the language you would like to run AST under. Each individual user may have their own language preference, only non-user specific pages such as the login screen will be shown in the system language. You can change this option later by going to System Settings page from the Setup Menu. If you do not see your language listed below, you may wish to translate AST into another language. See the AST home page at <a href="http://ast.sourceforge.net">ast.sourceforge.net</a> for more information on translation. Please select your language below:<br><br>
+<select name="language">$language_options</select><br><br>
+<input type="submit" value="Continue >>">
+</form>
+</div>
+<div id="footer">
+<div class="awf_dot_div"></div>
+<p class="ast_footer"><small>Powered By Advanced Stock Tracker (AST)<br>
+(c) Michael Williamson, 2005, 2006<br>
+Visit <a href="http://ast.sourceforge.net">ast.sourceforge.net</a></small>
+</p>
+</div>
+</div>
+</body>
+</html>

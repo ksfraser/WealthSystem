@@ -1,0 +1,120 @@
+.TH TSHURST 1 "January 17, 2006"
+.SH NAME
+tshurst \- calculate the Hurst coefficient for a time series
+.SH SYNOPSIS
+.nf
+tshurst [-a] [-d] [-f] [-m] [-p] [-r] [-v] [filename]
+.fi
+.SH DESCRIPTION
+Tshurst is for calculating the Hurst coefficient for a time series.  The
+method used is from "Complexification," John L. Casti, HarperCollins,
+New York, New York, 1994, ISBN 0-06-016888-9, pp 253, or "Chaos and
+Order in the Capital Markets," Edgar E. Peters, John Wiley & Sons, New
+York, New York, 1991, ISBN 0-471-53372-6, pp 63, or "Fractals, Chaos,
+Power Laws," Manfred Schroeder, W. H. Freeman and Company, New York,
+New York, 1991, ISBN 0-7167-2136-8, pp 129, or "Applied Chaos Theory:
+A Paradigm for Complexity," A. B. Cambel.  Academic Press, San Diego,
+California, 1993, ISBN 0-12-155940-8, pp 172.  The time series is
+broken into variable length intervals, which are assumed to be
+independent of each other, and the R/S value is computed for each
+interval based on the deviation from the average over the
+interval. These R/S values are then averaged for all of the intervals,
+then printed to stdout. The -r flag sets operation as described in
+"Chaos and Order in the Capital Markets," by Edgar E. Peters, pp 81,
+and should only be used for time series from market data since
+logarithmic returns sum to cumulative return-negative numbers in the
+time series file are not permitted with this option. The log (R/S) vs
+log (time) plot is printed to stdout.
+
+The input file structure is a text file consisting of records, in
+temporal order, one record per time series sample.  Blank records are
+ignored, and comment records are signified by a '#' character as the
+first non white space character in the record. Data records must
+contain at least one field, which is the data value of the sample, but
+may contain many fields-if the record contains many fields, then the
+first field is regarded as the sample's time, and the last field as
+the sample's value at that time.
+.SH OPTIONS
+.TP
+.B -a
+Do not subtract mean of intervals from values in intervals.
+.TP
+.B -d
+The input file is a derivative of a time series, instead of an
+integral, or cumulative sum.
+.TP
+.B -f
+Output linear range and standard deviation values. The output file
+consists of tab delimited fields-the first field is the number of
+elements from the time series in an interval, the second field is the
+average range of values from the time series in that interval, and the
+third field is the average standard deviation of values from the time
+series in that interval.
+.TP
+.B -m
+Precision mode, (computationally inefficient.)
+.TP
+.B -p
+Don't output the time series, only the Hurst coefficients.
+.TP
+.B -r
+Specifies that logarithmic returns will be used, instead of linear
+returns.
+.TP
+.B -v
+Print the version and copyright banner of the program.
+.TP
+.B filename
+Input filename.
+.SH WARNINGS
+.PP
+There is little or no provision for handling numerical exceptions.
+.SH SEE ALSO
+.PP
+tsderivative(1), tshcalc(1), tshurst(1), tsintegrate(1),
+tslogreturns(1), tslsq(1), tsnormal(1), tsshannon(1),
+tsblack(1), tsbrownian(1), tsdlogistic(1), tsfBm(1),
+tsfractional(1), tsgaussian(1), tsintegers(1),
+tslogistic(1), tspink(1), tsunfairfractional(1),
+tswhite(1), tscoin(1), tsunfairbrownian(1), tsfraction(1),
+tsshannonmax(1), tschangewager(1), tssample(1), tsrms(1),
+tscoins(1), tsavg(1), tsXsquared(1), tsstockwager(1),
+tsshannonwindow(1), tsmath(1), tsavgwindow(1), tspole(1),
+tsdft(1), tsbinomial(1), tsdeterministic(1), tsnumber(1),
+tsrmswindow(1), tsshannonstock(1), tsmarket(1),
+tsstock(1), tsstatest(1), tsunfraction(1),
+tsshannonaggregate(1), tsinstant(1), tsshannonvolume(1),
+tsstocks(1), tsshannonfundamental(1), tstrade(1),
+tstradesim(1), tsrunlength(1), tsunshannon(1),
+tsrootmean(1), tsrunmagnitude(1), tskurtosis(1),
+tskurtosiswindow(1), tsrootmeanscale(1),
+tsscalederivative(1), tsgain(1), tsgainwindow(1)
+tscauchy(1), tslognormal(1), tskalman(1), tsroot(1),
+tslaplacian(1)
+.SH DIAGNOSTICS
+.PP
+Error messages for incompatible arguments, failure to allocate memory,
+inaccessible files, and opening and closing files.
+.SH AUTHORS
+.nf
+----------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+----------------------------------------------------------------------
+.fi

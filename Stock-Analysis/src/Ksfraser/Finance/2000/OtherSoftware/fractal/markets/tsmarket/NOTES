@@ -1,0 +1,68 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for tsmarket. The data from files in the
+# ../computer.office ../electronic.components.production
+# ../electronic.components.shipments ../information.systems directories
+# were averaged and found to be:
+#
+#     data.tslogreturns-p.tsshannon.returns, 0.0145 ~ 0.015
+#     data.tslogreturns-p.tsshannon.probability, 0.5698 ~ 0.6
+#     data.tsshannonmax-p.max, 0.70 ~ 0.7000
+#     data.tsfraction.tsnormal-p.stddev, 0.0278 ~ 0.03
+#     data.tsfraction.tsrms-p, 0.02992 ~ 0.03
+#     data.tsfraction.tsavg-p, 0.01060 ~ 0.01
+#
+# A data file was made by running:
+#
+# ../../simulation/tsmarket -p 0.55 -c 11 300 > data
+#
+# where the -p argument is found as follows:
+#
+#     if all of the companies participating in the industrial market are
+#     operating optimally, ie. where F = 2P - 1, then the average of the
+#     normalized increments of the market time series history (from
+#     data.tsfraction.tsavg-p,) squared should be the root mean square
+#     value of the normalized increments of the market time series
+#     history, which should, also, be F, or F ~ sqrt (0.01) ~ 0.1, or P
+#     = 0.55
+#
+# and the -c argument is found as follows:
+#
+#     if the companies participating in the market are assumed to each
+#     have equal share of the market, then their contributions to the
+#     market would add linearly, and the root mean square values of
+#     their normalized increments of the time series history of the
+#     individual companies would add root mean square, or 0.03 ~ sqrt
+#     ((1 / n) * 0.1 * 0.1), where n is the number of companies in the
+#     market, or n ~ 11.
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/15 05:07:07 $
+# $Id: NOTES,v 0.0 2006/01/15 05:07:07 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/15 05:07:07  john
+# Initial version
+#
+#
+../../simulation/tsmarket -p 0.55 -c 11 300 > data

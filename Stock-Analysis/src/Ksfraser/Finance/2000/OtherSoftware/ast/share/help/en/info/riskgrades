@@ -1,0 +1,4 @@
+@caption RiskGrades
+RiskGrades is a risk metric developed by J.P. Morgan. The RiskGrade is a measure of the portfolio in your portfolio. A RiskGrade of 100 corresponds to the benchmark market risk from 1995 to 1999. Therefore a RiskGrade of less than 100 is considered to be less risky than the general market. RiskGrades are exponentially weighted so more recent volatility has a greater impact on the metric. The diversification benefit is a measure of how much your risk has been reduced by diversifying your portfolio. It takes into account the historical relationship between the returns of your holdings. The RiskImpact metric tells you how much a individual holding contributes to the risk in your portfolio. Holdings with a high RiskImpact may be overweight in your portfolio, or very risky.<br>
+<br>
+More information on RiskGrades can be obtained from free from www.riskgrades.com.<br>

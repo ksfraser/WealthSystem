@@ -1,0 +1,1 @@
+*/5 * * * * (cd /var/www/localhost/htdocs/ast ; ./ast --scheduler)

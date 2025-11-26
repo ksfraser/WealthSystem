@@ -1,0 +1,14 @@
+<form method="POST" action="$target" enctype="multipart/form-data">
+  <table class="awf_form">
+    <tr>
+      <th colspan="2">Select a file to upload</th>
+    </tr>
+    <tr>
+      <td><b>File Name:</b></td>
+      <td><input type="file" class="awf_wide_input awf_inputtext" name="filename" value=""></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit"></td>
+    </tr>
+  </table>
+</form>

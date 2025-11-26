@@ -1,0 +1,449 @@
+/*
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+tswhite.c, white noise generator-generates a time series.  The idea is
+to produce a flat power spectrum distribution.
+
+Note: these programs use the following functions from other
+references:
+
+    ran1, which returns a uniform random deviate between 0.0 and
+    1.0. See "Numerical Recipes in C: The Art of Scientific
+    Computing," William H. Press, Brian P. Flannery, Saul
+    A. Teukolsky, William T. Vetterling, Cambridge University Press,
+    New York, 1988, ISBN 0-521-35465-X, page 210, referencing Knuth.
+
+    gasdev, which returns a normally distributed deviate with zero
+    mean and unit variance, using ran1 () as the source of uniform
+    deviates. See "Numerical Recipes in C: The Art of Scientific
+    Computing," William H. Press, Brian P. Flannery, Saul
+    A. Teukolsky, William T. Vetterling, Cambridge University Press,
+    New York, 1988, ISBN 0-521-35465-X, page 217.
+
+    gammln, which returns the log of the results of the gamma
+    function.  See "Numerical Recipes in C: The Art of Scientific
+    Computing," William H. Press, Brian P. Flannery, Saul
+    A. Teukolsky, William T. Vetterling, Cambridge University Press,
+    New York, 1988, ISBN 0-521-35465-X, page 168.
+
+$Revision: 0.0 $
+$Date: 2006/01/18 20:28:55 $
+$Id: tswhite.c,v 0.0 2006/01/18 20:28:55 john Exp $
+$Log: tswhite.c,v $
+Revision 0.0  2006/01/18 20:28:55  john
+Initial version
+
+
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+static char rcsid[] = "$Id: tswhite.c,v 0.0 2006/01/18 20:28:55 john Exp $"; /* program version */
+static char copyright[] = "Copyright (c) 1994-2006, John Conover, All Rights Reserved"; /* the copyright banner */
+
+#ifdef __STDC__
+
+static const char *help_message[] = /* help message index array */
+
+#else
+
+static char *help_message[] = /* help message index array */
+
+#endif
+
+{
+    "\n",
+    "Generate a uniform distributed noise time series\n",
+    "Usage: tswhite [-t] [-v] number\n",
+    "    -t, sample's time will be included in the output time series\n",
+    "    -v, print the program's version information\n",
+    "    number, number of samples in the time series\n"
+};
+
+#ifdef __STDC__
+
+static const char *error_message[] = /* error message index array */
+
+#else
+
+static char *error_message[] = /* error message index array */
+
+#endif
+
+{
+    "No error\n",
+    "Error in program argument(s)\n"
+};
+
+#define NOERROR 0 /* error values, one for each index in the error message array */
+#define EARGS 1
+
+#ifdef __STDC__
+
+static void print_message (int retval); /* print any error messages */
+static double ran1 (int *idum);
+
+#else
+
+static void print_message (); /* print any error messages */
+static double ran1 ();
+
+#endif
+
+#ifdef __STDC__
+
+int main (int argc,char *argv[])
+
+#else
+
+int main (argc,argv)
+int argc;
+char *argv[];
+
+#endif
+
+{
+    int number, /* number of records in time series */
+        retval = EARGS, /* return value, assume not enough arguments */
+        i, /* counter of number of records in time series */
+        idem = -1, /* random number initialize flag */
+        t = 0, /* print time of samples flag, 0 = no, 1 = yes */
+        c; /* command line switch */
+
+    while ((c = getopt (argc, argv, "tv")) != EOF) /* for each command line switch */
+    {
+
+        switch (c) /* which switch? */
+        {
+
+            case 't': /* request printing time of samples? */
+
+                t = 1; /* yes, set the print time of samples flag */
+                break;
+
+            case 'v':
+
+                (void) printf ("%s\n", rcsid); /* print the version */
+                (void) printf ("%s\n", copyright); /* print the copyright */
+                optind = argc; /* force argument error */
+
+            default: /* illegal switch? */
+
+                optind = argc; /* force argument error */
+                break;
+        }
+
+    }
+
+    if (argc - optind > 0) /* enough arguments? */
+    {
+        retval = NOERROR; /* assume no error */
+
+        number = atoi (argv[optind]); /* number of records in time series */
+
+        for (i = 0; i < number; i ++) /* for each record in the time series */
+        {
+
+            if (t == 1) /* print time of samples? */
+            {
+                (void) printf ("%d\t", i); /* yes, print the sample's time */
+            }
+
+            (void) printf ("%f\n", ran1 (&idem) - (double) 0.5); /* print the record */
+        }
+
+    }
+
+    print_message (retval); /* print any error messages */
+    exit (retval); /* exit with the error value */
+
+#ifdef LINT
+
+    return (0); /* for lint formalities */
+
+#endif
+
+}
+
+/*
+
+Print any error messages.
+
+static void print_message (int retval);
+
+I) Data structures:
+
+    A) The help_message array is an array of character stings, one per
+       line to be printed for help.
+
+    B) The error_message array is an array of character strings, one
+       line per error; the error_message array is implicitly addressed
+       by the value integer retval, which specifies the error to be
+       printed.
+
+II) Function execution:
+
+    A) Depending on the value of the integer retval:
+
+        1) If retval is zero, print nothing-normal/successful program
+           exit.
+
+        2) Else if retval is unity, print help.
+
+        3) Else retval is not zero or unity, it is an error code, print
+           the corresponding error message.
+
+Returns nothing.
+
+*/
+
+#ifdef __STDC__
+
+static void print_message (int retval)
+
+#else
+
+static void print_message (retval)
+int retval;
+
+#endif
+
+{
+    size_t help_ctr; /* help_message line counter */
+
+    switch (retval) /* which return value */
+    {
+
+        case 0: /* program ended without errors, print nothing */
+
+            break;
+
+        case 1: /* program ended with a request for help, or argument error, print help */
+
+            for (help_ctr = 0; help_ctr < (sizeof (help_message) / sizeof (char *)); help_ctr ++) /* for each line of help */
+            {
+                (void) printf ("%s", help_message[help_ctr]); /* print the line */
+            }
+
+            break;
+
+        default: /* an error that was not a request for help, print the error */
+
+            (void) fprintf (stderr, "%s", error_message[retval]);
+            break;
+
+    }
+
+}
+
+#define M1 259200
+#define IA1 7141
+#define IC1 54773
+#define RM1 (1.0/M1)
+#define M2 134456
+#define IA2 8121
+#define IC2 28411
+#define RM2 (1.0/M2)
+#define M3 243000
+#define IA3 4561
+#define IC3 51349
+
+/*
+
+Returns a uniform random deviate between 0.0 and 1.0. Set idum to any
+negative value to initialize or reinitialize the sequence. See
+"Numerical Recipes in C: The Art of Scientific Computing," William
+H. Press, Brian P. Flannery, Saul A. Teukolsky, William T. Vetterling,
+Cambridge University Press, New York, 1988, ISBN 0-521-35465-X, page
+210, referencing Knuth.
+
+*/
+
+#ifdef __STDC__
+
+static double ran1 (int *idum)
+
+#else
+
+static double ran1 (idum)
+int *idum;
+
+#endif
+
+{
+    static int iff = 0;
+
+    static long ix1,
+                ix2,
+                ix3;
+
+    static double r[98];
+
+    int j;
+
+    double temp;
+
+    if (*idum < 0 || iff == 0) /* initialize on first call even if idum is not negative */
+    {
+        iff = 1;
+        ix1 = (IC1 - (*idum)) % M1; /* seed first routine */
+        ix1 = (IA1 * ix1 + IC1) % M1;
+        ix2 = ix1 % M2; /* use first to seed second routine */
+        ix1 = (IA1 * ix1 +IC1) % M1;
+        ix3 = ix1 % M3; /* use first to seed third routine */
+
+        for (j = 1; j <= 97; j++) /* fill table with sequential uniform deviates generated by first two routines */
+        {
+            ix1 = (IA1 * ix1 + IC1) % M1;
+            ix2 = (IA2 * ix2 + IC2) % M2;
+            r[j] = (ix1 + ix2 * RM2) * RM1; /* low and high order pieces combined here */
+        }
+
+        *idum = 1;
+    }
+
+    ix1 = (IA1 * ix1 + IC1) % M1; /* except when initializing, this is the start-generate the next number for each sequence */
+    ix2 = (IA2 * ix2 + IC2) % M2;
+    ix3 = (IA3 * ix3 + IC3) % M3;
+    j = 1 + ((97 * ix3)/M3); /* use the third sequence to get an integer between 1 and 97 */
+
+    if (j > 97 || j < 1)
+    {
+        (void) fprintf (stderr, "RAN1: This can not happen.\n");
+        exit (1);
+    }
+
+    temp = r[j]; /* return that table entry */
+    r[j] = (ix1 + ix2 * RM2) * RM1; /* refill the table's entry */
+    return (temp);
+}
+
+#ifdef TEST_RAN1
+
+/*
+
+Calculates PI statistically using volume of unit n-sphere.  Test
+driver for ran1 (). See "Numerical Recipes: Example Book (C),"
+William T. Vetterling, Saul A. Teukolsky, William H. Press, Brian
+P. Flannery, Cambridge University Press, New York, 1988, ISBN
+0-521-35746-2, page 82.
+
+*/
+
+#include <stdio.h>
+#include <math.h>
+
+#ifndef PI
+
+#define PI 3.141592653589793 /* pi to 15 decimal places as per CRC handbook */
+
+#endif
+
+#ifdef __STDC__
+
+static int twotoj (int j);
+static double fnc (double x1, double x2, double x3, double x4);
+static double ran1 (int *idum);
+
+#else
+
+static int twotoj ();
+static double fnc ();
+static double ran1 ();
+
+#endif
+
+#ifdef __STDC__
+
+void main (void)
+
+#else
+
+void main ()
+
+#endif
+
+{
+    int i,
+        idum = -1,
+        j,
+        k,
+        jpower;
+
+    double x1,
+           x2,
+           x3,
+           x4,
+           iy[4],
+           yprob[4];
+
+    /* Calculates PI statistically using volume of unit n-sphere */
+
+    for (i = 1; i <= 3; i ++)
+    {
+        iy[i] = (double) 0.0;
+    }
+
+    (void) printf ("\nvolume of unit n-sphere, n = 2, 3, 4\n");
+    (void) printf ("points\t\tPI\t\t(4/3)*PI\t(1/2)*PI^2\n\n");
+
+    for (j = 1; j <= 14; j ++)
+    {
+
+        for (k = twotoj (j - 1); k <= twotoj (j); k ++)
+        {
+            x1 = ran1 (&idum);
+            x2 = ran1 (&idum);
+            x3 = ran1 (&idum);
+            x4 = ran1 (&idum);
+
+            if (fnc (x1, x2, (double) 0.0, (double) 0.0) < (double) 1.0)
+            {
+                ++ iy[1];
+            }
+
+            if (fnc (x1, x2, x3, (double) 0.0) < (double) 1.0)
+            {
+                ++ iy[2];
+            }
+
+            if (fnc (x1, x2, x3, x4) < (double) 1.0)
+            {
+                ++ iy[3];
+            }
+
+        }
+
+        jpower=twotoj (j);
+        yprob[1] = (double) 4.0 * iy[1] / jpower;
+        yprob[2] = (double) 8.0 * iy[2] / jpower;
+        yprob[3] = (double) 16.0 * iy[3] / jpower;
+        (void) printf ("%6d\t%12.6f\t%12.6f\t%12.6f\n", jpower, yprob[1], yprob[2], yprob[3]);
+    }
+
+    (void) printf ("\nactual\t%12.6f\t%12.6f\t%12.6f\n", (double) PI, 4.0 * (double) PI / (double) 3.0, (double) 0.5 * (double) PI * (double) PI);
+}
+
+#endif

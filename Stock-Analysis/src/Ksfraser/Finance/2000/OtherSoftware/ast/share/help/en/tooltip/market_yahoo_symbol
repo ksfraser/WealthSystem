@@ -1,0 +1,2 @@
+@caption Yahoo Symbol
+This should be set to the Yahoo symbol for the main market index, such as the TSX 300 or NASDAQ composite. It can be left blank, which will disable comparisons against the market.

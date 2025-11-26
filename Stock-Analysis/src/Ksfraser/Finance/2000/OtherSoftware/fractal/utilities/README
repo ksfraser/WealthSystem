@@ -1,0 +1,163 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+These are programs that are useful when attempting a fractal analysis
+on time series data. The programs include:
+
+     tsshannon - calculate the probability, given the Shannon
+     information capacity
+
+     tslsq - make a least squares fit time series from a time series.
+
+     tslogreturns - take the logarithmic returns of a time series
+
+     tsintegrate - take the integral of a time series
+
+     tshurst - calculate the Hurst exponent for a time series.
+
+     tshcalc - calculate the H parameter for a one variable fBm time
+     series.
+
+     tsderivative - take the derivative of a time series
+
+     tsnormal - make a histogram or frequency plot of a time series
+
+     tsfraction - take the fraction of change of a time series
+
+     tsshannonmax - returns of a time series with unfair weights
+
+     tschangewager - change the unfair returns of a time series
+
+     tssample - sample a time series
+
+     tsXsquared - take the chi-square of two time series
+
+     tsrms - take the root mean square of a time series
+
+     tsavg - take the average of a time series
+
+     tsmath - mathamatical operations on a time series
+
+     tsavgwindow - take the windowed average of a time series
+
+     tspole - single pole filter a time series
+
+     tsdft - Discrete Fourier Transform (power spectrum) of a time series
+
+     tsdeterministic - determine if a time series is deterministic
+
+     tsnumber - number the records of a time series
+
+     tsrmswindow - take the windowed root mean square of a time series
+
+     tsstatest - make a statistical estimation of a time series
+
+     tsunfraction - make a cumulative sum of the fraction of change of
+     a time series
+
+     tsshannonaggregate - calculate the aggregate Shannon probability
+
+     tsinstant - take the instantaneous fraction of change of a time
+     series
+
+     tsshannonvolume - find the Shannon probability, based on trading
+     volume, of a time series
+
+     tsshannonfundamental - find the fundamental Shannon probability
+     of a time series
+
+     tsrunlength - find the run lengths of zero free intervals in a
+     time series
+
+     tsunshannon - shannon information capacity calculation, given the
+     Shannon probability
+
+     tsrootmean - find the root mean of a time series
+
+     tsrunmagnitude - find the magnitude of the run lengths in a time
+     series
+
+     tskurtosis - find the coefficient of excess kurtosis of a time
+     series
+
+     tskurtosiswindow - find the windowed coefficient of excess
+     kurtosis of a time series
+
+     tsrootmeanscale - find the root mean of a time series
+
+     tsscalederivative - take the derivative of a time series
+
+     tsgain - find the gain of a time series
+
+     tsgainwindow - find the windowed gain of a time series
+
+     tskalman - take the Kalman filtered average of a time series
+
+     tsroot - find the root of a time series
+
+There is compatability among the file structures used, where
+applicable.  The input file structure is a text file consisting of
+records, in temporal order, one record per time series sample.  Blank
+records are ignored, and comment records are signified by a '#'
+character as the first non white space character in the record. Data
+records must contain at least one field, which is the data value of
+the sample, but may contain many fields-if the record contains many
+fields, then the first field is regarded as the sample's time, and the
+last field as the sample's value at that time.
+
+The programs are written in ANSI standard C, but there is little or no
+provisions for handling numerical exceptions. Usually, a great deal of
+analytical skill is required in an interactive analysis of fractal
+time series, and should probably not be attempted by the novice for
+other than academic purposes. The user should consult, and have a
+thorough knowledge of the concepts presented in the following
+references:
+
+    "Fractals, Chaos, Power Laws," Manfred Schroeder, W. H. Freeman
+    and Company, New York, New York, 1991, ISBN 0-7167-2136-8.
+
+    "Numerical Recipes in C: The Art of Scientific Computing," William
+    H. Press, Brian P. Flannery, Saul A. Teukolsky, William
+    T. Vetterling, Cambridge University Press, New York, 1988, ISBN
+    0-521-35465-X.
+
+    "The Art of Modeling Dynamic Systems", Foster Morrison, John Wiley
+    & Sons, New York, New York, 1991.
+
+    "Predictions", Theodore Modis, Simon & Schuster, New York, New
+    York, 1992, ISBN 0-471-52004-7.
+
+     "Complexification," John L. Casti, HarperCollins, New York, New
+     York, 1994, ISBN 0-06-016888-9.
+
+    "Chaos and Order in the Capital Markets," Edgar E. Peters, John
+    Wiley & Sons, New York, New York, 1991, ISBN 0-471-53372-6.
+
+    "Applied Chaos Theory: A Paradigm for Complexity," A. B. Cambel.
+    Academic Press, San Diego, California, 1993, ISBN 0-12-155940-8.
+
+    "Introduction to Fractals and Chaos", Richard M. Crownover, Jones
+    and Bartlett Publishers International, London, England, 1995, ISBN
+    0-86720-464-8.
+
+    "Fractals", Jens Feder, Plenum Press, New York, New York, 1988,
+    ISBN 0-306-42851-2.

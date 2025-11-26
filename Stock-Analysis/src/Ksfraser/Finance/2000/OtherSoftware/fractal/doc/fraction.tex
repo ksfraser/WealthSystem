@@ -1,0 +1,347 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: fraction.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: fraction.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Time Series Increments Analysis}
+        \label{\SETLABEL:TSA}
+
+        \subidx{\market}{Time series analysis}
+        \subidx{time series}{increments}
+        \subidx{time series}{analysis}
+        \subidx{cumulative sum}{analysis}
+        \subidx{analysis}{cumulative sum}
+        \subidx{analysis}{random process}
+        \subidx{random process}{analysis}
+        \subidx{Gaussian}{increments}
+        \subidx{increments}{Gaussian}
+        \subidx{Brownian}{motion, fractional}
+        \subidx{fractional}{Brownian motion}
+        \subidx{fractal}{Brownian motion}
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF:TSA}.  Figure~\ref{\SETLABEL:TS} is
+        a graph of the time series data for the {\market}.
+
+        \subidx{increments}{normalized}
+        \subidx{normalized}{increments}
+        \subidx{programs}{tsfraction}
+        \subidx{tsfraction}{program}
+        Figure~\ref{\SETLABEL:TF} is a graph of the normalized
+        increments of the time series data presented in
+        Figure~\ref{\SETLABEL:TS}. The data presented was made by
+        running the program {\it tsfraction}\/ on the time series
+        data. The program {\it tsfraction}\/ is described briefly in
+        Appendix~\ref{programs}, and subtracts the previous value from
+        the next value, dividing this difference by the previous
+        value, for each element in the time series data. The new time
+        series contains the instantaneous change in the rate of
+        revenue returns, divided by the magnitude of the instantaneous
+        rate of revenue returns.
+
+        \subidx{mean}{standard deviation}
+        \subidx{standard deviation}{mean}
+        \idx{root mean square}
+        \idx{least squares approximation}
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.eps}
+                    \caption{{\market}, time series data.}
+                    \label{\SETLABEL:TS}
+                    \label{\SETLABELQ:TS}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.eps}
+                    \caption[{\market}, normalized
+                        increments]{{\market}, normalized increments
+                        of the time series data presented in
+                        Figure~\ref{\SETLABEL:TS}. The mean is
+                        {\datafractionmean} with a standard deviation
+                        of {\datafractionstddev}. The formula for the
+                        least squares approximation is
+                        ${\datafractionconstant} +
+                        {\datafractionslope}t$, and the root mean
+                        squared value is {\datafractionrms}. The
+                        graph, labeled ``data\-.tsfraction\-.tsrms,''
+                        is the running root mean square, and
+                        ``data\-.tsfraction\-.tsavg'' is the running
+                        average of the normalized increments.  This
+                        graph is the fraction of change in the time
+                        series, as a function of time. Note that the
+                        slope of the mean, {\datafractionslope}, is
+                        the coefficient of the nonlinearity term in
+                        the normalized increments. See
+                        Chapter~\ref{general}, Section~\ref{nlextend}
+                        for a possible application of the logistic
+                        function to this data set.}
+                    \label{\SETLABEL:TF}
+                    \label{\SETLABELQ:TF}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        \subidx{absolute value}{increments}
+        \subidx{increments}{absolute value}
+
+        Figure~\ref{\SETLABEL:TFA} is a graph of the absolute value of
+        the normalized increments of the time series data presented in
+        Figure~\ref{\SETLABEL:TF}. The data presented was made by
+        running the Unix utility sed(1) on the normalized increments
+        time series data to remove the negative signs. This is an
+        absolute value procedure.  The resulting time series contains
+        the absolute value of the instantaneous change in the rate of
+        revenue returns, divided by the magnitude of the instantaneous
+        rate of revenue returns\footnote{The absolute value of the
+        normalized increments, when averaged, is related to the root
+        mean square of the increments by a constant. If the normalized
+        increments are a fixed increment, the constant is unity. If
+        the normalized increments have a Gaussian distribution, the
+        constant is $\approx 0.8$ depending on the accuracy of of
+        ``fit'' to a Gaussian distribution.}.
+
+        \subidx{histogram}{normalized}
+        \subidx{normalized}{histogram}
+        \subidx{programs}{tsnormal}
+        \subidx{tsnormal}{program}
+        \subidx{mean}{standard deviation}
+        \subidx{standard deviation}{mean}
+        \idx{root mean square}
+        \idx{least squares approximation}
+        \subidx{\market}{analysis of increments}
+        Figure~\ref{\SETLABEL:NH} is the normalized histogram of the
+        normalized increments of the time series data shown in
+        Figure~\ref{\SETLABEL:TF}. The abscissa is 3 $\sigma$ limits,
+        and the area under the two curves is identical. The data for
+        this figure was produced by the program {\it tsnormal}\/,
+        which is described briefly in Appendix~\ref{programs}.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.abs.eps}
+                    \caption[{\market}, absolute value of the
+                        normalized increments]{{\market}, absolute
+                        value of the normalized increments of the time
+                        series data presented in
+                        Figure~\ref{\SETLABEL:TF}.  The mean is
+                        {\datafractionabsmean} with a standard
+                        deviation of {\datafractionabsstddev}. The
+                        formula for the least squares approximation is
+                        ${\datafractionabsconstant} +
+                        {\datafractionabsslope}t$, and the root mean
+                        square value, from Figure~\ref{\SETLABEL:TF},
+                        is {\datafractionrms}.  The graph, labeled
+                        ``data\-.tsfraction\-.tsrms,'' is the running
+                        root mean square, and
+                        ``data\-.tsfraction\-.tsavg'' is the running
+                        average of the normalized increments presented
+                        in Figure~\ref{\SETLABEL:TF}, superimposed
+                        here for convenience. This graph is the
+                        absolute value of the fraction of change in
+                        the time series, as a function of time.}
+                    \label{\SETLABEL:TFA}
+                    \label{\SETLABELQ:TFA}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tsnormal-s30.eps}
+                    \caption[{\market}, normalized histogram of the
+                        normalized increments]{{\market}, normalized
+                        histogram of the normalized increments of the
+                        time series data shown in
+                        Figure~\ref{\SETLABEL:TF}.  The data has a
+                        mean of {\datafractionmean}, with a standard
+                        deviation of {\datafractionstddev}.  The area
+                        under the two curves is identical. The
+                        $\chi^2$ value of the observed and expected
+                        values of the two curves is {\chisquared},
+                        with a critical value of {\critical}.}
+                    \label{\SETLABEL:NH}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        \subidx{programs}{tsXsquared}
+        \subidx{tsXsquared}{program}
+        \subidx{\market}{chi-squared values of increments}
+        The program {\it tsXsquared}\/, which is briefly described in
+        appendix~\ref{programs}, was used to derive the $\chi^2$
+        statistics for the data presented in
+        Figure~\ref{\SETLABEL:NH}.
+
+        \subidx{programs}{tsstatest}
+        \subidx{tsstatest}{program}
+        \subidx{\market}{statistical estimates}
+
+        Figure~\ref{\SETLABEL:SE} is the statistical estimate for the
+        data presented in Figure~\ref{\SETLABEL:TF}, as derived by the
+        program {\it tsstatest}\/, which is briefly described in
+        appendix~\ref{programs}.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{\textwidth}
+                    \center{\fbox{\parbox{0.9\textwidth}{\XXX{\directory/data.tsstatest-f0.1-c0.9-i.tex}}}}
+                    \caption[{\market}, statistical estimates of the
+                        normalized increments]{{\market}, statistical
+                        estimates of the normalized increments of the
+                        time series shown in Figure~\ref{\SETLABEL:TF}.
+                        The table was produced with the {\it
+                        tsstatest}\/ program, and illustrates the
+                        size of the data set required for a confidence
+                        level of 90\%, with an error estimate of $\pm$
+                        10\%, or alternately, the error estimate on
+                        the time series shown in Figure~\ref{\SETLABEL:TF}.}
+                    \label{\SETLABEL:SE}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        Note that the data set size estimations, as produced by the
+        {\it tsstatest}\/ program, are probably very conservative,
+        depending on the magnitude of the Shannon probability, $P =
+        \shannonlogreturns$, as derived in
+        Section~\ref{\SETLABEL:SP}. See Chapter~\ref{general},
+        Section~\ref{serdss} for possible alternative methodologies
+        for addressing the analysis of fractal time series with
+        limited data set sizes. Depending on the magnitude of the
+        Shannon probability, $P$, these estimates can be several
+        orders of magnitude too high.
+
+        \subidx{derivative of increments}{normalized}
+        \subidx{normalized}{derivative of increments}
+        \subidx{programs}{tsderivative}
+        \subidx{tsderivative}{program}
+        Figure~\ref{\SETLABEL:TF1} is the normalized histogram of the
+        first derivative of the normalized increments of the time
+        series data shown in Figure~\ref{\SETLABEL:TF}. In principle,
+        if the distribution of the normalized increments presented in
+        Figure~\ref{\SETLABEL:NH} is Gaussian in nature, this
+        distribution would be similar to ``white noise,'' as presented
+        in appendix~\ref{programs}, Figure~\ref{whiteexample}. The
+        data was generated by the {\it tsderivative}\/ program, which
+        is briefly described in
+        appendix~\ref{programs}. Figure~\ref{\SETLABEL:TF2} is the
+        normalized histogram of the second derivative of the
+        normalized increments of the time series data shown in
+        Figure~\ref{\SETLABEL:TF}. In principle, if the distribution
+        of the normalized increments presented in
+        Figure~\ref{\SETLABEL:NH} is an integrated Gaussian
+        distribution in nature, this distribution would be similar to
+        ``white noise,'' as presented in appendix~\ref{programs},
+        Figure~\ref{whiteexample}.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tsderivative.tsnormal-s30.eps}
+                    \caption[{\market}, histogram of the first
+                        derivative of the increments]{{\market},
+                        normalized histogram of the first derivative
+                        of the normalized increments of the time
+                        series data shown in
+                        Figure~\ref{\SETLABEL:TF}.}
+                    \label{\SETLABEL:TF1}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.2tsderivative.tsnormal-s30.eps}
+                    \caption[{\market}, histogram of the second
+                        derivative of the increments]{{\market},
+                        normalized histogram of second derivative of
+                        the the normalized increments of the time
+                        series data shown in
+                        Figure~\ref{\SETLABEL:TF}.}
+                    \label{\SETLABEL:TF2}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+        \subidx{fractal}{range}
+        \subidx{fractal}{R/S analysis}
+        \subidx{\market}{rate of revenue returns, range}
+        \subidx{\market}{deterministic mechanism}
+        \subidx{deterministic}{mechanism}
+        \subidx{mechanism}{deterministic}
+        Figure~\ref{\SETLABEL:TR} is the range of values of the time
+        series shown in Figure~\ref{\SETLABEL:TS}. The horizontal axis
+        is time into the future. In principle, if the time series was
+        characterized as fractional Brownian motion the graph in
+        Figure~\ref{\SETLABEL:TR} would be a square root
+        function\footnote{Note that the ``roughness,'' or ``sawtooth''
+        characteristics of the graph in Figure~\ref{\SETLABEL:TR} are
+        a computational artifact---caused by not using the -m option
+        to the program {\it tshurst}\/, which is computationally
+        inefficient.}. Figure~\ref{\SETLABEL:TD} is the deterministic
+        map of the normalized increments of the time series data shown
+        in Figure~\ref{\SETLABEL:TF}. The deterministic map is useful
+        for determining if a time series was created by a
+        deterministic mechanism. This, essentially, maps each element
+        in the time series with the previous element in the time
+        series.  See,~\cite[pp. 745]{Peitgen}.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tshurst-f.eps}
+                    \caption[{\market}, range]{{\market}, range of the
+                        time series data shown in
+                        Figure~\ref{\SETLABEL:TS}.}
+                    \label{\SETLABEL:TR}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsfraction.tsdeterministic.eps}
+                    \caption[{\market}, deterministic map]{{\market},
+                        deterministic map of the normalized increments
+                        of the time series data shown in
+                        Figure~\ref{\SETLABEL:TF}.}
+                    \label{\SETLABEL:TD}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

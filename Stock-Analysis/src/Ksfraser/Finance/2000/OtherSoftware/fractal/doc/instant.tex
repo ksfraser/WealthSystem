@@ -1,0 +1,120 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: instant.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: instant.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Instantaneous Analysis of Normalized Increments}
+        \label{\SETLABEL:IA}
+
+        \subidx{\market}{instantaneous analysis of normalized increments}
+        \idx{average of normalized increments}
+        \idx{root mean square of normalized increments}
+        \subidx{Shannon probability}{instantaneous computation of}
+        \subidx{average of normalized increments}{instantaneous computation of}
+        \subidx{root mean square of normalized increments}{instantaneous computation of}
+        \subidx{instantaneous computation}{Shannon probability}
+        \subidx{instantaneous computation}{average of normalized increments}
+        \subidx{instantaneous computation}{root mean square of normalized increments}
+        \idx{time series}
+        \subidx{time series}{instantaneous analysis}
+        \subidx{instantaneous analysis}{time series}
+        \subidx{time series}{increments}
+        \subidx{time series}{analysis}
+        \subidx{Shannon}{probability}
+        \subidx{probability}{Shannon}
+        \subidx{normalized}{increments}
+        \subidx{increments}{normalized}
+
+        The program {\it tsinstant}\/, which is briefly described in
+        Appendix~\ref{programs}, is for finding the instantaneous
+        fraction of change in a time series. The value of a sample in
+        the time series is subtracted from the previous sample in the
+        time series, and divided by the value of the previous sample.
+        As explained in Chapter~\ref{general},
+        Sections~\ref{derivation},~\ref{GA},~\ref{abmfi},~\ref{aftsma}
+        and,~\ref{ompl} for Brownian motion, random walk fractals, the
+        absolute value of the instantaneous fraction of change is also
+        the root mean square of the instantaneous fraction of
+        change\footnote{The absolute value of the normalized
+        increments, when averaged, is related to the root mean square
+        of the increments by a constant. If the normalized increments
+        are a fixed increment, the constant is unity. If the
+        normalized increments have a Gaussian distribution, the
+        constant is $\approx 0.8$ depending on the accuracy of of
+        ``fit'' to a Gaussian distribution.}. Squaring this value is
+        the average of the instantaneous fraction of change, and
+        adding unity to the absolute value of the instantaneous
+        fraction of change, and dividing by two, is the Shannon
+        probability of the instantaneous fraction of change.
+
+        Figure~\ref{\SETLABEL:IA1} is the instantaneous value of the
+        root mean square of the normalized increments for the
+        {\market}, and Figure~\ref{\SETLABEL:IA2} is the instantaneous
+        Shannon probability for the normalized increments.
+
+        \begin{figure}[ht]
+            \begin{center}
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsinstant-r.eps}
+                    \caption[{\market}, instantaneous value of
+                        rms.]{{\market}, instantaneous value of the
+                        root mean square of the normalized increments,
+                        provided by running the program {\it
+                        tsinstant}\/ with the -r option on the data
+                        presented in Figure~\ref{\SETLABEL:TS}.}
+                    \label{\SETLABEL:IA1}
+                    \label{\SETLABELQ:IA1}
+                \end{minipage}
+                \hfill
+                \begin{minipage}[t]{0.45\textwidth}
+                    \epsfxsize=1.0\linewidth
+                    \epsffile{\directory/data.tsinstant-s.eps}
+                    \caption[{\market}, instantaneous value of
+                        Shannon probability.]{{\market}, instantaneous
+                        value of the Shannon probability of the
+                        normalized increments, provided by running the
+                        program {\it tsinstant}\/ with the -s option
+                        on the data presented in
+                        Figure~\ref{\SETLABEL:TS}.}
+                    \label{\SETLABEL:IA2}
+                    \label{\SETLABELQ:IA2}
+                \end{minipage}
+            \end{center}
+        \end{figure}
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

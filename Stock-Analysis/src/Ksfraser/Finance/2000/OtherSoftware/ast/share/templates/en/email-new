@@ -1,0 +1,22 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+     <tr>
+      <th class="awf_column_heading" colspan="2">Edit Email Address</th>
+    </tr>
+    <tr>
+      <td><b>Description:</b></td>
+      <td><input type="text" value="$email.name" name="email.name" class="awf_inputtext">&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.email_name></td>
+    </tr>
+    <tr>
+      <td><b>Email Address:</b></td>
+      <td><input type="text" value="$email.address" name="email.address" class="awf_inputtext awf_wide_input"></td>
+    </tr>
+    <tr>
+      <td><b>Type:</b></td>
+      <td><select name="email.type">$email_type_options</select>&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.email_type></td>
+    </tr>
+    <tr>
+      <td colspan="2" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

@@ -1,0 +1,20 @@
+feed.flags: 0
+feed.market: -1
+feed.feed_name: Yahoo! Finance
+feed.url: http://finance.yahoo.com/rss/headline?s=$ysymbol
+%%
+feed.flags: 0
+feed.market: 1
+feed.feed_name: Seeking Alpha
+feed.url: http://seekingalpha.com/by/symbol/$symbol/feed
+%%
+feed.flags: 0
+feed.market: 2
+feed.feed_name: Seeking Alpha
+feed.url: http://seekingalpha.com/by/symbol/$symbol/feed
+%%
+feed.flags: 0
+feed.market: 3
+feed.feed_name: Seeking Alpha
+feed.url: http://seekingalpha.com/by/symbol/$symbol/feed
+%%

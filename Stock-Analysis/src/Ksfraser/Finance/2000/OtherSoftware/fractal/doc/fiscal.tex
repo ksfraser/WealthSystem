@@ -1,0 +1,363 @@
+%
+% -----------------------------------------------------------------------------
+%
+% A license is hereby granted to reproduce this software source code and
+% to create executable versions from this source code for personal,
+% non-commercial use.  The copyright notice included with the software
+% must be maintained in all copies produced.
+%
+% THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+% WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+% MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+% AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+% INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+%
+% Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+%
+% Comments and/or bug reports should be addressed to:
+%
+%     john@email.johncon.com (John Conover)
+%
+% -----------------------------------------------------------------------------
+%
+% Revision: \RCSRevision \\
+% Revision Time: \RCSTime UMT \\
+% Revision Date: \RCSDate \\
+% Revision Id: \RCSId \\
+% Revision File: \RCSLog \\
+\RCS $Revision: 0.0 $
+\RCS $Date: 2006/01/20 04:38:13 $
+\RCS $Id: fiscal.tex,v 0.0 2006/01/20 04:38:13 john Exp $
+% $Log: fiscal.tex,v $
+% Revision 0.0  2006/01/20 04:38:13  john
+% Initial version
+%
+%
+    \subsection{Fixed Increment Approximation for Fiscal Strategy}
+        \label{\SETLABEL:FS}
+
+        \subidx{\market}{fiscal strategy}
+        \subidx{markets}{analysis}
+        \subidx{analysis}{markets}
+        \subidx{strategy}{fiscal}
+        \subidx{fiscal}{strategy}
+        The data in this section is presented in tabular form in
+        Section~\ref{\SETLABELREF:LR}. This section derives various
+        values based on the ``average'' of the normalized increments
+        presented in Figure~\ref{\SETLABEL:TFA}. These values are an
+        approximation to a, probably, complex process with a
+        distribution shown in Figure~\ref{\SETLABEL:TF}. These values
+        will be used in a fixed increment Brownian fractal analysis
+        and simulation of the {\market}, and may, or may not, provide
+        adequate accuracy for projections.
+
+        For an organization operating in the {\market}, the fiscal
+        strategy, commensurate with the aggregate environment, can be
+        derived as follows~\cite[pp. 128, pp
+        151]{Schroeder},~\cite[pp. 450]{Reza},~\cite[pp. 270]{Pierce}:
+        \vspace{0.15in}
+
+        \subsubsection{Logarithmic Returns}
+            \label{\SETLABEL:LR}
+
+            \subidx{logarithmic}{returns}
+            \subidx{returns}{logarithmic}
+            \subidx{\market}{logarithmic returns}
+            The logarithmic returns can be calculated by various
+            means. Four will be presented here, for comparison.
+
+            \subidx{programs}{tsnormal}
+            \subidx{tsnormal}{program}
+            \subidx{logarithmic}{returns}
+            \subidx{returns}{logarithmic}
+            The logarithmic returns, in bits, $bits$, as computed from
+            the mean, by the program {\it tsnormal}\/, which is
+            described in Chapter~\ref{programs}, and is presented in
+            Figure~\ref{\SETLABEL:TF}, and Equation~\ref{abits} from
+            Section~\ref{ereturns} in Chapter~\ref{general}:
+
+            \begin{equation}
+                bits = \frac{\ln \left({\datafractionmean} + 1\right)}{\ln \left(2\right)} = \datafractionmeanbits
+            \end{equation}
+
+            \subidx{programs}{tslsq}
+            \subidx{tslsq}{program}
+            \subidx{logarithmic}{returns}
+            \subidx{returns}{logarithmic}
+            \noindent By comparison, the logarithmic returns, in bits,
+            $bits$, as computed from the constant in the least squares
+            approximation, using the program {\it tslsq}\/, which is briefly
+            described in Chapter~\ref{programs}, as presented in
+            Figure~\ref{\SETLABEL:TF}, and Equation~\ref{abits} from
+            Section~\ref{ereturns} in Chapter~\ref{general}:
+
+            \begin{equation}
+                bits = \frac{\ln \left({\datafractionconstant} + 1\right)}{\ln \left(2\right)} = \datafractionconstantbits
+            \end{equation}
+
+            Note that if the mean is not constant in
+            Figure~\ref{\SETLABEL:TF}, this method will not provide
+            accurate results.
+
+            \subidx{programs}{tslsq}
+            \subidx{tslsq}{program}
+            \subidx{logarithmic}{returns}
+            \subidx{returns}{logarithmic}
+            \noindent And by yet another comparison, using the program
+            {\it tslsq}\/, which is briefly described in
+            Chapter~\ref{programs}, with the -e -p options, to provide
+            a formula for the least squares exponential fit to the
+            time series data set presented in
+            Figure~\ref{\SETLABEL:TS}:
+
+            \begin{equation}
+                bits = {\datatslsqepbits}
+            \end{equation}
+
+            \subidx{programs}{tslogreturns}
+            \subidx{tslogreturns}{program}
+            \subidx{logarithmic}{returns}
+            \subidx{returns}{logarithmic}
+            \noindent And finally, by comparison, from the
+            {\it tslogreturns}\/ program, which is briefly described
+            in Chapter~\ref{programs}, with the -p option, to provide
+            a formula for the logarithmic returns of the time series
+            data set presented in Figure~\ref{\SETLABEL:TS}:
+
+            \begin{equation}
+                bits = {\logreturns}
+            \end{equation}
+
+        \subsubsection{Calculation of Shannon Probability}
+            \label{\SETLABEL:SP}
+
+            \subidx{\market}{Shannon probability}
+            Ideally, all of the values presented in
+            Section~\ref{\SETLABEL:LR} would be equal. Using the
+            logarithmic returns provided by the {\it tslogreturns}\/
+            program, to be consistent
+            with~\cite[pp. 81]{Peters:CAOITCM}
+
+            \subidx{programs}{tslogreturns}
+            \subidx{tslogreturns}{program}
+            \begin{equation}
+                2^{{\logreturns}t}
+            \end{equation}
+
+            \noindent therefore:
+            \begin{equation}
+                C\left(p\right) = {\logreturns}
+            \end{equation}
+            \subidx{programs}{tsshannon}
+            \subidx{tsshannon}{program}
+            \subidx{Shannon}{probability}
+            \subidx{probability}{Shannon}
+            \noindent and, {\it tsshannon}\/ {\logreturns} gives:
+            \begin{equation}
+                \label{\SETLABEL:F0}
+                C\left({\shannonlogreturns}\right) = {\logreturns}
+            \end{equation}
+            \noindent therefore:
+            \begin{eqnarray}
+                2^{C\left({\shannonlogreturns}\right)} & = & 2^{\logreturns}\\
+                                                       & = & {\twologreturns}\\
+                                                       & = & {\twologreturnshundred}\%
+            \end{eqnarray}
+            \noindent and:
+            \begin{eqnarray}
+                2p - 1 & = & \left(2 \cdot {\shannonlogreturns}\right) - 1\\
+                       & = & {\twopone}\\
+                       \label{\SETLABEL:F1}
+                       & = & {\twoponehundred}\%
+            \end{eqnarray}
+
+            \subidx{\market}{fiscal strategy}
+            \subidx{markets}{analysis}
+            \subidx{analysis}{markets}
+            \subidx{strategy}{fiscal}
+            \subidx{fiscal}{strategy}
+            \subidx{\market}{fiscal strategy}
+            \subidx{\market}{growth rate}
+            Presuming the simplified assumptions outlined in
+            Section~\ref{assumptions}, the ``typical'' organization
+            operating in the {\market} executes a long term fiscal
+            strategy, commensurate with the aggregate environment,
+            that is to invest, every {\timescale}, in sufficient
+            additional resources and infrastructure, to increase the
+            manufacturing of goods and services by {\twoponehundred}\%
+            of its rate of revenue returns, (per {\timescale}.) As a
+            conceptual model, the remaining {\hundredtwoponehundred}\%
+            will be held in ``reserve'' with a
+            {\shannonlogreturnshundred}\% chance of making twice the
+            {\twoponehundred}\% back, (and a
+            {\hundredshannonlogreturnshundred}\% chance of making
+            0.0,) in one {\timescale}, on the average, for an average
+            growth in its rate of revenue returns, (per {\timescale},)
+            of {\twologreturnshundred}\%, or a doubling of its rate of
+            revenue returns, (per {\timescale},) in
+            {\oneoverlogreturns} {\timescale}s.
+
+        \subsubsection{Example Fixed Increment Approximation Fiscal Strategies}
+
+            \subidx{\market}{fiscal strategy}
+            \subidx{markets}{analysis}
+            \subidx{analysis}{markets}
+            \subidx{strategy}{fiscal}
+            \subidx{fiscal}{strategy}
+            \subidx{\market}{fiscal strategy}
+            \subidx{\market}{growth rate}
+            \subidx{\market}{management metric}
+            \idx{management metric}
+            A possible metric on the effectiveness of long term fiscal
+            management could possibly be that if an investment of
+            {\twoponehundred}\% per {\timescale} of the rate of
+            revenue returns, (per {\timescale},) is made in resources
+            and infrastructure, then the rate of revenue returns would
+            be expected to increase by {\twologreturnshundred}\%, per
+            {\timescale}, on average.
+
+            Note that the metrics presented in this section are
+            representative of the {\market} as an aggregate whole, and
+            may or may not be accurate representations for any
+            particular participant in the environment. Of interest to
+            the participants in the environment would be a similar
+            analysis of each product or service rendered in the
+            marketplace.
+
+            \subidx{\market}{fiscal strategy}
+            \subidx{markets}{analysis}
+            \subidx{analysis}{markets}
+            \subidx{strategy}{fiscal}
+            \subidx{fiscal}{strategy}
+            \subidx{\market}{fiscal strategy}
+            As a simple illustrative example, a company operating in
+            this environment might obtain a credit line from a bank
+            that is equal to {\twoponehundred}\% of its rate of
+            revenue returns, (per {\timescale},) to finance additional
+            operations. In this simple scenario, the company would use
+            its revenue base as collateral for the loan. Some
+            {\timescale}s, depending on the {\market}'s environment,
+            the company's rate of revenue returns exceeds what was
+            borrowed from the bank, and the loan is repaid in
+            full. Other {\timescale}s, the company must default, and
+            the bank seizes a portion of the company's revenue base to
+            pay the delinquent loan. However, on the average, the
+            company will expand its rate of revenue returns at
+            {\twologreturnshundred}\% per {\timescale}.
+
+            \subidx{\market}{fiscal strategy}
+            \subidx{markets}{analysis}
+            \subidx{analysis}{markets}
+            \subidx{strategy}{fiscal}
+            \subidx{fiscal}{strategy}
+            \subidx{\market}{fiscal strategy}
+            As another simple example, a company re-invests
+            {\twoponehundred}\% of its rate of revenue returns, (per
+            {\timescale},) in development, marketing, sales, and
+            distribution of new products.  Although some products will
+            be successful and the return on the investment will exceed
+            the {\twoponehundred}\% per {\timescale} investment,
+            others will not. However, on the average, the company will
+            expand it gross rate of revenue returns at
+            {\twologreturnshundred}\% per {\timescale}.
+
+            \subidx{\market}{fiscal strategy}
+            \subidx{markets}{analysis}
+            \subidx{analysis}{markets}
+            \subidx{strategy}{fiscal}
+            \subidx{fiscal}{strategy}
+            \subidx{\market}{fiscal strategy}
+            \subidx{\market}{product portfolio}
+            \subidx{\market}{product diversity}
+            \subidx{\market}{product mix}
+            \subidx{\market}{optimum number of products}
+            \idx{product portfolio}
+            \idx{product diversity}
+            \idx{optimum number of products}
+            \idx{product mix}
+
+            As an example of ``product portfolio'' management, suppose
+            a company re-invests {\twoponehundred}\% of its rate of
+            revenue returns, (per {\timescale},) in development,
+            marketing, sales, and distribution of new products.
+            Further suppose that the company has two products, and a
+            fractal analysis of the individual product rate of revenue
+            return time series indicates that one product has a
+            Shannon probability of 0.65, and the other has a Shannon
+            probability of 0.55. Then the percentage of re-investment
+            in the first product would be $(2 \cdot 0.65 - 1) \cdot
+            {\twoponehundred}$, percent of the rate of revenue
+            returns, and $(2 \cdot 0.55 - 1) \cdot {\twoponehundred}$
+            percent for the second product, implying that the company
+            should diversify its product line\footnote{The astute
+            reader would note that the linear addition was used to add
+            the contribution to development of each product. This is a
+            ``near term'' interpretation. Actually, in general, the
+            method used should be a root mean square process,
+            dependent on the Hurst Coefficient, $H$, where
+            $P_{total}^H = P_1^H + P_2^H + \cdots$, where $P_n$ is the
+            contribution to each individual product. For a Brownian
+            motion, or random walk type of fractal the Hurst
+            Coefficient is a function of time into the future. For the
+            ``near term,'' the Hurst coefficient is very near unity,
+            meaning the summation process is linear. For the ``long
+            term,'' $H \approx 0.5$, or a standard root mean square
+            summation process should be used. If $H$ is $0.5$ then the
+            market is termed a Brownian motion, or random walk
+            process. If it is larger than 0.5, it is termed fractional
+            Brownian motion process. For a random walk process, ``near
+            term'' and ``far term'' are quantitatively differentiated
+            on the Hurst Coefficient graph where $1 - \ln (t) = 0.5
+            \cdot \ln (t)$, or when $\ln (t) = 2$, or $t =
+            7.389\ldots$ See~\cite[pp. 67, 83-84]{Peters:CAOITCM}
+            and~\cite[pp. 129, 159]{Schroeder} for particulars on the
+            implications of the Hurst Coefficient and root mean square
+            summation issues.}.  Note that this is a ``bet hedging''
+            metric methodology, and assumes that the products have
+            uncorrelated revenue return rates. If this re-investment
+            methodology is not feasible, perhaps for strategic
+            financial reasons, then the re-investment in both products
+            should total the ${\twoponehundred}$\%, and the investment
+            in each product should be made at a ratio of $\frac{(2
+            \cdot 0.65 - 1)}{(2 \cdot 0.55 - 1)} = 3 : 1$,
+            respectively. Note that this ``bet hedging'' can be used
+            to define the optimal number of products that can be
+            supported on the rate of revenue returns. If it assumed
+            that all products are ``typical'' for the {\market}, as a
+            standard bench mark, then the optimal number will be
+            $\frac{1}{{\twopone}}$. Note that this is a
+            ``theoretical'' value, since not all products are
+            ``typical,'' and there may be strategic reasons, for
+            example product leveraging, that may increase the number
+            of products above the optimum. However, most of the
+            revenue should come from the optimal number of products,
+            since having more products will decrease the amount of the
+            potential investment in each product, and having less than
+            the optimum number of products will increase the risk that
+            many of the products could suffer a ``down market''
+            concurrently, impacting the rate of revenue returns.  As
+            another interesting interpretation of the optimal
+            ``hedging of bets,'' in product portfolio strategy, and
+            considering the graph of the normalized increments
+            presented in Figure~\ref{\SETLABEL:TF}, if the
+            organization is running optimally, then these products
+            will generate, at least in principle, one standard
+            deviation, approximately $0.8413 = 84.13$\% of the future
+            growth in rate of revenue returns. Naturally, these are
+            approximations, and the values are an approximation to a,
+            probably, complex process, and appropriate scrutiny should
+            be exercised before making specific projections.  As yet
+            another example of ``product portfolio'' management,
+            consider the issue of product mix. In this interpretation,
+            {\twoponehundred}\% of the product manufactured should be
+            ``proprietary,'' while the rest is ``industry standard.''
+            As yet another possibility, {\twoponehundred}\% of the
+            product manufactured should be predatory into new markets,
+            and the remainder in markets that are ``traditional'' for
+            the company.
+
+% Local Variables:
+% TeX-parse-self: t
+% TeX-auto-save: t
+% TeX-master: "fractal.tex"
+% End:

@@ -1,0 +1,78 @@
+<form method="post" id="authform">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form" width="60%">
+    <tr>
+      <th colspan="2">System Settings - Authentication</th>
+    </tr>
+    <tr>
+      <td><b>Authentication Method:</b></td>
+      <td></td>
+    <tr>
+    <tr>
+      <td><select name="auth_method" id="auth_method" onchange="sysset_on_change_auth_method();">$auth_method_options</select></td>
+      <td></td>
+    </tr>
+    <tr id="ast_ag5" $table_hidden>
+      <td><b>Database Table:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag6" $table_hidden>
+      <td><input type="text" name="sql_auth_table" value="$sql_auth_table" class="awf_inputtext"></td>
+      <td></td>
+    </tr>
+    <tr id="ast_ag1" $advsetup_hidden>
+      <td><b>Authentication Algorithm:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag2" $advsetup_hidden>
+      <td><select name="auth_algorithm">$algorithm_options</select></td>
+      <td></td>
+    </tr>
+    <tr id="ast_ag3" $advsetup_hidden>
+      <td><b>Authentication Salt:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag4" $advsetup_hidden>
+      <td><input type="text" name="auth_salt" value="$auth_salt" class="awf_inputtext"></td>
+      <td></td>
+    </tr>
+    <tr id="ast_ag11" $advsetup_hidden>
+      <td><b>Username Field:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag12" $advsetup_hidden>
+      <td><input type="text" name="sql_auth_username" value="$sql_auth_username" class="awf_inputtext"></td>
+      <td></td>
+    </tr>
+    <tr id="ast_ag13" $advsetup_hidden>
+      <td><b>Password Field:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag14" $advsetup_hidden>
+      <td><input type="text" name="sql_auth_password" value="$sql_auth_password" class="awf_inputtext"></td>
+      <td><div class="awf_small">Leave blank if not available.</div></td>
+    </tr>
+    <tr id="ast_ag7" $advsetup_hidden>
+      <td><b>Fullname Field:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag8" $advsetup_hidden>
+      <td><input type="text" name="sql_auth_fullname" value="$sql_auth_fullname" class="awf_inputtext"></td>
+      <td><div class="awf_small">Leave blank if not available.</div></td>
+    </tr>
+    <tr id="ast_ag9" $advsetup_hidden>
+      <td><b>Email Field:</b></td>
+      <td></td>
+    <tr>
+    <tr id="ast_ag10" $advsetup_hidden>
+      <td><input type="text" name="sql_auth_email" value="$sql_auth_email" class="awf_inputtext"></td>
+      <td><div class="awf_small">Leave blank if not available.</div></td>
+    </tr>
+    <tr>
+      <td colspan="2"><b>*IMPORTANT*<br>If you switch to SQL authentication, and it doesn't work you can find errors in var/log/sqlauth_log. If you need to get back into AST to change these settings then run ast from the command line with the argument --reset-default-auth.<br></b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

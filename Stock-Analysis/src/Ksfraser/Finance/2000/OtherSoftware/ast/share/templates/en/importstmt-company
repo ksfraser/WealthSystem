@@ -1,0 +1,1 @@
+<select name="$key&#95;MARKET">$market</select>&nbsp;&nbsp;<input type="text" name="$key&#95;SYMBOL" value="$symbol" class="awf_inputtextshort">&nbsp;&nbsp;<input type="text" name="$key&#95;NAME" value="$name" class="awf_inputtext">

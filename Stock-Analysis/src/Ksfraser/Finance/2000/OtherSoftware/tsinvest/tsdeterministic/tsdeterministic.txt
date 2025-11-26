@@ -1,0 +1,81 @@
+TSDETERMINISTIC(1)					    TSDETERMINISTIC(1)
+
+
+
+NAME
+       tsdeterministic - determine if a time series is deterministic.
+
+SYNOPSIS
+       tsdeterministic [-v] [filename]
+
+DESCRIPTION
+       Tsdeterministic	for  determining  if  a  time  series was created by a
+       deterministic mechanism. The idea is  place  each  element  of  a  time
+       series  in  an  array  structure that contains the element and the next
+       element in the time series, and then sort the array. The array is  out-
+       put  and  may be plotted. For example, using the program tsdlogistic(1)
+       to make a discrete time series of the logistic,	(quadratic  function,)
+       with the following command:
+
+	   tsdlogistic -a 4 -b -4 1000 > XXX
+
+       and  then  using this program on the output file, XXX, will result in a
+       plot of a parabola.  See "Chaos and Fractals:  New  Frontiers  of  Sci-
+       ence,"  Heinz-Otto  Peitgen  and  Hartmut  Jurgens  and	Dietmar Saupe,
+       Springer-Verlag, 1992, pp. 745.
+
+OPTIONS
+       -v     Print the version and copyright banner of the program.
+
+       filename
+	      Input filename.
+
+WARNINGS
+       There is little or no provision for handling numerical exceptions.
+
+SEE ALSO
+       tsderivative(1),  tshcalc(1),  tshurst(1),   tsintegrate(1),   tslogre-
+       turns(1),  tslsq(1),  tsnormal(1),  tsshannon(1),  tsblack(1), tsbrown-
+       ian(1), tsdlogistic(1), tsfBm(1), tsfractional(1), tsgaussian(1), tsin-
+       tegers(1), tslogistic(1), tspink(1), tsunfairfractional(1), tswhite(1),
+       tscoin(1),   tsunfairbrownian(1),    tsfraction(1),    tsshannonmax(1),
+       tschangewager(1),    tssample(1),   tsrms(1),   tscoins(1),   tsavg(1),
+       tsXsquared(1), tsstockwager(1), tsshannonwindow(1),  tsmath(1),	tsavg-
+       window(1),   tspole(1),	tsdft(1),  tsbinomial(1),  tsdeterministic(1),
+       tsnumber(1),    tsrmswindow(1),	   tsshannonstock(1),	  tsmarket(1),
+       tsstock(1), tsstatest(1), tsunfraction(1), tsshannonaggregate(1), tsin-
+       stant(1),  tsshannonvolume(1),  tsstocks(1),   tsshannonfundamental(1),
+       tstrade(1),   tstradesim(1),  tsrunlength(1),  tsunshannon(1),  tsroot-
+       mean(1), tsrunmagnitude(1), tskurtosis(1), tskurtosiswindow(1), tsroot-
+       meanscale(1),	tsscalederivative(1),	 tsgain(1),    tsgainwindow(1)
+       tscauchy(1), tslognormal(1), tskalman(1), tsroot(1), tslaplacian(1)
+
+DIAGNOSTICS
+       Error messages for incompatible arguments, failure to allocate  memory,
+       inaccessible files, and opening and closing files.
+
+AUTHORS
+       ----------------------------------------------------------------------
+
+       A license is hereby granted to reproduce this software source code and
+       to create executable versions from this source code for personal,
+       non-commercial use.  The copyright notice included with the software
+       must be maintained in all copies produced.
+
+       THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+       WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+       MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+       AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+       INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+       Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+       Comments and/or bug reports should be addressed to:
+
+	   john@email.johncon.com (John Conover)
+
+       ----------------------------------------------------------------------
+
+
+
+			       January 17, 2006 	    TSDETERMINISTIC(1)

@@ -1,0 +1,86 @@
+<form method="post" action="$target" id="chart_form">
+  <input type="hidden" name="more_options" value="false">
+  <input type="hidden" name="symbol_search" id="symbol_search" value="false">
+  <input type="hidden" name="period" value="$period">
+  <script type="text/javascript" language="javascript" charset="utf-8">var ac;</script>
+  <table width="100%" class="awf_form">
+    <tr><th colspan="3">Chart Configuration</th></tr>
+    <tr>
+      <td><b>Market:</b></td>
+      <td><b>Symbol:</b></td>
+      <td align="right"><a href="#" onclick="javascript:ast_chart_more_options();" id="more">More Options</a></td>
+    </tr>
+    <tr>
+      <td><select name="market" id="market" class="awf_inputtext" onchange="javascript: ac.setParameters('prefix=&amp;market='+$('market').value);">$market_options</select></td>
+      <td><input autocomplete="off" type="text" name="symbol" id="symbol" value="$symbol" class="awf_inputtext">
+          <div id="symbolupdate" class="awf_dropmenu" style="display: none"></div>
+          <script type="text/javascript" language="javascript" charset="utf-8">
+            // <![CDATA[
+           ac = new Ajax.Autocompleter('symbol','symbolupdate','?process=ajax-symbol-list',{select:'awf_selectiontext', parameters: 'prefix=&market=' + $('market').value});
+            // ]]>
+          </script>
+
+        &nbsp;<a href="#" onclick="javascript=document.getElementById('symbol_search').value='true';document.getElementById('chart_form').submit();" $tooltip.symbollookup><img src="images/find.png" alt="find"></a></td>
+      <td align="right"><input type="submit" value="Chart" id="chart1"></td>
+    </tr>
+  </table>
+    <table id="options" style="display: none" class="awf_form" width="100%">
+      <tr>
+        <td><b>Time:</b></td>
+        <td><b>Image Size:</b></td>
+        <td><b>Chart Type:</b></td>
+      </tr>
+      <tr>
+        <td><select name="time"  class="awf_inputtext">$time_options</select></td>
+        <td><select name="size"  class="awf_inputtext">$size_options</select></td>
+        <td><select name="type"  class="awf_inputtext">$chart_options</select></td>
+      </tr>
+      <tr>
+        <td><b>Moving Average Type:</b></td>
+        <td><b>Moving Averages:</b>&nbsp;<span class="awf_small">(comma separated - e.g. 25,40)</span></td>
+        <td><input type="checkbox" name="colour_up" $colourup>&nbsp;Colour code ups/downs</td>
+      </tr>
+      <tr>
+        <td><select name="average_type"  class="awf_inputtext">$matype_options</select></td>
+        <td><input name="averages" value="$averages" class="awf_inputtext"></td>
+        <td><input type="checkbox" name="logscale" $logscale>&nbsp;Logarithmic Scaling</td>
+      </tr>
+      <tr>
+        <td><b>Hi-light Pattern:</b></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><select name="pattern_hilight"  class="awf_inputtext">$pattern_options</select></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th colspan="3">Indicators</th>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="volume_chart" $show_vol>Show Volume</td>
+        <td><input type="checkbox" name="obv_chart" $show_obv>Show OBV</td>
+        <td><input type="checkbox" name="mom_chart" $show_mom>Show Momentum</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="macd_chart" $show_macd>Show MACD</td>
+        <td><input type="checkbox" name="stoch_chart" $show_stoch>Show Stochastic</td>
+        <td><input type="checkbox" name="rsi_chart" $show_rsi>Show Relative Strength Index (RSI)</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="mfi_chart" $show_mfi>Show Money Flow Index (MFI)</td>
+        <td><input type="checkbox" name="williamsr_chart" $show_wr>Show Williams %R</td>
+        <td><input type="checkbox" name="adx_chart" $show_adx>Show Average Direction Movement Index (ADX)&nbsp;&nbsp;<img src="images/help_small.png" alt="help" $tooltip.adx></td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" name="bbands" $show_bbands>Show Bollinger Bands</td>
+        <td><input type="checkbox" name="sar" $show_sar>Show Parabolic SAR</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td align="left"><input type="submit" value="Chart"></td><td>&nbsp;</td><td>&nbsp;</td>
+      </tr>
+    </table>
+</form>
+

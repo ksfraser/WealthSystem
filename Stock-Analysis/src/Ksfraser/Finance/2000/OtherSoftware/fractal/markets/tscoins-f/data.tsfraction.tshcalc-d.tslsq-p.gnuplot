@@ -1,0 +1,1 @@
+plot [t=:] "data.tsfraction.tshcalc-d" with lines, -3.513257 + 0.463851 * t with lines, -3.516731 + 0.474175 * t with lines

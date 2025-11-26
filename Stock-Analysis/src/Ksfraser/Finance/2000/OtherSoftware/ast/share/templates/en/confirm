@@ -1,0 +1,14 @@
+<form method="post" action="$appname">
+  $fields
+  <table width="60%" align="center" class="awf_form">
+    <tr>
+      <th colspan="2">Confirm Action</th>
+    </tr>
+    <tr>
+      <td rowspan="2"><img src="images/attention.png" alt="warning"></td>
+      <td>$message</td>
+    <tr>
+      <td align="center"><input type="submit" name="confirm" value="yes">&nbsp;<input type="submit" name="confirm" value="no">
+    </tr>
+  </table>
+</form>

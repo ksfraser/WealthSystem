@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svnroot/geniustrader/!svn/ver/685/trunk/GT/Graphics/Object
+END
+Marks.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/539/trunk/GT/Graphics/Object/Marks.pm
+END
+BuySellArrows.pm
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/geniustrader/!svn/ver/568/trunk/GT/Graphics/Object/BuySellArrows.pm
+END
+VotingLine.pm
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/Object/VotingLine.pm
+END
+CandleVolume.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/553/trunk/GT/Graphics/Object/CandleVolume.pm
+END
+MountainBand.pm
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/geniustrader/!svn/ver/553/trunk/GT/Graphics/Object/MountainBand.pm
+END
+Trades.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/685/trunk/GT/Graphics/Object/Trades.pm
+END
+CandleVolumePlace.pm
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/geniustrader/!svn/ver/553/trunk/GT/Graphics/Object/CandleVolumePlace.pm
+END
+Text.pm
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/Object/Text.pm
+END
+Curve.pm
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/geniustrader/!svn/ver/553/trunk/GT/Graphics/Object/Curve.pm
+END
+Candle.pm
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/geniustrader/!svn/ver/553/trunk/GT/Graphics/Object/Candle.pm
+END
+BarChart.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/466/trunk/GT/Graphics/Object/BarChart.pm
+END
+Positions.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/685/trunk/GT/Graphics/Object/Positions.pm
+END
+Polygon.pm
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/geniustrader/!svn/ver/452/trunk/GT/Graphics/Object/Polygon.pm
+END
+Mountain.pm
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/geniustrader/!svn/ver/553/trunk/GT/Graphics/Object/Mountain.pm
+END
+Histogram.pm
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/geniustrader/!svn/ver/644/trunk/GT/Graphics/Object/Histogram.pm
+END

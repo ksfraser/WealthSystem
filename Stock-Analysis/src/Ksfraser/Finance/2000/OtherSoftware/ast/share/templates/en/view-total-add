@@ -1,0 +1,17 @@
+<form method="post" action="$save_page">
+  <table class="awf_form" width="100%">
+    <tr>
+      <th colspan="3">Add total</th>
+    </tr>
+    <tr>
+      <td><b>Field:</b></td>
+      <td><b>Total Type:</b></td>
+      <td>&nbsp</td>
+    </tr>
+    <tr>
+      <td><select name="column">$column_options</select></td>
+      <td><select name="type">$total_options</select></td>
+      <td><input type="submit" value="Add"></td>
+    </tr>
+  </table>
+</form>

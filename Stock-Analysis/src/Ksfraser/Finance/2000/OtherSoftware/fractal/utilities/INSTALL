@@ -1,0 +1,171 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+------------------------------------------------------------------------------
+
+To install the programs, use the standard make procedure in this
+directory. If all goes well, compile the ../simulation directory and
+change back to this directory, and then to the test directory, and use
+the standard make procedure to make the test cases. Be advised that
+this is an extremely long process; for example, about 30 hours on a
+20Mhz 386. If all goes well, install the following programs in the
+executable path:
+
+    tsshannon
+    tslsq
+    tslogreturns
+    tsintegrate
+    tshurst
+    tshcalc
+    tsderivative
+    tsnormal
+    tsfraction
+    tsshannonmax
+    tschangewager
+    tssample
+    tsXsquared
+    tsrms
+    tsavg
+    tsshannonwindow
+    tsmath
+    tsavgwindow
+    tspole
+    tsdft
+    tsdeterministic
+    tsnumber
+    tsrmswindow
+    tsstatest
+    tsunfraction
+    tsshannonaggregate
+    tsinstant
+    tsshannonvolume
+    tsshannonfundamental
+    tsrunlength
+    tsunshannon
+    tsrootmean
+    tsrunmagnitude
+    tskurtosis
+    tskurtosiswindow
+    tsrootmeanscale
+    tsscalederivative
+    tsgain
+    tsgainwindow
+    tskalman
+    tsroot
+
+Install the man pages to the programs in the man path:
+
+    tsshannon.1
+    tslsq.1
+    tslogreturns.1
+    tsintegrate.1
+    tshurst.1
+    tshcalc.1
+    tsderivative.1
+    tsnormal.1
+    tsfraction.1
+    tsshannonmax.1
+    tschangewager.1
+    tssample.1
+    tsXsquared.1
+    tsrms.1
+    tsavg.1
+    tsshannonwindow.1
+    tsmath.1
+    tsavgwindow.1
+    tspole.1
+    tsdft.1
+    tsdeterministic.1
+    tsnumber.1
+    tsrmswindow.1
+    tsstatest.1
+    tsunfraction.1
+    tsshannonaggregate.1
+    tsinstant.1
+    tsshannonvolume.1
+    tsshannonfundamental.1
+    tsrunlength.1
+    tsunshannon.1
+    tsrootmean.1
+    tsrunmagnitude.1
+    tskurtosis.1
+    tskurtosiswindow.1
+    tsrootmeanscale.1
+    tsscalederivative.1
+    tsgain.1
+    tsgainwindow.1
+    tskalman.1
+    tsroot.1
+
+or
+
+    tsshannon.catman
+    tslsq.catman
+    tslogreturns.catman
+    tsintegrate.catman
+    tshurst.catman
+    tshcalc.catman
+    tsderivative.catman
+    tsnormal.catman
+    tsfraction.catman
+    tsshannonmax.catman
+    tschangewager.catman
+    tssample.catman
+    tsXsquared.catman
+    tsrms.catman
+    tsavg.catman
+    tsshannonwindow.catman
+    tsmath.catman
+    tsavgwindow.catman
+    tspole.catman
+    tsdft.catman
+    tsdeterministic.catman
+    tsnumber.catman
+    tsrmswindow.catman
+    tsstatest.catman
+    tsunfraction.catman
+    tsshannonaggregate.catman
+    tsinstant.catman
+    tsshannonvolume.catman
+    tsshannonfundamental.catman
+    tsrunlength.catman
+    tsunshannon.catman
+    tsrootmean.catman
+    tsrunmagnitude.catman
+    tskurtosis.catman
+    tskurtosiswindow.catman
+    tsrootmeanscale.catman
+    tsscalederivative.catman
+    tsgain.catman
+    tsgainwindow.catman
+    tskalman.catman
+    tsroot.catman
+
+where the catman files have already been made by:
+
+    nroff -man file.1 > file.catman
+
+for those systems that do not support nroff.
+
+The programs are written in ANSI standard C, but there is little or no
+provisions for handling numerical exceptions. Usually, a great deal of
+analytical skill is required in an interactive analysis of fractal
+time series, and should probably not be attempted by the novice for
+other than academic purposes.

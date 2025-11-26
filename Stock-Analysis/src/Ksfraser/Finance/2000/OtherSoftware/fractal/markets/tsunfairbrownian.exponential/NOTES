@@ -1,0 +1,186 @@
+#!/bin/sh
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# Make the data file for tscoin. The data from files in the
+# ../computer.office ../electronic.components.production
+# ../electronic.components.shipments ../information.systems directories
+# were averaged and found to be:
+#
+#     data.tslogreturns-p.tsshannon.returns, 0.0145 ~ 0.015
+#     data.tslogreturns-p.tsshannon.probability, 0.5698 ~ 0.6
+#     data.tsshannonmax-p.max, 0.70 ~ 0.7000
+#     data.tsfraction.tsnormal-p.stddev, 0.0278 ~ 0.03
+#     data.tsfraction.tsrms-p, 0.02992 ~ 0.03
+#
+# A data, file "data.original," was made by with a text editor, by
+# replicating the following fragment 1000 times:
+#
+# 0.2
+# -0.2
+# 0.2
+# -0.2
+# 0.2
+#
+# to produce a time series data file of 5000 records that "oscillates,"
+# on a period of 5, with a Shannon probability of 3 / 5 = 0.6. A data
+# file was made by running:
+#
+# ../../simulation/tsunfairbrownian -d -i 1.0 -f 0.2 data.original > data
+#
+# since f = 2P - 1, where P = 0.6, f = 0.2. An i of 1.0 was used to
+# simulate an exponential file, begining with e^0.
+#
+# The rationale is as follows:
+#
+# +0.2 -+ +-+ +-   -+ +-+ +-   -+ +-+ +-   -+ +-+ +-
+#       | | | | ... | | | | ... | | | | ... | | | | ...
+# -0.2  +-+ +-+     +-+ +-+     +-+ +-+     +-+ +-+
+#
+# There are 3 '+0.2's for every 2 '-.2's, for an average of +0.2 per 5
+# time units, for an average of +0.2 / 5 = +0.04. The reason for the
+# numbers, +0.2 and -0.2, is that it is the optimum for a Shannon
+# probability of 0.6, since 0.2 = 2P - 1, (which also equals P - (1 -
+# P),) where 2 * 0.6 - 1 = 0.2, which is the optimal amount of the
+# cumulative returns to wager with an unfair coin that has a probability
+# of 0.6 of a win, ie., 3 out of 5. If the nth minus one value in the
+# time series is subtracted from the nth value, and the value of this
+# subtraction divided by the nth minus one value, then the quotient
+# should be +0.2 or -0.2 depending on the whether the wager was won or
+# lost.
+#
+# Under this scenario, P = 0.6, and the returns are:
+#
+#          (0.029049406)    (0.020135514)
+#         2              = e
+#
+# which can be verified with the program tsshannon, and are consistent
+# with "Fractals, Chaos, Power Laws," Manfred Schroeder, W. H. Freeman
+# and Company, New York, New York, 1991, ISBN 0-7167-2136-8, pp 128.
+#
+# Using tsunfairbrownian -f 0.2 will construct an exponential data time
+# series that is known to be optimum, ie., a Shannon probability of 0.6
+# with an optimal wager fraction of 0.2, with an "approximate" Brownian
+# motion noise content-albeit not random. It is useful for evaluating
+# methodologies. The derivation of the exponential is as follows:
+#
+#                 kt
+#         f(t) = e
+#
+#                                kt    k(t - 1)
+#         f(t) - f(t - 1)       e   - e
+#         --------------- = A = ---------------
+#              f(t)                 k(t - 1)
+#                                  e
+#
+#              kt    kt - k      kt    kt - k          -k
+#             e   - e           e   - e  e        1 - e      k
+#         A = --------------- = --------------- = ------- = e  - 1
+#                 kt - k            kt - k          -k
+#                e                 e  e            e
+#
+#         or k = ln (A + 1)
+#
+# Now, consider the first cycle, begining with a cumulative returns of
+# 1, of wager fractions of 0.2, -0.2, +0.2, -0.2, +0.2 of the cumulative
+# returns:
+#
+#       after the first, the cumulative returns were 1.2, since it
+#       it was a "win."
+#
+#       after the second, the cumulative returns were 1.2 * 0.8 =
+#       0.96, since it was a "loss."
+#
+#       after the third, the cumulative returns were 1.2 * 0.8 * 1.2 =
+#       1.152, since it was a "win."
+#
+#       after the fourth, the cumulative returns were 1.2 * 0.8 * 1.2
+#       * 0.8 = 0.9216, since it was a "loss."
+#
+#       after the fifth, the cumulative returns were 1.2 * 0.8 * 1.2 *
+#       0.8 * 1.2 = 1.10592, since it was a "win."
+#
+# Therefore:
+#
+#       R      = R  * (1.2 * 0.8 * 1.2 * 0.8 * 1.2) = 1.10592 * R
+#        n + 5    n                                              n
+#
+# and finding the average gains per one iteration of the "game:"
+#
+#                              1/5
+#       R      = R  * (1.10592)    = R  * 1.020339601
+#        n + 1    n                   n
+#
+#       R
+#        n + 1
+#       ------ = 1.020339601
+#       R
+#        n
+#
+#       R
+#        n + 1
+#       ------ - 1 = 1.020339601 -1
+#       R
+#        n
+#
+#       R
+#        n + 1
+#       ------ - 1 = 0.020339601 = A
+#       R
+#        n
+#
+# and:
+#
+#       k = ln (A + 1) = ln (1.020339601) = 0.020135514
+#
+# Therefore, the formula for the exponential cumulative returns function is:
+#
+#                  kt    0.020135514t
+#          f(t) = e   = e
+#
+# Note:
+#
+# tslsq -e -p data gives:
+# e^(0.020233 + 0.020135t) = 1.020340^(1.004834 + t) = 2^(0.029190 + 0.029049t)
+#
+# tslogreturns -p gives:
+# e^(0.020099t) = 1.020302^(t) = 2^(0.028997t)
+#
+# and running:
+#
+# tsfraction data > data.tsfraction
+#
+# tslsq -p data.tsfraction gives:
+# 0.039872 + 0.000000t
+#
+# tsnormal -p data.tsfraction gives:
+# 0.039968 0.195985
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/15 05:10:50 $
+# $Id: NOTES,v 0.0 2006/01/15 05:10:50 john Exp $
+# $Log: NOTES,v $
+# Revision 0.0  2006/01/15 05:10:50  john
+# Initial version
+#
+#
+../../simulation/tsunfairbrownian -d -i 1.0 -f 0.2 data.original > data

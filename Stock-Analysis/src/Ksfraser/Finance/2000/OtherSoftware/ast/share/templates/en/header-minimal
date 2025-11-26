@@ -1,0 +1,13 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html charset=iso-8859-1">
+$meta
+<title>$title</title>
+<link rel="shortcut icon" HREF="images/ast-icon.png" type="image/png">
+<link rel="stylesheet" type="text/css" href="$stylesheet">
+<script type="text/javascript" src="$javascript&amp;script=ast.js"></script>
+<script type="text/javascript" src="$javascript&amp;script=overlib_mini.js"><!-- overLIB (c) Erik Bosrup --></script>
+</head>
+<body>
+<div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>

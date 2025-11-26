@@ -1,0 +1,11 @@
+<form method="post" action="$save_page">
+  <table class="awf_form">
+    <tr><th>Note: $name</th></tr>
+    <tr><td><b>Subject:</b></td></tr>
+    <tr><td><input type="text" name="note.subject" class="awf_inputtext awf_wide_input" value="$name"></td></tr>
+    <tr><td><input type="checkbox" name="note.public">&nbsp;Public</td></tr>
+    <tr><td><b>Note:</b></td></tr>
+    <tr><td><textarea name="note.note" rows="8" cols="62"></textarea></td></tr>
+    <tr><td><input type="submit" value="Save"></td></tr>
+  </table>
+</form>

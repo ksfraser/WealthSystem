@@ -1,0 +1,17 @@
+<form method="post" action="$save_page">
+  <table class="awf_form" width="100%">
+    <tr>
+      <th colspan="2">Edit Filter</th>
+    </tr>
+    <tr>
+      <td colspan="2"><span class="awf_error">$message</span></td>
+    </tr>
+    <tr>
+      <td><textarea rows="8" cols="70" name="filter" id="filter">$filter</textarea></td>
+      <td rowspan="2"><b>Available Fields:</b>&nbsp;<span class="awf_small">(Double click to insert)</span><br><select id="fields" size="8" ondblclick="ast_append(filter,fields);">$column_options</select></td>
+    </tr>
+    <tr>
+      <td align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

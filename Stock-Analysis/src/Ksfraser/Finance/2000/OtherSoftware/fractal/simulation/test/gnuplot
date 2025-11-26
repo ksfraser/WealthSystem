@@ -1,0 +1,365 @@
+#
+# -----------------------------------------------------------------------------
+#
+# A license is hereby granted to reproduce this software source code and
+# to create executable versions from this source code for personal,
+# non-commercial use.  The copyright notice included with the software
+# must be maintained in all copies produced.
+#
+# THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+# WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+# MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+# AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+# INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+#
+# Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+#
+# Comments and/or bug reports should be addressed to:
+#
+#     john@email.johncon.com (John Conover)
+#
+# -----------------------------------------------------------------------------
+#
+# $Revision: 0.0 $
+# $Date: 2006/01/07 02:11:53 $
+# $Id: gnuplot,v 0.0 2006/01/07 02:11:53 john Exp $
+# $Log: gnuplot,v $
+# Revision 0.0  2006/01/07 02:11:53  john
+# Initial version
+#
+#
+set terminal postscript portrait
+set output "tsbrownian.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsbrownian.tsnormal" with lines, "tsbrownian.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsgaussian.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsgaussian.tsnormal" with lines, "tsgaussian.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tswhite.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tswhite.tsnormal" with lines, "tswhite.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tslaplacian.tsnormal.eps"
+set grid
+show grid
+set title "Laplacian Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tslaplacian.tsnormal" with lines, "tslaplacian.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfractional.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfractional.tsnormal" with lines, "tsfractional.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tspink.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tspink.tsnormal" with lines, "tspink.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsblack.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsblack.tsnormal" with lines, "tsblack.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tscoin.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin" with lines
+#
+set terminal postscript portrait
+set output "tscoin.tsunfairbrownian.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tsunfairbrownian" with lines
+#
+set terminal postscript portrait
+set output "tsfBm-h0.0.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.0.tsnormal" with lines, "tsfBm-h0.0.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfBm-h0.1.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.1.tsnormal" with lines, "tsfBm-h0.1.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfBm-h0.3.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.3.tsnormal" with lines, "tsfBm-h0.3.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfBm-h0.5.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.5.tsnormal" with lines, "tsfBm-h0.5.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfBm-h0.7.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.7.tsnormal" with lines, "tsfBm-h0.7.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfBm-h0.9.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h0.9.tsnormal" with lines, "tsfBm-h0.9.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tsfBm-h1.0.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsfBm-h1.0.tsnormal" with lines, "tsfBm-h1.0.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tscoins.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Cumulative Sum"
+show ylabel
+plot "tscoins" with lines
+#
+set terminal postscript portrait
+set output "tscoins.tsfraction.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tscoins.tsfraction.tsnormal" with lines, "tscoins.tsfraction.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tslogistic.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tslogistic" with lines
+#
+set terminal postscript portrait
+set output "tsdlogistic.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsdlogistic" with lines
+#
+set terminal postscript portrait
+set output "tsbinomial.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tsbinomial.tsnormal" with lines, "tsbinomial.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tscoin.tsunfairbrownian.tsstockwager.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tsunfairbrownian.tsstockwager" with lines
+#
+set terminal postscript portrait
+set output "tscoin.tsunfairbrownian.tsunfairfractional.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tscoin.tsunfairbrownian.tsunfairfractional" with lines
+#
+set terminal postscript portrait
+set output "tsintegers.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsintegers" with lines
+#
+set terminal postscript portrait
+set output "tsmarket.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsmarket" with lines
+#
+set terminal postscript portrait
+set output "tsmarket.tsshannonstock.eps"
+set grid
+show grid
+set title "Time Series Data"
+show title
+set xlabel "Time"
+show xlabel
+set ylabel "Revenue"
+show ylabel
+plot "tsmarket.tsshannonstock" with lines
+#
+set terminal postscript portrait
+set output "tscauchy.tsnormal.eps"
+set grid
+show grid
+set title "Cauchy Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tscauchy.tsnormal" with lines, "tscauchy.tsnormal-f" with steps
+#
+set terminal postscript portrait
+set output "tscoins.tslognormal.tsnormal.eps"
+set grid
+show grid
+set title "Normal Distribution"
+show title
+set xlabel "3 Sigma Standard Deviation"
+show xlabel
+set ylabel "Normalized Frequency"
+show ylabel
+plot "tscoins.tsfraction.tsnormal" with lines, "tscoins.tsfraction.tsnormal-f" with steps, "tscoins.tslognormal.tsnormal" with lines, "tscoins.tslognormal.tsnormal-f" with steps

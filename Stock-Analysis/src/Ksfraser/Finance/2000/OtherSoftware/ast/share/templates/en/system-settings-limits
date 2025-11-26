@@ -1,0 +1,76 @@
+<form method="post">
+  <input type="hidden" name="action" value="save">
+  <table class="awf_form">
+    <tr>
+      <th colspan="3">System Settings / User Restrictions</th>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Feature Access:</b></td>
+    </tr>
+    <tr>
+      <td>Alerts:</td>
+      <td><input type="radio" name="limit_alerts" value="on" $limit_alerts_checked>&nbsp;Disabled</td>
+      <td><input type="radio" name="limit_alerts" value="off" $limit_alerts_not_checked>&nbsp;Enabled</td>
+    </tr>
+    <tr>
+      <td>Comparisons:</td>
+      <td><input type="radio" name="limit_comparisons" value="on" $limit_comparisons_checked>&nbsp;Disabled</td>
+      <td><input type="radio" name="limit_comparisons" value="off" $limit_comparisons_not_checked>&nbsp;Enabled</td>
+    </tr>
+    <tr>
+      <td>Portfolio:</td>
+      <td><input type="radio" name="limit_portfolio" value="on" $limit_portfolio_checked>&nbsp;Disabled</td>
+      <td><input type="radio" name="limit_portfolio" value="off" $limit_portfolio_not_checked>&nbsp;Enabled</td>
+    </tr>
+    <tr>
+      <td>Reports:</td>
+      <td><input type="radio" name="limit_reports" value="on" $limit_reports_checked>&nbsp;Disabled</td>
+      <td><input type="radio" name="limit_reports" value="off" $limit_reports_not_checked>&nbsp;Enabled</td>
+    </tr>
+    <tr>
+      <td>Stock Screener:</td>
+      <td><input type="radio" name="limit_screener" value="on" $limit_screener_checked>&nbsp;Disabled</td>
+      <td><input type="radio" name="limit_screener" value="off" $limit_screener_not_checked>&nbsp;Enabled</td>
+    </tr>
+    <tr>
+      <td>Worksheet:</td>
+      <td><input type="radio" name="limit_worksheet" value="on" $limit_worksheet_checked>&nbsp;Disabled</td>
+      <td><input type="radio" name="limit_worksheet" value="off" $limit_worksheet_not_checked>&nbsp;Enabled</td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Maximum Number of Alerts:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="text" class="awf_inputtext" name="limit_alerts_max" value="$limit_alerts_max"></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Maximum Number of Portfolios:</b></td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="text" class="awf_inputtext" name="limit_portfolios_max" value="$limit_portfolios_max"></td>
+      <td><small>(* Does not include competitions)</small></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Maximum Number of Worksheets:</b></td>
+    </tr>
+    <tr>
+      <td colspan="3"><input type="text" class="awf_inputtext" name="limit_worksheets_max" value="$limit_worksheets_max"></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Maximum Number of Securities Worksheets:</b></td>
+    </tr>
+    <tr>
+      <td colspan="3"><input type="text" class="awf_inputtext" name="limit_worksheet_sec_max" value="$limit_worksheet_sec_max"></td>
+    </tr>
+    <tr>
+      <td colspan="3"><b>Maximum Number of Comparisons:</b></td>
+    </tr>
+    <tr>
+      <td colspan="3"><input type="text" class="awf_inputtext" name="limit_comparisons_max" value="$limit_comparisons_max"></td>
+    </tr>
+    <tr>
+      <td colspan="3" align="center"><input type="submit" value="Save"></td>
+    </tr>
+  </table>
+</form>

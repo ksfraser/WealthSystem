@@ -1,0 +1,164 @@
+
+------------------------------------------------------------------------------
+
+A license is hereby granted to reproduce this software source code and
+to create executable versions from this source code for personal,
+non-commercial use.  The copyright notice included with the software
+must be maintained in all copies produced.
+
+THIS PROGRAM IS PROVIDED "AS IS". THE AUTHOR PROVIDES NO WARRANTIES
+WHATSOEVER, EXPRESSED OR IMPLIED, INCLUDING WARRANTIES OF
+MERCHANTABILITY, TITLE, OR FITNESS FOR ANY PARTICULAR PURPOSE.  THE
+AUTHOR DOES NOT WARRANT THAT USE OF THIS PROGRAM DOES NOT INFRINGE THE
+INTELLECTUAL PROPERTY RIGHTS OF ANY THIRD PARTY IN ANY COUNTRY.
+
+Copyright (c) 1994-2006, John Conover, All Rights Reserved.
+
+Comments and/or bug reports should be addressed to:
+
+    john@email.johncon.com (John Conover)
+
+    http://www.johncon.com/ntropix/
+    http://www.johncon.com/
+
+------------------------------------------------------------------------------
+
+File inventory:
+
+    MANIFEST this file.
+
+    Makefile is the makefile script that executes the regression test
+    suite for the tsinvest programs.
+
+    README is a general description of the regression test suite for
+    the tsinvest programs.
+
+    non-volatile.data, a test file for tsinvestsim(1), of a market
+    with 300 equities, with too little volatility, ie., rms < 2P - 1,
+    with Shannon probabilities, P, ranging, in a linear fashion, from
+    0.51 to 0.51299. (Real markets go from about 0.505 to 0.560, or
+    so, and are typically, non-volatile.)  The volatility is 50% too
+    low.
+
+    non-volatile.equal.antipersistent.data, a test file for
+    tsinvestsim(1), of a market with 300 equities, with too little
+    volatility, ie., rms < 2P - 1, with Shannon probabilities, P,
+    identical, and equal to 0.51, and an antipersistence, H, ranging,
+    in a linear fashion, from 0.4 to 0.5. (Real markets have Shannon
+    probabilities that go from about 0.505 to 0.560, or so, and
+    antipersistences running from about 0.400 to 0.500, or so.) The
+    volatility is 50% too low. This is a good "bear" market
+    simulation.
+
+    non-volatile.equal.data, a test file for tsinvestsim(1), of a
+    market with 300 equities, with too little volatility, ie., rms < 2P
+    - 1, with Shannon probabilities, P, identical, and equal to
+    0.51. (Real markets go from about 0.505 to 0.560, or so.) The
+    volatility is 50% too low. This is a good "bear" market
+    simulation.
+
+    non-volatile.equal.persistent.data, a test file for
+    tsinvestsim(1), of a market with 300 equities, with too little
+    volatility, ie., rms < 2P - 1, with Shannon probabilities, P,
+    identical, and equal to 0.51, and a persistence, H, ranging, in a
+    linear fashion, from 0.5 to 0.6. (Real markets have Shannon
+    probabilities that go from about 0.505 to 0.560, or so, and
+    persistences running from about 0.500 to 0.650, or so.) The
+    volatility is 50% too low. This is a good "bear" market
+    simulation.
+
+    optimal.data, a test file for tsinvestsim(1), of a market with 300
+    equities, all optimal, ie., rms = 2P - 1, with Shannon
+    probabilities, P, ranging, in a linear fashion, from 0.51 to
+    0.51299. (Real markets go from about 0.505 to 0.560, or so.)
+
+    optimal.equal.antipersistent.data, a test file for tsinvestsim(1),
+    of a market with 300 equities, all optimal, ie., rms = 2P - 1, with
+    Shannon probabilities, P, identical, and equal to 0.51, and a
+    antipersistence, H, ranging, in a linear fashion, from 0.4 to
+    0.5. (Real markets have Shannon probabilities that go from about
+    0.505 to 0.560, or so, and antipersistences running from about
+    0.400 to 0.500.)
+
+    optimal.equal.data, a test file for tsinvestsim(1), of a market
+    with 300 equities, all optimal, ie., rms = 2P - 1, with Shannon
+    probabilities, P, identical, and equal to 0.51. (Real markets go
+    from about 0.505 to 0.560, or so.)
+
+    optimal.equal.persistent.data, a test file for tsinvestsim(1), of
+    a market with 300 equities, all optimal, ie., rms = 2P - 1, with
+    Shannon probabilities, P, identical, and equal to 0.51, and a
+    persistence, H, ranging, in a linear fashion, from 0.5 to
+    0.6. (Real markets have Shannon probabilities that go from about
+    0.505 to 0.560, or so, and persistences running from about 0.500
+    to 0.650.)
+
+    volatile.data, a test file for tsinvestsim(1), of a market with
+    300 equities, all too volatile, ie., rms > 2P - 1, with Shannon
+    probabilities, P, ranging, in a linear fashion, from 0.51 to
+    0.51299. (Real markets go from about 0.505 to 0.560, or so, and
+    are typically, non-volatile, but some equities exhibit volatility.)
+    The volatility is 50% too high.
+
+    volatile.equal.antipersistent.data, a test file for
+    tsinvestsim(1), of a market with 300 equities, all too volatile,
+    ie., rms > 2P - 1, with Shannon probabilities, P, identical, and
+    equal to 0.51, and a antipersistence, H, ranging, in a linear
+    fashion, from 0.4 to 0.5. (Real markets have Shannon probabilities
+    that go from about 0.505 to 0.560, or so, and antipersistences
+    running from about 0.400 to 0.500, or so.)  The volatility is 50%
+    too high.
+
+    volatile.equal.data, a test file for tsinvestsim(1), of a market
+    with 300 equities, all too volatile, ie., rms > 2P - 1, with Shannon
+    probabilities, P, identical, and equal to 0.51. (Real markets go
+    from about 0.505 to 0.560, or so.)  The volatility is 50% too
+    high.
+
+    volatile.equal.persistent.data, a test file for tsinvestsim(1), of
+    a market with 300 equities, all too volatile, ie., rms > 2P - 1,
+    with Shannon probabilities, P, identical, and equal to 0.51, and a
+    persistence, H, ranging, in a linear fashion, from 0.5 to
+    0.6. (Real markets have Shannon probabilities that go from about
+    0.505 to 0.560, or so, and persistences running from about 0.500
+    to 0.650, or so.)  The volatility is 50% too high.
+
+    crash-up.data, a test file for tsinvestsim(1), of a deteriorating
+    market with 300 equities, simulating the US equity markets for 3,254
+    trading days between 15 August, 1921, and 6 June, 1932,
+    inclusive. During the 2,401 trading day period between 15 August,
+    1921 and 7 September, 1929, the US equity markets had a
+    substantial gain of about 5.7X in value, (DJIA values of 66.02 to
+    375.44.) During the 853 trading day period between 7 September,
+    1929, and 6 June, 1932, the markets had a significant reversal,
+    loosing about 90% of their 7 September, 1929 value, (DJIA values
+    of 375.44 to 42.68,) for about a 30% loss on the decade 1921-1931,
+    and did not regain their 7 September, 1929 values until mid 1956.
+
+    crash-down.data, a test file for tsinvestsim(1), machine generated
+    from the crash-up.data file. The file crash-up.data represents the
+    escalation in equity values, from 1921 on, and the file
+    crash-down.data represents the deterioration in equity values,
+    from 1929 on.
+
+    stocks.data, a test file for tsinvestsim(1), of a market with 454
+    equities. This file was generated by dumping the internal data
+    structures of the tsinvest(1) program after it had completed
+    execution of the file "stocks", (a daily fragment of the American
+    stock exchanges, consisting of 454 equities, from January 1, 1993,
+    to June 6, 1996, as supplied by
+    http://www.ai.mit.edu/stocks.html,) using the -r option, to make a
+    new file for tsinvestsim(1).
+
+    losers.data, a test file for tsinvest(1), of a market with 49
+    equities, all decreasing in value. This file was generated by
+    dumping the internal data structures of the tsinvest(1) program
+    after it had completed execution of the file "stocks", (a daily
+    fragment of the American stock exchanges, consisting of 454
+    equities, from January 1, 1993, to June 6, 1996, as supplied by
+    http://www.ai.mit.edu/stocks.html,) using the -r option, (the -p
+    -P options were used, also,) to make a new file for tsinvest(1).
+
+John Conover
+john@email.johncon.com
+January 7, 2006

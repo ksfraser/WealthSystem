@@ -1,0 +1,19 @@
+<form method="post" action="$save_page">
+<table class="awf_form" width="60%">
+  <tr>
+    <td><b>Portfolio:</b></td>
+  </tr>
+  <tr>
+    <td><select name="permission.objectid">$portfolio_options</select></td>
+  </tr>
+  <tr>
+    <td><b>Grant Permissions to:</b></td>
+  </tr>
+  <tr>
+    <td><select name="permission.grantee">$user_options</select></td>
+  </tr>
+  <tr>
+    <td><input type="submit" value="Grant"></td>
+  </tr>
+</table>
+</form>

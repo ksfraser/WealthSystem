@@ -1,0 +1,9 @@
+</div>
+<div id="leftnav">
+Logged in as:
+<a href="$logout_page">$username</a><br><br>
+$navmenu<br>
+<a href="$bug_page">Submit Bug</a>
+</div>
+<div id="content">
+<br>
