@@ -58,13 +58,20 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetCurrentPricesMultipleSymbols(): void
     {
-        $this->markTestSkipped('Requires DI refactoring to inject mock StockDataAccess');
+        // Arrange: Mock data for multiple symbols
+        $mockDataMap = [
+            ['AAPL', ['symbol' => 'AAPL', 'close' => 150.00, 'date' => '2025-01-15']],
+            ['GOOGL', ['symbol' => 'GOOGL', 'close' => 140.00, 'date' => '2025-01-15']],
+            ['MSFT', ['symbol' => 'MSFT', 'close' => 380.00, 'date' => '2025-01-15']]
+        ];
         
-        // Arrange
-        $symbols = ['AAPL', 'GOOGL', 'MSFT'];
+        $this->mockStockDataAccess
+            ->expects($this->exactly(3))
+            ->method('getLatestPrice')
+            ->willReturnMap($mockDataMap);
         
         // Act
-        $result = $this->service->getCurrentPrices($symbols);
+        $result = $this->service->getCurrentPrices(['AAPL', 'GOOGL', 'MSFT']);
         
         // Assert
         $this->assertIsArray($result);
@@ -88,24 +95,41 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetCurrentPricesInvalidSymbol(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
-        
-        // Arrange
-        $symbols = ['INVALID123'];
+        // Arrange: Mock returns null for invalid symbol
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('INVALID123')
+            ->willReturn(null);
         
         // Act
-        $result = $this->service->getCurrentPrices($symbols);
+        $result = $this->service->getCurrentPrices(['INVALID123']);
         
-        // Assert: Should handle gracefully
+        // Assert: Should handle gracefully - invalid symbols are not included in result
         $this->assertIsArray($result);
-        // May contain error or null for invalid symbol
+        $this->assertEmpty($result);
     }
     
     // ===== getCurrentPrice() TESTS =====
     
     public function testGetCurrentPriceValidSymbol(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock price data
+        $mockPriceData = [
+            'symbol' => 'AAPL',
+            'close' => 150.00,
+            'date' => '2025-01-15',
+            'open' => 148.00,
+            'high' => 152.00,
+            'low' => 147.00,
+            'volume' => 50000000
+        ];
+        
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('AAPL')
+            ->willReturn($mockPriceData);
         
         // Act
         $result = $this->service->getCurrentPrice('AAPL');
@@ -114,12 +138,19 @@ class MarketDataServiceTest extends TestCase
         $this->assertIsArray($result);
         $this->assertArrayHasKey('symbol', $result);
         $this->assertArrayHasKey('price', $result);
-        $this->assertArrayHasKey('timestamp', $result);
+        $this->assertArrayHasKey('date', $result);
+        $this->assertArrayHasKey('change', $result);
+        $this->assertArrayHasKey('change_percent', $result);
     }
     
     public function testGetCurrentPriceNullForInvalidSymbol(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock returns null for invalid symbol
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('INVALID')
+            ->willReturn(null);
         
         // Act
         $result = $this->service->getCurrentPrice('INVALID');
@@ -141,15 +172,21 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetHistoricalPricesWithDateRange(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock historical price data
+        $mockHistoricalData = [
+            ['date' => '2024-01-02', 'open' => 148.00, 'high' => 152.00, 'low' => 147.00, 'close' => 150.00, 'volume' => 50000000],
+            ['date' => '2024-01-03', 'open' => 150.00, 'high' => 153.00, 'low' => 149.00, 'close' => 152.00, 'volume' => 48000000],
+            ['date' => '2024-01-04', 'open' => 152.00, 'high' => 155.00, 'low' => 151.00, 'close' => 154.00, 'volume' => 52000000]
+        ];
         
-        // Arrange
-        $symbol = 'AAPL';
-        $startDate = '2024-01-01';
-        $endDate = '2024-12-31';
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', '2024-01-01', '2024-12-31', null)
+            ->willReturn($mockHistoricalData);
         
         // Act
-        $result = $this->service->getHistoricalPrices($symbol, $startDate, $endDate);
+        $result = $this->service->getHistoricalPrices('AAPL', '2024-01-01', '2024-12-31');
         
         // Assert
         $this->assertIsArray($result);
@@ -167,79 +204,112 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetHistoricalPricesWithoutDateRange(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock returns recent data when no dates specified
+        $mockRecentData = [
+            ['date' => '2025-01-13', 'open' => 148.00, 'high' => 152.00, 'low' => 147.00, 'close' => 150.00, 'volume' => 50000000],
+            ['date' => '2025-01-14', 'open' => 150.00, 'high' => 153.00, 'low' => 149.00, 'close' => 152.00, 'volume' => 48000000]
+        ];
+        
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', null, null, null)
+            ->willReturn($mockRecentData);
         
         // Act: No dates = default to recent history
         $result = $this->service->getHistoricalPrices('AAPL');
         
         // Assert
         $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
     }
     
     public function testGetHistoricalPricesInvalidDateRange(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
-        
-        // Arrange: End date before start date
-        $symbol = 'AAPL';
-        $startDate = '2024-12-31';
-        $endDate = '2024-01-01';
+        // Arrange: End date before start date - mock returns empty array
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', '2024-12-31', '2024-01-01', null)
+            ->willReturn([]);
         
         // Act
-        $result = $this->service->getHistoricalPrices($symbol, $startDate, $endDate);
+        $result = $this->service->getHistoricalPrices('AAPL', '2024-12-31', '2024-01-01');
         
-        // Assert: Should return empty or error
+        // Assert: Should return empty
         $this->assertIsArray($result);
+        $this->assertEmpty($result);
     }
     
     public function testGetHistoricalPricesInvalidDateFormat(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
-        
-        // Arrange
-        $symbol = 'AAPL';
-        $startDate = 'invalid-date';
-        $endDate = '2024-12-31';
+        // Arrange: Invalid date format - mock returns empty array
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', 'invalid-date', '2024-12-31', null)
+            ->willReturn([]);
         
         // Act
-        $result = $this->service->getHistoricalPrices($symbol, $startDate, $endDate);
+        $result = $this->service->getHistoricalPrices('AAPL', 'invalid-date', '2024-12-31');
         
-        // Assert
+        // Assert: Should handle gracefully
         $this->assertIsArray($result);
-        // Should handle gracefully
+        $this->assertEmpty($result);
     }
     
     // ===== getMarketSummary() TESTS =====
     
     public function testGetMarketSummary(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock data for major indices
+        $mockIndicesData = [
+            ['^GSPC', ['symbol' => '^GSPC', 'close' => 4500.00, 'open' => 4480.00, 'date' => '2025-01-15']],
+            ['^DJI', ['symbol' => '^DJI', 'close' => 35000.00, 'open' => 34900.00, 'date' => '2025-01-15']],
+            ['^IXIC', ['symbol' => '^IXIC', 'close' => 14000.00, 'open' => 13950.00, 'date' => '2025-01-15']]
+        ];
+        
+        $this->mockStockDataAccess
+            ->expects($this->exactly(3))
+            ->method('getLatestPrice')
+            ->willReturnMap($mockIndicesData);
         
         // Act
         $result = $this->service->getMarketSummary();
         
         // Assert
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('indices', $result);
+        $this->assertCount(3, $result);
         
-        $indices = $result['indices'];
-        $this->assertArrayHasKey('^GSPC', $indices); // S&P 500
-        $this->assertArrayHasKey('^DJI', $indices);  // Dow Jones
-        $this->assertArrayHasKey('^IXIC', $indices); // NASDAQ
+        // Verify each index is present
+        $symbols = array_column($result, 'symbol');
+        $this->assertContains('^GSPC', $symbols); // S&P 500
+        $this->assertContains('^DJI', $symbols);  // Dow Jones
+        $this->assertContains('^IXIC', $symbols); // NASDAQ
     }
     
     public function testGetMarketSummaryStructure(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock returns complete data
+        $mockData = [
+            'symbol' => '^GSPC',
+            'close' => 4500.00,
+            'open' => 4480.00,
+            'date' => '2025-01-15'
+        ];
+        
+        $this->mockStockDataAccess
+            ->method('getLatestPrice')
+            ->willReturn($mockData);
         
         // Act
         $result = $this->service->getMarketSummary();
         
         // Assert: Check structure of each index
-        foreach ($result['indices'] as $symbol => $data) {
+        foreach ($result as $data) {
             $this->assertArrayHasKey('symbol', $data);
             $this->assertArrayHasKey('name', $data);
-            $this->assertArrayHasKey('price', $data);
+            $this->assertArrayHasKey('value', $data);
             $this->assertArrayHasKey('change', $data);
             $this->assertArrayHasKey('change_percent', $data);
         }
@@ -249,35 +319,50 @@ class MarketDataServiceTest extends TestCase
     
     public function testCalculateDayChange(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock with open and close prices to test change calculation
+        $mockData = [
+            'symbol' => '^GSPC',
+            'close' => 4500.00,
+            'open' => 4480.00,
+            'date' => '2025-01-15'
+        ];
         
-        // This tests the private calculateDayChange() method
-        // indirectly through getMarketSummary()
+        $this->mockStockDataAccess
+            ->method('getLatestPrice')
+            ->willReturn($mockData);
         
         // Act
         $result = $this->service->getMarketSummary();
         
         // Assert: Changes should be calculated
-        foreach ($result['indices'] as $data) {
+        foreach ($result as $data) {
             $this->assertIsNumeric($data['change']);
         }
     }
     
     public function testCalculateDayChangePercent(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
+        // Arrange: Mock with open and close to test percentage calculation
+        $mockData = [
+            'symbol' => '^GSPC',
+            'close' => 4500.00,
+            'open' => 4480.00,
+            'date' => '2025-01-15'
+        ];
         
-        // This tests the private calculateDayChangePercent() method
+        $this->mockStockDataAccess
+            ->method('getLatestPrice')
+            ->willReturn($mockData);
         
         // Act
         $result = $this->service->getMarketSummary();
         
         // Assert: Change percentages should be calculated
-        foreach ($result['indices'] as $data) {
+        foreach ($result as $data) {
             $this->assertIsNumeric($data['change_percent']);
             // Percent should be reasonable (e.g., -20% to +20% in a day)
-            $this->assertGreaterThan(-20, $data['change_percent']);
-            $this->assertLessThan(20, $data['change_percent']);
+            $this->assertGreaterThanOrEqual(-20, $data['change_percent']);
+            $this->assertLessThanOrEqual(20, $data['change_percent']);
         }
     }
     
@@ -297,17 +382,51 @@ class MarketDataServiceTest extends TestCase
     
     public function testNetworkTimeout(): void
     {
-        $this->markTestSkipped('Requires DI refactoring to inject mock that simulates timeout');
+        // Arrange: Mock throws exception to simulate timeout
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('AAPL')
+            ->willThrowException(new \Exception('Network timeout'));
+        
+        // Act
+        $result = $this->service->getCurrentPrice('AAPL');
+        
+        // Assert: Should handle gracefully and return null
+        $this->assertNull($result);
     }
     
     public function testAPIRateLimitExceeded(): void
     {
-        $this->markTestSkipped('Requires DI refactoring to inject mock that simulates rate limit');
+        // Arrange: Mock throws exception to simulate API rate limit
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('AAPL')
+            ->willThrowException(new \Exception('API rate limit exceeded'));
+        
+        // Act
+        $result = $this->service->getCurrentPrice('AAPL');
+        
+        // Assert: Should handle gracefully and return null
+        $this->assertNull($result);
     }
     
     public function testInvalidResponseFormat(): void
     {
-        $this->markTestSkipped('Requires DI refactoring to inject mock with invalid response');
+        // Arrange: Mock returns malformed data (missing required fields)
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('AAPL')
+            ->willReturn(['invalid' => 'data']); // Missing close, open, etc.
+        
+        // Act
+        $result = $this->service->getCurrentPrice('AAPL');
+        
+        // Assert: Should handle gracefully - returns data with defaults
+        $this->assertIsArray($result);
+        $this->assertEquals(0, $result['price']); // Default value when close is missing
     }
     
     // ===== EDGE CASES =====
@@ -330,15 +449,18 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetHistoricalPricesFutureDate(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
-        
-        // Arrange: Request data for future date
-        $symbol = 'AAPL';
+        // Arrange: Request data for future date - mock returns empty array
         $startDate = date('Y-m-d', strtotime('+1 year'));
         $endDate = date('Y-m-d', strtotime('+2 years'));
         
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', $startDate, $endDate, null)
+            ->willReturn([]);
+        
         // Act
-        $result = $this->service->getHistoricalPrices($symbol, $startDate, $endDate);
+        $result = $this->service->getHistoricalPrices('AAPL', $startDate, $endDate);
         
         // Assert: Should return empty (no future data)
         $this->assertIsArray($result);
@@ -347,38 +469,59 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetHistoricalPricesVeryLargeDateRange(): void
     {
-        $this->markTestSkipped('Requires DI refactoring');
-        
         // Arrange: Request 50 years of data
-        $symbol = 'AAPL';
         $startDate = '1970-01-01';
         $endDate = date('Y-m-d');
         
+        // Mock returns whatever data is available
+        $mockLargeDataset = array_fill(0, 100, [
+            'date' => '2024-01-01',
+            'open' => 150.00,
+            'high' => 152.00,
+            'low' => 148.00,
+            'close' => 151.00,
+            'volume' => 50000000
+        ]);
+        
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', $startDate, $endDate, null)
+            ->willReturn($mockLargeDataset);
+        
         // Act
-        $result = $this->service->getHistoricalPrices($symbol, $startDate, $endDate);
+        $result = $this->service->getHistoricalPrices('AAPL', $startDate, $endDate);
         
         // Assert: Should handle large dataset
         $this->assertIsArray($result);
-        // AAPL wasn't public in 1970, but service should handle gracefully
+        $this->assertCount(100, $result);
     }
     
     // ===== INTEGRATION TESTS =====
     
     public function testCompleteMarketDataWorkflow(): void
     {
-        $this->markTestSkipped('Requires DI refactoring - integration test');
+        // This test verifies the complete workflow with all method calls
         
-        // This test would verify the complete workflow:
-        // 1. Get current prices
-        // 2. Get historical data
-        // 3. Get market summary
-        // All for the same symbol
+        // Arrange: Set up mocks for all three operations
+        $mockCurrentPrice = ['symbol' => 'AAPL', 'close' => 150.00, 'open' => 148.00, 'date' => '2025-01-15'];
+        $mockHistorical = [['date' => '2024-01-02', 'open' => 148.00, 'close' => 150.00, 'volume' => 50000000]];
+        $mockIndexPrice = ['symbol' => '^GSPC', 'close' => 4500.00, 'open' => 4480.00, 'date' => '2025-01-15'];
         
-        $symbol = 'AAPL';
+        $this->mockStockDataAccess
+            ->expects($this->exactly(4)) // 1 for current + 1 for historical + 3 for market summary indices
+            ->method('getLatestPrice')
+            ->willReturnOnConsecutiveCalls($mockCurrentPrice, $mockIndexPrice, $mockIndexPrice, $mockIndexPrice);
+        
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getPriceData')
+            ->with('AAPL', '2024-01-01', '2024-12-31', null)
+            ->willReturn($mockHistorical);
         
         // Act
-        $currentPrice = $this->service->getCurrentPrice($symbol);
-        $historicalPrices = $this->service->getHistoricalPrices($symbol, '2024-01-01', '2024-12-31');
+        $currentPrice = $this->service->getCurrentPrice('AAPL');
+        $historicalPrices = $this->service->getHistoricalPrices('AAPL', '2024-01-01', '2024-12-31');
         $marketSummary = $this->service->getMarketSummary();
         
         // Assert
@@ -391,13 +534,15 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetCurrentPricesPerformance(): void
     {
-        $this->markTestSkipped('Requires DI refactoring - performance test');
+        // Arrange: Large batch of symbols with mocked responses
+        $symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'NVDA', 'AMD', 'INTC', 'NFLX'];
         
-        // Arrange: Large batch of symbols
-        $symbols = array_merge(
-            ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'],
-            ['META', 'NVDA', 'AMD', 'INTC', 'NFLX']
-        );
+        // Mock returns data for all symbols
+        $mockPrice = ['symbol' => 'TEST', 'close' => 150.00, 'open' => 148.00, 'date' => '2025-01-15'];
+        $this->mockStockDataAccess
+            ->expects($this->exactly(10))
+            ->method('getLatestPrice')
+            ->willReturn($mockPrice);
         
         // Act
         $startTime = microtime(true);
@@ -406,8 +551,9 @@ class MarketDataServiceTest extends TestCase
         
         $executionTime = $endTime - $startTime;
         
-        // Assert: Should complete within reasonable time
-        $this->assertLessThan(10.0, $executionTime, 'Batch price fetch should complete within 10 seconds');
+        // Assert: With mocked data, should be very fast
+        $this->assertLessThan(1.0, $executionTime, 'Batch price fetch with mocks should complete within 1 second');
+        $this->assertCount(10, $result);
     }
     
     // ===== DOCUMENTATION TESTS =====
