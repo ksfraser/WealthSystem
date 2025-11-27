@@ -3,31 +3,30 @@
 namespace App\Services;
 
 use App\Services\Interfaces\MarketDataServiceInterface;
-
-// Include existing data access systems
-require_once __DIR__ . '/../../DynamicStockDataAccess.php';
+use App\DataAccess\Interfaces\StockDataAccessInterface;
+use App\DataAccess\Adapters\DynamicStockDataAccessAdapter;
 
 /**
  * Market Data Service Implementation
  * 
  * Provides real-time and historical market data by integrating with existing
- * data fetching systems including DynamicStockDataAccess, Python scripts, and APIs.
+ * data fetching systems via dependency injection.
  */
 class MarketDataService implements MarketDataServiceInterface
 {
-    private ?\DynamicStockDataAccess $stockDataAccess = null;
+    private StockDataAccessInterface $stockDataAccess;
     private array $config;
     
-    public function __construct(array $config = [])
+    /**
+     * Constructor with dependency injection
+     * 
+     * @param StockDataAccessInterface|null $stockDataAccess Data access layer (optional, creates default adapter if null)
+     * @param array $config Configuration options
+     */
+    public function __construct(?StockDataAccessInterface $stockDataAccess = null, array $config = [])
     {
+        $this->stockDataAccess = $stockDataAccess ?? new DynamicStockDataAccessAdapter();
         $this->config = $config;
-        
-        // Initialize existing stock data access
-        try {
-            $this->stockDataAccess = new \DynamicStockDataAccess();
-        } catch (\Exception $e) {
-            // Will work with limited functionality
-        }
     }
     
     /**
@@ -57,10 +56,6 @@ class MarketDataService implements MarketDataServiceInterface
      */
     public function getCurrentPrice(string $symbol): ?array
     {
-        if (!$this->stockDataAccess) {
-            return null;
-        }
-        
         try {
             $priceData = $this->stockDataAccess->getLatestPrice($symbol);
             
@@ -89,10 +84,6 @@ class MarketDataService implements MarketDataServiceInterface
      */
     public function getHistoricalPrices(string $symbol, ?string $startDate = null, ?string $endDate = null, ?int $limit = null): array
     {
-        if (!$this->stockDataAccess) {
-            return [];
-        }
-        
         try {
             $priceData = $this->stockDataAccess->getPriceData($symbol, $startDate, $endDate, $limit);
             
@@ -174,10 +165,6 @@ class MarketDataService implements MarketDataServiceInterface
      */
     private function fetchAndStorePriceData(string $symbol): bool
     {
-        if (!$this->stockDataAccess) {
-            return false;
-        }
-        
         try {
             // This would integrate with the Python data fetching
             // For now, return false as placeholder
@@ -223,15 +210,24 @@ class MarketDataService implements MarketDataServiceInterface
      */
     public function hasDataForSymbol(string $symbol): bool
     {
-        if (!$this->stockDataAccess) {
-            return false;
-        }
-        
         try {
             $price = $this->stockDataAccess->getLatestPrice($symbol);
             return !empty($price);
         } catch (\Exception $e) {
             return false;
         }
+    }
+    
+    /**
+     * Get fundamental data for a symbol
+     * 
+     * @param string $symbol Stock ticker symbol
+     * @return array|null Fundamental data or null if not available
+     */
+    public function getFundamentals(string $symbol): ?array
+    {
+        // TODO: Implement fundamentals fetching
+        // For now, return null to maintain compatibility
+        return null;
     }
 }

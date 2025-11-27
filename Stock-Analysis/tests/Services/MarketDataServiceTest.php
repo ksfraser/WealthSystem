@@ -4,6 +4,7 @@ namespace Tests\Services;
 
 use PHPUnit\Framework\TestCase;
 use App\Services\MarketDataService;
+use App\DataAccess\Interfaces\StockDataAccessInterface;
 
 /**
  * Comprehensive tests for MarketDataService
@@ -16,30 +17,43 @@ class MarketDataServiceTest extends TestCase
     
     protected function setUp(): void
     {
-        // Create mock for DynamicStockDataAccess
-        $this->mockStockDataAccess = $this->createMock(\DynamicStockDataAccess::class);
+        // Create mock for StockDataAccessInterface (DI pattern)
+        $this->mockStockDataAccess = $this->createMock(StockDataAccessInterface::class);
         
-        // Create service - need to inject mock somehow
-        // For now, we'll test without DI (this highlights the DI violation)
-        $this->service = new MarketDataService();
+        // Create service with injected mock
+        $this->service = new MarketDataService($this->mockStockDataAccess);
     }
     
     // ===== getCurrentPrices() TESTS =====
     
     public function testGetCurrentPricesSingleSymbol(): void
     {
-        $this->markTestSkipped('Requires DI refactoring to inject mock StockDataAccess');
+        // Arrange: Mock data access to return price data
+        $mockPriceData = [
+            'symbol' => 'AAPL',
+            'close' => 150.00,
+            'open' => 148.00,
+            'high' => 152.00,
+            'low' => 147.00,
+            'volume' => 50000000,
+            'date' => '2025-01-15'
+        ];
         
-        // Arrange
-        $symbols = ['AAPL'];
+        $this->mockStockDataAccess
+            ->expects($this->once())
+            ->method('getLatestPrice')
+            ->with('AAPL')
+            ->willReturn($mockPriceData);
         
         // Act
-        $result = $this->service->getCurrentPrices($symbols);
+        $result = $this->service->getCurrentPrices(['AAPL']);
         
         // Assert
         $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertArrayHasKey('AAPL', $result);
+        $this->assertNotNull($result['AAPL']);
+        $this->assertEquals(150.00, $result['AAPL']['price']);
     }
     
     public function testGetCurrentPricesMultipleSymbols(): void
@@ -62,6 +76,8 @@ class MarketDataServiceTest extends TestCase
     
     public function testGetCurrentPricesEmptyArray(): void
     {
+        // No mock expectations needed - empty array means no calls to data access
+        
         // Act
         $result = $this->service->getCurrentPrices([]);
         
