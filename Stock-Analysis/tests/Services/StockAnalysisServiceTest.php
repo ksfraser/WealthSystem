@@ -35,22 +35,23 @@ class StockAnalysisServiceTest extends TestCase
     
     public function testAnalyzeStockSuccess(): void
     {
-        // Arrange: Mock market data fetch
-        $mockStockData = [
-            'success' => true,
-            'symbol' => 'AAPL',
-            'prices' => [
-                ['date' => '2025-01-01', 'close' => 150.00],
-                ['date' => '2025-01-02', 'close' => 152.00],
-            ],
-            'fundamentals' => ['pe_ratio' => 25.5]
+        // Arrange: Mock market data methods
+        $mockPriceData = [
+            ['date' => '2025-01-01', 'close' => 150.00, 'open' => 149.00, 'high' => 151.00, 'low' => 148.00, 'volume' => 1000000],
+            ['date' => '2025-01-02', 'close' => 152.00, 'open' => 150.00, 'high' => 153.00, 'low' => 149.00, 'volume' => 1100000],
         ];
         
         $this->marketDataService
             ->expects($this->once())
-            ->method('fetchStockData')
-            ->with('AAPL', $this->anything())
-            ->willReturn($mockStockData);
+            ->method('getHistoricalPrices')
+            ->with('AAPL')
+            ->willReturn($mockPriceData);
+        
+        $this->marketDataService
+            ->expects($this->once())
+            ->method('getFundamentals')
+            ->with('AAPL')
+            ->willReturn(['pe_ratio' => 25.5]);
         
         // Arrange: Mock Python analysis
         $mockAnalysisResult = [
@@ -95,11 +96,15 @@ class StockAnalysisServiceTest extends TestCase
             'sentiment' => 0.10
         ];
         
-        $mockStockData = [
-            'success' => true,
-            'symbol' => 'AAPL',
-            'prices' => [['date' => '2025-01-01', 'close' => 150.00]]
-        ];
+        $mockPriceData = [['date' => '2025-01-01', 'close' => 150.00, 'open' => 149.00, 'high' => 151.00, 'low' => 148.00, 'volume' => 1000000]];
+        
+        $this->marketDataService
+            ->method('getHistoricalPrices')
+            ->willReturn($mockPriceData);
+        
+        $this->marketDataService
+            ->method('getFundamentals')
+            ->willReturn(['pe_ratio' => 25.5]);
         
         $mockAnalysisResult = [
             'success' => true,
@@ -109,10 +114,6 @@ class StockAnalysisServiceTest extends TestCase
                 'recommendation' => 'BUY'
             ]
         ];
-        
-        $this->marketDataService
-            ->method('fetchStockData')
-            ->willReturn($mockStockData);
         
         $this->pythonService
             ->method('analyzeStock')
@@ -125,17 +126,20 @@ class StockAnalysisServiceTest extends TestCase
         
         // Assert
         $this->assertTrue($result['success']);
-        // Weights should be applied in analysis
     }
     
     public function testAnalyzeStockWithPersistence(): void
     {
         // Arrange
-        $mockStockData = [
-            'success' => true,
-            'symbol' => 'AAPL',
-            'prices' => [['date' => '2025-01-01', 'close' => 150.00]]
-        ];
+        $mockPriceData = [['date' => '2025-01-01', 'close' => 150.00, 'open' => 149.00, 'high' => 151.00, 'low' => 148.00, 'volume' => 1000000]];
+        
+        $this->marketDataService
+            ->method('getHistoricalPrices')
+            ->willReturn($mockPriceData);
+        
+        $this->marketDataService
+            ->method('getFundamentals')
+            ->willReturn(['pe_ratio' => 25.5]);
         
         $mockAnalysisResult = [
             'success' => true,
@@ -145,10 +149,6 @@ class StockAnalysisServiceTest extends TestCase
                 'recommendation' => 'BUY'
             ]
         ];
-        
-        $this->marketDataService
-            ->method('fetchStockData')
-            ->willReturn($mockStockData);
         
         $this->pythonService
             ->method('analyzeStock')
