@@ -43,14 +43,14 @@ class PortfolioServiceTest extends TestCase
     {
         $userId = 1;
         
-        // Arrange: Mock micro-cap data source
+        // Arrange: Mock micro-cap data source - isAvailable called twice (once in getActualPortfolioData, once in getActualHoldings)
         $this->microCapDataSource
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('isAvailable')
             ->willReturn(true);
         
         $this->microCapDataSource
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('readPortfolio')
             ->willReturn([
                 [
@@ -94,64 +94,84 @@ class PortfolioServiceTest extends TestCase
     
     public function testGetDashboardDataEmptyPortfolio(): void
     {
-        // Arrange: Empty portfolio
-        $this->portfolioRepository
-            ->expects($this->once())
-            ->method('getPortfolio')
-            ->willReturn([
-                'holdings' => [],
-                'cash' => 10000.00,
-                'total_invested' => 0.00
-            ]);
+        $userId = 1;
+        
+        // Arrange: Both data sources return empty data
+        $this->microCapDataSource
+            ->method('isAvailable')
+            ->willReturn(true);
+        
+        $this->microCapDataSource
+            ->method('readPortfolio')
+            ->willReturn([]); // Empty portfolio
+        
+        $this->marketDataService
+            ->method('getMarketSummary')
+            ->willReturn([]);
         
         // Act
-        $result = $this->service->getDashboardData();
+        $result = $this->service->getDashboardData($userId);
         
         // Assert
         $this->assertIsArray($result);
         $this->assertEmpty($result['holdings']);
-        $this->assertEquals(10000.00, $result['portfolio']['cash']);
+        $this->assertEquals(0, $result['total_value']);
     }
     
     public function testGetDashboardDataMarketDataUnavailable(): void
     {
-        // Arrange
-        $mockPortfolio = [
-            'holdings' => [
-                ['symbol' => 'AAPL', 'shares' => 100, 'cost_basis' => 12000.00]
-            ]
-        ];
+        $userId = 1;
         
-        $this->portfolioRepository
-            ->method('getPortfolio')
-            ->willReturn($mockPortfolio);
+        // Arrange: Data source returns holdings
+        $this->microCapDataSource
+            ->method('isAvailable')
+            ->willReturn(true);
         
-        // Arrange: Market data service fails
+        $this->microCapDataSource
+            ->method('readPortfolio')
+            ->willReturn([
+                ['Ticker' => 'AAPL', 'Shares' => 100, 'Buy Price' => 120.00, 'Current Price' => 150.00]
+            ]);
+        
+        // Arrange: Market data service returns empty (unavailable)
         $this->marketDataService
             ->expects($this->once())
             ->method('getCurrentPrices')
-            ->willReturn([]); // Empty result
+            ->willReturn([]);
+        
+        $this->marketDataService
+            ->method('getMarketSummary')
+            ->willReturn([]);
         
         // Act
-        $result = $this->service->getDashboardData();
+        $result = $this->service->getDashboardData($userId);
         
-        // Assert: Should still return data, but with stale/missing prices
+        // Assert: Should still return data
         $this->assertIsArray($result);
         $this->assertArrayHasKey('holdings', $result);
     }
     
     public function testGetDashboardDataRepositoryThrowsException(): void
     {
-        // Arrange: Repository throws exception
-        $this->portfolioRepository
-            ->expects($this->once())
-            ->method('getPortfolio')
-            ->willThrowException(new \Exception('Database connection lost'));
+        $userId = 1;
+        
+        // Arrange: Data source throws exception
+        $this->microCapDataSource
+            ->method('isAvailable')
+            ->willReturn(true);
+        
+        $this->microCapDataSource
+            ->method('readPortfolio')
+            ->willThrowException(new \Exception('Data source error'));
+        
+        $this->marketDataService
+            ->method('getMarketSummary')
+            ->willReturn([]);
         
         // Act
-        $result = $this->service->getDashboardData();
+        $result = $this->service->getDashboardData($userId);
         
-        // Assert: Should return error response
+        // Assert: Should return default values (error is caught)
         $this->assertIsArray($result);
         $this->assertArrayHasKey('error', $result);
     }
@@ -160,64 +180,74 @@ class PortfolioServiceTest extends TestCase
     
     public function testCalculatePerformanceWithGains(): void
     {
-        // Arrange
-        $holdings = [
-            [
-                'symbol' => 'AAPL',
-                'shares' => 100,
-                'cost_basis' => 12000.00,
-                'current_price' => 150.00
-            ]
-        ];
+        $userId = 1;
+        
+        // Arrange: Mock performance history showing gains
+        $this->portfolioRepository
+            ->expects($this->once())
+            ->method('getPerformanceHistory')
+            ->with($userId)
+            ->willReturn([
+                ['value' => 10000, 'date' => '2024-01-01'],
+                ['value' => 12000, 'date' => '2024-06-01'],
+                ['value' => 15000, 'date' => '2024-12-01']
+            ]);
         
         // Act
-        $result = $this->service->calculatePerformance($holdings);
+        $result = $this->service->calculatePerformance($userId);
         
         // Assert
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('total_cost', $result);
+        $this->assertArrayHasKey('total_return', $result);
+        $this->assertArrayHasKey('total_return_percent', $result);
+        $this->assertArrayHasKey('daily_return', $result);
         $this->assertArrayHasKey('current_value', $result);
-        $this->assertArrayHasKey('total_gain', $result);
-        $this->assertArrayHasKey('total_gain_percent', $result);
         
-        $this->assertEquals(12000.00, $result['total_cost']);
-        $this->assertEquals(15000.00, $result['current_value']); // 100 * 150
-        $this->assertEquals(3000.00, $result['total_gain']);
-        $this->assertEquals(25.0, $result['total_gain_percent']);
+        $this->assertEquals(5000, $result['total_return']); // 15000 - 10000
+        $this->assertEquals(50.0, $result['total_return_percent']); // (5000/10000) * 100
     }
     
     public function testCalculatePerformanceWithLosses(): void
     {
-        // Arrange
-        $holdings = [
-            [
-                'symbol' => 'AAPL',
-                'shares' => 100,
-                'cost_basis' => 15000.00,
-                'current_price' => 120.00
-            ]
-        ];
+        $userId = 1;
+        
+        // Arrange: Mock performance history showing losses
+        $this->portfolioRepository
+            ->expects($this->once())
+            ->method('getPerformanceHistory')
+            ->with($userId)
+            ->willReturn([
+                ['value' => 15000, 'date' => '2024-01-01'],
+                ['value' => 12000, 'date' => '2024-12-01']
+            ]);
         
         // Act
-        $result = $this->service->calculatePerformance($holdings);
+        $result = $this->service->calculatePerformance($userId);
         
         // Assert
-        $this->assertEquals(15000.00, $result['total_cost']);
-        $this->assertEquals(12000.00, $result['current_value']);
-        $this->assertEquals(-3000.00, $result['total_gain']);
-        $this->assertEquals(-20.0, $result['total_gain_percent']);
+        $this->assertEquals(-3000, $result['total_return']);
+        $this->assertEquals(12000, $result['current_value']);
+        $this->assertEquals(-20.0, $result['total_return_percent']);
     }
     
     public function testCalculatePerformanceEmptyHoldings(): void
     {
+        $userId = 1;
+        
+        // Arrange: Empty performance history
+        $this->portfolioRepository
+            ->expects($this->once())
+            ->method('getPerformanceHistory')
+            ->with($userId)
+            ->willReturn([]);
+        
         // Act
-        $result = $this->service->calculatePerformance([]);
+        $result = $this->service->calculatePerformance($userId);
         
         // Assert
-        $this->assertEquals(0, $result['total_cost']);
-        $this->assertEquals(0, $result['current_value']);
-        $this->assertEquals(0, $result['total_gain']);
-        $this->assertEquals(0, $result['total_gain_percent']);
+        $this->assertEquals(0, $result['total_return']);
+        $this->assertEquals(0, $result['total_return_percent']);
+        $this->assertEquals(0, $result['daily_return']);
     }
     
     public function testCalculatePerformanceNullHoldings(): void
