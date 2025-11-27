@@ -37,16 +37,21 @@ class StockAnalysisService
         'sentiment' => 0.10     // 10% weight
     ];
     
+    /**
+     * Constructor with dependency injection
+     * 
+     * @param MarketDataService $marketDataService Service for fetching market data
+     * @param PythonIntegrationService|null $pythonService Service for Python integration (optional, creates default if null)
+     * @param array $config Configuration options
+     */
     public function __construct(
         MarketDataService $marketDataService,
+        ?PythonIntegrationService $pythonService = null,
         array $config = []
     ) {
         $this->marketDataService = $marketDataService;
+        $this->pythonService = $pythonService ?? new PythonIntegrationService();
         $this->config = $config;
-        
-        // Initialize Python integration service
-        $pythonPath = $config['python_path'] ?? 'python';
-        $this->pythonService = new PythonIntegrationService($pythonPath);
     }
     
     /**
@@ -231,72 +236,15 @@ class StockAnalysisService
     /**
      * Perform AI/statistical analysis using Python
      * 
+     * Delegates to PythonIntegrationService for actual execution.
+     * 
      * @param array $input Analysis input data
      * @return array Python analysis results
      */
     private function performAIAnalysis(array $input): array
     {
-        try {
-            // Build command to execute Python analysis
-            $pythonScript = dirname(__DIR__, 2) . '/python_analysis/analysis.py';
-            
-            if (!file_exists($pythonScript)) {
-                return [
-                    'success' => false,
-                    'error' => 'Python analysis module not found at: ' . $pythonScript
-                ];
-            }
-            
-            // Encode input as JSON
-            $jsonInput = json_encode($input);
-            
-            // Execute Python script
-            $command = sprintf(
-                '%s "%s" analyze %s 2>&1',
-                $this->config['python_path'] ?? 'python',
-                $pythonScript,
-                escapeshellarg($jsonInput)
-            );
-            
-            exec($command, $output, $returnCode);
-            
-            if ($returnCode !== 0) {
-                return [
-                    'success' => false,
-                    'error' => 'Python execution failed: ' . implode("\n", $output)
-                ];
-            }
-            
-            // Parse JSON output from Python
-            $outputJson = implode("\n", $output);
-            $result = json_decode($outputJson, true);
-            
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                return [
-                    'success' => false,
-                    'error' => 'Invalid JSON from Python: ' . $outputJson
-                ];
-            }
-            
-            // Check for errors in Python result
-            if (isset($result['error'])) {
-                return [
-                    'success' => false,
-                    'error' => 'Python analysis error: ' . $result['error']
-                ];
-            }
-            
-            return [
-                'success' => true,
-                'data' => $result
-            ];
-            
-        } catch (\Exception $e) {
-            return [
-                'success' => false,
-                'error' => 'Python integration error: ' . $e->getMessage()
-            ];
-        }
+        // Delegate to PythonIntegrationService - no direct Python execution
+        return $this->pythonService->analyzeStock($input);
     }
     
     /**
