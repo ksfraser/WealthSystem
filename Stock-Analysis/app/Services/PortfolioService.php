@@ -5,44 +5,41 @@ namespace App\Services;
 use App\Services\Interfaces\PortfolioServiceInterface;
 use App\Services\Interfaces\MarketDataServiceInterface;
 use App\Repositories\Interfaces\PortfolioRepositoryInterface;
-
-// Include existing Portfolio DAOs for compatibility
-require_once __DIR__ . '/../../web_ui/UserPortfolioDAO.php';
-require_once __DIR__ . '/../../web_ui/PortfolioDAO.php';
-require_once __DIR__ . '/../../web_ui/MicroCapPortfolioDAO.php';
+use App\DataAccess\Interfaces\PortfolioDataSourceInterface;
+use App\DataAccess\Adapters\UserPortfolioDAOAdapter;
+use App\DataAccess\Adapters\MicroCapPortfolioDAOAdapter;
 
 /**
  * Portfolio Service Implementation
  * 
- * Provides portfolio management and analytics using existing DAO system.
- * Integrates with UserPortfolioDAO and PortfolioDAO for data access.
+ * Provides portfolio management and analytics with dependency injection.
+ * Uses data source interfaces for flexible data access.
  */
 class PortfolioService implements PortfolioServiceInterface
 {
     private PortfolioRepositoryInterface $portfolioRepository;
     private MarketDataServiceInterface $marketDataService;
-    private ?\UserPortfolioDAO $userPortfolioDAO = null;
-    private ?\MicroCapPortfolioDAO $microCapDAO = null;
+    private PortfolioDataSourceInterface $userPortfolioDataSource;
+    private PortfolioDataSourceInterface $microCapDataSource;
     
-    public function __construct(PortfolioRepositoryInterface $portfolioRepository, MarketDataServiceInterface $marketDataService)
-    {
+    /**
+     * Constructor with dependency injection
+     * 
+     * @param PortfolioRepositoryInterface $portfolioRepository Repository for portfolio persistence
+     * @param MarketDataServiceInterface $marketDataService Service for market data
+     * @param PortfolioDataSourceInterface|null $userPortfolioDataSource User portfolio data source (optional)
+     * @param PortfolioDataSourceInterface|null $microCapDataSource Micro-cap portfolio data source (optional)
+     */
+    public function __construct(
+        PortfolioRepositoryInterface $portfolioRepository,
+        MarketDataServiceInterface $marketDataService,
+        ?PortfolioDataSourceInterface $userPortfolioDataSource = null,
+        ?PortfolioDataSourceInterface $microCapDataSource = null
+    ) {
         $this->portfolioRepository = $portfolioRepository;
         $this->marketDataService = $marketDataService;
-        
-        // Initialize existing DAOs for data access
-        try {
-            $csvPath = __DIR__ . '/../../Scripts and CSV Files/chatgpt_portfolio_update.csv';
-            $this->userPortfolioDAO = new \UserPortfolioDAO($csvPath, 'user_portfolios', 'LegacyDatabaseConfig');
-        } catch (\Exception $e) {
-            // Will work with limited functionality
-        }
-        
-        try {
-            $microCapCsvPath = __DIR__ . '/../../Scripts and CSV Files/chatgpt_portfolio_update.csv';
-            $this->microCapDAO = new \MicroCapPortfolioDAO($microCapCsvPath);
-        } catch (\Exception $e) {
-            // Will work with limited functionality
-        }
+        $this->userPortfolioDataSource = $userPortfolioDataSource ?? new UserPortfolioDAOAdapter();
+        $this->microCapDataSource = $microCapDataSource ?? new MicroCapPortfolioDAOAdapter();
     }
     
     /**
@@ -224,17 +221,17 @@ class PortfolioService implements PortfolioServiceInterface
     private function getActualPortfolioData(int $userId): array
     {
         try {
-            // Try to get from MicroCapDAO first
-            if ($this->microCapDAO) {
-                $portfolioRows = $this->microCapDAO->readPortfolio();
+            // Try to get from micro-cap data source first
+            if ($this->microCapDataSource->isAvailable()) {
+                $portfolioRows = $this->microCapDataSource->readPortfolio();
                 if (!empty($portfolioRows)) {
                     return $this->calculatePortfolioMetrics($portfolioRows);
                 }
             }
             
-            // Fallback to UserPortfolioDAO
-            if ($this->userPortfolioDAO) {
-                $portfolio = $this->userPortfolioDAO->readUserPortfolio($userId);
+            // Fallback to user portfolio data source
+            if ($this->userPortfolioDataSource->isAvailable()) {
+                $portfolio = $this->userPortfolioDataSource->readPortfolio($userId);
                 if (!empty($portfolio)) {
                     return $this->calculatePortfolioMetrics($portfolio);
                 }
@@ -263,11 +260,11 @@ class PortfolioService implements PortfolioServiceInterface
     private function getActualHoldings(int $userId): array
     {
         try {
-            // Get holdings from existing system
+            // Get holdings from data source
             $holdings = [];
             
-            if ($this->microCapDAO) {
-                $portfolioRows = $this->microCapDAO->readPortfolio();
+            if ($this->microCapDataSource->isAvailable()) {
+                $portfolioRows = $this->microCapDataSource->readPortfolio();
                 if (!empty($portfolioRows)) {
                     $holdings = $this->formatHoldings($portfolioRows);
                 }

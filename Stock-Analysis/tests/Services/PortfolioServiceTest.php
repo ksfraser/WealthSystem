@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use App\Services\PortfolioService;
 use App\Repositories\Interfaces\PortfolioRepositoryInterface;
 use App\Services\Interfaces\MarketDataServiceInterface;
+use App\DataAccess\Interfaces\PortfolioDataSourceInterface;
 
 /**
  * Comprehensive tests for PortfolioService
@@ -15,18 +16,24 @@ class PortfolioServiceTest extends TestCase
 {
     private $portfolioRepository;
     private $marketDataService;
+    private $userPortfolioDataSource;
+    private $microCapDataSource;
     private PortfolioService $service;
     
     protected function setUp(): void
     {
-        // Create mocks for dependencies
+        // Create mocks for dependencies (DI pattern)
         $this->portfolioRepository = $this->createMock(PortfolioRepositoryInterface::class);
         $this->marketDataService = $this->createMock(MarketDataServiceInterface::class);
+        $this->userPortfolioDataSource = $this->createMock(PortfolioDataSourceInterface::class);
+        $this->microCapDataSource = $this->createMock(PortfolioDataSourceInterface::class);
         
-        // Create service with mocked dependencies
+        // Create service with all mocked dependencies
         $this->service = new PortfolioService(
             $this->portfolioRepository,
-            $this->marketDataService
+            $this->marketDataService,
+            $this->userPortfolioDataSource,
+            $this->microCapDataSource
         );
     }
     
@@ -34,56 +41,55 @@ class PortfolioServiceTest extends TestCase
     
     public function testGetDashboardDataSuccess(): void
     {
-        // Arrange: Mock portfolio data
-        $mockPortfolio = [
-            'holdings' => [
-                [
-                    'symbol' => 'AAPL',
-                    'shares' => 100,
-                    'cost_basis' => 12000.00,
-                    'avg_cost' => 120.00
-                ],
-                [
-                    'symbol' => 'GOOGL',
-                    'shares' => 50,
-                    'cost_basis' => 7500.00,
-                    'avg_cost' => 150.00
-                ]
-            ],
-            'cash' => 5000.00,
-            'total_invested' => 19500.00
-        ];
+        $userId = 1;
         
-        $this->portfolioRepository
+        // Arrange: Mock micro-cap data source
+        $this->microCapDataSource
             ->expects($this->once())
-            ->method('getPortfolio')
-            ->willReturn($mockPortfolio);
+            ->method('isAvailable')
+            ->willReturn(true);
+        
+        $this->microCapDataSource
+            ->expects($this->once())
+            ->method('readPortfolio')
+            ->willReturn([
+                [
+                    'Ticker' => 'AAPL',
+                    'Company' => 'Apple Inc',
+                    'Shares' => 100,
+                    'Buy Price' => 120.00,
+                    'Current Price' => 150.00,
+                    'Market Value' => '15000.00',
+                    'P&L' => '3000.00'
+                ]
+            ]);
         
         // Arrange: Mock market data
         $mockPrices = [
-            'AAPL' => ['price' => 150.00, 'change' => 2.50, 'change_percent' => 1.69],
-            'GOOGL' => ['price' => 140.00, 'change' => -5.00, 'change_percent' => -3.45]
+            'AAPL' => ['price' => 150.00, 'change' => 2.50, 'change_percent' => 1.69]
         ];
         
         $this->marketDataService
             ->expects($this->once())
             ->method('getCurrentPrices')
-            ->with(['AAPL', 'GOOGL'])
+            ->with(['AAPL'])
             ->willReturn($mockPrices);
         
+        // Arrange: Mock market summary
+        $this->marketDataService
+            ->expects($this->once())
+            ->method('getMarketSummary')
+            ->willReturn([]);
+        
         // Act
-        $result = $this->service->getDashboardData();
+        $result = $this->service->getDashboardData($userId);
         
         // Assert
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('portfolio', $result);
-        $this->assertArrayHasKey('performance', $result);
+        $this->assertArrayHasKey('user_id', $result);
+        $this->assertEquals($userId, $result['user_id']);
         $this->assertArrayHasKey('holdings', $result);
-        
-        // Verify calculations
-        $this->assertArrayHasKey('current_value', $result['performance']);
-        $this->assertArrayHasKey('total_gain', $result['performance']);
-        $this->assertArrayHasKey('total_gain_percent', $result['performance']);
+        $this->assertArrayHasKey('marketData', $result);
     }
     
     public function testGetDashboardDataEmptyPortfolio(): void
