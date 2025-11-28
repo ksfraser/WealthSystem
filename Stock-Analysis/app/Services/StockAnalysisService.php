@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Repositories\AnalysisRepositoryInterface;
+
 /**
  * Stock Analysis Service
  * 
@@ -10,12 +12,13 @@ namespace App\Services;
  * - MarketDataService (PHP) - Data fetching and caching
  * - PythonIntegrationService (PHP) - Bridge to Python
  * - python_analysis/analysis.py (Python) - AI/statistical analysis
+ * - AnalysisRepository (PHP) - Analysis result persistence
  * 
  * Architecture:
  * PHP handles:
  *   - Data fetching and caching
  *   - Business rules and validation
- *   - Database persistence
+ *   - Database persistence (via Repository)
  *   - Result formatting and presentation
  * 
  * Python handles:
@@ -27,6 +30,7 @@ class StockAnalysisService
 {
     private MarketDataService $marketDataService;
     private PythonIntegrationService $pythonService;
+    private AnalysisRepositoryInterface $analysisRepository;
     private array $config;
     
     // Default scoring weights for analysis dimensions
@@ -41,15 +45,18 @@ class StockAnalysisService
      * Constructor with dependency injection
      * 
      * @param MarketDataService $marketDataService Service for fetching market data
+     * @param AnalysisRepositoryInterface $analysisRepository Repository for analysis persistence
      * @param PythonIntegrationService|null $pythonService Service for Python integration (optional, creates default if null)
      * @param array $config Configuration options
      */
     public function __construct(
         MarketDataService $marketDataService,
+        AnalysisRepositoryInterface $analysisRepository,
         ?PythonIntegrationService $pythonService = null,
         array $config = []
     ) {
         $this->marketDataService = $marketDataService;
+        $this->analysisRepository = $analysisRepository;
         $this->pythonService = $pythonService ?? new PythonIntegrationService();
         $this->config = $config;
     }
@@ -317,10 +324,13 @@ class StockAnalysisService
      */
     private function persistAnalysisResult(string $symbol, array $result): bool
     {
-        // TODO: Implement database persistence via Repository
-        // For now, just log
-        error_log("Analysis result for {$symbol}: " . $result['recommendation']);
-        return true;
+        $metadata = [
+            'analyzed_at' => date('Y-m-d H:i:s'),
+            'version' => '1.0',
+            'weights' => $this->config['weights'] ?? self::DEFAULT_WEIGHTS
+        ];
+        
+        return $this->analysisRepository->store($symbol, $result, $metadata);
     }
     
     /**
@@ -331,8 +341,13 @@ class StockAnalysisService
      */
     private function getCachedAnalysis(string $symbol): ?array
     {
-        // TODO: Implement cache lookup via Repository
-        // For now, return null (no cache)
+        // Check cache with 1 hour TTL (configurable)
+        $cacheMaxAge = $this->config['cache_ttl'] ?? 3600;
+        
+        if ($this->analysisRepository->isCached($symbol, $cacheMaxAge)) {
+            return $this->analysisRepository->get($symbol, $cacheMaxAge);
+        }
+        
         return null;
     }
     

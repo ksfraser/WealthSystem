@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use App\Services\StockAnalysisService;
 use App\Services\MarketDataService;
 use App\Services\PythonIntegrationService;
+use App\Repositories\AnalysisRepositoryInterface;
 
 /**
  * Comprehensive tests for StockAnalysisService
@@ -15,6 +16,7 @@ class StockAnalysisServiceTest extends TestCase
 {
     private $marketDataService;
     private $pythonService;
+    private $analysisRepository;
     private StockAnalysisService $service;
     
     protected function setUp(): void
@@ -22,10 +24,12 @@ class StockAnalysisServiceTest extends TestCase
         // Create mock dependencies
         $this->marketDataService = $this->createMock(MarketDataService::class);
         $this->pythonService = $this->createMock(PythonIntegrationService::class);
+        $this->analysisRepository = $this->createMock(AnalysisRepositoryInterface::class);
         
         // Create service with mocked dependencies
         $this->service = new StockAnalysisService(
             $this->marketDataService,
+            $this->analysisRepository,
             $this->pythonService,
             ['python_path' => 'python']
         );

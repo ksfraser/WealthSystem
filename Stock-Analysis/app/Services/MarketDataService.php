@@ -5,26 +5,34 @@ namespace App\Services;
 use App\Services\Interfaces\MarketDataServiceInterface;
 use App\DataAccess\Interfaces\StockDataAccessInterface;
 use App\DataAccess\Adapters\DynamicStockDataAccessAdapter;
+use App\Repositories\MarketDataRepositoryInterface;
 
 /**
  * Market Data Service Implementation
  * 
  * Provides real-time and historical market data by integrating with existing
- * data fetching systems via dependency injection.
+ * data fetching systems via dependency injection. Uses Repository for caching
+ * and persistence.
  */
 class MarketDataService implements MarketDataServiceInterface
 {
     private StockDataAccessInterface $stockDataAccess;
+    private MarketDataRepositoryInterface $marketDataRepository;
     private array $config;
     
     /**
      * Constructor with dependency injection
      * 
+     * @param MarketDataRepositoryInterface $marketDataRepository Repository for market data persistence
      * @param StockDataAccessInterface|null $stockDataAccess Data access layer (optional, creates default adapter if null)
      * @param array $config Configuration options
      */
-    public function __construct(?StockDataAccessInterface $stockDataAccess = null, array $config = [])
-    {
+    public function __construct(
+        MarketDataRepositoryInterface $marketDataRepository,
+        ?StockDataAccessInterface $stockDataAccess = null,
+        array $config = []
+    ) {
+        $this->marketDataRepository = $marketDataRepository;
         $this->stockDataAccess = $stockDataAccess ?? new DynamicStockDataAccessAdapter();
         $this->config = $config;
     }
@@ -226,8 +234,27 @@ class MarketDataService implements MarketDataServiceInterface
      */
     public function getFundamentals(string $symbol): ?array
     {
-        // TODO: Implement fundamentals fetching
-        // For now, return null to maintain compatibility
-        return null;
+        // Check cache first (24 hour TTL for fundamentals)
+        $cacheMaxAge = $this->config['fundamentals_cache_ttl'] ?? 86400;
+        $cached = $this->marketDataRepository->getFundamentals($symbol, $cacheMaxAge);
+        
+        if ($cached !== null) {
+            return $cached;
+        }
+        
+        // Fetch fresh data from data access layer
+        try {
+            $fundamentals = $this->stockDataAccess->getFundamentals($symbol);
+            
+            if ($fundamentals !== null) {
+                // Store in repository for future use
+                $this->marketDataRepository->storeFundamentals($symbol, $fundamentals);
+            }
+            
+            return $fundamentals;
+        } catch (\Exception $e) {
+            error_log("Failed to fetch fundamentals for {$symbol}: " . $e->getMessage());
+            return null;
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Services;
 use PHPUnit\Framework\TestCase;
 use App\Services\MarketDataService;
 use App\DataAccess\Interfaces\StockDataAccessInterface;
+use App\Repositories\MarketDataRepositoryInterface;
 
 /**
  * Comprehensive tests for MarketDataService
@@ -14,14 +15,19 @@ class MarketDataServiceTest extends TestCase
 {
     private MarketDataService $service;
     private $mockStockDataAccess;
+    private $mockMarketDataRepository;
     
     protected function setUp(): void
     {
         // Create mock for StockDataAccessInterface (DI pattern)
         $this->mockStockDataAccess = $this->createMock(StockDataAccessInterface::class);
+        $this->mockMarketDataRepository = $this->createMock(MarketDataRepositoryInterface::class);
         
-        // Create service with injected mock
-        $this->service = new MarketDataService($this->mockStockDataAccess);
+        // Create service with injected mocks
+        $this->service = new MarketDataService(
+            $this->mockMarketDataRepository,
+            $this->mockStockDataAccess
+        );
     }
     
     // ===== getCurrentPrices() TESTS =====
