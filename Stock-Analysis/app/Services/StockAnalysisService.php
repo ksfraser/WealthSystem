@@ -99,7 +99,8 @@ class StockAnalysisService
             
             return [
                 'success' => true,
-                'data' => $finalResult
+                'symbol' => $symbol,
+                'analysis' => $finalResult
             ];
             
         } catch (\Exception $e) {
