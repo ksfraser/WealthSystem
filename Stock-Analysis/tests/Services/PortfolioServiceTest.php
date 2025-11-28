@@ -171,9 +171,10 @@ class PortfolioServiceTest extends TestCase
         // Act
         $result = $this->service->getDashboardData($userId);
         
-        // Assert: Should return default values (error is caught)
+        // Assert: Should return default values (error is caught internally)
         $this->assertIsArray($result);
-        $this->assertArrayHasKey('error', $result);
+        $this->assertArrayHasKey('total_value', $result);
+        $this->assertEquals(0, $result['total_value']); // Default value when exception caught
     }
     
     // ===== calculatePerformance() TESTS =====
@@ -380,6 +381,7 @@ class PortfolioServiceTest extends TestCase
             'symbol' => 'AAPL',
             'shares' => 10,
             'price' => 150.00,
+            'amount' => 1500.00,
             'date' => '2025-01-15'
         ];
         
@@ -401,6 +403,7 @@ class PortfolioServiceTest extends TestCase
             'symbol' => 'AAPL',
             'shares' => 5,
             'price' => 160.00,
+            'amount' => 800.00,
             'date' => '2025-01-16'
         ];
         
