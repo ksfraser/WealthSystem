@@ -1,11 +1,16 @@
 <?php
 /**
  * User Dashboard - Main logged-in area
+ * 
+ * Uses Dependency Injection Container for service resolution
  */
 
-require_once __DIR__ . '/UserAuthDAO.php';
+// Load DI Container
+$container = require_once __DIR__ . '/bootstrap.php';
 
-$auth = new UserAuthDAO();
+// Resolve services from container
+$auth = $container->get(UserAuthDAO::class);
+$navigationService = $container->get(App\Services\NavigationService::class);
 
 // Require login
 $auth->requireLogin();
@@ -107,9 +112,7 @@ $user = $auth->getCurrentUser();
 <body>
 
 <?php
-// Use centralized NavigationService (follows SRP)
-require_once 'NavigationService.php';
-$navigationService = new NavigationService();
+// Render navigation header using DI-resolved service
 echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced Trading System', 'dashboard');
 ?>
 
@@ -123,9 +126,8 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
             <div class="status-info">
                 <?php
                 try {
-                    require_once 'UserAuthDAO.php';
-                    $testAuth = new UserAuthDAO();
-                    $testAuth->isLoggedIn();
+                    // Test database connection via auth service
+                    $auth->isLoggedIn();
                     echo '<strong>🔧 System Status:</strong> 🟢 Database Available - All features operational.';
                 } catch (Exception $e) {
                     echo '<strong>🔧 System Status:</strong> 🔴 Database Unavailable - Operating in limited mode.';

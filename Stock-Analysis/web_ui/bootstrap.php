@@ -1,21 +1,31 @@
 <?php
 /**
- * Modern Bootstrap File - Uses existing classes with namespaces
- * This eliminates the need for manual includes throughout the application
+ * Web UI Bootstrap with Dependency Injection
+ * 
+ * This bootstrap file sets up the DI Container for web UI pages.
+ * It provides access to:
+ * - Stock Analysis services (StockAnalysisService, MarketDataService)
+ * - Repository layer (AnalysisRepository, MarketDataRepository)
+ * - Authentication services (UserAuthDAO, SessionManager)
+ * - Navigation and UI services
+ * 
+ * Usage in web pages:
+ * ```php
+ * require_once __DIR__ . '/bootstrap.php';
+ * 
+ * $analysisService = $container->get(StockAnalysisService::class);
+ * $marketData = $container->get(MarketDataService::class);
+ * $auth = $container->get(UserAuthDAO::class);
+ * ```
  */
 
-// Load Composer's autoloader first - this handles external dependencies
+// Load Composer's autoloader first
 require_once __DIR__ . '/../vendor/autoload.php';
 
-// For our existing classes that now use namespaces, we need to include them manually
-// until we fully migrate to PSR-4 autoloading for our own classes
+// Load the Stock-Analysis DI Container bootstrap
+$container = require __DIR__ . '/../bootstrap.php';
 
-require_once __DIR__ . '/AuthExceptions.php';        // App\Auth namespace
-require_once __DIR__ . '/SessionManager.php';       // App\Core namespace
-require_once __DIR__ . '/UserAuthDAO.php';          // Will add namespace next
-require_once __DIR__ . '/CommonDAO.php';            // Will add namespace next
-
-// Optional: Set up any global configuration here
+// Define application constants
 if (!defined('APP_ROOT')) {
     define('APP_ROOT', dirname(__DIR__));
 }
@@ -24,8 +34,39 @@ if (!defined('WEB_ROOT')) {
     define('WEB_ROOT', __DIR__);
 }
 
+if (!defined('STORAGE_ROOT')) {
+    define('STORAGE_ROOT', APP_ROOT . '/storage');
+}
+
 // Error reporting for development
 if (!defined('PRODUCTION')) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 }
+
+// Web-specific service bindings (for legacy compatibility)
+// These services are used by existing web_ui pages that haven't been refactored yet
+
+// SessionManager (web UI specific)
+if (!$container->has(App\Core\SessionManager::class)) {
+    require_once __DIR__ . '/SessionManager.php';
+    $container->singleton(App\Core\SessionManager::class, function() {
+        return new App\Core\SessionManager();
+    });
+}
+
+// UserAuthDAO (web UI authentication)
+if (!$container->has(UserAuthDAO::class)) {
+    require_once __DIR__ . '/UserAuthDAO.php';
+    $container->singleton(UserAuthDAO::class, function($c) {
+        return new UserAuthDAO();
+    });
+}
+
+// NavigationService (web UI navigation)
+if (!$container->has(App\Services\NavigationService::class)) {
+    $container->singleton(App\Services\NavigationService::class);
+}
+
+// Return the configured container
+return $container;
