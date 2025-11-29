@@ -100,4 +100,11 @@ $container->singleton(App\Services\Trading\TurtleStrategyService::class, functio
     );
 });
 
+$container->singleton(App\Services\Trading\MACrossoverStrategyService::class, function($container) {
+    return new App\Services\Trading\MACrossoverStrategyService(
+        $container->get(MarketDataService::class),
+        $container->get(MarketDataRepositoryInterface::class)
+    );
+});
+
 return $container;
