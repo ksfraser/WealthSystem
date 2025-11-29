@@ -21,6 +21,7 @@ use App\Repositories\StrategyRepositoryInterface;
 use App\Services\StockAnalysisService;
 use App\Services\MarketDataService;
 use App\Services\MarketFactorsService;
+use App\Services\BacktestEngine;
 use App\Services\PythonIntegrationService;
 use App\DataAccess\Adapters\DynamicStockDataAccessAdapter;
 use App\DataAccess\Interfaces\StockDataAccessInterface;
@@ -91,6 +92,14 @@ $container->singleton(StockAnalysisService::class, function($container) {
 $container->singleton(MarketFactorsService::class, function() {
     $storagePath = __DIR__ . '/storage/market_factors';
     return new MarketFactorsService($storagePath);
+});
+
+$container->singleton(BacktestEngine::class, function($container) {
+    return new BacktestEngine(
+        $container->get(StrategyRepositoryInterface::class),
+        100000.0,  // Initial capital
+        0.001      // Transaction cost (0.1%)
+    );
 });
 
 // ===== ADDITIONAL SERVICES (Add as needed) =====
