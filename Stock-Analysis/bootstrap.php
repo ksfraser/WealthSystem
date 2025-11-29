@@ -107,4 +107,11 @@ $container->singleton(App\Services\Trading\MACrossoverStrategyService::class, fu
     );
 });
 
+$container->singleton(App\Services\Trading\FourWeekRuleStrategyService::class, function($container) {
+    return new App\Services\Trading\FourWeekRuleStrategyService(
+        $container->get(MarketDataService::class),
+        $container->get(MarketDataRepositoryInterface::class)
+    );
+});
+
 return $container;
