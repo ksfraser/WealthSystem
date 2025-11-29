@@ -91,4 +91,13 @@ $container->singleton(StockAnalysisService::class, function($container) {
 //     );
 // });
 
+// ===== TRADING STRATEGIES =====
+
+$container->singleton(App\Services\Trading\TurtleStrategyService::class, function($container) {
+    return new App\Services\Trading\TurtleStrategyService(
+        $container->get(MarketDataService::class),
+        $container->get(MarketDataRepositoryInterface::class)
+    );
+});
+
 return $container;
