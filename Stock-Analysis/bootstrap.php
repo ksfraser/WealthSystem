@@ -114,4 +114,11 @@ $container->singleton(App\Services\Trading\FourWeekRuleStrategyService::class, f
     );
 });
 
+$container->singleton(App\Services\Trading\SupportResistanceStrategyService::class, function($container) {
+    return new App\Services\Trading\SupportResistanceStrategyService(
+        $container->get(MarketDataService::class),
+        $container->get(MarketDataRepositoryInterface::class)
+    );
+});
+
 return $container;
