@@ -16,6 +16,8 @@ use App\Repositories\AnalysisRepository;
 use App\Repositories\AnalysisRepositoryInterface;
 use App\Repositories\MarketDataRepository;
 use App\Repositories\MarketDataRepositoryInterface;
+use App\Repositories\StrategyRepository;
+use App\Repositories\StrategyRepositoryInterface;
 use App\Services\StockAnalysisService;
 use App\Services\MarketDataService;
 use App\Services\PythonIntegrationService;
@@ -35,6 +37,11 @@ $container->singleton(AnalysisRepositoryInterface::class, function() {
 $container->singleton(MarketDataRepositoryInterface::class, function() {
     $storagePath = __DIR__ . '/storage/market_data';
     return new MarketDataRepository($storagePath);
+});
+
+$container->singleton(StrategyRepositoryInterface::class, function() {
+    $storagePath = __DIR__ . '/storage/strategies';
+    return new StrategyRepository($storagePath);
 });
 
 // ===== DATA ACCESS BINDINGS =====
