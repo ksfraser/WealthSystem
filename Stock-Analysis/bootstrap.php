@@ -150,4 +150,11 @@ $container->singleton(App\Services\Trading\WarrenBuffettStrategyService::class, 
     );
 });
 
+$container->singleton(App\Services\Trading\GARPStrategyService::class, function($container) {
+    return new App\Services\Trading\GARPStrategyService(
+        $container->get(MarketDataService::class),
+        $container->get(MarketDataRepositoryInterface::class)
+    );
+});
+
 return $container;
