@@ -143,4 +143,11 @@ $container->singleton(App\Services\Trading\SupportResistanceStrategyService::cla
     );
 });
 
+$container->singleton(App\Services\Trading\WarrenBuffettStrategyService::class, function($container) {
+    return new App\Services\Trading\WarrenBuffettStrategyService(
+        $container->get(MarketDataService::class),
+        $container->get(MarketDataRepositoryInterface::class)
+    );
+});
+
 return $container;
