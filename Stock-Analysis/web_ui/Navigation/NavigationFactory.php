@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/Services/NavigationBuilder.php';
 require_once __DIR__ . '/Services/DashboardCardBuilder.php';
+require_once __DIR__ . '/Services/BreadcrumbBuilder.php';
 require_once __DIR__ . '/Providers/PortfolioItemsProvider.php';
 require_once __DIR__ . '/Providers/StockAnalysisItemsProvider.php';
 require_once __DIR__ . '/Providers/DataManagementItemsProvider.php';
@@ -72,6 +73,14 @@ class NavigationFactory {
         $builder->addProvider(new ProfileItemsProvider());
         
         return $builder;
+    }
+    
+    /**
+     * Create a breadcrumb builder with configuration
+     */
+    public static function createBreadcrumbBuilder(?array $currentUser = null): BreadcrumbBuilder {
+        $config = self::getConfig();
+        return new BreadcrumbBuilder($config, $currentUser);
     }
     
     /**

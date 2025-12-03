@@ -147,51 +147,40 @@ class DashboardContentService {
     }
     
     private function createFeatureGrid() {
-        $features = [
-            [
-                'title' => '🏠 Dashboard Hub',
-                'description' => 'Access the main portfolio dashboard with account management and admin tools',
-                'icon' => '🏠',
-                'actions' => [
-                    ['url' => 'dashboard.php', 'label' => 'Go to Dashboard', 'class' => 'btn btn-primary', 'icon' => '🏠']
-                ]
-            ],
-            [
-                'title' => '📊 Portfolio Management',
-                'description' => 'Track and manage your investment portfolios with real-time updates',
-                'icon' => '📊',
-                'actions' => [
-                    ['url' => 'portfolio_overview.php', 'label' => 'View Portfolios', 'class' => 'btn btn-primary', 'icon' => '👁️']
-                ]
-            ],
-            [
-                'title' => '💹 Trade Execution',
-                'description' => 'Execute trades and monitor market movements',
-                'icon' => '💹',
-                'actions' => [
-                    ['url' => 'trading_interface.php', 'label' => 'Start Trading', 'class' => 'btn btn-success', 'icon' => '🚀']
-                ]
-            ],
-            [
-                'title' => '📈 Performance Analytics',
-                'description' => 'Analyze your trading performance with advanced metrics',
-                'icon' => '📈',
-                'actions' => [
-                    ['url' => 'analytics_dashboard.php', 'label' => 'View Analytics', 'class' => 'btn btn-info', 'icon' => '📊']
-                ]
-            ]
-        ];
+        // Use new SRP architecture for dashboard cards with access control
+        require_once 'Navigation/NavigationFactory.php';
         
-        // Return multiple cards as separate components instead of trying to render them as HTML
+        $user = $this->authService->getCurrentUser();
+        $dashboardBuilder = NavigationFactory::createDashboardCardBuilder($user);
+        
+        // Get cards as array for rendering with UIRenderer
+        $cardsArray = $dashboardBuilder->getCardsArray();
+        
+        // Add "Dashboard Hub" card at the beginning
+        array_unshift($cardsArray, [
+            'id' => 'dashboard_hub',
+            'title' => '🏠 Dashboard Hub',
+            'description' => 'Access the main portfolio dashboard with account management and admin tools',
+            'icon' => '🏠',
+            'actions' => [
+                ['url' => 'dashboard.php', 'label' => 'Go to Dashboard', 'class' => 'btn btn-primary', 'icon' => '🏠']
+            ],
+            'has_access' => true
+        ]);
+        
+        // Convert to UiFactory cards for rendering
         $cards = [];
-        foreach ($features as $feature) {
-            $cards[] = UiFactory::createCard(
-                $feature['title'],
-                $feature['description'],
-                'default',
-                $feature['icon'],
-                $feature['actions']
-            );
+        foreach ($cardsArray as $cardData) {
+            // Only create cards that user has access to (or are greyed out)
+            if ($cardData['has_access'] || !empty($cardData)) {
+                $cards[] = UiFactory::createCard(
+                    $cardData['title'],
+                    $cardData['description'],
+                    'default',
+                    $cardData['icon'],
+                    $cardData['actions']
+                );
+            }
         }
         
         return $cards;

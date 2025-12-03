@@ -10,6 +10,8 @@ class DashboardCardBuilder {
     private $config;
     private $currentUser;
     private $isAdmin;
+    private $cacheKey;
+    private $cachedCards = null;
     
     /**
      * @param array $config Navigation configuration
@@ -19,6 +21,11 @@ class DashboardCardBuilder {
         $this->config = $config;
         $this->currentUser = $currentUser;
         $this->isAdmin = $currentUser && ($currentUser['is_admin'] ?? false);
+        
+        // Generate cache key
+        $userRole = $currentUser['role'] ?? 'guest';
+        $adminStatus = $this->isAdmin ? 'admin' : 'user';
+        $this->cacheKey = "dashboard_cards_{$userRole}_{$adminStatus}";
     }
     
     /**
@@ -34,6 +41,19 @@ class DashboardCardBuilder {
      * @return DashboardCard[]
      */
     public function getCards(): array {
+        // Check cache if enabled
+        if ($this->config['cache_enabled'] ?? false) {
+            if ($this->cachedCards !== null) {
+                return $this->cachedCards;
+            }
+            
+            $cached = $this->getCachedCards();
+            if ($cached !== null) {
+                $this->cachedCards = $cached;
+                return $cached;
+            }
+        }
+        
         $allCards = [];
         
         foreach ($this->providers as $provider) {
@@ -48,7 +68,62 @@ class DashboardCardBuilder {
             return $a->getSortOrder() <=> $b->getSortOrder();
         });
         
+        // Cache if enabled
+        if ($this->config['cache_enabled'] ?? false) {
+            $this->cacheCards($allCards);
+            $this->cachedCards = $allCards;
+        }
+        
         return $allCards;
+    }
+    
+    /**
+     * Get cached cards
+     */
+    private function getCachedCards(): ?array {
+        $cacheDir = __DIR__ . '/../../cache';
+        $cacheFile = $cacheDir . '/' . $this->cacheKey . '.cache';
+        
+        if (!file_exists($cacheFile)) {
+            return null;
+        }
+        
+        $cacheDuration = $this->config['cache_duration'] ?? 3600;
+        if (time() - filemtime($cacheFile) > $cacheDuration) {
+            @unlink($cacheFile);
+            return null;
+        }
+        
+        $data = @file_get_contents($cacheFile);
+        if ($data === false) {
+            return null;
+        }
+        
+        return unserialize($data);
+    }
+    
+    /**
+     * Cache cards to file
+     */
+    private function cacheCards(array $cards): void {
+        $cacheDir = __DIR__ . '/../../cache';
+        
+        if (!is_dir($cacheDir)) {
+            @mkdir($cacheDir, 0755, true);
+        }
+        
+        $cacheFile = $cacheDir . '/' . $this->cacheKey . '.cache';
+        @file_put_contents($cacheFile, serialize($cards));
+    }
+    
+    /**
+     * Clear cache
+     */
+    public function clearCache(): void {
+        $cacheDir = __DIR__ . '/../../cache';
+        $cacheFile = $cacheDir . '/' . $this->cacheKey . '.cache';
+        @unlink($cacheFile);
+        $this->cachedCards = null;
     }
     
     /**

@@ -11,6 +11,8 @@ class NavigationBuilder {
     private $currentUser;
     private $isAdmin;
     private $currentPath;
+    private $cacheKey;
+    private $cachedItems = null;
     
     /**
      * @param array $config Navigation configuration
@@ -22,6 +24,11 @@ class NavigationBuilder {
         $this->currentUser = $currentUser;
         $this->isAdmin = $currentUser && ($currentUser['is_admin'] ?? false);
         $this->currentPath = $currentPath;
+        
+        // Generate cache key based on user role and admin status
+        $userRole = $currentUser['role'] ?? 'guest';
+        $adminStatus = $this->isAdmin ? 'admin' : 'user';
+        $this->cacheKey = "nav_menu_{$userRole}_{$adminStatus}";
     }
     
     /**
@@ -37,6 +44,19 @@ class NavigationBuilder {
      * @return MenuItem[]
      */
     public function getMenuItems(): array {
+        // Check cache if enabled
+        if ($this->config['cache_enabled'] ?? false) {
+            if ($this->cachedItems !== null) {
+                return $this->cachedItems;
+            }
+            
+            $cached = $this->getCachedItems();
+            if ($cached !== null) {
+                $this->cachedItems = $cached;
+                return $cached;
+            }
+        }
+        
         $allItems = [];
         
         foreach ($this->providers as $provider) {
@@ -55,7 +75,62 @@ class NavigationBuilder {
             return $a->getSortOrder() <=> $b->getSortOrder();
         });
         
+        // Cache the results if enabled
+        if ($this->config['cache_enabled'] ?? false) {
+            $this->cacheItems($allItems);
+            $this->cachedItems = $allItems;
+        }
+        
         return $allItems;
+    }
+    
+    /**
+     * Get cached items from file or memory cache
+     */
+    private function getCachedItems(): ?array {
+        $cacheDir = __DIR__ . '/../../cache';
+        $cacheFile = $cacheDir . '/' . $this->cacheKey . '.cache';
+        
+        if (!file_exists($cacheFile)) {
+            return null;
+        }
+        
+        $cacheDuration = $this->config['cache_duration'] ?? 3600;
+        if (time() - filemtime($cacheFile) > $cacheDuration) {
+            @unlink($cacheFile);
+            return null;
+        }
+        
+        $data = @file_get_contents($cacheFile);
+        if ($data === false) {
+            return null;
+        }
+        
+        return unserialize($data);
+    }
+    
+    /**
+     * Cache items to file
+     */
+    private function cacheItems(array $items): void {
+        $cacheDir = __DIR__ . '/../../cache';
+        
+        if (!is_dir($cacheDir)) {
+            @mkdir($cacheDir, 0755, true);
+        }
+        
+        $cacheFile = $cacheDir . '/' . $this->cacheKey . '.cache';
+        @file_put_contents($cacheFile, serialize($items));
+    }
+    
+    /**
+     * Clear cache for this builder
+     */
+    public function clearCache(): void {
+        $cacheDir = __DIR__ . '/../../cache';
+        $cacheFile = $cacheDir . '/' . $this->cacheKey . '.cache';
+        @unlink($cacheFile);
+        $this->cachedItems = null;
     }
     
     /**
