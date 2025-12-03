@@ -5,11 +5,54 @@ namespace App\Services\Trading;
 use App\Services\MarketDataService;
 use App\Repositories\MarketDataRepositoryInterface;
 
+/**
+ * Contrarian Strategy Service
+ * 
+ * Identifies quality stocks experiencing excessive market panic or selloffs.
+ * Buys during overreactions when strong fundamentals suggest recovery potential.
+ * 
+ * Panic/Oversold Indicators:
+ * - Drawdown: 20%+ decline from recent peak
+ * - Volume surge: 1.8x average (indicates panic selling)
+ * - RSI: < 30 (oversold territory)
+ * - Capitulation detection: Extreme selling pressure
+ * 
+ * Fundamental Quality Requirements:
+ * - Fundamental score: 65%+ minimum
+ * - P/E ratio: < 15x (value territory)
+ * - Price/Book: < 2.5x
+ * - ROE: 10%+ return on equity
+ * - Debt/Equity: < 2.0x
+ * - Current ratio: > 1.2x (liquidity)
+ * 
+ * Contrarian Signals:
+ * - Insider buying during decline (confidence)
+ * - Sentiment reversal patterns
+ * - Support level bounces
+ * - Strong fundamentals + panic = opportunity
+ * 
+ * Risk Management:
+ * - Requires strong fundamentals to justify contrarian position
+ * - Multiple confirmation signals needed
+ * - Higher confidence when capitulation detected
+ * 
+ * @package App\Services\Trading
+ */
 class ContrarianStrategyService implements TradingStrategyInterface
 {
+    /**
+     * @var MarketDataService Market data service for fundamentals and prices
+     */
     private MarketDataService $marketDataService;
+    
+    /**
+     * @var MarketDataRepositoryInterface Repository for data persistence
+     */
     private MarketDataRepositoryInterface $marketDataRepository;
     
+    /**
+     * @var array Strategy parameters with default values
+     */
     private array $parameters = [
         'min_drawdown_percent' => 0.20,        // 20% minimum drawdown
         'max_drawdown_days' => 60,             // 60 days maximum drawdown period
@@ -26,6 +69,14 @@ class ContrarianStrategyService implements TradingStrategyInterface
         'sentiment_reversal_threshold' => 0.60 // 60% for reversal signal
     ];
 
+    /**
+     * Constructor
+     * 
+     * Initializes the contrarian strategy with required services.
+     * 
+     * @param MarketDataService $marketDataService Service for market data retrieval
+     * @param MarketDataRepositoryInterface $marketDataRepository Repository for data persistence
+     */
     public function __construct(
         MarketDataService $marketDataService,
         MarketDataRepositoryInterface $marketDataRepository
@@ -35,6 +86,11 @@ class ContrarianStrategyService implements TradingStrategyInterface
         $this->loadParametersFromDatabase();
     }
 
+    /**
+     * Load strategy parameters from database
+     * 
+     * @return void
+     */
     private function loadParametersFromDatabase(): void
     {
         try {
@@ -70,16 +126,36 @@ class ContrarianStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Get strategy name
+     * 
+     * @return string Strategy identifier
+     */
     public function getName(): string
     {
         return 'Contrarian';
     }
 
+    /**
+     * Get strategy description
+     * 
+     * @return string Human-readable description of strategy logic
+     */
     public function getDescription(): string
     {
         return 'Identifies quality stocks experiencing excessive market selloffs. Buys during panic when strong fundamentals suggest the decline is an overreaction, targeting mean reversion opportunities.';
     }
 
+    /**
+     * Analyze symbol for contrarian trading opportunities
+     * 
+     * Identifies panic selling situations in fundamentally strong companies.
+     * Looks for excessive drawdowns with volume confirmation and strong fundamentals.
+     * 
+     * @param string $symbol Stock ticker symbol to analyze
+     * @param string $date Analysis date (default: 'today')
+     * @return array Analysis result with action, confidence, reasoning, and metrics
+     */
     public function analyze(string $symbol, string $date = 'today'): array
     {
         try {
@@ -611,11 +687,24 @@ class ContrarianStrategyService implements TradingStrategyInterface
         ];
     }
 
+    /**
+     * Get strategy parameters
+     * 
+     * @return array Current strategy parameters
+     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
+    /**
+     * Set strategy parameters
+     * 
+     * Updates strategy parameters with provided values.
+     * 
+     * @param array $parameters Parameters to update
+     * @return void
+     */
     public function setParameters(array $parameters): void
     {
         foreach ($parameters as $key => $value) {
@@ -625,11 +714,24 @@ class ContrarianStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Check if strategy can execute for symbol
+     * 
+     * @param string $symbol Stock ticker symbol
+     * @return bool Always returns true
+     */
     public function canExecute(string $symbol): bool
     {
         return true;
     }
 
+    /**
+     * Get required historical days
+     * 
+     * Requires 150 days for accurate drawdown and panic detection.
+     * 
+     * @return int Number of days required (150)
+     */
     public function getRequiredHistoricalDays(): int
     {
         return 150;

@@ -5,11 +5,46 @@ namespace App\Services\Trading;
 use App\Services\MarketDataService;
 use App\Repositories\MarketDataRepositoryInterface;
 
+/**
+ * Mean Reversion Strategy Service
+ * 
+ * Identifies oversold conditions using Bollinger Bands and RSI, targeting mean reversion opportunities.
+ * 
+ * Key Technical Indicators:
+ * - Bollinger Bands (20-day SMA, 2 standard deviations)
+ * - RSI (Relative Strength Index) for oversold detection (< 30)
+ * - Volume confirmation (1.5x average)
+ * - RSI divergence patterns (bullish/bearish)
+ * - Support level bounce detection
+ * 
+ * Strategy Logic:
+ * - BUY when price is below lower Bollinger Band with RSI < 30 and volume confirmation
+ * - Target reversion to middle band (mean)
+ * - Higher confidence when bullish divergence present
+ * - Requires minimum volatility threshold to ensure tradeable movement
+ * 
+ * Risk Management:
+ * - Minimum volatility requirement prevents low-movement trades
+ * - Volume confirmation reduces false signals
+ * - Multiple indicator confluence increases probability
+ * 
+ * @package App\Services\Trading
+ */
 class MeanReversionStrategyService implements TradingStrategyInterface
 {
+    /**
+     * @var MarketDataService Market data service for fetching fundamentals and prices
+     */
     private MarketDataService $marketDataService;
+    
+    /**
+     * @var MarketDataRepositoryInterface Repository for market data persistence
+     */
     private MarketDataRepositoryInterface $marketDataRepository;
     
+    /**
+     * @var array Strategy parameters with default values
+     */
     private array $parameters = [
         'bb_period' => 20,
         'bb_std_dev' => 2.0,
@@ -25,6 +60,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         'divergence_lookback' => 10
     ];
 
+    /**
+     * Constructor
+     * 
+     * Initializes the mean reversion strategy with required services and loads
+     * parameters from database if available.
+     * 
+     * @param MarketDataService $marketDataService Service for market data retrieval
+     * @param MarketDataRepositoryInterface $marketDataRepository Repository for data persistence
+     */
     public function __construct(
         MarketDataService $marketDataService,
         MarketDataRepositoryInterface $marketDataRepository
@@ -34,6 +78,14 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         $this->loadParametersFromDatabase();
     }
 
+    /**
+     * Load strategy parameters from database
+     * 
+     * Attempts to load custom parameters from SQLite database. Falls back to
+     * default parameters if database doesn't exist or query fails.
+     * 
+     * @return void
+     */
     private function loadParametersFromDatabase(): void
     {
         try {
@@ -70,16 +122,38 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Get strategy name
+     * 
+     * @return string Strategy identifier
+     */
     public function getName(): string
     {
         return 'MeanReversion';
     }
 
+    /**
+     * Get strategy description
+     * 
+     * @return string Human-readable description of strategy logic
+     */
     public function getDescription(): string
     {
         return 'Identifies oversold conditions using Bollinger Bands and RSI, looking for mean reversion opportunities with volume confirmation and bullish divergence patterns.';
     }
 
+    /**
+     * Analyze symbol for mean reversion trading opportunities
+     * 
+     * Performs comprehensive technical analysis using Bollinger Bands, RSI, volume,
+     * divergence detection, and support levels to identify oversold conditions with
+     * high probability of mean reversion.
+     * 
+     * @param string $symbol Stock ticker symbol to analyze
+     * @param string $date Analysis date (default: 'today')
+     * @return array Analysis result with action (BUY/SELL/HOLD), confidence (0-100),
+     *               reasoning (string explanation), and metrics (technical indicators)
+     */
     public function analyze(string $symbol, string $date = 'today'): array
     {
         try {
@@ -150,6 +224,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Calculate Bollinger Bands
+     * 
+     * Computes upper, middle (SMA), and lower bands based on standard deviation.
+     * Also calculates current price position relative to bands (-1 to +1).
+     * 
+     * @param array $historicalData Historical price data with 'close' values
+     * @return array Array containing upper, middle, lower bands, position, and current_price
+     */
     private function calculateBollingerBands(array $historicalData): array
     {
         $period = (int)$this->parameters['bb_period'];
@@ -185,6 +268,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         ];
     }
 
+    /**
+     * Calculate Relative Strength Index (RSI)
+     * 
+     * Computes RSI using average gains and losses over specified period.
+     * Returns value between 0-100, where < 30 indicates oversold conditions.
+     * 
+     * @param array $historicalData Historical price data with 'close' values
+     * @return float RSI value (0-100)
+     */
     private function calculateRSI(array $historicalData): float
     {
         $period = (int)$this->parameters['rsi_period'];
@@ -216,6 +308,16 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return round($rsi, 2);
     }
 
+    /**
+     * Detect RSI divergence patterns
+     * 
+     * Identifies bullish divergence (price lower lows, RSI higher lows) or
+     * bearish divergence (price higher highs, RSI lower highs).
+     * 
+     * @param array $historicalData Historical price data
+     * @param float $currentRSI Current RSI value
+     * @return string Divergence type: 'bullish', 'bearish', or 'none'
+     */
     private function detectRSIDivergence(array $historicalData, float $currentRSI): string
     {
         $lookback = (int)$this->parameters['divergence_lookback'];
@@ -268,6 +370,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return 'none';
     }
 
+    /**
+     * Calculate volume confirmation
+     * 
+     * Checks if current volume exceeds threshold multiplier of average volume,
+     * confirming genuine market interest in the movement.
+     * 
+     * @param array $historicalData Historical data with 'volume' values
+     * @return bool True if volume exceeds threshold (default 1.5x average)
+     */
     private function calculateVolumeConfirmation(array $historicalData): bool
     {
         $threshold = (float)$this->parameters['volume_threshold'];
@@ -286,6 +397,19 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return $currentVolume >= ($avgVolume * $threshold);
     }
 
+    /**
+     * Calculate mean reversion score
+     * 
+     * Combines multiple indicators with weighted scoring:
+     * - BB position: 40% weight
+     * - RSI oversold: 30% weight
+     * - Bullish divergence: 15% weight
+     * - Volume confirmation: 10% weight
+     * - Support bounce: 5% weight
+     * 
+     * @param array $indicators Array of technical indicators
+     * @return float Composite score (0.0 to 1.0)
+     */
     private function calculateMeanReversionScore(array $indicators): float
     {
         $score = 0;
@@ -332,6 +456,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return round($score / $maxScore, 2);
     }
 
+    /**
+     * Detect support level bounce
+     * 
+     * Identifies if price has bounced from recent support level by checking
+     * if current price is above recent minimum by threshold percentage.
+     * 
+     * @param array $historicalData Historical price data
+     * @return bool True if bounce detected from recent support
+     */
     private function detectSupportBounce(array $historicalData): bool
     {
         $threshold = (float)$this->parameters['support_bounce_threshold'];
@@ -354,6 +487,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return $bouncePercent >= $threshold && $minIndex >= 5;
     }
 
+    /**
+     * Calculate historical volatility
+     * 
+     * Computes standard deviation of returns over recent period (20 days).
+     * Used to ensure sufficient price movement for mean reversion trades.
+     * 
+     * @param array $historicalData Historical price data
+     * @return float Volatility as standard deviation of returns
+     */
     private function calculateVolatility(array $historicalData): float
     {
         $prices = array_column($historicalData, 'close');
@@ -378,6 +520,16 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return round(sqrt($variance), 4);
     }
 
+    /**
+     * Count Bollinger Band touches
+     * 
+     * Counts how many times price has touched or crossed below lower Bollinger Band
+     * in lookback period. More touches can indicate stronger support level.
+     * 
+     * @param array $historicalData Historical price data
+     * @param array $bollingerBands Current Bollinger Band values
+     * @return int Number of lower band touches in lookback period
+     */
     private function countBandTouches(array $historicalData, array $bollingerBands): int
     {
         $lookback = (int)$this->parameters['lookback_period'];
@@ -408,6 +560,16 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return $touches;
     }
 
+    /**
+     * Calculate distance from mean
+     * 
+     * Computes percentage distance of current price from middle Bollinger Band (mean).
+     * Negative values indicate price below mean.
+     * 
+     * @param array $historicalData Historical price data (unused but kept for consistency)
+     * @param array $bollingerBands Bollinger Band values with current_price and middle
+     * @return float Percentage distance from mean (negative = below mean)
+     */
     private function calculateDistanceFromMean(array $historicalData, array $bollingerBands): float
     {
         $currentPrice = $bollingerBands['current_price'];
@@ -420,6 +582,15 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         return round(($currentPrice - $mean) / $mean, 4);
     }
 
+    /**
+     * Determine overall trend context
+     * 
+     * Compares first half average to second half average of recent prices to identify
+     * trend direction (uptrend, downtrend, or sideways).
+     * 
+     * @param array $historicalData Historical price data
+     * @return string Trend direction: 'uptrend', 'downtrend', 'sideways', or 'unknown'
+     */
     private function determineTrendContext(array $historicalData): string
     {
         $prices = array_column($historicalData, 'close');
@@ -446,6 +617,16 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Determine trading action based on metrics
+     * 
+     * Evaluates all technical indicators and metrics to generate trading recommendation.
+     * Returns BUY for strong oversold signals with confirmation, HOLD otherwise.
+     * 
+     * @param array $metrics Calculated technical metrics
+     * @param array $fundamentals Fundamental data (unused but available for future enhancements)
+     * @return array Action result with action, confidence, and reasoning
+     */
     private function determineAction(array $metrics, array $fundamentals): array
     {
         $minVolatility = (float)$this->parameters['min_volatility'];
@@ -544,11 +725,25 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         ];
     }
 
+    /**
+     * Get strategy parameters
+     * 
+     * @return array Current strategy parameters
+     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
+    /**
+     * Set strategy parameters
+     * 
+     * Updates strategy parameters with provided values. Only updates keys that
+     * exist in current parameters array.
+     * 
+     * @param array $parameters Parameters to update
+     * @return void
+     */
     public function setParameters(array $parameters): void
     {
         foreach ($parameters as $key => $value) {
@@ -558,11 +753,26 @@ class MeanReversionStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Check if strategy can execute for symbol
+     * 
+     * Mean reversion strategy can execute for any symbol with sufficient data.
+     * 
+     * @param string $symbol Stock ticker symbol
+     * @return bool Always returns true
+     */
     public function canExecute(string $symbol): bool
     {
         return true;
     }
 
+    /**
+     * Get required historical days
+     * 
+     * Returns minimum number of historical data days required for accurate analysis.
+     * 
+     * @return int Number of days required (100)
+     */
     public function getRequiredHistoricalDays(): int
     {
         return 100;

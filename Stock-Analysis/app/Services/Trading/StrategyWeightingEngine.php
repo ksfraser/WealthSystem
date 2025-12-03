@@ -2,6 +2,36 @@
 
 namespace App\Services\Trading;
 
+/**
+ * Strategy Weighting Engine
+ * 
+ * Manages portfolio allocation across multiple trading strategies using preset
+ * risk profiles and consensus-based decision making.
+ * 
+ * Preset Allocation Profiles:
+ * - **Conservative**: 35% QualityDividend, 25% MeanReversion, 20% Contrarian
+ *   Focus on income and stability, minimal growth exposure
+ * 
+ * - **Balanced**: 20% each QualityDividend/MomentumQuality, equal distribution
+ *   Diversified approach balancing growth, income, and value
+ * 
+ * - **Aggressive**: 30% SmallCapCatalyst, 25% MomentumQuality, 20% IPlace
+ *   Growth-focused with higher risk tolerance
+ * 
+ * - **Growth**: 30% MomentumQuality, 25% IPlace, 20% SmallCapCatalyst
+ *   Momentum and upgrade-driven opportunities
+ * 
+ * - **Value**: 35% Contrarian, 25% QualityDividend, 20% MeanReversion
+ *   Deep value and mean reversion focus
+ * 
+ * Consensus Decision Making:
+ * - Aggregates signals from all strategies based on their weights
+ * - Calculates weighted confidence scores
+ * - Supports BUY/SELL/HOLD with reasoning from each strategy
+ * - Normalizes weights to sum to 1.0
+ * 
+ * @package App\Services\Trading
+ */
 class StrategyWeightingEngine
 {
     private array $strategies = [];

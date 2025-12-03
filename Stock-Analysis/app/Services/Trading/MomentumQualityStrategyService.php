@@ -5,11 +5,48 @@ namespace App\Services\Trading;
 use App\Services\MarketDataService;
 use App\Repositories\MarketDataRepositoryInterface;
 
+/**
+ * Momentum Quality Strategy Service
+ * 
+ * Combines strong price momentum with high-quality fundamental metrics.
+ * Seeks stocks exhibiting both technical strength and improving business fundamentals.
+ * 
+ * Momentum Indicators:
+ * - 50/200 day moving average golden cross (bullish)
+ * - 3-month momentum: 10%+ price increase
+ * - 6-month momentum: 15%+ price increase
+ * - Volume surge confirmation (1.5x average)
+ * 
+ * Quality Metrics:
+ * - ROE: 15%+ return on equity
+ * - Profit margin: 10%+ net margin
+ * - Revenue growth: 10%+ annual growth
+ * - Earnings growth: 8%+ annual growth
+ * - Debt/Equity: < 1.5x
+ * - FCF margin: 8%+ free cash flow margin
+ * 
+ * Strategy Logic:
+ * - BUY when momentum score >= 60% AND quality score >= 65%
+ * - Both technical and fundamental strength required
+ * - Higher confidence when both scores are high
+ * 
+ * @package App\Services\Trading
+ */
 class MomentumQualityStrategyService implements TradingStrategyInterface
 {
+    /**
+     * @var MarketDataService Market data service for fundamentals and prices
+     */
     private MarketDataService $marketDataService;
+    
+    /**
+     * @var MarketDataRepositoryInterface Repository for data persistence
+     */
     private MarketDataRepositoryInterface $marketDataRepository;
     
+    /**
+     * @var array Strategy parameters with default values
+     */
     private array $parameters = [
         'sma_short_period' => 50,              // 50-day moving average
         'sma_long_period' => 200,              // 200-day moving average
@@ -28,6 +65,14 @@ class MomentumQualityStrategyService implements TradingStrategyInterface
         'min_fcf_margin' => 0.08               // 8% FCF margin minimum
     ];
 
+    /**
+     * Constructor
+     * 
+     * Initializes the momentum-quality strategy with required services.
+     * 
+     * @param MarketDataService $marketDataService Service for market data retrieval
+     * @param MarketDataRepositoryInterface $marketDataRepository Repository for data persistence
+     */
     public function __construct(
         MarketDataService $marketDataService,
         MarketDataRepositoryInterface $marketDataRepository
@@ -37,6 +82,11 @@ class MomentumQualityStrategyService implements TradingStrategyInterface
         $this->loadParametersFromDatabase();
     }
 
+    /**
+     * Load strategy parameters from database
+     * 
+     * @return void
+     */
     private function loadParametersFromDatabase(): void
     {
         try {
@@ -72,16 +122,36 @@ class MomentumQualityStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Get strategy name
+     * 
+     * @return string Strategy identifier
+     */
     public function getName(): string
     {
         return 'MomentumQuality';
     }
 
+    /**
+     * Get strategy description
+     * 
+     * @return string Human-readable description of strategy logic
+     */
     public function getDescription(): string
     {
         return 'Combines strong price momentum (50/200 MA crossovers) with fundamental quality metrics (ROE, earnings growth, profit margins). Seeks stocks with both technical strength and improving business fundamentals.';
     }
 
+    /**
+     * Analyze symbol for momentum-quality trading opportunities
+     * 
+     * Evaluates both technical momentum (MA crossovers, price momentum, volume) and
+     * fundamental quality (ROE, margins, growth rates) to identify strong buy candidates.
+     * 
+     * @param string $symbol Stock ticker symbol to analyze
+     * @param string $date Analysis date (default: 'today')
+     * @return array Analysis result with action, confidence, reasoning, and metrics
+     */
     public function analyze(string $symbol, string $date = 'today'): array
     {
         try {
@@ -600,11 +670,24 @@ class MomentumQualityStrategyService implements TradingStrategyInterface
         ];
     }
 
+    /**
+     * Get strategy parameters
+     * 
+     * @return array Current strategy parameters
+     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
+    /**
+     * Set strategy parameters
+     * 
+     * Updates strategy parameters with provided values.
+     * 
+     * @param array $parameters Parameters to update
+     * @return void
+     */
     public function setParameters(array $parameters): void
     {
         foreach ($parameters as $key => $value) {
@@ -614,11 +697,24 @@ class MomentumQualityStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Check if strategy can execute for symbol
+     * 
+     * @param string $symbol Stock ticker symbol
+     * @return bool Always returns true
+     */
     public function canExecute(string $symbol): bool
     {
         return true;
     }
 
+    /**
+     * Get required historical days
+     * 
+     * Requires 250 days for accurate 200-day MA calculation.
+     * 
+     * @return int Number of days required (250)
+     */
     public function getRequiredHistoricalDays(): int
     {
         return 250;

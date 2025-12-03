@@ -5,11 +5,47 @@ namespace App\Services\Trading;
 use App\Services\MarketDataService;
 use App\Repositories\MarketDataRepositoryInterface;
 
+/**
+ * Quality Dividend Strategy Service
+ * 
+ * Identifies high-quality dividend stocks with sustainable payouts, consistent growth, and strong fundamentals.
+ * 
+ * Key Criteria:
+ * - Dividend yield: 2.5%-10% (avoid dividend traps)
+ * - Consecutive dividend growth: 5+ years minimum
+ * - Payout ratio: < 65% for sustainability
+ * - FCF coverage: 1.2x minimum (dividends covered by free cash flow)
+ * - ROE: 12%+ return on equity
+ * - Earnings stability: 5+ years positive earnings
+ * 
+ * Dividend Aristocrat Identification:
+ * - Recognizes stocks with 25+ years of consecutive dividend growth
+ * - Provides bonus confidence for aristocrat status
+ * 
+ * Safety Score Components (0-100%):
+ * - Payout ratio (25%): Lower is safer
+ * - FCF coverage (25%): Higher is safer
+ * - Growth streak (20%): Longer is better
+ * - Debt level (15%): Lower is safer
+ * - ROE (15%): Higher is better
+ * 
+ * @package App\Services\Trading
+ */
 class QualityDividendStrategyService implements TradingStrategyInterface
 {
+    /**
+     * @var MarketDataService Market data service for fundamentals and prices
+     */
     private MarketDataService $marketDataService;
+    
+    /**
+     * @var MarketDataRepositoryInterface Repository for data persistence
+     */
     private MarketDataRepositoryInterface $marketDataRepository;
     
+    /**
+     * @var array Strategy parameters with default values
+     */
     private array $parameters = [
         'min_dividend_yield' => 0.025,         // 2.5% minimum yield
         'max_dividend_yield' => 0.10,          // 10% maximum (avoid traps)
@@ -28,6 +64,15 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         'min_earnings_coverage' => 1.5         // 1.5x earnings coverage
     ];
 
+    /**
+     * Constructor
+     * 
+     * Initializes the quality dividend strategy with required services and loads
+     * parameters from database if available.
+     * 
+     * @param MarketDataService $marketDataService Service for market data retrieval
+     * @param MarketDataRepositoryInterface $marketDataRepository Repository for data persistence
+     */
     public function __construct(
         MarketDataService $marketDataService,
         MarketDataRepositoryInterface $marketDataRepository
@@ -37,6 +82,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         $this->loadParametersFromDatabase();
     }
 
+    /**
+     * Load strategy parameters from database
+     * 
+     * Attempts to load custom parameters from SQLite database. Falls back to
+     * default parameters if database doesn't exist or query fails.
+     * 
+     * @return void
+     */
     private function loadParametersFromDatabase(): void
     {
         try {
@@ -72,16 +125,37 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Get strategy name
+     * 
+     * @return string Strategy identifier
+     */
     public function getName(): string
     {
         return 'QualityDividend';
     }
 
+    /**
+     * Get strategy description
+     * 
+     * @return string Human-readable description of strategy logic
+     */
     public function getDescription(): string
     {
         return 'Identifies high-quality dividend stocks with sustainable payouts, consistent growth, and strong fundamentals. Focuses on dividend safety, growth streak, and cash flow coverage.';
     }
 
+    /**
+     * Analyze symbol for quality dividend investment opportunities
+     * 
+     * Performs comprehensive dividend analysis including yield, growth history,
+     * payout sustainability, FCF coverage, and overall dividend safety scoring.
+     * 
+     * @param string $symbol Stock ticker symbol to analyze
+     * @param string $date Analysis date (default: 'today')
+     * @return array Analysis result with action (BUY/SELL/HOLD), confidence (0-100),
+     *               reasoning (string explanation), and metrics (dividend metrics)
+     */
     public function analyze(string $symbol, string $date = 'today'): array
     {
         try {
@@ -148,6 +222,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Calculate dividend yield
+     * 
+     * Computes dividend yield as dividend per share divided by price.
+     * 
+     * @param array $fundamentals Fundamental data
+     * @return float Dividend yield (0.0 to 1.0)
+     */
     private function calculateDividendYield(array $fundamentals): float
     {
         if (isset($fundamentals['dividend_yield'])) {
@@ -164,6 +246,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         return round($dividendPerShare / $price, 4);
     }
 
+    /**
+     * Calculate consecutive dividend growth streak
+     * 
+     * Counts how many consecutive years the dividend has increased.
+     * 
+     * @param array $dividendHistory Array of dividend history by year
+     * @return int Number of consecutive years with dividend growth
+     */
     private function calculateDividendGrowthStreak(array $dividendHistory): int
     {
         if (count($dividendHistory) < 2) {
@@ -187,6 +277,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         return $streak;
     }
 
+    /**
+     * Calculate average dividend growth rate
+     * 
+     * Computes mean annual dividend growth rate over history.
+     * 
+     * @param array $dividendHistory Array of dividend history
+     * @return float Average growth rate (0.0 to 1.0+)
+     */
     private function calculateAverageDividendGrowth(array $dividendHistory): float
     {
         if (count($dividendHistory) < 2) {
@@ -214,6 +312,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         return round(array_sum($growthRates) / count($growthRates), 4);
     }
 
+    /**
+     * Calculate dividend payout ratio
+     * 
+     * Ratio of dividend per share to earnings per share. Lower is more sustainable.
+     * 
+     * @param array $fundamentals Fundamental data
+     * @return float Payout ratio (0.0 to 1.0+, > 1.0 indicates unsustainable)
+     */
     private function calculatePayoutRatio(array $fundamentals): float
     {
         $eps = $fundamentals['earnings_per_share'] ?? 0;
@@ -226,6 +332,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         return round($dps / $eps, 4);
     }
 
+    /**
+     * Calculate free cash flow coverage
+     * 
+     * Ratio of free cash flow to total dividends paid. Higher indicates more safety.
+     * 
+     * @param array $fundamentals Fundamental data
+     * @return float FCF coverage ratio (1.0+ is good, < 1.0 is warning)
+     */
     private function calculateFCFCoverage(array $fundamentals): float
     {
         $fcf = $fundamentals['free_cash_flow'] ?? 0;
@@ -238,6 +352,14 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         return round($fcf / $dividendsPaid, 2);
     }
 
+    /**
+     * Check earnings stability
+     * 
+     * Verifies that earnings have been positive for required number of years.
+     * 
+     * @param array $fundamentals Fundamental data with earnings history
+     * @return bool True if earnings stable for required years
+     */
     private function checkEarningsStability(array $fundamentals): bool
     {
         $earningsHistory = $fundamentals['earnings_history'] ?? [];
@@ -258,6 +380,20 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         return true;
     }
 
+    /**
+     * Calculate overall dividend safety score
+     * 
+     * Combines multiple factors into composite safety score (0-100%):
+     * - Payout ratio (25%)
+     * - FCF coverage (25%)
+     * - Growth streak (20%)
+     * - Debt level (15%)
+     * - ROE (15%)
+     * 
+     * @param array $fundamentals Fundamental data
+     * @param array $dividendHistory Dividend history
+     * @return float Safety score (0.0 to 1.0)
+     */
     private function calculateDividendSafetyScore(array $fundamentals, array $dividendHistory): float
     {
         $score = 0;
@@ -500,11 +636,24 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         ];
     }
 
+    /**
+     * Get strategy parameters
+     * 
+     * @return array Current strategy parameters
+     */
     public function getParameters(): array
     {
         return $this->parameters;
     }
 
+    /**
+     * Set strategy parameters
+     * 
+     * Updates strategy parameters with provided values.
+     * 
+     * @param array $parameters Parameters to update
+     * @return void
+     */
     public function setParameters(array $parameters): void
     {
         foreach ($parameters as $key => $value) {
@@ -514,11 +663,22 @@ class QualityDividendStrategyService implements TradingStrategyInterface
         }
     }
 
+    /**
+     * Check if strategy can execute for symbol
+     * 
+     * @param string $symbol Stock ticker symbol
+     * @return bool Always returns true
+     */
     public function canExecute(string $symbol): bool
     {
         return true;
     }
 
+    /**
+     * Get required historical days
+     * 
+     * @return int Number of days required (60)
+     */
     public function getRequiredHistoricalDays(): int
     {
         return 60;

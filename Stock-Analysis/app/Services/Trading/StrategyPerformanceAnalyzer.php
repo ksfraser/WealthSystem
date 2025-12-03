@@ -2,6 +2,37 @@
 
 namespace App\Services\Trading;
 
+/**
+ * Strategy Performance Analyzer
+ * 
+ * Comprehensive performance analytics for trading strategies including risk-adjusted
+ * returns, win rates, profit factors, and statistical analysis.
+ * 
+ * Key Performance Metrics:
+ * - **Win Rate**: Percentage of profitable trades
+ * - **Average Win/Loss**: Mean profit and loss amounts
+ * - **Profit Factor**: Gross profits / gross losses (> 1.5 good)
+ * - **Sharpe Ratio**: Risk-adjusted returns (> 1.0 good, > 2.0 excellent)
+ * - **Max Drawdown**: Largest peak-to-trough decline
+ * - **Expectancy**: Expected value per trade
+ * - **Total Return**: Cumulative percentage gain/loss
+ * 
+ * Analysis Features:
+ * - Trade-by-trade performance tracking
+ * - Strategy comparison and ranking
+ * - Correlation analysis between strategies
+ * - Risk metrics (volatility, drawdown, Sharpe)
+ * - Time-based performance (holding days, entry/exit analysis)
+ * - Portfolio-level aggregated metrics
+ * 
+ * Optimal Combination Finder:
+ * - Identifies best strategy combinations based on Sharpe ratio
+ * - Tests multiple weight allocations
+ * - Considers strategy correlation to maximize diversification
+ * - Recommends allocation percentages
+ * 
+ * @package App\Services\Trading
+ */
 class StrategyPerformanceAnalyzer
 {
     private array $tradeHistory = [];

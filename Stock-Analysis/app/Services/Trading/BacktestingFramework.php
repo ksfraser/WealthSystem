@@ -2,6 +2,45 @@
 
 namespace App\Services\Trading;
 
+/**
+ * Backtesting Framework
+ * 
+ * Historical simulation engine for validating trading strategies with realistic
+ * market conditions including commissions, slippage, and risk management.
+ * 
+ * Core Features:
+ * - **Historical Simulation**: Walk-forward analysis using past price data
+ * - **Transaction Costs**: Configurable commission (default 0.1%) and slippage (default 0.05%)
+ * - **Position Sizing**: Percentage-based capital allocation per trade
+ * - **Risk Management**: Stop loss, take profit, maximum holding period
+ * - **Portfolio-Level Backtesting**: Multi-strategy simulation with rebalancing
+ * 
+ * Risk Controls:
+ * - Stop Loss: Automatic exit at specified loss percentage
+ * - Take Profit: Automatic exit at specified gain percentage
+ * - Max Holding Days: Force exit after time limit
+ * - Position Size Limits: Prevent over-concentration
+ * 
+ * Walk-Forward Analysis:
+ * - Divides historical data into training/testing periods
+ * - Validates strategy parameters on out-of-sample data
+ * - Measures parameter stability across different market conditions
+ * - Reduces overfitting by testing on unseen data
+ * 
+ * Monte Carlo Simulation:
+ * - Randomizes trade sequences to test robustness
+ * - Measures confidence intervals for returns
+ * - Identifies strategies resilient to sequence risk
+ * - Provides probabilistic performance distributions
+ * 
+ * Output Metrics:
+ * - Total return, Sharpe ratio, max drawdown
+ * - Win rate, profit factor, average win/loss
+ * - Trade count, holding period statistics
+ * - Equity curve for visualization
+ * 
+ * @package App\Services\Trading
+ */
 class BacktestingFramework
 {
     private float $initialCapital;
