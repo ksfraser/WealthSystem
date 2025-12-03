@@ -945,6 +945,271 @@ After: Buy panic-sold stock if sector fundamentals intact
 
 ---
 
+### Index Benchmarking & Market Comparison
+
+**Compare Your Stocks Against Major Market Indexes**
+
+The system tracks and compares performance against major market benchmarks to measure alpha (excess returns), beta (market sensitivity), and relative strength.
+
+#### Supported Market Indexes
+
+| Index Symbol | Index Name | Description | Constituents |
+|-------------|------------|-------------|--------------|
+| **SPY** | S&P 500 | Large-cap US stocks | 500 companies |
+| **QQQ** | NASDAQ 100 | Technology-focused index | 100 companies |
+| **DIA** | Dow Jones Industrial Average | Blue-chip US stocks | 30 companies |
+| **IWM** | Russell 2000 | Small-cap US stocks | 2000 companies |
+
+#### Stock vs Index Comparison
+
+Compare individual stock performance to relevant market benchmarks:
+
+```php
+$comparison = $indexService->compareToIndex('NVDA', 'SPY', '2024-01-01', '2024-12-01');
+```
+
+**Example Output**:
+```
+Stock: NVDA
+Index: S&P 500 (SPY)
+Period: 90 days
+
+Stock Performance:
+- Total Return: +82.5%
+- Volatility: 38.2% (annualized)
+- Sharpe Ratio: 2.16
+
+Index Performance:
+- Total Return: +18.3%
+- Volatility: 14.5%
+- Sharpe Ratio: 1.26
+
+Comparative Metrics:
+- Alpha (Annualized): +64.2% ✅ Exceptional excess return
+- Beta: 1.85 (85% more volatile than market)
+- Correlation: 0.72 (strong positive relationship)
+- Tracking Error: 22.1% (significant divergence)
+- Excess Return: +64.2%
+- Information Ratio: 2.91 (excellent risk-adjusted outperformance)
+
+Interpretation: NVDA significantly outperformed S&P 500
+→ Strong alpha generation
+→ Higher volatility than market (beta 1.85)
+→ Consider appropriate position sizing
+```
+
+#### Understanding Alpha & Beta
+
+**Alpha (α)**: Excess return beyond what the market delivered
+- **Positive Alpha**: Outperformance (e.g., +15% alpha = beat market by 15%)
+- **Negative Alpha**: Underperformance (e.g., -8% alpha = lagged market by 8%)
+- **Zero Alpha**: Matched market returns
+
+**Beta (β)**: Sensitivity to market movements
+- **β = 1.0**: Moves in line with market
+- **β > 1.0**: More volatile than market (e.g., β=1.5 = 50% more volatile)
+- **β < 1.0**: Less volatile than market (e.g., β=0.7 = 30% less volatile)
+- **β ≈ 0**: Uncorrelated with market
+
+**Example Interpretations**:
+```
+Stock A: Alpha = +12%, Beta = 1.5
+→ Great returns BUT higher risk
+→ Good for aggressive portfolios
+→ Expect larger swings
+
+Stock B: Alpha = +5%, Beta = 0.8
+→ Modest outperformance with lower risk
+→ Good for conservative portfolios
+→ Smoother ride
+
+Stock C: Alpha = -3%, Beta = 1.2
+→ Underperformance with higher risk
+→ ⚠️ Worst of both worlds
+→ Likely candidate for replacement
+```
+
+#### Index Membership Detection
+
+The system can estimate if a stock is likely included in major indexes:
+
+```php
+$membership = $indexService->isLikelyInIndex('AAPL', 'SPY');
+```
+
+**Example Output**:
+```
+Symbol: AAPL
+Index: S&P 500
+
+Likely Member: ✅ YES
+Confidence: 95%
+Reason: Large-cap stock with $3.0T market cap exceeds S&P 500 threshold ($10B+)
+
+Market Cap: $3,000,000,000,000
+Sector: Information Technology
+```
+
+**Detection Criteria**:
+- **S&P 500**: Market cap > $10B, US domiciled, high liquidity
+- **NASDAQ 100**: Market cap > $10B, tech/growth focus, NASDAQ-listed
+- **Dow Jones**: Market cap > $100B, blue-chip reputation
+- **Russell 2000**: Market cap $300M - $5B (small-cap range)
+
+#### Correlation Analysis
+
+Understand how closely your stock moves with the market:
+
+**Correlation Scale**:
+- **+1.0**: Perfect positive correlation (moves identically)
+- **+0.7 to +1.0**: Strong positive relationship
+- **+0.3 to +0.7**: Moderate positive relationship
+- **-0.3 to +0.3**: Weak/no relationship
+- **-0.7 to -0.3**: Moderate negative relationship
+- **-1.0 to -0.7**: Strong negative relationship
+
+**Example**:
+```
+NVDA vs S&P 500:
+- Correlation: 0.72
+- Interpretation: Strong positive correlation
+- Meaning: When S&P 500 rises, NVDA usually rises (but more volatile)
+- Use case: NVDA captures market uptrends with amplification
+
+GLD (Gold ETF) vs S&P 500:
+- Correlation: -0.15
+- Interpretation: Weak negative correlation
+- Meaning: Gold moves independently of stocks
+- Use case: Portfolio diversification benefit
+```
+
+#### Information Ratio & Sharpe Ratio
+
+**Information Ratio**: Measures consistency of alpha generation
+```
+Information Ratio = Excess Return / Tracking Error
+
+High IR (>1.0): Consistent outperformance with controlled risk
+Low IR (<0.5): Inconsistent or risky outperformance
+Negative IR: Consistent underperformance
+```
+
+**Sharpe Ratio**: Risk-adjusted returns
+```
+Sharpe Ratio = (Return - Risk-free Rate) / Volatility
+
+Excellent: >2.0
+Very Good: 1.5-2.0
+Good: 1.0-1.5
+Fair: 0.5-1.0
+Poor: <0.5
+```
+
+#### Practical Usage Examples
+
+**Scenario 1: Portfolio Benchmark Selection**
+```
+Analyzing portfolio of 10 stocks
+
+Step 1: Compare to multiple indexes
+- vs S&P 500: Beta 1.2, Alpha +5%
+- vs Russell 2000: Beta 0.9, Alpha +12%
+- vs NASDAQ 100: Beta 1.1, Alpha +3%
+
+Step 2: Choose best benchmark
+→ Russell 2000 is best fit (lowest beta, highest alpha)
+→ Portfolio is small-cap focused
+```
+
+**Scenario 2: Risk Assessment**
+```
+Stock XYZ Analysis:
+- Return: +45% (90 days)
+- vs S&P 500: Beta 2.1, Alpha +25%
+
+Interpretation:
+⚠️ Stock is 2.1x more volatile than market
+→ Position sizing: Reduce by 50% vs normal
+→ Set tighter stop losses
+→ Expect large daily swings
+✅ But generating strong alpha (+25%)
+```
+
+**Scenario 3: Performance Attribution**
+```
+Stock returned +30% while S&P 500 returned +10%
+
+Question: Was this skill or just market beta?
+
+Answer:
+- Beta: 1.5
+- Expected return from market: 10% × 1.5 = 15%
+- Actual return: 30%
+- Alpha: 30% - 15% = +15%
+
+Conclusion: 
+- 15% from market exposure (beta)
+- 15% from stock-specific alpha ✅
+→ Manager added real value
+```
+
+**Scenario 4: Index Fund Selection**
+```
+Want to add index exposure to portfolio
+
+Current holdings:
+- All large-cap tech stocks
+- High correlation with NASDAQ 100
+
+Decision:
+❌ Don't add QQQ (would increase concentration)
+✅ Add IWM (Russell 2000) for small-cap diversification
+✅ Or add DIA (Dow) for blue-chip value exposure
+```
+
+#### Best Practices
+
+**✅ DO**:
+- Compare every stock to relevant benchmark
+- Use beta for position sizing (lower beta = larger position)
+- Track alpha consistency over time
+- Choose benchmark that matches portfolio style
+- Rebalance when correlations shift dramatically
+
+**❌ DON'T**:
+- Compare small-cap stocks to S&P 500 (use Russell 2000)
+- Ignore beta when calculating position sizes
+- Chase high returns without considering risk-adjusted metrics
+- Use single benchmark for diversified portfolio
+- Assume past correlations persist indefinitely
+
+#### Integration with Strategies
+
+**Momentum Quality + Index Benchmarking**:
+```
+Before: Buy stock with strong momentum
+After: Buy stock with positive alpha AND momentum
+→ Avoid stocks riding market beta without skill
+```
+
+**Mean Reversion + Index Benchmarking**:
+```
+Before: Buy oversold stock
+After: Buy stock with positive alpha that's temporarily oversold
+→ Focus on quality stocks having bad days
+```
+
+**Risk Management + Index Benchmarking**:
+```
+Position size based on beta:
+- Beta 0.8: Standard position
+- Beta 1.5: Reduce position by 40%
+- Beta 2.0: Reduce position by 50%
+→ Maintain consistent portfolio volatility
+```
+
+---
+
 ### Risk Management: Trailing Stops & Profit Taking
 
 **NEW FEATURE**: Lock in profits automatically as your positions gain value.
@@ -1334,6 +1599,49 @@ A: Combine them:
 - Strategy says BUY + Stock underperforming sector = Caution
 - Strategy says SELL + Sector rotating down = Strong SELL
 
+### Index Benchmarking Questions
+
+**Q: What is alpha and why does it matter?**  
+A: Alpha is excess return beyond what the market delivered:
+- Positive alpha = You beat the market
+- Negative alpha = You lagged the market
+- Zero alpha = You matched the market
+Example: Stock up 25%, market up 10%, alpha = +15%
+
+**Q: What is a good beta for my portfolio?**  
+A: Depends on risk tolerance:
+- Beta 0.8-1.0: Conservative (lower volatility)
+- Beta 1.0-1.3: Moderate (market-like volatility)
+- Beta 1.3-1.5: Aggressive (higher volatility)
+- Beta > 1.5: Very aggressive (expect large swings)
+
+**Q: Which index should I compare my stocks to?**  
+A:
+- Large-cap stocks → S&P 500 (SPY)
+- Small-cap stocks → Russell 2000 (IWM)
+- Tech stocks → NASDAQ 100 (QQQ)
+- Blue-chip stocks → Dow Jones (DIA)
+- Diversified portfolio → Use multiple benchmarks
+
+**Q: What's the difference between alpha and excess return?**  
+A: They're related but different:
+- Excess Return = Total return - Index return (simple difference)
+- Alpha = Return beyond what beta predicted (risk-adjusted)
+- Alpha accounts for stock's volatility relative to market
+
+**Q: How do I use correlation in portfolio construction?**  
+A:
+- High correlation (>0.7): Stocks move together (limited diversification)
+- Low correlation (<0.3): Stocks move independently (good diversification)
+- Negative correlation (<-0.3): Stocks move opposite (excellent hedge)
+
+**Q: What is tracking error and why does it matter?**  
+A: Tracking error measures how much returns deviate from benchmark:
+- Low tracking error (<5%): Closely follows index
+- Moderate (5-10%): Some independent movement
+- High (>10%): Significantly different from index
+Use it to gauge if active management is worth the risk.
+
 ### Performance Questions
 
 **Q: What is a good Sharpe Ratio?**  
@@ -1413,6 +1721,18 @@ A: Correct! Backtesting shows historical edge, not future certainty. Always:
 **Sector Laggards**: Sectors with weakest recent performance (bottom 3)
 
 **Sector Rotation**: Money flowing from one sector to another (indicates market regime change)
+
+**Alpha**: Excess return beyond what the market (benchmark) delivered, annualized. Positive alpha indicates outperformance.
+
+**Beta**: Measure of stock's volatility relative to market. Beta > 1.0 means more volatile than market, beta < 1.0 means less volatile.
+
+**Correlation**: Statistical measure of how two assets move together, ranging from -1 (perfect negative) to +1 (perfect positive). 0 means uncorrelated.
+
+**Excess Return**: Simple difference between stock return and index return (Total Return - Index Return).
+
+**Information Ratio**: Measures consistency of alpha generation (Excess Return / Tracking Error). Higher is better.
+
+**Tracking Error**: Standard deviation of excess returns, measuring how closely a stock follows its benchmark. Lower means closer tracking.
 
 **Position Size**: Percentage of portfolio allocated to one trade
 
@@ -1525,13 +1845,29 @@ When reporting issues, include:
 │  35-HealthCare, 40-Financials, 45-InfoTech         │
 │  50-Communications, 55-Utilities, 60-RealEstate    │
 │                                                     │
+│  INDEX BENCHMARKING                                 │
+│  ------------------                                 │
+│  ✓ Compare to relevant benchmark (SPY/QQQ/IWM)     │
+│  ✓ Alpha > 0 = Beating the market                  │
+│  ✓ Beta > 1.0 = More volatile than market          │
+│  ✓ Reduce position size for high beta stocks       │
+│  ✓ Information Ratio > 1.0 = Consistent alpha      │
+│  ✓ Choose benchmark matching stock's market cap    │
+│                                                     │
+│  MAJOR INDEXES                                      │
+│  -------------                                      │
+│  SPY  - S&P 500 (Large-cap, 500 stocks)            │
+│  QQQ  - NASDAQ 100 (Tech-focused, 100 stocks)      │
+│  DIA  - Dow Jones (Blue-chip, 30 stocks)           │
+│  IWM  - Russell 2000 (Small-cap, 2000 stocks)      │
+│                                                     │
 │  RISK MANAGEMENT                                    │
 │  ---------------                                    │
 │  ✓ Always use stop losses                          │
-│  ✓ Size positions appropriately                    │
-│  ✓ Diversify across strategies                     │
+│  ✓ Size positions by beta (high beta = smaller)    │
+│  ✓ Diversify across strategies and sectors         │
 │  ✓ Don't trade with low confidence (<60%)          │
-│  ✓ Monitor live vs. expected performance           │
+│  ✓ Monitor alpha consistency over time             │
 └─────────────────────────────────────────────────────┘
 ```
 
