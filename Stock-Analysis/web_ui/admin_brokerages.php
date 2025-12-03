@@ -1,4 +1,8 @@
 <?php
+require_once __DIR__ . '/UserAuthDAO.php';
+$auth = new UserAuthDAO();
+$auth->requireAdmin();
+
 require_once __DIR__ . '/MidCapBankImportDAO.php';
 
 try {

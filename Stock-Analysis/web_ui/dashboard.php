@@ -162,16 +162,18 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
                 </div>
             </div>
             
-            <!-- Account Management -->
+            <?php if ($user['is_admin']): ?>
+            <!-- Account Management (Admin Only) -->
             <div class="dashboard-card">
                 <h3>🏦 Account Management</h3>
-                <p>Manage your brokerage accounts, account types, and banking information.</p>
+                <p>Manage account types, brokerages, and bank accounts.</p>
                 <div class="card-links">
                     <a href="admin_account_types.php">📋 Account Types</a>
-                    <a href="admin_brokerages_simple.php">🏢 Brokerages</a>
+                    <a href="admin_brokerages.php">🏢 Brokerages</a>
                     <a href="admin_bank_accounts.php">🏪 Bank Accounts</a>
                 </div>
             </div>
+            <?php endif; ?>
             
             <!-- Data Import -->
             <div class="dashboard-card">
