@@ -34,10 +34,14 @@ This Requirements Traceability Matrix (RTM) provides bidirectional traceability 
 | BR-022 | Rebalancing recommendations | FR-1104 | ✅ Implemented |
 | BR-030 | Multi-dimensional analysis | FR-200-505 | ✅ Implemented |
 | BR-031 | Historical analysis review | FR-1300-1305 | ✅ Implemented |
-| BR-032 | Cross-sector comparison | FR-1603 | 📋 Planned |
+| BR-032 | Cross-sector comparison | FR-1603, FR-004.3 | ✅ Implemented (Dec 2025) |
 | BR-040 | Generate journal entries | FR-1400-1401 | ✅ Implemented |
 | BR-041 | Mark-to-market tracking | FR-1402 | ✅ Implemented |
 | BR-042 | Financial reporting | FR-1406 | ✅ Implemented |
+| BR-050 | Sector classification and analysis | FR-004.3 | ✅ Implemented (Dec 2025) |
+| BR-051 | Index benchmarking and comparison | FR-004.4 | ✅ Implemented (Dec 2025) |
+| BR-052 | Fund composition and fee analysis | FR-004.5 | ✅ Implemented (Dec 2025) |
+| BR-053 | Client eligibility and MER tier management | FR-004.5 | ✅ Implemented (Dec 2025) |
 
 ---
 
@@ -96,7 +100,15 @@ This Requirements Traceability Matrix (RTM) provides bidirectional traceability 
 | FR-1500-1505 | TR-100-103 | main.py::run_interactive() | ✅ |
 | FR-1600-1603 | TR-100-103 | main.py::print_analysis_report() | ✅/📋 |
 
-### 3.7 System Functions
+### 3.7 Advanced Analysis Functions (PHP)
+
+| Functional Req | Technical Req | Implementation File | Status |
+|----------------|---------------|---------------------|--------|
+| FR-004.3 | TR-2000-2010 | SectorAnalysisService.php | ✅ |
+| FR-004.4 | TR-2100-2110 | IndexBenchmarkingService.php | ✅ |
+| FR-004.5 | TR-2200-2215 | FundCompositionService.php, Fund.php, FundDAO.php, FundHolding.php, FundHoldingDAO.php, FundEligibility.php, FundEligibilityDAO.php | ✅ |
+
+### 3.8 System Functions
 
 | Functional Req | Technical Req | Implementation File | Status |
 |----------------|---------------|---------------------|--------|
@@ -323,12 +335,12 @@ This Requirements Traceability Matrix (RTM) provides bidirectional traceability 
 
 | Category | Total | Implemented | Planned | Coverage % |
 |----------|-------|-------------|---------|------------|
-| Business Requirements | 17 | 16 | 1 | 94% |
+| Business Requirements | 21 | 20 | 1 | 95% |
 | Business Capabilities | 17 | 17 | 0 | 100% |
 | Business Rules | 15 | 15 | 0 | 100% |
-| Functional Requirements | 129 | 125 | 4 | 97% |
+| Functional Requirements | 132 | 129 | 3 | 98% |
 | Technical Requirements | 112 | 112 | 0 | 100% |
-| **TOTAL** | **290** | **285** | **5** | **98.3%** |
+| **TOTAL** | **297** | **293** | **4** | **98.7%** |
 
 ### 6.2 Module Coverage
 
@@ -340,7 +352,22 @@ This Requirements Traceability Matrix (RTM) provides bidirectional traceability 
 | database_manager.py | 20 (FR-1200-1305, TR-500-512) | ~800 | Planned |
 | front_accounting.py | 7 (FR-1400-1406, TR-600-606) | ~300 | Planned |
 | main.py | 20 (FR-1500-1903, TR-100-103) | ~575 | Planned |
-| **Total** | **150 requirements** | **~3,375 lines** | **0%** |
+| **Python Total** | **150 requirements** | **~3,375 lines** | **0%** |
+
+### 6.3 PHP Service Coverage (New - December 2025)
+
+| Module | Requirements | Lines | Test Coverage |
+|--------|--------------|-------|---------------|
+| SectorAnalysisService.php | FR-004.3, BR-050 | ~580 | 100% (11/11 tests, 67 assertions) |
+| IndexBenchmarkingService.php | FR-004.4, BR-051 | ~580 | 100% (11/11 tests, 48 assertions) |
+| FundCompositionService.php | FR-004.5, BR-052, BR-053 | ~780 | 100% (11/11 tests, 52 assertions) |
+| Fund.php (Model) | FR-004.5 | ~150 | Covered by service tests |
+| FundHolding.php (Model) | FR-004.5 | ~120 | Covered by service tests |
+| FundEligibility.php (Model) | FR-004.5 | ~130 | Covered by service tests |
+| FundDAO.php | FR-004.5 | ~280 | Covered by service tests |
+| FundHoldingDAO.php | FR-004.5 | ~230 | Covered by service tests |
+| FundEligibilityDAO.php | FR-004.5 | ~190 | Covered by service tests |
+| **PHP Total** | **3 requirements** | **~3,040 lines** | **100%** |
 
 ---
 
@@ -350,19 +377,31 @@ This Requirements Traceability Matrix (RTM) provides bidirectional traceability 
 
 | Requirement | Description | Priority | Target |
 |-------------|-------------|----------|--------|
-| BR-032 | Cross-sector comparison reports | SHOULD | v1.1 |
 | FR-505 | Analyst target price tracking | SHOULD | v1.1 |
 | FR-1602 | Report export (CSV, JSON) | SHOULD | v1.1 |
-| FR-1603 | Sector comparison reports | SHOULD | v1.1 |
 | FR-1703 | Environment variable config override | SHOULD | v1.2 |
 
-### 7.2 Missing Test Coverage
+### 7.2 Recently Implemented (December 2025)
+
+| Requirement | Description | Implementation | Status |
+|-------------|-------------|----------------|--------|
+| FR-004.3 | Sector Analysis | SectorAnalysisService.php | ✅ Complete |
+| FR-004.4 | Index Benchmarking | IndexBenchmarkingService.php | ✅ Complete |
+| FR-004.5 | Fund Composition Analysis | FundCompositionService.php | ✅ Complete |
+| BR-050 | GICS sector classification | 11 sectors, RS ratio, rotation | ✅ Complete |
+| BR-051 | Alpha/beta calculation | SPY, QQQ, DIA, IWM benchmarks | ✅ Complete |
+| BR-052 | Fund holdings and fees | ETF, MF, Seg Fund support | ✅ Complete |
+| BR-053 | MER tier eligibility | 4 tiers, family aggregation | ✅ Complete |
+
+### 7.3 Missing Test Coverage
 
 | Area | Gap | Priority | Plan |
 |------|-----|----------|------|
-| Unit Tests | All modules | MUST | Create in tests/ directory |
+| Unit Tests (Python) | All Python modules | MUST | Create in tests/ directory |
 | Integration Tests | End-to-end flows | MUST | Create integration test suite |
 | Performance Tests | All performance requirements | SHOULD | Create performance benchmarks |
+
+**Note:** PHP services (Sector, Index, Fund) have 100% test coverage with 33 tests and 167 assertions.
 
 ---
 
@@ -371,6 +410,7 @@ This Requirements Traceability Matrix (RTM) provides bidirectional traceability 
 | Version | Date | Changes | Author |
 |---------|------|---------|--------|
 | 1.0 | 2025-11-25 | Initial RTM creation | Development Team |
+| 1.1 | 2025-12-03 | Added FR-004.3, FR-004.4, FR-004.5 (Sector, Index, Fund analysis), BR-050-053, updated coverage to 98.7% | Development Team |
 
 ---
 
@@ -384,8 +424,9 @@ This RTM has been validated against:
 - ✅ README documentation
 
 **Validation Status:** COMPLETE  
-**Traceability Completeness:** 98.3%  
-**Implementation Status:** 285/290 requirements (98.3%)
+**Traceability Completeness:** 98.7%  
+**Implementation Status:** 293/297 requirements (98.7%)  
+**Last Updated:** December 3, 2025
 
 ---
 

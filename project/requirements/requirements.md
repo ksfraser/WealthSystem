@@ -231,6 +231,138 @@ Alert Thresholds:
   - Liquidity risk monitoring
 ```
 
+#### **Sector Analysis (FR-004.3)**
+```yaml
+Priority: High
+Description: GICS sector classification and comparative analysis
+Status: ✅ Implemented (December 2025)
+
+Acceptance Criteria:
+  - Classify stocks into 11 GICS sectors
+  - Compare stock performance vs sector average
+  - Calculate Relative Strength (RS) ratio
+  - Identify sector leaders and laggards
+  - Detect sector rotation patterns
+  - Track sector index performance
+
+GICS Sectors Supported:
+  - Energy (10)
+  - Materials (15)
+  - Industrials (20)
+  - Consumer Discretionary (25)
+  - Consumer Staples (30)
+  - Health Care (35)
+  - Financials (40)
+  - Information Technology (45)
+  - Communication Services (50)
+  - Utilities (55)
+  - Real Estate (60)
+
+Business Rules:
+  - RS Ratio > 1.5: Significant outperformance
+  - RS Ratio < 0.5: Significant underperformance
+  - Sector rotation detected with 3+ consecutive period trends
+  - Peer comparison within same sector only
+```
+
+#### **Index Benchmarking (FR-004.4)**
+```yaml
+Priority: High
+Description: Compare stocks/portfolios against major market indexes
+Status: ✅ Implemented (December 2025)
+
+Acceptance Criteria:
+  - Calculate alpha (excess returns beyond market)
+  - Calculate beta (volatility relative to market)
+  - Measure correlation with indexes
+  - Calculate Sharpe ratio (risk-adjusted returns)
+  - Calculate Information ratio (alpha consistency)
+  - Measure tracking error
+  - Detect index membership heuristically
+
+Supported Indexes:
+  - SPY (S&P 500) - Large-cap US stocks, 500 constituents
+  - QQQ (NASDAQ 100) - Tech-focused, 100 constituents
+  - DIA (Dow Jones) - Blue-chip stocks, 30 constituents
+  - IWM (Russell 2000) - Small-cap stocks, 2000 constituents
+
+Performance Metrics:
+  - Alpha: Annualized excess return (positive = outperformance)
+  - Beta: Market sensitivity (1.0 = market volatility)
+  - Correlation: -1 to +1 scale (movement relationship)
+  - Tracking Error: Standard deviation of excess returns
+  - Information Ratio: Alpha / Tracking Error
+  - Sharpe Ratio: (Return - Risk-free rate) / Std Dev
+
+Business Rules:
+  - Choose benchmark based on market cap:
+    * Large-cap → SPY
+    * Small-cap → IWM
+    * Tech-heavy → QQQ
+    * Blue-chip → DIA
+  - Adjust position size for high beta (beta > 1.5 = reduce position)
+  - Positive alpha required to justify active management fees
+```
+
+#### **Fund Composition Analysis (FR-004.5)**
+```yaml
+Priority: High
+Description: Analyze ETF, mutual fund, and segregated fund holdings and fees
+Status: ✅ Implemented (December 2025)
+
+Acceptance Criteria:
+  - Retrieve complete fund holdings with weights
+  - Calculate sector allocation from holdings
+  - Calculate asset class breakdown
+  - Calculate geographic exposure
+  - Measure concentration risk (Top 10, HHI)
+  - Compare fund overlap (redundancy detection)
+  - Compare MER tiers for same base fund
+  - Filter funds by client eligibility
+  - Project long-term fee impact (10/25 years)
+  - Analyze fund performance vs benchmark with alpha after fees
+
+Fund Types Supported:
+  - ETF (Exchange-Traded Fund)
+  - Mutual Fund
+  - Segregated Fund (insurance product)
+  - Index Fund
+
+MER Tier Structure:
+  - RETAIL: 2.0-2.5% MER, $0 minimum net worth
+  - PREFERRED: 1.5-1.9% MER, $250k minimum net worth
+  - PREMIUM: 1.0-1.4% MER, $500k minimum net worth
+  - INSTITUTIONAL: 0.5-0.9% MER, $1M+ minimum net worth
+
+Eligibility Rules:
+  - Personal net worth threshold
+  - Family net worth aggregation (when allowed by fund)
+  - Minimum investment amount
+  - Advisor approval requirements
+  - Effective date and expiry date validation
+
+Overlap Interpretation:
+  - <20%: Minimal overlap (good diversification)
+  - 20-50%: Moderate overlap (acceptable)
+  - 50-80%: High overlap (consider alternatives)
+  - >80%: Very high redundancy (avoid)
+
+Concentration Risk Metrics:
+  - Top 10 holdings weight percentage
+  - HHI (Herfindahl-Hirschman Index):
+    * <1,000: Highly diversified
+    * 1,000-1,800: Moderately concentrated
+    * >1,800: Highly concentrated (risky)
+
+Business Rules:
+  - Multiple fund codes may share same base fund ID (different MER tiers)
+  - Family aggregation increases eligibility for lower MER tiers
+  - Upgrade opportunities detected when client net worth increases
+  - Fee projections assume 6% annual return
+  - Fund performance must be compared to appropriate benchmark
+  - Segregated funds combine underlying fund + insurance wrapper fees
+```
+
 ---
 
 ## 🔒 **Non-Functional Requirements**
