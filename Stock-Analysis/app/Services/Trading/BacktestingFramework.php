@@ -59,11 +59,35 @@ class BacktestingFramework
     }
     
     /**
-     * Run backtest for a single strategy
+     * Run backtest for a single strategy with advanced risk management
+     * 
+     * Features:
+     * - Fixed stop loss and take profit levels
+     * - Trailing stop loss that adjusts upward with price
+     * - Partial profit taking at configurable levels
+     * - Max holding period constraints
+     * - Strategy signal-based exits
+     * 
+     * Example trailing stop: Buy at $100 with 10% trailing stop. Price rises to $120.
+     * Trailing stop activates after 5% gain and adjusts to $108 (90% of $120), locking in profit.
+     * If price falls to $108, position exits with $8 profit locked in.
+     * 
+     * Example partial profit: Buy 1000 shares at $10. Price rises to $12 (20% gain).
+     * Sell 25% (250 shares) at $12, keeping 750 shares for further upside while locking profit.
+     * 
      * @param object $strategy Strategy service instance
-     * @param array $historicalData Array of [date => stock_data]
-     * @param array $options Backtest options (position_size, stop_loss, take_profit, max_holding_days)
-     * @return array Backtest results with trades and metrics
+     * @param array $historicalData Array of [date => stock_data] indexed by date
+     * @param array $options Backtest options:
+     *   - position_size: Percentage of capital per position (default 0.10)
+     *   - stop_loss: Fixed stop loss percentage (default null)
+     *   - take_profit: Fixed take profit percentage (default null)
+     *   - max_holding_days: Maximum days to hold position (default null)
+     *   - trailing_stop: Enable trailing stop loss (default false)
+     *   - trailing_stop_activation: Profit threshold to activate trailing (default 0.05 = 5%)
+     *   - trailing_stop_distance: Distance below highest price (default 0.10 = 10%)
+     *   - partial_profit_taking: Enable scaling out of positions (default false)
+     *   - profit_levels: Array of profit targets with sell percentages
+     * @return array Backtest results including trades, metrics, and performance statistics
      */
     public function runBacktest(object $strategy, array $historicalData, array $options = []): array
     {
@@ -72,7 +96,16 @@ class BacktestingFramework
             'stop_loss' => null,            // Stop loss percentage (e.g., 0.10 = 10%)
             'take_profit' => null,          // Take profit percentage (e.g., 0.20 = 20%)
             'max_holding_days' => null,     // Maximum days to hold position
-            'rebalance_frequency' => 30     // Days between rebalances
+            'rebalance_frequency' => 30,    // Days between rebalances
+            'trailing_stop' => false,       // Enable trailing stop loss
+            'trailing_stop_activation' => 0.05, // Activate trailing after 5% gain
+            'trailing_stop_distance' => 0.10,   // Trail 10% below highest price
+            'partial_profit_taking' => false,   // Enable scaling out of positions
+            'profit_levels' => [            // Sell percentages at profit levels
+                ['profit' => 0.10, 'sell_pct' => 0.25],  // Sell 25% at 10% gain
+                ['profit' => 0.20, 'sell_pct' => 0.50],  // Sell 50% more at 20% gain
+                ['profit' => 0.30, 'sell_pct' => 1.00]   // Sell remaining at 30% gain
+            ]
         ];
         
         $options = array_merge($defaultOptions, $options);
@@ -96,8 +129,85 @@ class BacktestingFramework
                 $shouldExit = false;
                 $exitReason = '';
                 
-                // Stop loss check
-                if ($options['stop_loss'] && $currentPrice <= $position['entry_price'] * (1 - $options['stop_loss'])) {
+                // Update highest price and trailing stop
+                if ($currentPrice > $position['highest_price']) {
+                    $positions[$posIndex]['highest_price'] = $currentPrice;
+                    
+                    // Activate trailing stop after specified gain
+                    if ($options['trailing_stop']) {
+                        $gainPercent = ($currentPrice - $position['entry_price']) / $position['entry_price'];
+                        
+                        if ($gainPercent >= $options['trailing_stop_activation']) {
+                            $positions[$posIndex]['trailing_stop_active'] = true;
+                            $newTrailingStop = $currentPrice * (1 - $options['trailing_stop_distance']);
+                            
+                            // Only move stop upward, never downward
+                            if ($newTrailingStop > ($position['trailing_stop_price'] ?? 0)) {
+                                $positions[$posIndex]['trailing_stop_price'] = $newTrailingStop;
+                            }
+                        }
+                    }
+                }
+                
+                // Check partial profit taking
+                if ($options['partial_profit_taking'] && $position['shares'] > 0) {
+                    $currentProfit = ($currentPrice - $position['entry_price']) / $position['entry_price'];
+                    
+                    foreach ($options['profit_levels'] as $level) {
+                        $levelKey = (string)$level['profit'];
+                        
+                        if ($currentProfit >= $level['profit'] && !isset($position['profit_levels_taken'][$levelKey])) {
+                            // Calculate shares to sell
+                            $sharesToSell = floor($position['original_shares'] * $level['sell_pct']);
+                            $sharesToSell = min($sharesToSell, $position['shares']); // Don't oversell
+                            
+                            if ($sharesToSell > 0) {
+                                $exitPrice = $this->applySlippage($currentPrice, 'SELL');
+                                $commission = $exitPrice * $sharesToSell * $this->commissionRate;
+                                $proceeds = ($exitPrice * $sharesToSell) - $commission;
+                                $costBasis = ($position['cost'] / $position['original_shares']) * $sharesToSell;
+                                $profit = $proceeds - $costBasis;
+                                
+                                $capital += $proceeds;
+                                
+                                // Record partial exit
+                                $closedTrades[] = [
+                                    'symbol' => $position['symbol'],
+                                    'entry_date' => $position['entry_date'],
+                                    'entry_price' => $position['entry_price'],
+                                    'exit_date' => $date,
+                                    'exit_price' => $exitPrice,
+                                    'shares' => $sharesToSell,
+                                    'return' => (($exitPrice - $position['entry_price']) / $position['entry_price']) * 100,
+                                    'profit_loss' => $profit,
+                                    'holding_days' => $holdingDays,
+                                    'exit_reason' => 'partial_profit_' . ($level['profit'] * 100) . '%'
+                                ];
+                                
+                                // Update position
+                                $positions[$posIndex]['shares'] -= $sharesToSell;
+                                $positions[$posIndex]['profit_levels_taken'][$levelKey] = true;
+                                
+                                // If all shares sold, remove position
+                                if ($positions[$posIndex]['shares'] <= 0) {
+                                    unset($positions[$posIndex]);
+                                    continue 2; // Skip to next position
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                // Check trailing stop
+                if ($options['trailing_stop'] && $position['trailing_stop_active'] && 
+                    $position['trailing_stop_price'] !== null && $currentPrice <= $position['trailing_stop_price']) {
+                    $shouldExit = true;
+                    $exitReason = 'trailing_stop';
+                }
+                
+                // Fixed stop loss check (fallback if trailing not active)
+                if (!$shouldExit && $options['stop_loss'] && !$position['trailing_stop_active'] && 
+                    $currentPrice <= $position['entry_price'] * (1 - $options['stop_loss'])) {
                     $shouldExit = true;
                     $exitReason = 'stop_loss';
                 }
@@ -164,7 +274,14 @@ class BacktestingFramework
                         'entry_price' => $entryPrice,
                         'shares' => $shares,
                         'cost' => $totalCost,
-                        'confidence' => $signal['confidence'] ?? 0
+                        'confidence' => $signal['confidence'] ?? 0,
+                        // Trailing stop tracking
+                        'highest_price' => $entryPrice,
+                        'trailing_stop_price' => null,
+                        'trailing_stop_active' => false,
+                        // Partial profit tracking
+                        'original_shares' => $shares,
+                        'profit_levels_taken' => []
                     ];
                 }
             }

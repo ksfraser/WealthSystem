@@ -446,7 +446,9 @@ End Date: 2023-12-31
 Parameters:
 - Initial Capital: $100,000
 - Position Size: 10% per trade
-- Stop Loss: 10%
+- Fixed Stop Loss: 10%
+- Trailing Stop: Enabled (10% trailing, activates at 5% gain)
+- Partial Profit Taking: Enabled (25% at 10%, 50% at 20%, 100% at 30%)
 - Take Profit: 20%
 - Max Holding Days: 30
 
@@ -654,6 +656,103 @@ Expected Performance:
 ---
 
 ## Advanced Features
+
+### Risk Management: Trailing Stops & Profit Taking
+
+**NEW FEATURE**: Lock in profits automatically as your positions gain value.
+
+#### Trailing Stop Loss
+
+**What it is**: A dynamic stop loss that adjusts upward as the price rises, but never moves downward.
+
+**How it works**:
+```
+1. Buy stock at $100
+2. Set 10% trailing stop (trail distance)
+3. Set 5% activation threshold
+4. Price rises to $106 → Trailing activates
+5. Stop is set at $95.40 (10% below $106)
+6. Price rises to $120 → Stop moves to $108 (10% below $120)
+7. Price falls to $115 → Stop stays at $108
+8. Price falls to $108 → Position exits, locking in $8 profit
+```
+
+**Benefit**: If price had fallen from $120 back to $90, you'd still exit at $108 instead of losing everything.
+
+#### Partial Profit Taking
+
+**What it is**: Selling portions of your position at predetermined profit levels.
+
+**How it works**:
+```
+Buy 1000 shares at $10 = $10,000 invested
+
+Price hits $11 (10% gain):
+- Sell 25% (250 shares) = $2,750
+- Keep 750 shares, locked in $250 profit
+
+Price hits $12 (20% gain):
+- Sell 50% of original (500 shares total, but only 750 remain)
+- All 750 remaining shares sold = $9,000
+- Total proceeds: $2,750 + $9,000 = $11,750
+- Total profit: $1,750 (17.5% on original capital)
+```
+
+**Benefit**: Lock in guaranteed profits while keeping upside exposure.
+
+#### Configuring Risk Management
+
+**In Backtest Setup**:
+```
+Dashboard > Backtesting > Advanced Options
+
+[✓] Enable Trailing Stop
+    Activation Threshold: 5%  (start trailing after 5% gain)
+    Trail Distance: 10%       (stay 10% below highest price)
+
+[✓] Enable Partial Profit Taking
+    Level 1: 10% gain → Sell 25%
+    Level 2: 20% gain → Sell 50%
+    Level 3: 30% gain → Sell remaining
+```
+
+**Strategy Combinations**:
+
+**Conservative (Capital Preservation)**:
+```
+Fixed Stop Loss: 8%
+Trailing Stop: 8% distance, activate at 3% gain
+Partial Profits: 20% at 5%, 50% at 10%, 100% at 15%
+```
+
+**Balanced (Growth + Protection)**:
+```
+Fixed Stop Loss: 10%
+Trailing Stop: 10% distance, activate at 5% gain  
+Partial Profits: 25% at 10%, 50% at 20%, 100% at 30%
+```
+
+**Aggressive (Let Winners Run)**:
+```
+Fixed Stop Loss: 15%
+Trailing Stop: 15% distance, activate at 10% gain
+Partial Profits: 30% at 15%, 100% at 40%
+```
+
+**Best Practices**:
+
+✅ **DO**:
+- Use trailing stops on momentum strategies (let trends run)
+- Use tighter stops (5-8%) on volatile small caps
+- Use partial profits to lock in gains on large moves
+- Adjust trail distance based on stock volatility
+- Test different configurations in backtests
+
+❌ **DON'T**:
+- Move stops downward manually (defeats the purpose)
+- Use same parameters for all strategies (customize per strategy)
+- Ignore trailing stops in range-bound markets (consider fixed stops)
+- Take all profit too early (keep some skin in the game)
 
 ### Custom Strategy Parameters
 
