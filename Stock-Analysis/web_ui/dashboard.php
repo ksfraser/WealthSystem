@@ -18,10 +18,16 @@ $navigationService = new NavigationService($container->get(App\Services\Interfac
 // Use new SRP Navigation Architecture for dashboard cards
 require_once __DIR__ . '/Navigation/NavigationFactory.php';
 
-// Require login
-$auth->requireLogin();
-
-$user = $auth->getCurrentUser();
+// Require login with proper exception handling
+try {
+    $auth->requireLogin();
+    $user = $auth->getCurrentUser();
+} catch (\App\Auth\LoginRequiredException $e) {
+    // Redirect to login with return URL
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'dashboard.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

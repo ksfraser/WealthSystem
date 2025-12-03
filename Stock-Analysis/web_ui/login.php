@@ -34,6 +34,9 @@ if (isset($_GET['registered'])) {
     $message = 'Registration successful! Please log in with your credentials.';
 }
 
+// Get return URL if provided
+$returnUrl = $_GET['return_url'] ?? 'dashboard.php';
+
 // Handle login form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -45,6 +48,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         
         $user = $auth->loginUser($username, $password);
+        
+        // Redirect to return URL or dashboard after successful login
+        $redirectTo = $_POST['return_url'] ?? $_GET['return_url'] ?? 'dashboard.php';
+        // Sanitize return URL to prevent open redirects
+        if (!preg_match('/^[a-zA-Z0-9_\-\.\?\/=&]+$/', $redirectTo) || strpos($redirectTo, '//') !== false) {
+            $redirectTo = 'dashboard.php';
+        }
         
         // Queue priority jobs for user's portfolio (MQTT-based system)
         // This is optional functionality - errors won't prevent login
@@ -121,9 +131,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             error_log("Portfolio job manager error during login: " . $e->getMessage());
         }
         
-        // Redirect to dashboard or intended page
-        $redirectUrl = $_GET['redirect'] ?? 'dashboard.php';
-        header("Location: $redirectUrl");
+        // Redirect to intended page (already sanitized above)
+        header("Location: $redirectTo");
         exit;
         
     } catch (Exception $e) {
@@ -293,6 +302,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
         
         <form method="post">
+            <input type="hidden" name="return_url" value="<?php echo htmlspecialchars($returnUrl); ?>">
+            
             <div class="form-group">
                 <label for="username">Username or Email:</label>
                 <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($_POST['username'] ?? ''); ?>" required autofocus>

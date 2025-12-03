@@ -12,11 +12,15 @@ $container = require_once __DIR__ . '/bootstrap.php';
 // Resolve authentication service
 $auth = $container->get(UserAuthDAO::class);
 
-// Require login
-$auth->requireLogin();
-
-// Get current user
-$user = $auth->getCurrentUser();
+// Require login with proper exception handling
+try {
+    $auth->requireLogin();
+    $user = $auth->getCurrentUser();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'strategy-config.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

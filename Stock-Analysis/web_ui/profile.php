@@ -24,10 +24,15 @@ $invitationService = new InvitationService();
 $rbac = new RBACService();
 $advisorHelper = new AdvisorManagementHelper($auth, $rbac);
 
-// Require login
-$auth->requireLogin();
-
-$currentUser = $auth->getCurrentUser();
+// Require login with proper exception handling
+try {
+    $auth->requireLogin();
+    $currentUser = $auth->getCurrentUser();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'profile.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+}
 $userId = $currentUser['id'];
 $message = '';
 $messageType = '';
