@@ -5,36 +5,46 @@
  * Handles AJAX requests for stock analysis, LLM integration, and data updates
  */
 
-require_once __DIR__ . '/includes/auth.php';
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/StockDAO.php';
-require_once __DIR__ . '/StockPriceService.php';
-require_once __DIR__ . '/LLMAnalysisService.php';
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 0); // Don't display errors in JSON API
+ini_set('log_errors', 1);
 
-// Check authentication for API calls
-if (!isLoggedIn()) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'error' => 'Authentication required']);
-    exit;
-}
-
-// Only accept POST requests
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'error' => 'Method not allowed']);
-    exit;
-}
-
+// Set JSON header first
 header('Content-Type: application/json');
 
+// Correct paths - API is in web_ui/api/, files are in web_ui/
+require_once __DIR__ . '/../UserAuthDAO.php';
+require_once __DIR__ . '/../StockDAO.php';
+require_once __DIR__ . '/../StockPriceService.php';
+require_once __DIR__ . '/../LLMAnalysisService.php';
+
 try {
+    // Check authentication using UserAuthDAO
+    $userAuth = new UserAuthDAO();
+    if (!$userAuth->isLoggedIn()) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Authentication required']);
+        exit;
+    }
+    
+    // Get database connection
+    $pdo = $userAuth->getPDO();
+    
+    // Only accept POST requests
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode(['success' => false, 'error' => 'Method not allowed']);
+        exit;
+    }
+    
     // Load configuration
-    $config = require_once __DIR__ . '/config/stock_analysis.php';
+    $config = require_once __DIR__ . '/../config/stock_analysis.php';
     
     // Initialize services
-    $stockDAO = new StockDAO($pdo, $config['database']);
-    $priceService = new StockPriceService($stockDAO, $config['price_service']);
-    $analysisService = new LLMAnalysisService($stockDAO, $config['llm']);
+    $stockDAO = new StockDAO($pdo, $config['database'] ?? []);
+    $priceService = new StockPriceService($stockDAO, $config['price_service'] ?? []);
+    $analysisService = new LLMAnalysisService($stockDAO, $config['llm'] ?? []);
     
     $action = $_POST['action'] ?? '';
     $symbol = strtoupper(trim($_POST['symbol'] ?? ''));
