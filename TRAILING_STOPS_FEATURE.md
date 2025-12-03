@@ -3,11 +3,19 @@
 ## Overview
 
 **Status**: ✅ IMPLEMENTED & TESTED  
-**Commit**: 08b63e0d  
-**Tests**: 5/5 passing with 21 assertions  
+**Core Feature**: Commit 08b63e0d (5/5 tests passing)  
+**Multi-User System**: Commit [current] (11/11 tests passing)  
 **Documentation**: Complete with examples
 
 This feature addresses your critical requirement: **"Does our strategies and back testing consider stop losses, as well as resets? I.e. we buy at 100$, with a 10% stop loss (i.e. 90). Price goes up to 120 in a week, so we adjust our stop loss to be 90% of 120, etc."**
+
+### ✅ Multi-User Configuration System
+
+**NEW**: Each user can now have their own risk management preferences stored in the database:
+- Per-user stop loss, trailing stop, and profit-taking settings
+- Three risk profile presets (Conservative, Balanced, Aggressive)
+- Strategy-specific overrides (e.g., more aggressive for momentum strategies)
+- Automatic integration with backtesting framework
 
 ---
 
@@ -254,6 +262,340 @@ For each position in portfolio:
        → EXIT via max_holding_days
      - Else if strategy says SELL:
        → EXIT via strategy_signal
+```
+
+---
+
+## Multi-User Configuration System
+
+### Overview
+
+The system now supports per-user risk management preferences stored in the database. Each user can:
+- Choose from preset risk profiles (Conservative, Balanced, Aggressive)
+- Customize individual risk parameters
+- Set strategy-specific overrides
+- Have settings automatically applied to all backtests
+
+### Database Schema
+
+**Table**: `user_risk_preferences`
+
+```sql
+CREATE TABLE user_risk_preferences (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    
+    -- Position Sizing
+    default_position_size DECIMAL(5,4) DEFAULT 0.10,
+    max_positions INTEGER DEFAULT 5,
+    
+    -- Stop Loss & Take Profit
+    default_stop_loss DECIMAL(5,4),
+    default_take_profit DECIMAL(5,4),
+    default_max_holding_days INTEGER,
+    
+    -- Trailing Stops
+    enable_trailing_stop BOOLEAN DEFAULT 0,
+    trailing_stop_activation DECIMAL(5,4) DEFAULT 0.05,
+    trailing_stop_distance DECIMAL(5,4) DEFAULT 0.10,
+    
+    -- Partial Profits
+    enable_partial_profits BOOLEAN DEFAULT 0,
+    partial_profit_levels TEXT, -- JSON array
+    
+    -- Risk Profile & Costs
+    risk_profile VARCHAR(20) DEFAULT 'balanced',
+    commission_rate DECIMAL(6,5) DEFAULT 0.001,
+    slippage_rate DECIMAL(6,5) DEFAULT 0.0005,
+    initial_capital DECIMAL(15,2) DEFAULT 100000.00,
+    
+    -- Strategy Overrides
+    strategy_overrides TEXT, -- JSON object
+    
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+```
+
+### Risk Profile Presets
+
+#### Conservative Profile
+**Best For**: Capital preservation, risk-averse traders, retirement accounts
+
+```php
+[
+    'default_position_size' => 0.05,     // 5% per trade
+    'max_positions' => 3,                 // Only 3 positions max
+    'default_stop_loss' => 0.08,          // Tight 8% stop
+    'default_take_profit' => 0.12,        // Quick 12% profit target
+    'trailing_stop_activation' => 0.03,   // Start trailing at 3% gain
+    'trailing_stop_distance' => 0.08,     // 8% trailing distance
+    'partial_profit_levels' => [
+        ['profit' => 0.05, 'sell_pct' => 0.20],  // 5% gain → sell 20%
+        ['profit' => 0.10, 'sell_pct' => 0.50],  // 10% gain → sell 50%
+        ['profit' => 0.15, 'sell_pct' => 1.00]   // 15% gain → sell rest
+    ]
+]
+```
+
+**Result**: Small positions, tight stops, frequent profit-taking
+
+#### Balanced Profile (DEFAULT)
+**Best For**: Growth with protection, most traders
+
+```php
+[
+    'default_position_size' => 0.10,     // 10% per trade
+    'max_positions' => 5,                 // 5 positions max
+    'default_stop_loss' => 0.10,          // 10% stop loss
+    'default_take_profit' => 0.20,        // 20% profit target
+    'trailing_stop_activation' => 0.05,   // Start trailing at 5% gain
+    'trailing_stop_distance' => 0.10,     // 10% trailing distance
+    'partial_profit_levels' => [
+        ['profit' => 0.10, 'sell_pct' => 0.25],  // 10% gain → sell 25%
+        ['profit' => 0.20, 'sell_pct' => 0.50],  // 20% gain → sell 50%
+        ['profit' => 0.30, 'sell_pct' => 1.00]   // 30% gain → sell rest
+    ]
+]
+```
+
+**Result**: Moderate positions, balanced risk/reward
+
+#### Aggressive Profile
+**Best For**: Maximum growth, experienced traders, growth accounts
+
+```php
+[
+    'default_position_size' => 0.15,     // 15% per trade
+    'max_positions' => 7,                 // 7 positions max
+    'default_stop_loss' => 0.15,          // Wide 15% stop
+    'default_take_profit' => 0.30,        // Ambitious 30% target
+    'trailing_stop_activation' => 0.10,   // Start trailing at 10% gain
+    'trailing_stop_distance' => 0.15,     // 15% trailing distance
+    'partial_profit_levels' => [
+        ['profit' => 0.15, 'sell_pct' => 0.30],  // 15% gain → sell 30%
+        ['profit' => 0.40, 'sell_pct' => 1.00]   // 40% gain → sell rest
+    ]
+]
+```
+
+**Result**: Large positions, wide stops, let winners run
+
+### Usage Examples
+
+#### Basic Usage: Run Backtest with User Preferences
+
+```php
+use App\Services\UserBacktestingService;
+
+$service = new UserBacktestingService();
+
+// User's preferences are automatically loaded and applied
+$results = $service->runBacktestForUser(
+    userId: 123,
+    strategy: $momentumStrategy,
+    historicalData: $historicalData
+);
+
+// Results include user's risk settings applied
+```
+
+#### Get User's Risk Configuration
+
+```php
+$summary = $service->getUserRiskSummary(123);
+
+/*
+Returns:
+[
+    'profile' => 'balanced',
+    'position_sizing' => [
+        'default_size' => '10%',
+        'max_positions' => 5,
+        'max_exposure' => '100%'
+    ],
+    'risk_management' => [
+        'stop_loss' => '10%',
+        'take_profit' => '20%',
+        'max_holding_days' => 'None'
+    ],
+    'trailing_stop' => [
+        'enabled' => true,
+        'activation' => '5% gain',
+        'distance' => '10% below high'
+    ],
+    'partial_profits' => [
+        'enabled' => true,
+        'levels' => [
+            'At 10% gain, sell 25%',
+            'At 20% gain, sell 50%',
+            'At 30% gain, sell 100%'
+        ]
+    ]
+]
+*/
+```
+
+#### Change User's Risk Profile
+
+```php
+// Switch to conservative profile
+$service->updateUserRiskProfile(123, 'conservative');
+
+// All settings are updated to conservative preset
+```
+
+#### Update Individual Setting
+
+```php
+// User wants tighter stop loss
+$service->updateUserRiskSetting(123, 'default_stop_loss', 0.08);
+
+// Update trailing activation
+$service->updateUserRiskSetting(123, 'trailing_stop_activation', 0.03);
+```
+
+#### Strategy-Specific Overrides
+
+User wants more aggressive settings specifically for momentum strategies:
+
+```php
+$service->setStrategyOverride(123, 'MomentumQualityStrategy', [
+    'trailing_stop_distance' => 0.15,     // Wider trailing for momentum
+    'trailing_stop_activation' => 0.08,   // Wait for stronger trend
+    'position_size' => 0.12               // Larger position size
+]);
+
+// When running momentum strategy, these overrides are applied
+// Other strategies use default user preferences
+```
+
+#### Portfolio Backtest with User Preferences
+
+```php
+$results = $service->runPortfolioBacktestForUser(
+    userId: 123,
+    strategies: [
+        'momentum' => [$momentumStrategy, 0.40],
+        'mean_reversion' => [$meanRevStrategy, 0.30],
+        'dividend' => [$dividendStrategy, 0.30]
+    ],
+    historicalData: $multiSymbolData
+);
+
+// User's max_positions and risk settings are applied
+```
+
+#### Compare Risk Profiles (for user selection)
+
+```php
+$comparison = $service->compareRiskProfiles();
+
+/*
+Returns:
+[
+    'conservative' => [
+        'position_size' => '5%',
+        'max_positions' => 3,
+        'stop_loss' => '8%',
+        'best_for' => 'Capital preservation, smaller positions, tight stops'
+    ],
+    'balanced' => [...],
+    'aggressive' => [...]
+]
+*/
+```
+
+### Model Class: UserRiskPreferences
+
+```php
+use App\Models\UserRiskPreferences;
+
+// Create new preferences
+$prefs = new UserRiskPreferences(['user_id' => 123]);
+$prefs->setRiskProfile('balanced');
+
+// Get backtest options
+$options = $prefs->getBacktestOptions();
+// Returns array ready for BacktestingFramework
+
+// Get with overrides
+$options = $prefs->getBacktestOptions([
+    'position_size' => 0.15  // Override for this specific backtest
+]);
+
+// Get trailing stop config
+$trailing = $prefs->getTrailingStopConfig();
+// ['enabled' => true, 'activation' => 0.05, 'distance' => 0.10]
+
+// Get partial profit levels
+$levels = $prefs->getPartialProfitLevels();
+// [['profit' => 0.10, 'sell_pct' => 0.25], ...]
+```
+
+### DAO Class: UserRiskPreferencesDAO
+
+```php
+use App\DAOs\UserRiskPreferencesDAO;
+
+$dao = new UserRiskPreferencesDAO();
+
+// Get user preferences (creates default if doesn't exist)
+$prefs = $dao->getUserPreferences(123);
+
+// Create with specific profile
+$prefs = $dao->createDefaultPreferences(123, 'aggressive');
+
+// Save changes
+$prefs->setRiskProfile('conservative');
+$dao->save($prefs);
+
+// Update single field
+$dao->updateField(123, 'trailing_stop_activation', 0.03);
+
+// Check if user has preferences
+if (!$dao->hasPreferences(123)) {
+    $dao->createDefaultPreferences(123);
+}
+
+// Get all users with aggressive profile
+$aggressiveUsers = $dao->getUsersByProfile('aggressive');
+```
+
+### Default Behavior
+
+When a new user is created:
+1. No preferences exist initially
+2. On first backtest, `getUserPreferences()` creates default "balanced" profile
+3. User can change profile or individual settings anytime
+4. All subsequent backtests use saved preferences
+
+### Migration Script
+
+To populate preferences for existing users:
+
+```php
+// In migration or setup script
+$dao = new UserRiskPreferencesDAO();
+$users = getAllUsers(); // Your user retrieval logic
+
+foreach ($users as $user) {
+    if (!$dao->hasPreferences($user['id'])) {
+        $dao->createDefaultPreferences($user['id'], 'balanced');
+    }
+}
+```
+
+### Database Migration
+
+```bash
+# Run migration to create table
+sqlite3 your_database.db < database/migrations/create_user_risk_preferences_table.sql
+
+# Includes:
+# - Table creation
+# - Indexes
+# - Template profiles (user_id = 0)
+# - Example INSERT for existing users
 ```
 
 ---
