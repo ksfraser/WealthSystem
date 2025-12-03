@@ -1210,6 +1210,374 @@ Position size based on beta:
 
 ---
 
+### ETF, Mutual Fund & Segregated Fund Analysis
+
+**NEW FEATURE**: Analyze fund composition, compare fees across MER tiers, check client eligibility, and identify upgrade opportunities.
+
+#### Understanding Fund Types
+
+**ETF (Exchange-Traded Fund)**:
+- Trades like a stock on an exchange
+- Typically lower fees than mutual funds
+- Intraday trading
+- Tax efficient
+
+**Mutual Fund**:
+- Priced once per day at NAV
+- May have front-end or back-end loads
+- Professionally managed
+- Often higher MER than ETFs
+
+**Segregated Fund (Seg Fund)**:
+- Insurance product with death benefit guarantees
+- Creditor protection in certain jurisdictions
+- Often based on underlying ETF or mutual fund
+- Multiple fund codes for same underlying fund
+- Different MERs based on client eligibility
+
+**Index Fund**:
+- Tracks a specific market index
+- Passive management
+- Lowest fees
+
+#### MER Tiers Explained
+
+**MER (Management Expense Ratio)**: Annual fee charged by fund, expressed as percentage of assets.
+
+Seg funds often have multiple versions (fund codes) with different MERs:
+
+| Tier | MER Range | Net Worth Minimum | Notes |
+|------|-----------|-------------------|-------|
+| **RETAIL** | 2.0-2.5% | $0 | Available to all clients, highest fees |
+| **PREFERRED** | 1.5-1.9% | $250,000 | Mid-tier pricing |
+| **PREMIUM** | 1.0-1.4% | $500,000 | Lower fees for higher net worth |
+| **INSTITUTIONAL** | 0.5-0.9% | $1,000,000+ | Lowest fees, highest minimums |
+
+**Important**: All tiers hold the same underlying assets—only the fee differs.
+
+#### Client Eligibility
+
+**What it checks**:
+- Client's personal net worth
+- Family net worth (if fund allows aggregation)
+- Minimum investment amount
+- Advisor approval requirements
+
+**Example**:
+```
+Client: $400,000 net worth
+Spouse: $200,000 net worth
+Family net worth: $600,000
+
+Fund ABC - RETAIL: Qualified (no minimum)
+Fund ABC - PREFERRED: Qualified (needs $250k)
+Fund ABC - PREMIUM: Qualified via family aggregation (needs $500k)
+Fund ABC - INSTITUTIONAL: Not qualified (needs $1M)
+```
+
+**Family Aggregation**: Some funds allow combining household net worth to qualify for lower MER tiers.
+
+#### Analyzing Fund Holdings
+
+**What you get**:
+```php
+$composition = $fundService->getFundComposition('XIC.TO');
+
+Returns:
+- Holdings list (symbol, name, weight, shares, value)
+- Sector allocation (Technology 28%, Financials 24%, etc.)
+- Asset class breakdown (Equity 95%, Cash 5%)
+- Geographic exposure (Canada 60%, US 30%, International 10%)
+- Concentration metrics:
+  * Top 10 holdings concentration (e.g., 45% of portfolio)
+  * HHI (Herfindahl-Hirschman Index) - diversification measure
+```
+
+**Interpretation**:
+- **HHI < 1,000**: Highly diversified
+- **HHI 1,000-1,800**: Moderately concentrated
+- **HHI > 1,800**: Highly concentrated
+- **Top 10 > 50%**: Significant concentration risk
+
+#### Comparing Fund Overlap
+
+**What it does**: Identifies holdings common to multiple funds to avoid redundancy.
+
+**Example**:
+```php
+$overlap = $fundService->compareFundOverlap('XIC.TO', 'XIU.TO');
+
+Returns:
+- Shared holdings: [AAPL 8%, MSFT 6%, GOOGL 5%]
+- Total weighted overlap: 82%
+- Interpretation: Very High Redundancy
+- Recommendation: Consider diversifying to different sectors/regions
+```
+
+**Overlap Levels**:
+- **<20%**: Minimal overlap—good diversification
+- **20-50%**: Moderate overlap—acceptable
+- **50-80%**: High overlap—consider alternatives
+- **>80%**: Very high redundancy—portfolio inefficiency
+
+**Use case**: Before buying a second fund, check overlap to ensure you're not duplicating holdings.
+
+#### Comparing MER Tiers (Fee Projections)
+
+**What it calculates**: Shows long-term cost difference between MER tiers.
+
+**Example**:
+```php
+$comparison = $fundService->compareMERs('ABC-BASE', 100000);
+
+Investment: $100,000
+Annual return assumption: 6%
+
+| Tier | MER | Annual Fee | 10-Year Fees | 25-Year Fees | Final Value (25Y) |
+|------|-----|------------|--------------|--------------|-------------------|
+| INSTITUTIONAL | 0.75% | $750 | $9,800 | $33,500 | $398,400 |
+| PREMIUM | 1.25% | $1,250 | $16,200 | $55,000 | $375,200 |
+| PREFERRED | 1.75% | $1,750 | $22,600 | $76,500 | $352,800 |
+| RETAIL | 2.25% | $2,250 | $29,000 | $98,000 | $331,200 |
+
+Savings (Institutional vs Retail):
+- 10 years: $19,200
+- 25 years: $64,500 ($67,200 difference in final value)
+```
+
+**Key insight**: MER differences compound significantly over time.
+
+#### Identifying Upgrade Opportunities
+
+**What it does**: Checks if client qualifies for lower-MER version of funds they already own.
+
+**Example**:
+```php
+$eligible = $fundService->filterByEligibility(
+    clientNetWorth: 600000,
+    familyNetWorth: 0,
+    fundSymbols: ['ABC-RETAIL', 'XYZ-PREFERRED']
+);
+
+Results:
+✓ ABC-RETAIL: Currently held, eligible for PREMIUM upgrade
+  → Save $500/year on $100k position
+✓ XYZ-PREFERRED: Optimal tier
+```
+
+**Action**: Advisor initiates fund code swap (usually no tax consequence for registered accounts).
+
+#### Analyzing Fund Performance
+
+**What it calculates**: Fund returns vs benchmark, adjusting for fees.
+
+**Example**:
+```php
+$performance = $fundService->analyzeFundPerformance(
+    fundSymbol: 'XIC.TO',
+    benchmark: 'SPY',
+    startDate: '2023-01-01',
+    endDate: '2024-12-31'
+);
+
+Returns:
+- Fund return: 12.5%
+- Fund return after fees: 10.3% (MER 2.2%)
+- Benchmark return: 11.8%
+- Alpha: -1.5% (underperformed benchmark)
+- Fund beta: 0.95
+- Correlation: 0.88 (moves with benchmark)
+```
+
+**Interpretation**:
+- **Alpha > 0**: Outperforming benchmark (good)
+- **Alpha < 0**: Underperforming benchmark (consider alternatives)
+- **Beta < 1**: Less volatile than benchmark
+- **Beta > 1**: More volatile than benchmark
+
+---
+
+#### Practical Scenarios
+
+**Scenario 1: Building Core Portfolio**
+
+*Goal*: Select Canadian equity fund for RRSP.
+
+```
+1. Check composition:
+   → XIC.TO: 250 holdings, top 10 = 38% (well diversified)
+   → Sector: Financials 32%, Energy 18%, Tech 8%
+
+2. Check eligibility:
+   → Client: $350k, Family: $200k = $550k
+   → Qualifies for PREMIUM tier (2.25% → 1.10%)
+
+3. Compare to alternatives:
+   → XIU.TO: 60 holdings, top 10 = 65% (concentrated)
+   → Overlap with XIC: 78% (very high)
+   → Recommendation: Choose one, not both
+
+4. Project fees:
+   → $100k investment in PREMIUM tier
+   → 25-year savings vs RETAIL: $52,000
+```
+
+**Scenario 2: Client Inheritance**
+
+*Goal*: Upgrade existing funds after net worth increase.
+
+```
+Client receives $400k inheritance:
+- Previous net worth: $280k → Now: $680k
+- Holds 4 funds in RETAIL tier
+
+Check upgrade opportunities:
+→ Fund A: RETAIL → PREMIUM (save $450/year)
+→ Fund B: RETAIL → PREMIUM (save $380/year)
+→ Fund C: RETAIL → PREFERRED (save $210/year)
+→ Fund D: Already optimal tier
+
+Total annual savings: $1,040
+25-year value: ~$44,000 (compounded)
+
+Action: Advisor processes fund code swaps in RRSP (no tax event)
+```
+
+**Scenario 3: Portfolio Overlap Audit**
+
+*Goal*: Identify redundant holdings.
+
+```
+Client holds:
+- XIC.TO (Canadian equity)
+- XIU.TO (Canadian equity)
+- VCN.TO (Canadian equity)
+
+Check overlaps:
+→ XIC + XIU: 82% overlap (very high redundancy)
+→ XIC + VCN: 89% overlap (extremely high)
+→ XIU + VCN: 85% overlap (very high)
+
+Top 5 holdings appear in all 3 funds:
+- RBC, TD, Enbridge, CNR, Brookfield
+
+Recommendation:
+- Keep XIC (lowest MER, best diversification)
+- Sell XIU + VCN
+- Reallocate to US equity or bonds for true diversification
+```
+
+**Scenario 4: Fee Impact Analysis**
+
+*Goal*: Show client long-term cost of high-MER fund.
+
+```
+Client holds $200k in actively managed mutual fund:
+- MER: 2.45%
+- Annual fee: $4,900
+
+Compare to low-cost alternatives:
+- PREMIUM tier of same fund family: MER 1.15% → $2,300/year
+- Broad market ETF: MER 0.15% → $300/year
+
+25-year projection (6% return):
+| Option | Final Value | Fees Paid |
+|--------|-------------|-----------|
+| Current (2.45%) | $645,000 | $189,000 |
+| PREMIUM (1.15%) | $728,000 | $106,000 |
+| ETF (0.15%) | $819,000 | $29,000 |
+
+Client savings by switching to PREMIUM: $83,000
+Client savings by switching to ETF: $174,000
+```
+
+**Scenario 5: Fund vs Benchmark Performance**
+
+*Goal*: Justify active management fee.
+
+```
+Analyzing actively managed Canadian equity fund:
+→ Fund: ABC Canadian Equity (MER 2.10%)
+→ Benchmark: XIC.TO (MER 0.06%)
+→ Period: 5 years
+
+Results:
+- Fund gross return: 9.2%
+- Fund net return (after fees): 7.1%
+- Benchmark return: 8.9%
+- Alpha: -1.8% (underperformed)
+
+Analysis:
+- Fund charged $21,000 in fees over 5 years
+- Client would have $18,400 more with benchmark
+- Fund did not justify its higher fees
+
+Recommendation:
+- Switch to lower-cost option
+- Or negotiate for PREMIUM tier (MER 1.20%)
+```
+
+---
+
+#### Best Practices
+
+**DO**:
+- ✅ Always check client eligibility before recommending funds
+- ✅ Use family aggregation when available to access lower MER tiers
+- ✅ Review fund overlap when adding new positions
+- ✅ Compare fund performance to appropriate benchmark
+- ✅ Project long-term fee impact for client
+- ✅ Revisit eligibility after client net worth changes
+- ✅ Consider tax efficiency (ETF vs Mutual Fund) for non-registered accounts
+- ✅ Check holdings concentration (top 10, HHI)
+
+**DON'T**:
+- ❌ Assume client qualifies for advertised "low" MER without checking
+- ❌ Ignore family net worth when funds allow aggregation
+- ❌ Buy multiple funds with >80% overlap
+- ❌ Keep high-MER funds when client qualifies for upgrades
+- ❌ Compare actively managed fund to wrong benchmark
+- ❌ Forget to account for MER when analyzing performance
+- ❌ Overlook concentration risk in thematic or sector-specific funds
+- ❌ Ignore tracking error for index funds (>1% is poor)
+
+---
+
+#### Integration with Trading Strategies
+
+**Fund Analysis + Sector Analysis**:
+```
+Check if your funds are overweight certain sectors:
+1. Get fund holdings by sector
+2. Compare to benchmark sector weights
+3. Adjust individual stock positions accordingly
+→ Avoid double-weighting sectors
+```
+
+**Fund Analysis + Index Benchmarking**:
+```
+Validate fund performance:
+1. Fund tracks S&P 500 → compare to SPY
+2. Calculate alpha after fees
+3. If alpha < 0 for 3+ years → consider index fund
+→ Only pay for active management if it adds value
+```
+
+**Example Combined Workflow**:
+```
+Portfolio review:
+1. Client holds XIC.TO (Canadian equity fund)
+   → Check holdings: 32% Financials
+2. Also holds individual bank stocks: RBC, TD, BNS
+   → Check overlap: All 3 are top 10 holdings in XIC
+   → Combined weight: 15% of fund + individual positions
+3. Compare to S&P/TSX sector weight: Financials = 28%
+4. Conclusion: Overweight Financials
+5. Action: Reduce individual bank holdings or choose fund with less Financial exposure
+```
+
+---
+
 ### Risk Management: Trailing Stops & Profit Taking
 
 **NEW FEATURE**: Lock in profits automatically as your positions gain value.
@@ -1642,6 +2010,87 @@ A: Tracking error measures how much returns deviate from benchmark:
 - High (>10%): Significantly different from index
 Use it to gauge if active management is worth the risk.
 
+### Fund Analysis Questions
+
+**Q: What is a MER tier and why does it matter?**  
+A: MER (Management Expense Ratio) tier determines the annual fee you pay. Segregated funds often have multiple versions (fund codes) of the same underlying investment:
+- RETAIL: 2.0-2.5% MER (no minimum net worth)
+- PREFERRED: 1.5-1.9% MER ($250k minimum)
+- PREMIUM: 1.0-1.4% MER ($500k minimum)
+- INSTITUTIONAL: 0.5-0.9% MER ($1M+ minimum)
+
+Same holdings, different fees. Over 25 years, the difference can exceed $60,000 on a $100k investment.
+
+**Q: How do I know which fund version I qualify for?**  
+A: The system checks:
+- Your personal net worth
+- Your family net worth (if fund allows aggregation)
+- Minimum investment amounts
+- Whether advisor approval is required
+
+Example: $400k personal + $200k spouse = $600k family net worth → May qualify for PREMIUM tier
+
+**Q: Can I use family net worth to qualify for lower MER tiers?**  
+A: Yes, IF the fund allows "family aggregation":
+- Some funds allow combining household net worth
+- Check fund eligibility rules in system
+- Common for segregated funds
+- Can unlock significant fee savings
+
+**Q: What is fund overlap and why should I care?**  
+A: Fund overlap measures how much two funds hold the same securities:
+- <20%: Good diversification
+- 20-50%: Acceptable overlap
+- 50-80%: High redundancy
+- >80%: Very high redundancy—you're essentially paying double fees for same holdings
+
+Example: XIC.TO and XIU.TO have 82% overlap—holding both wastes fees without adding diversification.
+
+**Q: How much in fees will I pay over time?**  
+A: Use the MER comparison tool. Example for $100k investment:
+
+| MER | 10-Year Fees | 25-Year Fees |
+|-----|--------------|--------------|
+| 2.25% (RETAIL) | $29,000 | $98,000 |
+| 0.75% (INSTITUTIONAL) | $9,800 | $33,500 |
+
+Difference: $19,200 (10Y) or $64,500 (25Y)
+
+**Q: What's the difference between an ETF and segregated fund?**  
+A:
+- **ETF**: Trades like stock, typically lower fees (0.05-0.75%), no guarantees
+- **Segregated Fund**: Insurance product, creditor protection, death benefit guarantees, higher fees (1.0-2.5%), multiple MER tiers
+
+Seg funds often CONTAIN ETFs or mutual funds—you're paying for the insurance wrapper on top.
+
+**Q: Should I pay higher MER for active management?**  
+A: Only if the fund consistently delivers positive alpha (outperformance after fees):
+- Check 5-year alpha vs benchmark
+- If alpha negative → Consider lower-cost index fund
+- If alpha positive by >1% → Active management may be justified
+- Most actively managed funds underperform after fees
+
+**Q: What is concentration risk in funds?**  
+A: When too much weight is in a few holdings:
+- **Top 10 holdings >50%**: Significant concentration risk
+- **HHI >1,800**: Highly concentrated
+- Example: Thematic tech fund with 75% in 10 stocks is risky
+- Broad market index funds typically have top 10 <30%
+
+**Q: How often should I check for upgrade opportunities?**  
+A: Check eligibility when:
+- Client receives inheritance or windfall
+- Annual net worth review
+- Marriage/divorce (changes family aggregation)
+- Job promotion with significant salary increase
+- Every 2-3 years at minimum
+
+**Q: Can I switch fund tiers without tax consequences?**  
+A: Depends on account type:
+- **Registered accounts (RRSP, TFSA)**: Usually no tax consequence—just a fund code swap
+- **Non-registered accounts**: May trigger capital gains
+- Consult with advisor and tax professional
+
 ### Performance Questions
 
 **Q: What is a good Sharpe Ratio?**  
@@ -1733,6 +2182,32 @@ A: Correct! Backtesting shows historical edge, not future certainty. Always:
 **Information Ratio**: Measures consistency of alpha generation (Excess Return / Tracking Error). Higher is better.
 
 **Tracking Error**: Standard deviation of excess returns, measuring how closely a stock follows its benchmark. Lower means closer tracking.
+
+**AUM (Assets Under Management)**: Total market value of assets that a fund manages.
+
+**Base Fund ID**: Identifier linking different MER tiers of the same underlying fund (e.g., ABC-RETAIL, ABC-PREMIUM, ABC-INSTITUTIONAL all share same base fund).
+
+**ETF (Exchange-Traded Fund)**: Fund that trades on an exchange like a stock. Typically lower fees than mutual funds.
+
+**Expense Ratio**: Total annual operating expenses of a fund, expressed as percentage of assets. Similar to MER.
+
+**Family Aggregation**: Combining household net worth to qualify for lower MER tiers (e.g., client + spouse net worth).
+
+**Fund Overlap**: Percentage of holdings shared between two funds. High overlap (>80%) indicates redundancy.
+
+**HHI (Herfindahl-Hirschman Index)**: Concentration measure. HHI < 1,000 is diversified, HHI > 1,800 is concentrated.
+
+**MER (Management Expense Ratio)**: Annual fee charged by a fund, expressed as percentage of assets (e.g., 2.25% MER = $2,250/year on $100k).
+
+**MER Tier**: Fee level for fund access. RETAIL (highest fees, no minimum) → PREFERRED → PREMIUM → INSTITUTIONAL (lowest fees, highest minimum).
+
+**Mutual Fund**: Professionally managed fund priced once daily at NAV. May have load fees.
+
+**NAV (Net Asset Value)**: Per-share value of a fund, calculated by dividing total assets by shares outstanding.
+
+**Segregated Fund (Seg Fund)**: Insurance product offering creditor protection and death benefit guarantees. Often has multiple fund codes with different MERs for same underlying holdings.
+
+**Turnover Rate**: Frequency with which fund holdings are bought/sold. High turnover can increase costs and taxes.
 
 **Position Size**: Percentage of portfolio allocated to one trade
 
@@ -1860,6 +2335,36 @@ When reporting issues, include:
 │  QQQ  - NASDAQ 100 (Tech-focused, 100 stocks)      │
 │  DIA  - Dow Jones (Blue-chip, 30 stocks)           │
 │  IWM  - Russell 2000 (Small-cap, 2000 stocks)      │
+│                                                     │
+│  FUND ANALYSIS                                      │
+│  -------------                                      │
+│  ✓ Check client eligibility for MER tiers          │
+│  ✓ Use family aggregation when available           │
+│  ✓ Avoid funds with >80% overlap                   │
+│  ✓ Review fund holdings concentration (HHI)        │
+│  ✓ Check for upgrade opportunities annually        │
+│  ✓ Compare fund performance to benchmark (alpha)   │
+│                                                     │
+│  MER TIER THRESHOLDS                                │
+│  -------------------                                │
+│  RETAIL        - $0 net worth (2.0-2.5% MER)       │
+│  PREFERRED     - $250k net worth (1.5-1.9% MER)    │
+│  PREMIUM       - $500k net worth (1.0-1.4% MER)    │
+│  INSTITUTIONAL - $1M+ net worth (0.5-0.9% MER)     │
+│                                                     │
+│  FUND OVERLAP INTERPRETATION                        │
+│  ---------------------------                        │
+│  <20%     - Minimal (good diversification)         │
+│  20-50%   - Moderate (acceptable)                  │
+│  50-80%   - High (consider alternatives)           │
+│  >80%     - Very high (redundant, avoid)           │
+│                                                     │
+│  FUND CONCENTRATION RISK                            │
+│  -----------------------                            │
+│  HHI < 1,000     - Highly diversified              │
+│  HHI 1,000-1,800 - Moderately concentrated         │
+│  HHI > 1,800     - Highly concentrated (risky)     │
+│  Top 10 > 50%    - Significant concentration       │
 │                                                     │
 │  RISK MANAGEMENT                                    │
 │  ---------------                                    │
