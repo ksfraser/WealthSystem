@@ -657,6 +657,294 @@ Expected Performance:
 
 ## Advanced Features
 
+### Sector & Industry Analysis
+
+**NEW FEATURE**: Compare stock performance against sector benchmarks and peer companies.
+
+#### What is Sector Analysis?
+
+Sector analysis helps you understand how a stock performs relative to its industry peers and sector average. This context is critical for determining if a stock's gains are due to company-specific factors or broader sector trends.
+
+**Why it matters**:
+- A stock up 20% in a sector up 25% is actually **underperforming**
+- A stock down 5% in a sector down 15% is **outperforming**
+- Sector rotation can signal market regime changes
+
+#### GICS Sector Classification
+
+Stocks are categorized using the **Global Industry Classification Standard (GICS)**:
+
+| Sector Code | Sector Name | Examples |
+|------------|-------------|----------|
+| 10 | Energy | XOM, CVX, SLB |
+| 15 | Materials | DOW, LYB, NEM |
+| 20 | Industrials | BA, CAT, UNP |
+| 25 | Consumer Discretionary | AMZN, TSLA, HD |
+| 30 | Consumer Staples | PG, KO, WMT |
+| 35 | Health Care | JNJ, UNH, PFE |
+| 40 | Financials | JPM, BAC, GS |
+| 45 | Information Technology | AAPL, MSFT, NVDA |
+| 50 | Communication Services | GOOGL, META, NFLX |
+| 55 | Utilities | NEE, DUK, SO |
+| 60 | Real Estate | AMT, PLD, SPG |
+
+#### Classifying Stocks by Sector
+
+**In the System**:
+```
+Dashboard > Analysis > Sector Classification
+
+Enter Symbol: NVDA
+```
+
+**Example Output**:
+```
+Symbol: NVDA
+Sector: Information Technology (Code: 45)
+Industry: Semiconductors
+Market Cap: $2.1T
+Classification: GICS
+```
+
+#### Comparing Stock vs Sector Performance
+
+**What it does**: Shows if your stock is outperforming or underperforming its sector.
+
+**How to use**:
+```
+Dashboard > Analysis > Sector Comparison
+
+Symbol: NVDA
+Period: Q1 2024 (Jan 1 - Mar 31)
+```
+
+**Example Results**:
+```
+Stock Performance (NVDA):
+- Total Return: +82.5%
+- Volatility: 35.2%
+- Max Drawdown: -12.3%
+
+Sector Performance (Information Technology):
+- Sector Return: +18.4%
+- Constituents: 75 stocks
+- Market Cap Weight: 28.5%
+
+Relative Performance:
+- Outperformance: +64.1%
+- Percentile Rank: 98th
+- Status: Significantly outperforming sector
+
+Interpretation:
+✅ NVDA is in the top 2% of tech stocks
+✅ Company-specific drivers (AI boom)
+✅ Not just riding sector trend
+```
+
+**Another Example (Underperformance)**:
+```
+Stock: XOM (Energy)
+- Stock Return: +3.2%
+- Sector Return: +12.8%
+- Relative Performance: -9.6%
+- Status: Underperforming sector
+
+Interpretation:
+⚠️ Energy sector is strong, but XOM lagging
+⚠️ Consider investigating company-specific issues
+⚠️ May indicate operational problems
+```
+
+#### Sector Peer Ranking
+
+**What it does**: Ranks all stocks in a sector by performance.
+
+**How to use**:
+```
+Dashboard > Analysis > Sector Rankings
+
+Sector: Information Technology
+Period: 90 days
+```
+
+**Example Output**:
+```
+Rank | Symbol | Return | Volatility | Sharpe
+-----|--------|--------|------------|-------
+  1  | NVDA   | +82.5% |   35.2%   |  2.34
+  2  | AMD    | +54.3% |   42.1%   |  1.29
+  3  | AVGO   | +38.7% |   28.5%   |  1.36
+  4  | MSFT   | +22.1% |   18.9%   |  1.17
+  5  | AAPL   | +15.3% |   16.2%   |  0.94
+ ...
+ 73  | HPQ    | -3.2%  |   22.5%   | -0.14
+ 74  | CSCO   | -5.8%  |   19.8%   | -0.29
+ 75  | IBM    | -8.4%  |   24.1%   | -0.35
+
+Your Holdings:
+- NVDA: Rank #1 (Top 1.3%)
+- MSFT: Rank #4 (Top 5.3%)
+```
+
+#### Sector Rotation Detection
+
+**What it is**: Identifying which sectors are gaining or losing momentum.
+
+**Why it matters**:
+- Early sign of market regime changes
+- Helps rebalance portfolio allocation
+- Indicates economic cycle shifts
+
+**How to use**:
+```
+Dashboard > Analysis > Sector Rotation
+
+Lookback Period: 30 days
+```
+
+**Example Output**:
+```
+Sector Leaders (Past 30 Days):
+1. Information Technology: +12.5% (strong uptrend)
+2. Communication Services: +8.3% (uptrend)
+3. Consumer Discretionary: +5.1% (uptrend)
+
+Sector Laggards (Past 30 Days):
+1. Energy: -7.8% (strong downtrend)
+2. Utilities: -5.2% (downtrend)
+3. Consumer Staples: -3.5% (downtrend)
+
+Rotation Status: ✅ ROTATION DETECTED
+- Spread: 20.3% (Tech to Energy)
+- Interpretation: Strong rotation into growth sectors
+
+Investment Implications:
+✅ Growth > Value rotation
+✅ Favor tech, communication, discretionary
+⚠️ Reduce defensive positions (utilities, staples)
+⚠️ Energy weakness may indicate economic slowdown concerns
+```
+
+#### Relative Strength Analysis
+
+**What it is**: Measures how stock performs relative to its sector over time.
+
+**Relative Strength Ratio = Stock Return / Sector Return**
+
+**How to interpret**:
+- **RS Ratio > 1.5**: Significantly outperforming
+- **RS Ratio 1.1-1.5**: Outperforming  
+- **RS Ratio 0.9-1.1**: In line with sector
+- **RS Ratio 0.5-0.9**: Underperforming
+- **RS Ratio < 0.5**: Significantly underperforming
+
+**Example**:
+```
+Symbol: JPM (Financials)
+Period: 90 days
+
+Stock Return: +24.0%
+Sector Return: +12.0%
+RS Ratio: 2.0 (24% / 12%)
+
+Interpretation: Significantly outperforming sector
+- Company-specific catalysts strong
+- Consider maintaining/increasing position
+```
+
+#### Practical Usage Examples
+
+**Scenario 1: Evaluating a Buy Signal**
+```
+Strategy says: BUY NVDA (80% confidence)
+
+Check Sector Analysis:
+- NVDA Return: +82% (90 days)
+- Tech Sector: +18%
+- RS Ratio: 4.56 (exceptional outperformance)
+- Sector Trend: Strong uptrend
+- Sector Rank: #1 out of 75
+
+Decision: 
+✅ Strong BUY - Both stock AND sector showing strength
+✅ Momentum likely to continue
+✅ Sector tailwinds supporting individual performance
+```
+
+**Scenario 2: Warning Sign**
+```
+Strategy says: BUY XYZ (75% confidence)
+
+Check Sector Analysis:
+- XYZ Return: +5%
+- Sector Return: +22%
+- RS Ratio: 0.23 (significantly underperforming)
+- Sector Rank: #68 out of 70
+
+Decision:
+⚠️ CAUTION - Stock lagging its strong sector
+⚠️ Investigate why stock is weak when peers are strong
+⚠️ May indicate company-specific problems
+→ Reduce confidence or skip trade
+```
+
+**Scenario 3: Sector Rotation Trade**
+```
+Sector Rotation shows:
+- Energy dropping from leader to laggard
+- Tech rising from laggard to leader
+
+Action:
+1. Reduce energy positions
+2. Increase tech exposure
+3. Update portfolio allocations:
+   - Tech: 25% → 35%
+   - Energy: 15% → 5%
+```
+
+#### Best Practices
+
+**✅ DO**:
+- Always check sector context before trading
+- Use sector rotation to time entries/exits
+- Compare multiple stocks in same sector
+- Track relative strength trends over time
+- Rebalance when rotation is detected
+
+**❌ DON'T**:
+- Ignore sector trends when evaluating stocks
+- Buy a "strong" stock in a collapsing sector
+- Overlook outperformers in weak sectors (they're rare gems)
+- Trade without understanding sector dynamics
+- Assume sector trends continue forever
+
+#### Integration with Trading Strategies
+
+Each strategy now includes sector analysis:
+
+**Momentum Quality Strategy + Sector Analysis**:
+```
+Before: Buy stock with strong momentum
+After: Buy stock with strong momentum in strong sector
+→ Higher win rate, better risk-adjusted returns
+```
+
+**Mean Reversion Strategy + Sector Analysis**:
+```
+Before: Buy oversold stock
+After: Buy oversold stock in neutral/strong sector
+→ Avoid catching falling knives in collapsing sectors
+```
+
+**Contrarian Strategy + Sector Analysis**:
+```
+Before: Buy panic-sold stock
+After: Buy panic-sold stock if sector fundamentals intact
+→ Distinguish temporary panic from permanent decline
+```
+
+---
+
 ### Risk Management: Trailing Stops & Profit Taking
 
 **NEW FEATURE**: Lock in profits automatically as your positions gain value.
@@ -1012,6 +1300,40 @@ A:
 - Moderate: Monthly
 - Long-term: Quarterly
 
+### Sector Analysis Questions
+
+**Q: What is sector analysis and why does it matter?**  
+A: Sector analysis compares your stock's performance to its industry peers. It matters because:
+- Stock up 20% in sector up 30% = Actually underperforming
+- Stock down 5% in sector down 20% = Actually outperforming
+- Reveals if gains are company-specific or sector-wide
+
+**Q: What is a good Relative Strength (RS) Ratio?**  
+A:
+- > 1.5: Significantly outperforming sector (excellent)
+- 1.1-1.5: Outperforming sector (good)
+- 0.9-1.1: In line with sector (acceptable)
+- 0.5-0.9: Underperforming sector (concerning)
+- < 0.5: Significantly underperforming (investigate)
+
+**Q: Should I buy a stock that's up 50% this year?**  
+A: Check sector context first:
+- If sector is up 60%, stock is actually lagging
+- If sector is up 10%, stock is a strong outperformer
+- Always compare to sector before judging absolute returns
+
+**Q: What is sector rotation?**  
+A: When money moves from one sector to another:
+- Example: Money rotating from defensive (utilities, staples) to growth (tech, discretionary)
+- Signals potential market regime changes
+- Use it to rebalance portfolio allocations
+
+**Q: How do I use sector analysis with strategies?**  
+A: Combine them:
+- Strategy says BUY + Stock outperforming sector = Strong BUY
+- Strategy says BUY + Stock underperforming sector = Caution
+- Strategy says SELL + Sector rotating down = Strong SELL
+
 ### Performance Questions
 
 **Q: What is a good Sharpe Ratio?**  
@@ -1068,13 +1390,29 @@ A: Correct! Backtesting shows historical edge, not future certainty. Always:
 
 **Equity Curve**: Graph showing account value over time
 
+**GICS**: Global Industry Classification Standard (11 sector classification system)
+
 **Mean Reversion**: Strategy assuming prices return to average
 
 **Momentum**: Rate of price change (accelerating/decelerating)
 
 **Monte Carlo**: Simulation with randomized variables
 
+**Outperformance**: Stock return exceeding sector/benchmark return
+
 **Oversold**: Price has fallen too much, too fast (RSI < 30)
+
+**Relative Performance**: Stock return minus sector return (can be positive or negative)
+
+**Relative Strength (RS) Ratio**: Stock return divided by sector return
+
+**Sector**: Industry group classification (e.g., Technology, Energy, Healthcare)
+
+**Sector Leaders**: Sectors with strongest recent performance (top 3)
+
+**Sector Laggards**: Sectors with weakest recent performance (bottom 3)
+
+**Sector Rotation**: Money flowing from one sector to another (indicates market regime change)
 
 **Position Size**: Percentage of portfolio allocated to one trade
 
@@ -1172,6 +1510,21 @@ When reporting issues, include:
 │  Moderate: 10-15% per position                     │
 │  Aggressive: 15-20% per position                   │
 │                                                     │
+│  SECTOR ANALYSIS                                    │
+│  ---------------                                    │
+│  ✓ Check sector context before trading             │
+│  ✓ Compare stock vs sector performance             │
+│  ✓ Use sector rotation to time trades              │
+│  ✓ RS Ratio > 1.5 = Strong outperformance          │
+│  ✓ Watch for sector leaders/laggards               │
+│                                                     │
+│  GICS SECTORS                                       │
+│  ------------                                       │
+│  10-Energy, 15-Materials, 20-Industrials           │
+│  25-ConsumerDisc, 30-ConsumerStaples               │
+│  35-HealthCare, 40-Financials, 45-InfoTech         │
+│  50-Communications, 55-Utilities, 60-RealEstate    │
+│                                                     │
 │  RISK MANAGEMENT                                    │
 │  ---------------                                    │
 │  ✓ Always use stop losses                          │
@@ -1184,7 +1537,7 @@ When reporting issues, include:
 
 ---
 
-**Document Version**: 1.0  
+**Document Version**: 1.1  
 **Last Updated**: December 2, 2025  
 **Next Review**: March 2, 2026
 
