@@ -1,26 +1,31 @@
-# ChatGPT Micro-Cap Experiment 🤖📈
-**A Comprehensive Financial Analysis & Portfolio Management Platform**
+# WealthSystem 💼📊
+**Professional Financial Analysis & Portfolio Management Platform**
 
-[![License: MIT**Key Architectu### **Backend Technologies**
-- **🐍 Python 3.8+** - Trading engine and technical analysis
-- **🐘 PHP 8.4+** - Web application and stock data service
-- **🗄️ MySQL/SQLite** - Primary database with SQLite option for development
-- **📊 TA-Lib** - Professional-grade technical analysis library
-- **🔧 Composer** - PHP dependency management and autoloading
-- **🌐 Guzzle HTTP** - HTTP client for Yahoo Finance API integrationatures:**
-- **🔄 Dual-Storage Strategy:** Database + CSV for maximum reliability
-- **🏭 DAO Pattern:** Standardized data access with inheritance
-- **📊 PHP-Native Stock Data:** Direct Yahoo Finance API integration via YahooFinancePhp
-- **⚡ Background Processing:** Asynchronous job system for technical analysis
-- **📊 Professional Analytics:** TA-Lib integration with 150+ indicators
-- **💾 Organized Data Storage:** Structured data/ directory with CSV and debug files
-- **🔐 Centralized Authentication:** Session-based security with CSRF protections://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PHP 8.4+](https://img.shields.io/badge/php-8.4+-777BB4.svg)](https://www.php.net/)
-[![Architecture](https://img.shields.io/badge/Architecture-PHP--Native-green.svg)](#architecture-overview)
+[![Architecture](https://img.shields.io/badge/Architecture-Professional-green.svg)](#architecture-overview)
 [![Documentation](https://img.shields.io/badge/Documentation-Complete-brightgreen.svg)](#documentation)
-[![Stock Data](https://img.shields.io/badge/Stock%20Data-Yahoo%20Finance-blue.svg)](#yahoo-finance-integration)
 
-Welcome to the repository behind my 6-month live trading experiment where ChatGPT manages a real-money micro-cap portfolio. This project has evolved from a simple experiment into a comprehensive financial analysis platform with professional-grade capabilities.
+> **Note on Repository History:** This project was originally forked from [LuckyOne7777/ChatGPT-Micro-Cap-Experiment](https://github.com/LuckyOne7777/ChatGPT-Micro-Cap-Experiment), an AI-driven micro-cap trading experiment. We have since evolved it into a comprehensive wealth management platform with professional trading strategies, fund analysis, and client portfolio management capabilities. The repository has been "de-forked" to establish it as an independent project while preserving the complete development history. The original Python experiment files are preserved in the `Original-Python-Experiment/` directory for reference.
+
+## 🎯 **What is WealthSystem?**
+
+WealthSystem is a professional-grade financial analysis platform designed for wealth managers, financial advisors, and sophisticated investors. It provides:
+
+- **📊 Multi-Strategy Trading System** - 6 professional trading strategies with backtesting
+- **🏦 Fund Analysis** - ETF, mutual fund, and segregated fund composition analysis
+- **💰 MER Tier Management** - Support for multiple fund codes with different expense ratios
+- **👥 Client Eligibility** - Net worth-based fund access with family aggregation
+- **📈 Sector & Index Benchmarking** - GICS sector classification and alpha/beta analysis
+- **🎯 Portfolio Optimization** - Multi-strategy allocation with risk management
+- **📉 Performance Attribution** - Detailed analysis of returns vs benchmarks
+
+### **Key Technologies**
+- **🐘 PHP 8.4+** - Modern object-oriented architecture
+- **🗄️ SQLite/MySQL** - Flexible database options
+- **📊 Professional Analytics** - Comprehensive market analysis
+- **🔧 Composer** - Dependency management and autoloading
+- **✅ PHPUnit Testing** - 100% test coverage on core features
 
 ## 🚀 **Quick Start Guide**
 - **🏁 Getting Started:** [Start Your Own Experiment](https://github.com/LuckyOne7777/ChatGPT-Micro-Cap-Experiment/blob/main/Start%20Your%20Own/README.md)
