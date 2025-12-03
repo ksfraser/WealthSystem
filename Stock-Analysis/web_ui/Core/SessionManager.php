@@ -2,117 +2,83 @@
 
 namespace App\Core;
 
+// Load the canonical SessionManager from global namespace
+require_once __DIR__ . '/../SessionManager.php';
+
 /**
- * Modern Session Manager using namespaces and dependency injection
+ * Namespaced wrapper for the global SessionManager
+ * This provides compatibility for code expecting App\Core\SessionManager
+ * while using the single canonical SessionManager implementation
  */
 class SessionManager
 {
-    /** @var SessionManager|null */
-    private static $instance = null;
+    /** @var \SessionManager|null */
+    private static $globalInstance = null;
+
+    /**
+     * Get the global SessionManager instance
+     */
+    public static function getInstance(): \SessionManager
+    {
+        if (self::$globalInstance === null) {
+            self::$globalInstance = \SessionManager::getInstance();
+        }
+        return self::$globalInstance;
+    }
     
-    /** @var string|null */
-    private $initializationError = null;
-    
-    /** @var bool */
-    private $sessionActive = false;
-
-    private function __construct()
-    {
-        $this->initializeSession();
-    }
-
-    public static function getInstance(): self
-    {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-        return self::$instance;
-    }
-
-    private function initializeSession(): void
-    {
-        // Skip if CLI or session already active
-        if (php_sapi_name() === 'cli') {
-            $this->sessionActive = false;
-            return;
-        }
-
-        if (session_status() === PHP_SESSION_ACTIVE) {
-            $this->sessionActive = true;
-            return;
-        }
-
-        // Check if headers already sent
-        if (headers_sent($file, $line)) {
-            $this->initializationError = "Headers already sent at $file:$line";
-            return;
-        }
-
-        try {
-            // Ensure session save path exists
-            $this->ensureSessionPath();
-            
-            // Start session
-            if (session_start()) {
-                $this->sessionActive = true;
-            } else {
-                $this->initializationError = 'Failed to start session';
-            }
-        } catch (\Exception $e) {
-            $this->initializationError = 'Session start exception: ' . $e->getMessage();
-        }
-    }
-
-    private function ensureSessionPath(): void
-    {
-        $savePath = session_save_path();
-        
-        if (empty($savePath)) {
-            $savePath = sys_get_temp_dir();
-            session_save_path($savePath);
-        }
-
-        if (!is_dir($savePath)) {
-            $this->createSessionPath($savePath);
-        }
-    }
-
-    private function createSessionPath(string $path): void
-    {
-        if (!mkdir($path, 0755, true) && !is_dir($path)) {
-            throw new \RuntimeException("Cannot create session directory: $path");
-        }
-    }
-
+    /**
+     * Check if session is active
+     */
     public function isSessionActive(): bool
     {
-        return $this->sessionActive;
+        return self::getInstance()->isSessionActive();
     }
-
+    
+    /**
+     * Get initialization error if any
+     */
     public function getInitializationError(): ?string
     {
-        return $this->initializationError;
+        return self::getInstance()->getInitializationError();
     }
-
+    
+    /**
+     * Set session value
+     */
+    public function set(string $key, $value): bool
+    {
+        return self::getInstance()->set($key, $value);
+    }
+    
+    /**
+     * Get session value
+     */
     public function get(string $key, $default = null)
     {
-        return $_SESSION[$key] ?? $default;
+        return self::getInstance()->get($key, $default);
     }
-
-    public function set(string $key, $value): void
+    
+    /**
+     * Check if session key exists
+     */
+    public function has(string $key): bool
     {
-        if ($this->sessionActive) {
-            $_SESSION[$key] = $value;
-        }
+        return self::getInstance()->has($key);
     }
-
-    public function destroy(): bool
+    
+    /**
+     * Remove session key
+     */
+    public function remove(string $key): bool
     {
-        if ($this->sessionActive) {
-            session_destroy();
-            $this->sessionActive = false;
-            return true;
-        }
-        return false;
+        return self::getInstance()->remove($key);
+    }
+    
+    /**
+     * Destroy session
+     */
+    public function destroy(): void
+    {
+        self::getInstance()->destroy();
     }
 }

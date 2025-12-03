@@ -66,6 +66,55 @@ class WarrenBuffettStrategyService implements TradingStrategyInterface
     ) {
         $this->marketDataService = $marketDataService;
         $this->marketDataRepository = $marketDataRepository;
+        $this->loadParametersFromDatabase();
+    }
+
+    /**
+     * Load parameters from database if available
+     */
+    private function loadParametersFromDatabase(): void
+    {
+        try {
+            $databasePath = __DIR__ . '/../../../storage/database/stock_analysis.db';
+            if (file_exists($databasePath)) {
+                $pdo = new \PDO("sqlite:$databasePath");
+                $stmt = $pdo->prepare("
+                    SELECT parameter_key, parameter_value, parameter_type
+                    FROM strategy_parameters
+                    WHERE strategy_name = :strategy_name AND is_active = 1
+                ");
+                $stmt->execute(['strategy_name' => $this->getName()]);
+                
+                while ($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
+                    $value = $this->castParameterValue($row['parameter_value'], $row['parameter_type']);
+                    $this->parameters[$row['parameter_key']] = $value;
+                }
+            }
+        } catch (\Exception $e) {
+            // If database doesn't exist or query fails, use hardcoded defaults
+            error_log("Could not load parameters from database: " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Cast parameter value to appropriate type
+     */
+    private function castParameterValue($value, string $type)
+    {
+        switch ($type) {
+            case 'int':
+            case 'integer':
+                return (int) $value;
+            case 'float':
+            case 'double':
+            case 'decimal':
+                return (float) $value;
+            case 'bool':
+            case 'boolean':
+                return (bool) $value;
+            default:
+                return $value;
+        }
     }
 
     public function getName(): string

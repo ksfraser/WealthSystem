@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UI Feedback Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        
+        .status-message {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+            display: block;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        
+        button:hover:not(:disabled) {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        button:disabled {
+            cursor: not-allowed;
+        }
+        
+        .demo-section {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-section">
+        <h2>Save Button Feedback Demo</h2>
+        <p>Click the button to see the visual feedback:</p>
+        <button id="demoBtn" onclick="demoSave()">💾 Save Changes</button>
+        <div id="statusMessage" class="status-message"></div>
+    </div>
+    
+    <div class="demo-section">
+        <h2>What You'll See:</h2>
+        <ol>
+            <li>Button changes to "💾 Saving..." and becomes disabled</li>
+            <li>Button opacity reduces to 0.6 (dimmed)</li>
+            <li>After "save", button turns green with "✅ Saved!"</li>
+            <li>Status message appears at top with animation</li>
+            <li>Page scrolls to top to show the message</li>
+            <li>After 2 seconds, button returns to normal</li>
+            <li>After 5 seconds, message disappears</li>
+        </ol>
+    </div>
+
+    <script>
+        function showMessage(message, type) {
+            const statusDiv = document.getElementById('statusMessage');
+            statusDiv.textContent = message;
+            statusDiv.className = `status-message ${type}`;
+            statusDiv.style.display = 'block';
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+                statusDiv.className = 'status-message';
+            }, 5000);
+        }
+        
+        async function demoSave() {
+            const saveBtn = document.getElementById('demoBtn');
+            const originalText = saveBtn.textContent;
+            
+            // Show saving state
+            saveBtn.disabled = true;
+            saveBtn.textContent = '💾 Saving...';
+            saveBtn.style.opacity = '0.6';
+            
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Show success
+            saveBtn.textContent = '✅ Saved!';
+            saveBtn.style.background = '#28a745';
+            
+            showMessage('✅ Configuration saved successfully!', 'success');
+            
+            // Reset button after 2 seconds
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.style.background = '#007bff';
+                saveBtn.style.opacity = '1';
+                saveBtn.disabled = false;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

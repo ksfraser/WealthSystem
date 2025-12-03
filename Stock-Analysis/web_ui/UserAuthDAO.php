@@ -191,7 +191,7 @@ class UserAuthDAO extends CommonDAO {
     private $sessionManager;
     
     public function __construct() {
-        parent::__construct('LegacyDatabaseConfig');
+        parent::__construct('AuthDatabaseConfig');
         
         // Use centralized SessionManager instead of direct session_start()
         $this->sessionManager = SessionManager::getInstance();

@@ -31,7 +31,10 @@ abstract class BaseDatabaseConfig {
                 __DIR__ . '/db_config.ini',
                 __DIR__ . '/../db_config.yml',
                 __DIR__ . '/../db_config.yaml',
-                __DIR__ . '/../db_config.ini'
+                __DIR__ . '/../db_config.ini',
+                __DIR__ . '/../../db_config.yml',
+                __DIR__ . '/../../db_config.yaml',
+                __DIR__ . '/../../db_config.ini'
             ];
             foreach ($possibleFiles as $file) {
                 if (file_exists($file)) {
@@ -62,24 +65,50 @@ abstract class BaseDatabaseConfig {
         if (function_exists('yaml_parse_file')) {
             return yaml_parse_file($file);
         } else {
-            // Simple YAML parser for basic configs
+            // Simple YAML parser for basic configs with proper nesting
             $content = file_get_contents($file);
             $lines = explode("\n", $content);
             $config = [];
-            $currentSection = &$config;
+            $stack = [&$config];
+            $prevIndent = 0;
+            
             foreach ($lines as $line) {
+                // Skip empty lines and comments
+                if (empty(trim($line)) || trim($line)[0] === '#') continue;
+                
+                // Calculate indentation level
+                $indent = strlen($line) - strlen(ltrim($line));
                 $line = trim($line);
-                if (empty($line) || $line[0] === '#') continue;
+                
                 if (strpos($line, ':') !== false) {
                     list($key, $value) = explode(':', $line, 2);
                     $key = trim($key);
                     $value = trim($value);
-                    if (empty($value)) {
-                        $currentSection[$key] = [];
-                        $currentSection = &$currentSection[$key];
-                    } else {
-                        $currentSection[$key] = $value;
+                    
+                    // Adjust stack based on indentation
+                    if ($indent > $prevIndent) {
+                        // Moving deeper - do nothing, already positioned
+                    } elseif ($indent < $prevIndent) {
+                        // Moving back - pop stack
+                        $levels = ($prevIndent - $indent) / 2;
+                        for ($i = 0; $i < $levels; $i++) {
+                            array_pop($stack);
+                        }
                     }
+                    
+                    // Get current context
+                    $current = &$stack[count($stack) - 1];
+                    
+                    if (empty($value)) {
+                        // Section header (no value)
+                        $current[$key] = [];
+                        $stack[] = &$current[$key];
+                    } else {
+                        // Key-value pair
+                        $current[$key] = $value;
+                    }
+                    
+                    $prevIndent = $indent;
                 }
             }
             return $config;
@@ -110,6 +139,39 @@ class MicroCapDatabaseConfig extends BaseDatabaseConfig {
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
         ];
+        return new PDO($dsn, $c['username'], $c['password'], $options);
+    }
+}
+
+/**
+ * AuthDatabaseConfig: Handles authentication DB (users, sessions, permissions)
+ */
+class AuthDatabaseConfig extends BaseDatabaseConfig {
+    public static function getConfig() {
+        $config = static::load();
+        return [
+            'host' => $config['database']['host'] ?? 'localhost',
+            'port' => $config['database']['port'] ?? 3306,
+            'dbname' => $config['database']['auth']['database'] ?? 'stock_market_2',
+            'username' => $config['database']['username'] ?? '',
+            'password' => $config['database']['password'] ?? '',
+            'charset' => $config['database']['charset'] ?? 'utf8mb4'
+        ];
+    }
+    public static function createConnection() {
+        $c = static::getConfig();
+        $dsn = sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s', $c['host'], $c['port'], $c['dbname'], $c['charset']);
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_TIMEOUT => 5, // 5 second connection timeout
+        ];
+        
+        // Set connection timeout at system level to prevent hanging
+        ini_set('default_socket_timeout', 5);
+        ini_set('mysql.connect_timeout', 5);
+        
         return new PDO($dsn, $c['username'], $c['password'], $options);
     }
 }

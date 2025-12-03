@@ -26,6 +26,10 @@ use App\Services\PythonIntegrationService;
 use App\DataAccess\Adapters\DynamicStockDataAccessAdapter;
 use App\DataAccess\Interfaces\StockDataAccessInterface;
 
+// Increase execution timeout for long-running operations
+set_time_limit(300); // 5 minutes
+ini_set('max_execution_time', '300');
+
 // Create container instance
 $container = new DIContainer();
 
@@ -44,6 +48,11 @@ $container->singleton(MarketDataRepositoryInterface::class, function() {
 $container->singleton(StrategyRepositoryInterface::class, function() {
     $storagePath = __DIR__ . '/storage/strategies';
     return new StrategyRepository($storagePath);
+});
+
+$container->singleton(App\Repositories\StrategyParametersRepositoryInterface::class, function() {
+    $databasePath = __DIR__ . '/storage/database/stock_analysis.db';
+    return new App\Repositories\StrategyParametersRepository($databasePath);
 });
 
 // ===== DATA ACCESS BINDINGS =====
@@ -99,6 +108,12 @@ $container->singleton(BacktestEngine::class, function($container) {
         $container->get(StrategyRepositoryInterface::class),
         100000.0,  // Initial capital
         0.001      // Transaction cost (0.1%)
+    );
+});
+
+$container->singleton(App\Services\StrategyConfigurationService::class, function($container) {
+    return new App\Services\StrategyConfigurationService(
+        $container->get(App\Repositories\StrategyParametersRepositoryInterface::class)
     );
 });
 

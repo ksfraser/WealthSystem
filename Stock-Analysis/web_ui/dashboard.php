@@ -10,7 +10,10 @@ $container = require_once __DIR__ . '/bootstrap.php';
 
 // Resolve services from container
 $auth = $container->get(UserAuthDAO::class);
-$navigationService = $container->get(App\Services\NavigationService::class);
+
+// Use web_ui NavigationService directly (has renderNavigationHeader method)
+require_once __DIR__ . '/NavigationService.php';
+$navigationService = new NavigationService($container->get(App\Services\Interfaces\AuthenticationServiceInterface::class));
 
 // Require login
 $auth->requireLogin();
@@ -198,6 +201,17 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
                 <div class="card-links">
                     <a href="../Scripts and CSV Files/Generate_Graph.py">📈 Performance Charts</a>
                     <a href="reports.php">📋 Custom Reports</a>
+                </div>
+            </div>
+            
+            <!-- Trading Strategies -->
+            <div class="dashboard-card">
+                <h3>⚙️ Trading Strategies</h3>
+                <p>Configure and manage your automated trading strategy parameters.</p>
+                <div class="card-links">
+                    <a href="strategy-config.php">🎯 Strategy Configuration</a>
+                    <a href="stock_analysis.php">📈 Stock Analysis</a>
+                    <a href="job_manager.php">⏱️ Job Manager</a>
                 </div>
             </div>
             

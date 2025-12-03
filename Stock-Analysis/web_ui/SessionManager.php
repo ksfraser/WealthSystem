@@ -191,6 +191,16 @@ class SessionManager {
             
             if (session_status() === PHP_SESSION_NONE) {
                 if (!headers_sent($file, $line)) {
+                    // Set session cookie parameters for better compatibility
+                    session_set_cookie_params([
+                        'lifetime' => 0,           // Session cookie (expires when browser closes)
+                        'path' => '/',
+                        'domain' => '',
+                        'secure' => false,         // Allow HTTP (not just HTTPS)
+                        'httponly' => true,        // Protect against XSS
+                        'samesite' => 'Lax'        // Lax for better compatibility
+                    ]);
+                    
                     session_start();
                     self::$sessionStarted = true;
                 } else {

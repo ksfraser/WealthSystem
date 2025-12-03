@@ -7,6 +7,14 @@ require_once __DIR__ . '/UserAuthDAO.php';
 
 $auth = new UserAuthDAO();
 
+// Check for database connection errors
+if (!$auth->getPdo()) {
+    $errors = $auth->getErrors();
+    if (!empty($errors)) {
+        error_log("Login page - DB connection failed: " . implode(", ", $errors));
+    }
+}
+
 // Redirect if already logged in
 if ($auth->isLoggedIn()) {
     header('Location: dashboard.php');
@@ -39,57 +47,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $auth->loginUser($username, $password);
         
         // Queue priority jobs for user's portfolio (MQTT-based system)
+        // This is optional functionality - errors won't prevent login
         try {
-            require_once __DIR__ . '/../UserPortfolioJobManager.php';
-            require_once __DIR__ . '/includes/config.php';
-            
-            // Load job processor configuration
-            $configFile = __DIR__ . '/../stock_job_processor.yml';
-            if (file_exists($configFile) && function_exists('yaml_parse_file')) {
-                $config = yaml_parse_file($configFile);
-            } else {
-                // Fallback configuration if YAML extension not available
-                $config = [
-                    'job_processor' => [
-                        'stock_jobs' => [
-                            'portfolio_priority' => ['data_staleness_threshold' => 30],
-                            'analysis' => ['cache_ttl' => 360]
-                        ],
-                        'jobs' => [
-                            'priority_rules' => [
-                                'user_login' => 1,
-                                'user_request' => 3,
-                                'scheduled_update' => 5,
-                                'background_analysis' => 8
-                            ]
-                        ],
-                        'portfolio' => [
-                            'priority_factors' => [
-                                'user_activity' => 0.4,
-                                'data_age' => 0.2
-                            ]
-                        ]
-                    ]
-                ];
-            }
-            
-            // Simple logger for job manager
-                $logger = new class {
-                    public function info($message) { error_log("INFO: " . $message); }
-                    public function warning($message) { error_log("WARNING: " . $message); }
-                    public function error($message) { error_log("ERROR: " . $message); }
-                    public function debug($message) { error_log("DEBUG: " . $message); }
-                };
+            // Check if required files exist before loading
+            if (class_exists('UserPortfolioJobManager') || 
+                file_exists(__DIR__ . '/../UserPortfolioJobManager.php')) {
                 
-                $portfolioJobManager = new UserPortfolioJobManager($config['job_processor'], $logger, $db);
-                $result = $portfolioJobManager->processUserLogin($user['id']);
-                
-                if (!$result['success']) {
-                    error_log("Portfolio job queue error during login: " . $result['error']);
+                if (!class_exists('UserPortfolioJobManager')) {
+                    require_once __DIR__ . '/../UserPortfolioJobManager.php';
                 }
-            
+                
+                // Get database connection if available
+                $db = null;
+                if (method_exists($auth, 'getDatabase')) {
+                    $db = $auth->getDatabase();
+                } elseif (method_exists($auth, 'getPdo')) {
+                    $db = $auth->getPdo();
+                }
+                
+                // Only proceed if we have a database connection
+                if ($db !== null) {
+                    // Load job processor configuration
+                    $configFile = __DIR__ . '/../stock_job_processor.yml';
+                    if (file_exists($configFile) && function_exists('yaml_parse_file')) {
+                        $config = yaml_parse_file($configFile);
+                    } else {
+                        // Fallback configuration if YAML extension not available
+                        $config = [
+                            'job_processor' => [
+                                'stock_jobs' => [
+                                    'portfolio_priority' => ['data_staleness_threshold' => 30],
+                                    'analysis' => ['cache_ttl' => 360]
+                                ],
+                                'jobs' => [
+                                    'priority_rules' => [
+                                        'user_login' => 1,
+                                        'user_request' => 3,
+                                        'scheduled_update' => 5,
+                                        'background_analysis' => 8
+                                    ]
+                                ],
+                                'portfolio' => [
+                                    'priority_factors' => [
+                                        'user_activity' => 0.4,
+                                        'data_age' => 0.2
+                                    ]
+                                ]
+                            ]
+                        ];
+                    }
+                    
+                    // Simple logger for job manager
+                    $logger = new class {
+                        public function info($message) { error_log("INFO: " . $message); }
+                        public function warning($message) { error_log("WARNING: " . $message); }
+                        public function error($message) { error_log("ERROR: " . $message); }
+                        public function debug($message) { error_log("DEBUG: " . $message); }
+                    };
+                    
+                    $portfolioJobManager = new UserPortfolioJobManager($config['job_processor'], $logger, $db);
+                    $result = $portfolioJobManager->processUserLogin($user['id']);
+                    
+                    if (!$result['success']) {
+                        error_log("Portfolio job queue error during login: " . $result['error']);
+                    }
+                }
+            }
         } catch (Exception $e) {
             // Silently handle job queue errors to not interfere with login
+            error_log("Portfolio job manager error during login: " . $e->getMessage());
+        } catch (Error $e) {
+            // Catch PHP errors (like undefined variables) and continue
             error_log("Portfolio job manager error during login: " . $e->getMessage());
         }
         
