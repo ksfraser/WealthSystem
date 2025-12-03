@@ -1,6 +1,6 @@
 # Original ChatGPT Micro-Cap Experiment
 
-This directory contains the original Python-based trading experiment that served as the foundation for WealthSystem.
+This directory contains the original Python-based trading experiment that served as the inspiration for WealthSystem.
 
 ## What Was This?
 
