@@ -69,6 +69,10 @@ class AddTransactionController {
     public $postData = [];
 
     public function __construct() {
+        // Enable error reporting for debugging
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
+        
         $this->navService = new NavigationService();
         
         // Establish a single database connection to be shared

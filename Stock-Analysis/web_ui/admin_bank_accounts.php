@@ -509,7 +509,7 @@ $currencies = ['USD', 'CAD', 'EUR', 'GBP', 'JPY', 'AUD'];
                         <tbody>
                             <?php foreach ($accounts as $account): ?>
                                 <tr>
-                                    <td><?php echo htmlspecialchars($account['account_id']); ?></td>
+                                    <td><?php echo htmlspecialchars($account['id']); ?></td>
                                     <td><strong><?php echo htmlspecialchars($account['bank_name']); ?></strong></td>
                                     <td><?php echo htmlspecialchars($account['account_number']); ?></td>
                                     <td><?php echo htmlspecialchars($account['account_nickname'] ?? '-'); ?></td>
@@ -531,7 +531,7 @@ $currencies = ['USD', 'CAD', 'EUR', 'GBP', 'JPY', 'AUD'];
                                         <form method="POST" style="display: inline;" 
                                               onsubmit="return confirm('Are you sure you want to delete this bank account?');">
                                             <input type="hidden" name="action" value="delete_bank">
-                                            <input type="hidden" name="account_id" value="<?php echo $account['account_id']; ?>">
+                                            <input type="hidden" name="account_id" value="<?php echo $account['id']; ?>">
                                             <button type="submit" class="btn btn-danger">Delete</button>
                                         </form>
                                     </td>
@@ -612,7 +612,7 @@ $currencies = ['USD', 'CAD', 'EUR', 'GBP', 'JPY', 'AUD'];
     
     <script>
         function editAccount(account) {
-            document.getElementById('edit_account_id').value = account.account_id;
+            document.getElementById('edit_account_id').value = account.id;
             document.getElementById('edit_bank_name').value = account.bank_name;
             document.getElementById('edit_account_number').value = account.account_number;
             document.getElementById('edit_account_name').value = account.account_nickname || '';
