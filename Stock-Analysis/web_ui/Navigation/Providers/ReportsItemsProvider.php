@@ -27,15 +27,16 @@ class ReportsItemsProvider implements NavigationItemProvider {
         $card = new DashboardCard(
             'card.reports',
             '📊 Reports',
-            'View detailed portfolio reports and analytics.',
+            'Generate reports, view performance charts, and analyze your investment strategy.',
             '📊',
             'reports.php',
             null,
-            7
+            4
         );
         
         $card->setActions([
-            ['url' => 'reports.php', 'label' => 'View Reports', 'class' => 'btn-primary']
+            ['url' => '../Scripts and CSV Files/Generate_Graph.py', 'label' => '📈 Performance Charts'],
+            ['url' => 'reports.php', 'label' => '📋 Custom Reports']
         ]);
         
         return [$card];

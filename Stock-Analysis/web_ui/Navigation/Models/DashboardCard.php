@@ -103,31 +103,21 @@ class DashboardCard extends NavigationItem {
         $disabled = !$hasAccess ? 'opacity: 0.5; cursor: not-allowed;' : '';
         $tooltip = !$hasAccess ? 'title="Requires ' . ($this->requiredRole ?? 'admin') . ' access"' : '';
         
-        $colorClass = $this->colorClass ?: '';
-        
-        $html = '<div class="col-md-4 mb-4" style="' . $disabled . '" ' . $tooltip . '>';
-        $html .= '<div class="card shadow-sm h-100 ' . $colorClass . '">';
-        $html .= '<div class="card-body">';
-        $html .= '<div class="d-flex align-items-center mb-3">';
-        $html .= '<span style="font-size: 2rem; margin-right: 15px;">' . htmlspecialchars($this->icon) . '</span>';
-        $html .= '<h5 class="card-title mb-0">' . htmlspecialchars($this->title) . '</h5>';
-        $html .= '</div>';
-        $html .= '<p class="card-text">' . htmlspecialchars($this->description) . '</p>';
+        $html = '<div class="dashboard-card" style="' . $disabled . '" ' . $tooltip . '>';
+        $html .= '<h3>' . htmlspecialchars($this->title) . '</h3>';
+        $html .= '<p>' . htmlspecialchars($this->description) . '</p>';
         
         if (!empty($this->actions)) {
-            $html .= '<div class="d-flex gap-2">';
+            $html .= '<div class="card-links">';
             foreach ($this->actions as $action) {
-                $btnClass = $action['class'] ?? 'btn-secondary';
-                $btnDisabled = !$hasAccess ? 'disabled' : '';
-                $html .= '<a href="' . htmlspecialchars($action['url']) . '" class="btn ' . $btnClass . ' ' . $btnDisabled . '">';
+                $btnDisabled = !$hasAccess ? 'style="pointer-events: none; opacity: 0.6;"' : '';
+                $html .= '<a href="' . htmlspecialchars($action['url']) . '" ' . $btnDisabled . '>';
                 $html .= htmlspecialchars($action['label']);
                 $html .= '</a>';
             }
             $html .= '</div>';
         }
         
-        $html .= '</div>';
-        $html .= '</div>';
         $html .= '</div>';
         
         return $html;

@@ -288,8 +288,42 @@ class NavigationService {
             }
         }
         
-        // Close dropdowns when clicking outside
+        function toggleDataDropdown() {
+            var menu = document.getElementById("dataDropdownMenu");
+            if (menu) {
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+        }
+        
+        function toggleReportsDropdown() {
+            var menu = document.getElementById("reportsDropdownMenu");
+            if (menu) {
+                menu.style.display = menu.style.display === "block" ? "none" : "block";
+            }
+        }
+        
+        // Generic dropdown toggle function for dynamic menus
+        function togglePortfolio_Dropdown() { togglePortfolioDropdown(); }
+        function toggleStock_analysisDropdown() { toggleStocksDropdown(); }
+        function toggleData_managementDropdown() { toggleDataDropdown(); }
+        function toggleReportsDropdown() { toggleReportsDropdown(); }
+        function toggleAdminDropdown() { toggleAdminDropdown(); }
+        
+        // Close dropdowns when clicking outside (generic approach)
         document.addEventListener("click", function(event) {
+            // Find all dropdown menus
+            var allDropdownMenus = document.querySelectorAll("[id$=DropdownMenu]");
+            
+            allDropdownMenus.forEach(function(menu) {
+                // Find parent dropdown container
+                var dropdownContainer = menu.closest("[class*=-dropdown]");
+                
+                if (dropdownContainer && !dropdownContainer.contains(event.target)) {
+                    menu.style.display = "none";
+                }
+            });
+            
+            // Legacy support for specific dropdowns
             var userDropdown = document.querySelector(".user-dropdown");
             var userMenu = document.getElementById("userDropdownMenu");
             var portfolioDropdown = document.querySelector(".portfolio-dropdown");  
@@ -446,97 +480,59 @@ class NavigationService {
     
     /**
      * Render complete navigation header - single method to rule them all
+     * Now uses SRP NavigationBuilder for consistent menu structure
      */
     public function renderNavigationHeader(string $title = 'Enhanced Trading System', string $currentPage = ''): string {
         $adminClass = $this->isAdmin ? ' admin' : '';
-        $menuItems = $this->getMenuItems($currentPage);
         
         $html = '<div class="nav-header' . $adminClass . '">';
         $html .= '<div class="nav-container">';
         $html .= '<h1 class="nav-title">' . htmlspecialchars($title) . '</h1>';
         $html .= '<div class="nav-user">';
         
-        // Navigation links with Portfolio dropdown
+        // Navigation links using new SRP architecture
         if ($this->isLoggedIn) {
             $html .= '<div class="nav-links">';
             
-            // Portfolio dropdown with proper CSS classes
-            $html .= '<div class="portfolio-dropdown">';
-            $html .= '<button class="portfolio-dropdown-toggle" onclick="togglePortfolioDropdown()">';
-            $html .= '📈 My Portfolio ▼';
-            $html .= '</button>';
-            $html .= '<div class="portfolio-dropdown-menu" id="portfolioDropdownMenu">';
-            $html .= '<a href="MyPortfolio.php" class="dropdown-item">🏠 My Portfolio</a>';
-            $html .= '<a href="portfolios.php" class="dropdown-item">📈 Manage Portfolios</a>';
-            $html .= '<a href="trades.php" class="dropdown-item">📋 Trades</a>';
-            $html .= '<a href="../simple_automation.py" class="dropdown-item">🤖 Automation</a>';
-            $html .= '</div>';
-            $html .= '</div>';
+            // Use NavigationBuilder to generate menus with access control
+            require_once __DIR__ . '/Navigation/NavigationFactory.php';
+            $navBuilder = NavigationFactory::createNavigationBuilder($this->currentUser, $currentPage);
             
-            // Stocks dropdown with proper CSS classes
-            $html .= '<div class="stocks-dropdown">';
-            $html .= '<button class="stocks-dropdown-toggle" onclick="toggleStocksDropdown()">';
-            $html .= '🔍 Stocks ▼';
-            $html .= '</button>';
-            $html .= '<div class="stocks-dropdown-menu" id="stocksDropdownMenu">';
-            $html .= '<a href="stock_search.php" class="dropdown-item">🔍 Stock Search</a>';
-            $html .= '<a href="stock_analysis.php" class="dropdown-item">🤖 Stock Analysis</a>';
-            $html .= '<a href="stock_analysis.php?demo=1" class="dropdown-item">🎯 Demo Analysis</a>';
-            $html .= '</div>';
-            $html .= '</div>';
-
-            // Data dropdown
-            $html .= '<div class="data-dropdown" style="position: relative; display: inline-block;">';
-            $html .= '<button class="data-dropdown-toggle" onclick="toggleDataDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
-            $html .= '📥 Data ▼';
-            $html .= '</button>';
-            $html .= '<div class="data-dropdown-menu" id="dataDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
-            $html .= '<a href="bank_import.php" class="dropdown-item">💾 Bank CSV Import</a>';
-            $html .= '<a href="trades.php" class="dropdown-item">📝 Trade Log</a>';
-            $html .= '</div>';
-            $html .= '</div>';
-
-            // Reports dropdown
-            $html .= '<div class="reports-dropdown" style="position: relative; display: inline-block;">';
-            $html .= '<button class="reports-dropdown-toggle" onclick="toggleReportsDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
-            $html .= '📊 Reports ▼';
-            $html .= '</button>';
-            $html .= '<div class="reports-dropdown-menu" id="reportsDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
-            $html .= '<a href="../Scripts and CSV Files/Generate_Graph.py" class="dropdown-item">📈 Performance Charts</a>';
-            $html .= '<a href="reports.php" class="dropdown-item">📋 Custom Reports</a>';
-            $html .= '</div>';
-            $html .= '</div>';
-
-            // Admin dropdown (only for admins)
-            if ($this->isAdmin) {
-                $html .= '<div class="admin-dropdown" style="position: relative; display: inline-block;">';
-                $html .= '<button class="admin-dropdown-toggle" onclick="toggleAdminDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
-                $html .= '🔧 Admin ▼';
-                $html .= '</button>';
-                $html .= '<div class="admin-dropdown-menu" id="adminDropdownMenu" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
-                $html .= '<a href="admin_users.php" class="dropdown-item">👥 User Management</a>';
-                $html .= '<a href="admin_account_types.php" class="dropdown-item">📋 Account Types</a>';
-                $html .= '<a href="admin_brokerages.php" class="dropdown-item">🏢 Brokerages</a>';
-                $html .= '<a href="admin_bank_accounts.php" class="dropdown-item">🏪 Bank Accounts</a>';
-                $html .= '<a href="admin_system.php" class="dropdown-item">⚙️ System Settings</a>';
-                $html .= '<a href="database.php" class="dropdown-item">🗄️ Database</a>';
-                $html .= '</div>';
-                $html .= '</div>';
-            }
+            // Get menu items as array for custom rendering (to maintain existing CSS structure)
+            $menuArray = $navBuilder->getMenuArray();
             
-            // Other navigation items (excluding dropdown items)
-            foreach ($menuItems as $item) {
-                if (!in_array($item['url'], ['MyPortfolio.php', 'portfolios.php', 'trades.php', 'stock_search.php', 'stock_analysis.php', 'user_bank_accounts.php', 'admin_users.php', 'admin_advisor_management.php', 'admin/stock_data_admin.php', 'database.php', 'admin_account_types.php', 'admin_brokerages.php', 'admin_bank_accounts.php', 'admin_system.php'])) {
-                    $activeClass = $item['active'] ? ' active' : '';
-                    $html .= '<a href="' . htmlspecialchars($item['url']) . '" class="nav-link' . $activeClass . '">';
-                    $html .= htmlspecialchars($item['label']);
+            foreach ($menuArray as $menuItem) {
+                if ($menuItem['has_children']) {
+                    // Render dropdown menu
+                    $dropdownId = str_replace('.', '_', $menuItem['id']) . 'DropdownMenu';
+                    $toggleFunction = 'toggle' . ucfirst(str_replace('.', '_', $menuItem['id'])) . 'Dropdown';
+                    
+                    $html .= '<div class="' . htmlspecialchars($menuItem['id']) . '-dropdown" style="position: relative; display: inline-block;">';
+                    $html .= '<button class="' . htmlspecialchars($menuItem['id']) . '-dropdown-toggle" onclick="' . $toggleFunction . '()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 14px;">';
+                    $html .= htmlspecialchars($menuItem['icon']) . ' ' . htmlspecialchars($menuItem['title']) . ' ▼';
+                    $html .= '</button>';
+                    $html .= '<div class="' . htmlspecialchars($menuItem['id']) . '-dropdown-menu" id="' . $dropdownId . '" style="display: none; position: absolute; right: 0; top: 100%; background: white; border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); min-width: 160px; z-index: 1000; margin-top: 5px;">';
+                    
+                    foreach ($menuItem['children'] as $child) {
+                        $disabled = !$child['has_access'] ? 'style="opacity: 0.5; cursor: not-allowed;"' : '';
+                        $tooltip = !$child['has_access'] ? 'title="Requires ' . ($child['required_role'] ?? 'admin') . ' access"' : '';
+                        $html .= '<a href="' . htmlspecialchars($child['url']) . '" class="dropdown-item" ' . $disabled . ' ' . $tooltip . '>';
+                        $html .= htmlspecialchars($child['icon']) . ' ' . htmlspecialchars($child['title']);
+                        $html .= '</a>';
+                    }
+                    
+                    $html .= '</div>';
+                    $html .= '</div>';
+                } else {
+                    // Render regular link
+                    $activeClass = $menuItem['is_active'] ? ' active' : '';
+                    $disabled = !$menuItem['has_access'] ? 'style="opacity: 0.5; pointer-events: none;"' : '';
+                    $html .= '<a href="' . htmlspecialchars($menuItem['url']) . '" class="nav-link' . $activeClass . '" ' . $disabled . '>';
+                    $html .= htmlspecialchars($menuItem['icon']) . ' ' . htmlspecialchars($menuItem['title']);
                     $html .= '</a>';
                 }
             }
             
-            // Bank Accounts link
-            $bankActiveClass = $currentPage === 'user_bank_accounts.php' ? ' active' : '';
-            $html .= '<a href="user_bank_accounts.php" class="nav-link' . $bankActiveClass . '">🏦 Bank Accounts</a>';
             $html .= '</div>';
         }
         

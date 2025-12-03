@@ -27,15 +27,17 @@ class StockAnalysisItemsProvider implements NavigationItemProvider {
         $card = new DashboardCard(
             'card.stock_analysis',
             '🔍 Stock Analysis',
-            'AI-powered stock analysis and screening tools.',
+            'Search stocks, get AI-powered recommendations, analyze sentiment, and view technical indicators with individual stock databases.',
             '🔍',
             'stock_analysis.php',
             null,
-            5
+            2
         );
         
         $card->setActions([
-            ['url' => 'stock_analysis.php', 'label' => 'Analyze Stocks', 'class' => 'btn-primary']
+            ['url' => 'stock_search.php', 'label' => '🔍 Stock Search'],
+            ['url' => 'stock_analysis.php', 'label' => '🤖 Stock Analysis'],
+            ['url' => 'stock_analysis.php?demo=1', 'label' => '🎯 Demo Analysis']
         ]);
         
         return [$card];

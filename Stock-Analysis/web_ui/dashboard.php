@@ -15,6 +15,9 @@ $auth = $container->get(UserAuthDAO::class);
 require_once __DIR__ . '/NavigationService.php';
 $navigationService = new NavigationService($container->get(App\Services\Interfaces\AuthenticationServiceInterface::class));
 
+// Use new SRP Navigation Architecture for dashboard cards
+require_once __DIR__ . '/Navigation/NavigationFactory.php';
+
 // Require login
 $auth->requireLogin();
 
@@ -143,97 +146,11 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
         </div>
         
         <div class="dashboard-grid">
-            <!-- Portfolio Management -->
-            <div class="dashboard-card">
-                <h3>📈 Portfolio Management</h3>
-                <p>View and manage your investment portfolios, track performance, and analyze holdings.</p>
-                <div class="card-links">
-                    <a href="MyPortfolio.php">🏠 My Portfolio</a>
-                    <a href="portfolios.php">📈 Manage Portfolios</a>
-                    <a href="trades.php">📋 Trades</a>
-                    <a href="../simple_automation.py">🤖 Automation</a>
-                </div>
-            </div>
-            
-            <!-- Stock Analysis -->
-            <div class="dashboard-card">
-                <h3>🔍 Stock Analysis</h3>
-                <p>Search stocks, get AI-powered recommendations, analyze sentiment, and view technical indicators with individual stock databases.</p>
-                <div class="card-links">
-                    <a href="stock_search.php">🔍 Stock Search</a>
-                    <a href="stock_analysis.php">🤖 Stock Analysis</a>
-                    <a href="stock_analysis.php?demo=1">🎯 Demo Analysis</a>
-                </div>
-            </div>
-            
-            <?php if ($user['is_admin']): ?>
-            <!-- Account Management (Admin Only) -->
-            <div class="dashboard-card">
-                <h3>🏦 Account Management</h3>
-                <p>Manage account types, brokerages, and bank accounts.</p>
-                <div class="card-links">
-                    <a href="admin_account_types.php">📋 Account Types</a>
-                    <a href="admin_brokerages.php">🏢 Brokerages</a>
-                    <a href="admin_bank_accounts.php">🏪 Bank Accounts</a>
-                </div>
-            </div>
-            <?php endif; ?>
-            
-            <!-- Data Import -->
-            <div class="dashboard-card">
-                <h3>📥 Data Management</h3>
-                <p>Import transaction data and account holdings from your brokerages and banks.</p>
-                <div class="card-links">
-                    <a href="bank_import.php">💾 Bank CSV Import</a>
-                    <a href="trades.php">📝 Trade Log</a>
-                </div>
-            </div>
-            
-            <!-- Profile & Invitations -->
-            <div class="dashboard-card">
-                <h3>👤 Profile & Invitations</h3>
-                <p>Manage your profile, invite friends and advisors, and upgrade your account.</p>
-                <div class="card-links">
-                    <a href="profile.php">⚙️ Edit Profile</a>
-                    <a href="profile.php#invitations">📧 Manage Invitations</a>
-                    <a href="profile.php#upgrade">🎓 Become an Advisor</a>
-                </div>
-            </div>
-            
-            <!-- Reports & Analysis -->
-            <div class="dashboard-card">
-                <h3>📊 Reports</h3>
-                <p>Generate reports, view performance charts, and analyze your investment strategy.</p>
-                <div class="card-links">
-                    <a href="../Scripts and CSV Files/Generate_Graph.py">📈 Performance Charts</a>
-                    <a href="reports.php">📋 Custom Reports</a>
-                </div>
-            </div>
-            
-            <!-- Trading Strategies -->
-            <div class="dashboard-card">
-                <h3>⚙️ Trading Strategies</h3>
-                <p>Configure and manage your automated trading strategy parameters.</p>
-                <div class="card-links">
-                    <a href="strategy-config.php">🎯 Strategy Configuration</a>
-                    <a href="stock_analysis.php">📈 Stock Analysis</a>
-                    <a href="job_manager.php">⏱️ Job Manager</a>
-                </div>
-            </div>
-            
-            
-            <?php if ($user['is_admin']): ?>
-            <!-- Admin Tools -->
-            <div class="dashboard-card">
-                <h3>🔧 Admin Tools</h3>
-                <p>Administrative functions for managing users and system settings.</p>
-                <div class="card-links">
-                    <a href="admin_users.php">👥 User Management</a>
-                    <a href="admin_system.php">⚙️ System Settings</a>
-                    <a href="database.php">🗄️ Database Management</a>
-                </div>
-            </div>
-            <?php endif; ?>
+            <?php
+            // Use new SRP architecture to render dashboard cards with access control
+            $dashboardBuilder = NavigationFactory::createDashboardCardBuilder($user);
+            echo $dashboardBuilder->renderCards();
+            ?>
         </div>
         
         <!-- Quick Stats -->

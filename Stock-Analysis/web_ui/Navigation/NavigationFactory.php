@@ -7,6 +7,7 @@ require_once __DIR__ . '/Providers/DataManagementItemsProvider.php';
 require_once __DIR__ . '/Providers/ReportsItemsProvider.php';
 require_once __DIR__ . '/Providers/AdminItemsProvider.php';
 require_once __DIR__ . '/Providers/ProfileItemsProvider.php';
+require_once __DIR__ . '/Providers/TradingStrategiesItemsProvider.php';
 
 /**
  * Navigation Factory
@@ -61,12 +62,14 @@ class NavigationFactory {
         $config = self::getConfig();
         $builder = new DashboardCardBuilder($config, $currentUser);
         
-        // Register all providers (except Profile, which doesn't have cards)
+        // Register all providers
         $builder->addProvider(new PortfolioItemsProvider());
         $builder->addProvider(new StockAnalysisItemsProvider());
         $builder->addProvider(new DataManagementItemsProvider());
         $builder->addProvider(new ReportsItemsProvider());
         $builder->addProvider(new AdminItemsProvider());
+        $builder->addProvider(new TradingStrategiesItemsProvider());
+        $builder->addProvider(new ProfileItemsProvider());
         
         return $builder;
     }

@@ -54,21 +54,42 @@ class AdminItemsProvider implements NavigationItemProvider {
     }
     
     public function getDashboardCards(): array {
-        $card = new DashboardCard(
-            'card.admin',
-            '⚙️ Account Management',
-            'Manage bank accounts, brokerages, and system settings.',
-            '⚙️',
+        $cards = [];
+        
+        // Account Management Card
+        $accountCard = new DashboardCard(
+            'card.admin.accounts',
+            '🏦 Account Management',
+            'Manage account types, brokerages, and bank accounts.',
+            '🏦',
             'admin_bank_accounts.php',
             'admin',
-            8
+            5
         );
-        
-        $card->setActions([
-            ['url' => 'admin_bank_accounts.php', 'label' => 'Bank Accounts', 'class' => 'btn-primary'],
-            ['url' => 'admin_brokerages.php', 'label' => 'Brokerages', 'class' => 'btn-secondary']
+        $accountCard->setActions([
+            ['url' => 'admin_account_types.php', 'label' => '📋 Account Types'],
+            ['url' => 'admin_brokerages.php', 'label' => '🏢 Brokerages'],
+            ['url' => 'admin_bank_accounts.php', 'label' => '🏪 Bank Accounts']
         ]);
+        $cards[] = $accountCard;
         
-        return [$card];
+        // Admin Tools Card
+        $toolsCard = new DashboardCard(
+            'card.admin.tools',
+            '🔧 Admin Tools',
+            'Administrative functions for managing users and system settings.',
+            '🔧',
+            'admin_users.php',
+            'admin',
+            6
+        );
+        $toolsCard->setActions([
+            ['url' => 'admin_users.php', 'label' => '👥 User Management'],
+            ['url' => 'admin_system.php', 'label' => '⚙️ System Settings'],
+            ['url' => 'database.php', 'label' => '🗄️ Database Management']
+        ]);
+        $cards[] = $toolsCard;
+        
+        return $cards;
     }
 }

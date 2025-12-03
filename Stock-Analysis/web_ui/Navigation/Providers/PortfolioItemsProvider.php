@@ -66,65 +66,23 @@ class PortfolioItemsProvider implements NavigationItemProvider {
     public function getDashboardCards(): array {
         $cards = [];
         
-        // My Portfolio Card
-        $myPortfolioCard = new DashboardCard(
-            'card.portfolio.my',
-            '🏠 My Portfolio',
-            'View and manage your investment portfolio.',
-            '🏠',
+        // Portfolio Management - Combined Card
+        $portfolioCard = new DashboardCard(
+            'card.portfolio.management',
+            '📈 Portfolio Management',
+            'View and manage your investment portfolios, track performance, and analyze holdings.',
+            '📈',
             'MyPortfolio.php',
             null,
             1
         );
-        $myPortfolioCard->setActions([
-            ['url' => 'MyPortfolio.php', 'label' => 'View Portfolio', 'class' => 'btn-primary']
+        $portfolioCard->setActions([
+            ['url' => 'MyPortfolio.php', 'label' => '🏠 My Portfolio'],
+            ['url' => 'portfolios.php', 'label' => '📈 Manage Portfolios'],
+            ['url' => 'trades.php', 'label' => '📋 Trades'],
+            ['url' => '../simple_automation.py', 'label' => '🤖 Automation']
         ]);
-        $cards[] = $myPortfolioCard;
-        
-        // Manage Portfolios Card
-        $manageCard = new DashboardCard(
-            'card.portfolio.manage',
-            '📈 Manage Portfolios',
-            'Create and manage multiple portfolios.',
-            '📈',
-            'portfolios.php',
-            null,
-            2
-        );
-        $manageCard->setActions([
-            ['url' => 'portfolios.php', 'label' => 'Manage', 'class' => 'btn-primary']
-        ]);
-        $cards[] = $manageCard;
-        
-        // Trades Card
-        $tradesCard = new DashboardCard(
-            'card.portfolio.trades',
-            '📋 Trades',
-            'View your trading history and performance.',
-            '📋',
-            'trades.php',
-            null,
-            3
-        );
-        $tradesCard->setActions([
-            ['url' => 'trades.php', 'label' => 'View Trades', 'class' => 'btn-primary']
-        ]);
-        $cards[] = $tradesCard;
-        
-        // Automation Card
-        $automationCard = new DashboardCard(
-            'card.portfolio.automation',
-            '🤖 Automation',
-            'Set up and manage automated trading strategies.',
-            '🤖',
-            'automation_scripts.php',
-            null,
-            4
-        );
-        $automationCard->setActions([
-            ['url' => 'automation_scripts.php', 'label' => 'Manage Scripts', 'class' => 'btn-primary']
-        ]);
-        $cards[] = $automationCard;
+        $cards[] = $portfolioCard;
         
         return $cards;
     }

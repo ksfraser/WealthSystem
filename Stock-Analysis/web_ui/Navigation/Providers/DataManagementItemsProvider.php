@@ -27,15 +27,16 @@ class DataManagementItemsProvider implements NavigationItemProvider {
         $card = new DashboardCard(
             'card.data_management',
             '📥 Data Management',
-            'Import and export your portfolio data.',
+            'Import transaction data and account holdings from your brokerages and banks.',
             '📥',
-            'import_export.php',
+            'bank_import.php',
             null,
-            6
+            3
         );
         
         $card->setActions([
-            ['url' => 'import_export.php', 'label' => 'Import/Export', 'class' => 'btn-primary']
+            ['url' => 'bank_import.php', 'label' => '💾 Bank CSV Import'],
+            ['url' => 'trades.php', 'label' => '📝 Trade Log']
         ]);
         
         return [$card];

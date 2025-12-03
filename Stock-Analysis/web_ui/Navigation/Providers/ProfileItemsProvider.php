@@ -54,8 +54,22 @@ class ProfileItemsProvider implements NavigationItemProvider {
     }
     
     public function getDashboardCards(): array {
-        // Profile typically doesn't need a dashboard card
-        // But we can add one if needed
-        return [];
+        $card = new DashboardCard(
+            'card.profile',
+            '👤 Profile & Invitations',
+            'Manage your profile, invite friends and advisors, and upgrade your account.',
+            '👤',
+            'profile.php',
+            null,
+            8
+        );
+        
+        $card->setActions([
+            ['url' => 'profile.php', 'label' => '⚙️ Edit Profile'],
+            ['url' => 'profile.php#invitations', 'label' => '📧 Manage Invitations'],
+            ['url' => 'profile.php#upgrade', 'label' => '🎓 Become an Advisor']
+        ]);
+        
+        return [$card];
     }
 }
