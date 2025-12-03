@@ -125,6 +125,9 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
         <div class="welcome-section">
             <h2>🎯 Your Portfolio Management Hub</h2>
             <p>Access all your investment tools and portfolio data from this centralized dashboard.</p>
+            <p style="margin-top: 10px;">
+                <a href="MyPortfolio.php" style="display: inline-block; padding: 10px 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 6px; font-weight: 600; transition: transform 0.2s;">📊 View Trading Dashboard</a>
+            </p>
             
             <div class="status-info">
                 <?php

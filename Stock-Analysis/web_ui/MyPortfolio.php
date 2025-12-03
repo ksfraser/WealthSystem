@@ -149,6 +149,14 @@ class DashboardContentService {
     private function createFeatureGrid() {
         $features = [
             [
+                'title' => '🏠 Dashboard Hub',
+                'description' => 'Access the main portfolio dashboard with account management and admin tools',
+                'icon' => '🏠',
+                'actions' => [
+                    ['url' => 'dashboard.php', 'label' => 'Go to Dashboard', 'class' => 'btn btn-primary', 'icon' => '🏠']
+                ]
+            ],
+            [
                 'title' => '📊 Portfolio Management',
                 'description' => 'Track and manage your investment portfolios with real-time updates',
                 'icon' => '📊',
