@@ -145,23 +145,24 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
         <div class="dashboard-grid">
             <!-- Portfolio Management -->
             <div class="dashboard-card">
-                <h3>📊 Portfolio Management</h3>
+                <h3>📈 Portfolio Management</h3>
                 <p>View and manage your investment portfolios, track performance, and analyze holdings.</p>
                 <div class="card-links">
-                    <a href="../">📈 Portfolio Overview</a>
-                    <a href="portfolio_manager.php">⚙️ Manage Portfolios</a>
-                    <a href="../simple_automation.py">🤖 Automation Scripts</a>
+                    <a href="MyPortfolio.php">🏠 My Portfolio</a>
+                    <a href="portfolios.php">📈 Manage Portfolios</a>
+                    <a href="trades.php">📋 Trades</a>
+                    <a href="../simple_automation.py">🤖 Automation</a>
                 </div>
             </div>
             
-            <!-- AI Stock Analysis -->
+            <!-- Stock Analysis -->
             <div class="dashboard-card">
-                <h3>🤖 AI Stock Analysis</h3>
+                <h3>🔍 Stock Analysis</h3>
                 <p>Search stocks, get AI-powered recommendations, analyze sentiment, and view technical indicators with individual stock databases.</p>
                 <div class="card-links">
-                    <a href="stock_search.php">🔍 Search Stocks</a>
-                    <a href="stock_analysis.php">📊 Stock Dashboard</a>
-                    <a href="stock_analysis.php?demo=1">🎯 Try Demo Analysis</a>
+                    <a href="stock_search.php">🔍 Stock Search</a>
+                    <a href="stock_analysis.php">🤖 Stock Analysis</a>
+                    <a href="stock_analysis.php?demo=1">🎯 Demo Analysis</a>
                 </div>
             </div>
             
@@ -180,7 +181,7 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
             
             <!-- Data Import -->
             <div class="dashboard-card">
-                <h3>📥 Data Import</h3>
+                <h3>📥 Data Management</h3>
                 <p>Import transaction data and account holdings from your brokerages and banks.</p>
                 <div class="card-links">
                     <a href="bank_import.php">💾 Bank CSV Import</a>
@@ -201,7 +202,7 @@ echo $navigationService->renderNavigationHeader('Portfolio Dashboard - Enhanced 
             
             <!-- Reports & Analysis -->
             <div class="dashboard-card">
-                <h3>📊 Reports & Analysis</h3>
+                <h3>📊 Reports</h3>
                 <p>Generate reports, view performance charts, and analyze your investment strategy.</p>
                 <div class="card-links">
                     <a href="../Scripts and CSV Files/Generate_Graph.py">📈 Performance Charts</a>
