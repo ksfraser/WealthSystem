@@ -8,9 +8,14 @@ require_once __DIR__ . '/UserAuthDAO.php';
 
 // Check if user is logged in (will redirect if not)  
 $userAuth = new UserAuthDAO();
-$userAuth->requireLogin(); // Anyone can view database status
-
-$currentUser = $userAuth->getCurrentUser();
+try {
+    $userAuth->requireLogin(); // Anyone can view database status
+    $currentUser = $userAuth->getCurrentUser();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'database.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+}
 $isAdmin = $userAuth->isAdmin();
 
 // Test database connectivity - SIMPLIFIED for testing

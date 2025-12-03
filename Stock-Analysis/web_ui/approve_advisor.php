@@ -12,7 +12,13 @@ $auth = new UserAuthDAO();
 $invitationService = new InvitationService();
 
 // Require login
-$auth->requireLogin();
+try {
+    $auth->requireLogin();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'profile.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+}
 
 $token = $_GET['token'] ?? '';
 $action = $_GET['action'] ?? '';

@@ -6,9 +6,14 @@ require_once __DIR__ . '/UserAuthDAO.php';
 
 // Check if user is logged in (will redirect if not)
 $userAuth = new UserAuthDAO();
-$userAuth->requireLogin(); // Admin not required for system status viewing
-
-$currentUser = $userAuth->getCurrentUser();
+try {
+    $userAuth->requireLogin(); // Admin not required for system status viewing
+    $currentUser = $userAuth->getCurrentUser();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'system_status.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+}
 $isAdmin = $userAuth->isAdmin();
 ?>
 <!DOCTYPE html>

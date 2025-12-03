@@ -1,7 +1,17 @@
 <?php
 require_once __DIR__ . '/UserAuthDAO.php';
 $auth = new UserAuthDAO();
-$auth->requireAdmin();
+
+try {
+    $auth->requireAdmin();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'admin_brokerages.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+} catch (Exception $e) {
+    header('Location: dashboard.php?error=' . urlencode('Admin access required'));
+    exit;
+}
 
 require_once __DIR__ . '/MidCapBankImportDAO.php';
 

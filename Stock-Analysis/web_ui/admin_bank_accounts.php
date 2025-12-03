@@ -11,9 +11,18 @@ require_once __DIR__ . '/BankAccountsDAO.php';
 require_once __DIR__ . '/UserAuthDAO.php';
 
 $auth = new UserAuthDAO();
-$auth->requireAdmin();
 
-$currentUser = $auth->getCurrentUser();
+try {
+    $auth->requireAdmin();
+    $currentUser = $auth->getCurrentUser();
+} catch (\App\Auth\LoginRequiredException $e) {
+    $returnUrl = urlencode($_SERVER['REQUEST_URI'] ?? 'admin_bank_accounts.php');
+    header('Location: login.php?return_url=' . $returnUrl);
+    exit;
+} catch (Exception $e) {
+    header('Location: dashboard.php?error=' . urlencode('Admin access required'));
+    exit;
+}
 $bankDAO = new BankAccountsDAO();
 $message = '';
 $messageType = '';
