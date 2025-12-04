@@ -545,6 +545,419 @@ Future Enhancement:
   - A/B testing support
 ```
 
+### **FR-006: Portfolio Sector Analysis & Charting**
+
+#### **Sector Allocation Calculation (FR-006.1)**
+```yaml
+Priority: High
+Description: Calculate and visualize portfolio sector allocation
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Aggregate portfolio holdings by GICS sector
+  ✅ Calculate percentage allocation for each sector
+  ✅ Display allocation in pie chart format
+  ✅ Color-coded sector visualization
+  ✅ Real-time updates on portfolio changes
+  ✅ Support for 11 GICS sectors
+
+GICS Sectors:
+  - Energy (10)
+  - Materials (15)
+  - Industrials (20)
+  - Consumer Discretionary (25)
+  - Consumer Staples (30)
+  - Health Care (35)
+  - Financials (40)
+  - Information Technology (45)
+  - Communication Services (50)
+  - Utilities (55)
+  - Real Estate (60)
+
+Technical Details:
+  - Service: SectorAnalysisChartService::calculateSectorAllocation()
+  - DAO: SectorAnalysisDAOImpl::getPortfolioSectorData()
+  - Chart: Chart.js pie chart with auto color generation
+  - API: GET /api/sector-analysis.php?user_id={id}
+```
+
+#### **S&P 500 Benchmark Comparison (FR-006.2)**
+```yaml
+Priority: High
+Description: Compare portfolio sector weights vs S&P 500 benchmark
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Retrieve S&P 500 sector weights (Q4 2025)
+  ✅ Calculate portfolio vs benchmark deviation
+  ✅ Identify overweight sectors (>5% deviation)
+  ✅ Identify underweight sectors (<-5% deviation)
+  ✅ Display comparison in bar chart format
+  ✅ Color-coded bars (portfolio vs benchmark)
+
+Benchmark Data:
+  - Technology: 28.5%
+  - Financials: 12.8%
+  - Health Care: 12.5%
+  - Consumer Discretionary: 10.2%
+  - Communication Services: 8.7%
+  - Industrials: 8.3%
+  - Consumer Staples: 6.1%
+  - Energy: 4.2%
+  - Utilities: 2.5%
+  - Real Estate: 2.4%
+  - Materials: 2.3%
+
+Technical Details:
+  - Service: SectorAnalysisChartService::compareToBenchmark()
+  - DAO: SectorAnalysisDAOImpl::getSP500SectorWeights()
+  - Chart: Chart.js multi-dataset bar chart
+  - Threshold: 5% deviation for overweight/underweight classification
+```
+
+#### **Concentration Risk Assessment (FR-006.3)**
+```yaml
+Priority: High
+Description: Calculate portfolio concentration risk metrics
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Calculate Herfindahl-Hirschman Index (HHI)
+  ✅ Identify top sector weight percentage
+  ✅ Risk level classification (LOW/MEDIUM/HIGH)
+  ✅ Display risk metrics in dashboard cards
+  ✅ Color-coded risk indicators (green/yellow/red)
+
+HHI Calculation:
+  HHI = Σ(sector_weight²) × 10,000
+  
+Risk Levels:
+  - LOW (HHI < 1,500): Diversified portfolio
+  - MEDIUM (1,500 ≤ HHI < 2,500): Moderately concentrated
+  - HIGH (HHI ≥ 2,500): Highly concentrated
+
+Business Rules:
+  - HHI ranges from 0 (infinite diversity) to 10,000 (single sector)
+  - Top sector weight should not exceed 40% for LOW risk
+  - Any sector >60% automatically triggers HIGH risk
+
+Technical Details:
+  - Service: SectorAnalysisChartService::calculateConcentrationRisk()
+  - Returns: ['hhi' => float, 'top_sector_weight' => float, 'risk_level' => string]
+  - UI: 3 metric cards with border colors based on risk
+```
+
+#### **Diversification Scoring (FR-006.4)**
+```yaml
+Priority: High
+Description: 0-100 scoring system for portfolio diversification
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Calculate diversification score (0-100 scale)
+  ✅ Consider sector count (40% weight)
+  ✅ Consider max sector weight (35% weight)
+  ✅ Consider HHI (30% weight)
+  ✅ Display score with visual indicator
+  ✅ Provide score interpretation
+
+Scoring Algorithm:
+  score = (sectorScore × 0.4) + (maxWeightScore × 0.35) + (hhiScore × 0.3)
+  
+  sectorScore:
+    - 100: 9-11 sectors (excellent diversification)
+    - 70: 6-8 sectors (good diversification)
+    - 40: 3-5 sectors (moderate diversification)
+    - 10: 1-2 sectors (poor diversification)
+  
+  maxWeightScore:
+    - 100: ≤15% (excellent)
+    - 70: ≤25% (good)
+    - 40: ≤40% (moderate)
+    - 10: >40% (poor)
+  
+  hhiScore:
+    - 100: HHI ≤1,500 (diversified)
+    - 70: HHI ≤2,000 (moderate)
+    - 40: HHI ≤2,500 (concentrated)
+    - 10: HHI >2,500 (highly concentrated)
+
+Score Interpretation:
+  - 80-100: Excellently diversified
+  - 60-79: Well diversified
+  - 40-59: Moderately diversified
+  - 20-39: Poorly diversified
+  - 0-19: Highly concentrated
+
+Technical Details:
+  - Service: SectorAnalysisChartService::calculateDiversificationScore()
+  - Example: 9 sectors, max 15%, HHI 1200 → score = 77.5 (well diversified)
+```
+
+#### **Chart Visualization (FR-006.5)**
+```yaml
+Priority: High
+Description: Interactive Chart.js visualizations for sector analysis
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Pie chart for sector allocation
+  ✅ Bar chart for portfolio vs benchmark comparison
+  ✅ Responsive design for mobile/tablet/desktop
+  ✅ Tooltips with percentage values
+  ✅ Legend with color mapping
+  ✅ Loading states and error handling
+
+Chart Features:
+  Pie Chart:
+    - Auto color generation (11 distinct colors)
+    - Percentage labels on hover
+    - Legend with sector names
+    - Data labels plugin support
+  
+  Bar Chart:
+    - Grouped bars (portfolio vs S&P 500)
+    - Color coding: Blue (portfolio), Gray (benchmark)
+    - Y-axis: 0-100% scale
+    - X-axis: Sector names
+    - Horizontal scrolling for mobile
+
+Technical Details:
+  - Library: Chart.js 4.4.0
+  - Service: chart_service.js
+  - Functions: createSectorPieChart(), createSectorComparisonChart()
+  - Page: sector_analysis.php
+```
+
+### **FR-007: Index Benchmarking & Performance Comparison**
+
+#### **Performance vs Major Indexes (FR-007.1)**
+```yaml
+Priority: High
+Description: Compare stock/portfolio performance against market indexes
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Support SPX (S&P 500), IXIC (NASDAQ), DJI (Dow Jones), RUT (Russell 2000)
+  ✅ Calculate total return for portfolio and index
+  ✅ Calculate annualized return (for periods >12 months)
+  ✅ Calculate relative performance (outperformance periods)
+  ✅ Display cumulative returns in line chart
+  ✅ Support multiple time periods (1M, 3M, 6M, 1Y, 3Y, 5Y)
+
+Supported Indexes:
+  - SPX: S&P 500 (large-cap US stocks)
+  - IXIC: NASDAQ Composite (tech-focused)
+  - DJI: Dow Jones Industrial Average (blue-chip)
+  - RUT: Russell 2000 (small-cap)
+
+Time Periods:
+  - 1M: Last 30 days
+  - 3M: Last 90 days
+  - 6M: Last 180 days
+  - 1Y: Last 365 days
+  - 3Y: Last 1,095 days
+  - 5Y: Last 1,825 days
+
+Technical Details:
+  - Service: IndexBenchmarkService::calculateTotalReturn()
+  - Service: IndexBenchmarkService::calculateRelativePerformance()
+  - DAO: IndexDataDAOImpl::getIndexData()
+  - Chart: Chart.js line chart with dual datasets
+  - API: GET /api/index-benchmark.php?symbol={sym}&index={idx}&period={per}
+```
+
+#### **Statistical Calculations (FR-007.2)**
+```yaml
+Priority: High
+Description: Calculate beta, alpha, and correlation coefficients
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Calculate beta (systematic risk)
+  ✅ Calculate alpha (excess return)
+  ✅ Calculate correlation coefficient
+  ✅ Handle edge cases (zero variance, missing data)
+  ✅ Display in metrics comparison table
+  ✅ Provide statistical interpretation
+
+Beta (β):
+  Formula: β = Cov(portfolio, index) / Var(index)
+  Interpretation:
+    - β = 1.0: Same volatility as market
+    - β > 1.0: More volatile than market
+    - β < 1.0: Less volatile than market
+    - β < 0: Inverse correlation (rare)
+
+Alpha (α):
+  Formula: α = Rₚ - (Rₓ + β(Rₘ - Rₓ))
+  Where:
+    - Rₚ: Portfolio return
+    - Rₘ: Market (index) return
+    - Rₓ: Risk-free rate (0% assumed)
+  Interpretation:
+    - α > 0: Outperformance beyond risk-adjusted expectations
+    - α = 0: Fair compensation for risk taken
+    - α < 0: Underperformance relative to risk
+
+Correlation (ρ):
+  Formula: ρ = Cov(portfolio, index) / (σₚ × σₘ)
+  Range: -1 to +1
+  Interpretation:
+    - ρ = +1: Perfect positive correlation
+    - ρ = 0: No correlation
+    - ρ = -1: Perfect negative correlation
+
+Technical Details:
+  - Service: IndexBenchmarkService::calculateBeta()
+  - Service: IndexBenchmarkService::calculateAlpha()
+  - Service: IndexBenchmarkService::calculateCorrelation()
+  - Precision: 4 decimal places
+```
+
+#### **Risk-Adjusted Returns (FR-007.3)**
+```yaml
+Priority: High
+Description: Calculate Sharpe ratio, Sortino ratio, and maximum drawdown
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Calculate Sharpe ratio (risk-adjusted return)
+  ✅ Calculate Sortino ratio (downside risk-adjusted)
+  ✅ Calculate maximum drawdown (peak-to-trough)
+  ✅ Calculate Calmar ratio (return/drawdown)
+  ✅ Display risk metrics in dedicated panel
+  ✅ Provide interpretation guidelines
+
+Sharpe Ratio:
+  Formula: (Rₚ - Rₓ) / σₚ
+  Where:
+    - Rₚ: Portfolio return
+    - Rₓ: Risk-free rate (0% assumed)
+    - σₚ: Portfolio standard deviation
+  Interpretation:
+    - Sharpe > 3.0: Excellent risk-adjusted returns
+    - Sharpe 2.0-3.0: Very good
+    - Sharpe 1.0-2.0: Good
+    - Sharpe 0.5-1.0: Acceptable
+    - Sharpe < 0.5: Poor
+
+Sortino Ratio:
+  Formula: (Rₚ - Rₜ) / σ_downside
+  Where:
+    - Rₜ: Target return (often minimum acceptable return)
+    - σ_downside: Standard deviation of negative returns only
+  Advantage: Ignores upside volatility, focuses on downside risk
+  Interpretation: Similar to Sharpe, but typically higher values
+
+Maximum Drawdown:
+  Formula: (Trough - Peak) / Peak
+  Calculation:
+    1. Track cumulative portfolio value
+    2. Identify running maximum (peak)
+    3. Calculate percentage decline from peak
+    4. Maximum drawdown = largest decline observed
+  Interpretation:
+    - <10%: Low risk
+    - 10-20%: Moderate risk
+    - 20-30%: High risk
+    - >30%: Very high risk
+
+Technical Details:
+  - Service: IndexBenchmarkService::calculateSharpeRatio()
+  - Service: IndexBenchmarkService::calculateSortinoRatio()
+  - Service: IndexBenchmarkService::calculateMaxDrawdown()
+  - Risk-free rate: 0% (assumed for simplicity)
+  - Annualization: √252 for daily data (trading days per year)
+```
+
+#### **Multiple Time Periods (FR-007.4)**
+```yaml
+Priority: High
+Description: Support 6 time periods for flexible analysis
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ 1M (1 month): Short-term momentum
+  ✅ 3M (3 months): Quarterly performance
+  ✅ 6M (6 months): Semi-annual trends
+  ✅ 1Y (1 year): Annual performance
+  ✅ 3Y (3 years): Medium-term trends
+  ✅ 5Y (5 years): Long-term analysis
+  ✅ Dropdown selector on UI
+  ✅ Automatic date range calculation
+
+Period Mapping:
+  - 1M: DateTime::modify('-30 days')
+  - 3M: DateTime::modify('-90 days')
+  - 6M: DateTime::modify('-180 days')
+  - 1Y: DateTime::modify('-365 days')
+  - 3Y: DateTime::modify('-1095 days')
+  - 5Y: DateTime::modify('-1825 days')
+
+Business Rules:
+  - Annualized returns calculated for periods >12 months
+  - Sharpe/Sortino ratios annualized using √(periods_per_year)
+  - Maximum drawdown calculated over entire period
+  - Beta/alpha calculated from aligned return series
+
+Technical Details:
+  - DAO: IndexDataDAOImpl::validatePeriod()
+  - Query: WHERE date >= :start_date AND date <= :end_date
+  - UI: Bootstrap select dropdown with 6 options
+```
+
+#### **Chart Visualization (FR-007.5)**
+```yaml
+Priority: High
+Description: Interactive performance comparison charts and metrics tables
+Status: ✅ IMPLEMENTED (December 4, 2025)
+
+Acceptance Criteria:
+  ✅ Line chart showing cumulative returns (portfolio vs index)
+  ✅ Dual Y-axis support (if needed)
+  ✅ Tooltips with date and return values
+  ✅ Legend with color mapping
+  ✅ Detailed metrics comparison table
+  ✅ Risk metrics panel with interpretation
+  ✅ Performance summary cards (4 key metrics)
+
+Chart Features:
+  Line Chart:
+    - X-axis: Date (time series)
+    - Y-axis: Cumulative return percentage
+    - Dataset 1: Portfolio (blue line)
+    - Dataset 2: Index (gray line)
+    - Hover tooltips with date + return
+    - Responsive design
+    - Loading spinner during data fetch
+
+Metrics Cards:
+  1. Total Return: Portfolio return with color coding (green/red)
+  2. Beta (β): Market volatility comparison
+  3. Alpha (α): Excess return with color coding
+  4. Sharpe Ratio: Risk-adjusted return
+
+Metrics Table:
+  Columns: Metric | Portfolio | Index | Difference
+  Rows:
+    - Total Return
+    - Annualized Return (if applicable)
+    - Beta
+    - Alpha
+    - Correlation
+    - Sharpe Ratio
+    - Sortino Ratio
+    - Max Drawdown
+
+Technical Details:
+  - Library: Chart.js 4.4.0
+  - Service: chart_service.js::createIndexPerformanceChart()
+  - Service: chart_service.js::formatMetricsTable()
+  - Page: index_benchmark.php
+  - API: GET /api/index-benchmark.php
+```
+
 ---
 
 ## 🔒 **Non-Functional Requirements**

@@ -533,6 +533,895 @@ class EncryptionService {
 }
 ```
 
+### 4.5 Portfolio Analytics Architecture
+
+#### 4.5.1 Sector Analysis & Charting System
+
+**Purpose:** Comprehensive portfolio sector allocation analysis with benchmark comparison and risk assessment
+
+**Architecture Overview:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Presentation Layer                       │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  sector_analysis.php (UI Page)                      │   │
+│  │  - 3 Metric Cards (Diversification, Risk, HHI)     │   │
+│  │  - Pie Chart (Sector Allocation)                   │   │
+│  │  - Bar Chart (Portfolio vs S&P 500)                │   │
+│  │  - Overweight/Underweight Lists                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  chart_service.js (Charting Utilities)             │   │
+│  │  - createSectorPieChart()                          │   │
+│  │  - createSectorComparisonChart()                   │   │
+│  │  - fetchSectorAnalysis()                           │   │
+│  │  - formatMetricsTable()                            │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    API Layer                                │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  /api/sector-analysis.php                          │   │
+│  │  GET ?user_id={id}                                 │   │
+│  │  Response: JSON with all sector analysis data     │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Service Layer                            │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  SectorAnalysisChartService                        │   │
+│  │  - calculateSectorAllocation()                     │   │
+│  │  - compareToBenchmark()                            │   │
+│  │  - calculateConcentrationRisk()                    │   │
+│  │  - calculateDiversificationScore()                 │   │
+│  │  - formatForPieChart()                             │   │
+│  │  - formatForComparisonChart()                      │   │
+│  │  - validateSectorData()                            │   │
+│  │  - sanitizeSectorName()                            │   │
+│  │  - getPortfolioSectorAnalysis()                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Data Access Layer                        │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  SectorAnalysisDAOImpl                             │   │
+│  │  - getPortfolioSectorData(userId)                 │   │
+│  │  - getSP500SectorWeights()                        │   │
+│  │  - getSectorsBySymbols(symbols)                   │   │
+│  │  - getDefaultSP500Weights()                       │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Database Layer                           │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  portfolio_positions (user holdings)               │   │
+│  │  stock_fundamentals (sector classification)       │   │
+│  │  sector_performance (S&P 500 weights)             │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Component Details:**
+
+```php
+namespace App\Services;
+
+/**
+ * Sector Analysis Chart Service
+ * 
+ * Prepares sector allocation data for visualization and analysis.
+ * Implements comprehensive risk metrics and benchmark comparison.
+ */
+class SectorAnalysisChartService
+{
+    private SectorAnalysisDAO $dao;
+    
+    public function __construct(SectorAnalysisDAO $dao) {
+        $this->dao = $dao;
+    }
+    
+    /**
+     * Calculate sector allocation percentages
+     * 
+     * @param int $userId User identifier
+     * @return array Sector allocation data with percentages
+     */
+    public function calculateSectorAllocation(int $userId): array
+    {
+        $holdings = $this->dao->getPortfolioSectorData($userId);
+        
+        $totalValue = array_sum(array_column($holdings, 'value'));
+        $allocation = [];
+        
+        foreach ($holdings as $holding) {
+            $sector = $this->sanitizeSectorName($holding['sector']);
+            if (!isset($allocation[$sector])) {
+                $allocation[$sector] = 0;
+            }
+            $allocation[$sector] += $holding['value'];
+        }
+        
+        foreach ($allocation as $sector => $value) {
+            $allocation[$sector] = round(($value / $totalValue) * 100, 2);
+        }
+        
+        return $allocation;
+    }
+    
+    /**
+     * Compare portfolio allocation to S&P 500 benchmark
+     * 
+     * @param array $portfolioAllocation Sector percentages
+     * @return array Comparison data with overweight/underweight sectors
+     */
+    public function compareToBenchmark(array $portfolioAllocation): array
+    {
+        $benchmarkWeights = $this->dao->getSP500SectorWeights();
+        
+        $comparison = [];
+        $overweight = [];
+        $underweight = [];
+        
+        foreach ($portfolioAllocation as $sector => $portfolioWeight) {
+            $benchmarkWeight = $benchmarkWeights[$sector] ?? 0;
+            $difference = $portfolioWeight - $benchmarkWeight;
+            
+            $comparison[$sector] = [
+                'portfolio_weight' => $portfolioWeight,
+                'benchmark_weight' => $benchmarkWeight,
+                'difference' => round($difference, 2)
+            ];
+            
+            if ($difference > 5) {
+                $overweight[] = ['sector' => $sector, 'difference' => round($difference, 2)];
+            } elseif ($difference < -5) {
+                $underweight[] = ['sector' => $sector, 'difference' => round($difference, 2)];
+            }
+        }
+        
+        return [
+            'comparison' => $comparison,
+            'overweight' => $overweight,
+            'underweight' => $underweight
+        ];
+    }
+    
+    /**
+     * Calculate concentration risk metrics
+     * 
+     * @param array $allocation Sector allocation percentages
+     * @return array Risk metrics (HHI, top sector weight, risk level)
+     */
+    public function calculateConcentrationRisk(array $allocation): array
+    {
+        // Herfindahl-Hirschman Index
+        $hhi = 0;
+        foreach ($allocation as $weight) {
+            $hhi += pow($weight, 2);
+        }
+        $hhi = round($hhi, 2);
+        
+        // Top sector weight
+        $topSectorWeight = max($allocation);
+        
+        // Risk level determination
+        $riskLevel = 'LOW';
+        if ($hhi >= 2500 || $topSectorWeight >= 60) {
+            $riskLevel = 'HIGH';
+        } elseif ($hhi >= 1500 || $topSectorWeight >= 40) {
+            $riskLevel = 'MEDIUM';
+        }
+        
+        return [
+            'hhi' => $hhi,
+            'top_sector_weight' => round($topSectorWeight, 2),
+            'risk_level' => $riskLevel
+        ];
+    }
+    
+    /**
+     * Calculate diversification score (0-100)
+     * 
+     * Scoring algorithm:
+     * - Sector count (40%): More sectors = higher score
+     * - Max sector weight (35%): Lower concentration = higher score
+     * - HHI (30%): Lower HHI = higher score
+     * 
+     * @param array $allocation Sector allocation percentages
+     * @return float Score from 0-100
+     */
+    public function calculateDiversificationScore(array $allocation): float
+    {
+        $sectorCount = count($allocation);
+        $maxWeight = max($allocation);
+        
+        $hhi = 0;
+        foreach ($allocation as $weight) {
+            $hhi += pow($weight, 2);
+        }
+        
+        // Sector count score (40% weight)
+        if ($sectorCount >= 9) {
+            $sectorScore = 100;
+        } elseif ($sectorCount >= 6) {
+            $sectorScore = 70;
+        } elseif ($sectorCount >= 3) {
+            $sectorScore = 40;
+        } else {
+            $sectorScore = 10;
+        }
+        
+        // Max weight score (35% weight)
+        if ($maxWeight <= 15) {
+            $maxWeightScore = 100;
+        } elseif ($maxWeight <= 25) {
+            $maxWeightScore = 70;
+        } elseif ($maxWeight <= 40) {
+            $maxWeightScore = 40;
+        } else {
+            $maxWeightScore = 10;
+        }
+        
+        // HHI score (30% weight)
+        if ($hhi <= 1500) {
+            $hhiScore = 100;
+        } elseif ($hhi <= 2000) {
+            $hhiScore = 70;
+        } elseif ($hhi <= 2500) {
+            $hhiScore = 40;
+        } else {
+            $hhiScore = 10;
+        }
+        
+        $score = ($sectorScore * 0.4) + ($maxWeightScore * 0.35) + ($hhiScore * 0.3);
+        
+        return round($score, 2);
+    }
+    
+    /**
+     * Format data for Chart.js pie chart
+     * 
+     * @param array $allocation Sector allocation percentages
+     * @return array Chart.js compatible format
+     */
+    public function formatForPieChart(array $allocation): array
+    {
+        $colors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF',
+            '#FF9F40', '#FF6384', '#C9CBCF', '#4BC0C0', '#FF6384', '#36A2EB'
+        ];
+        
+        return [
+            'labels' => array_keys($allocation),
+            'datasets' => [[
+                'data' => array_values($allocation),
+                'backgroundColor' => array_slice($colors, 0, count($allocation)),
+                'borderWidth' => 1
+            ]]
+        ];
+    }
+    
+    /**
+     * Format data for Chart.js comparison bar chart
+     * 
+     * @param array $comparison Sector comparison data
+     * @return array Chart.js compatible format
+     */
+    public function formatForComparisonChart(array $comparison): array
+    {
+        $labels = [];
+        $portfolioData = [];
+        $benchmarkData = [];
+        
+        foreach ($comparison as $sector => $data) {
+            $labels[] = $sector;
+            $portfolioData[] = $data['portfolio_weight'];
+            $benchmarkData[] = $data['benchmark_weight'];
+        }
+        
+        return [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Portfolio',
+                    'data' => $portfolioData,
+                    'backgroundColor' => 'rgba(54, 162, 235, 0.8)',
+                    'borderColor' => 'rgba(54, 162, 235, 1)',
+                    'borderWidth' => 1
+                ],
+                [
+                    'label' => 'S&P 500',
+                    'data' => $benchmarkData,
+                    'backgroundColor' => 'rgba(201, 203, 207, 0.8)',
+                    'borderColor' => 'rgba(201, 203, 207, 1)',
+                    'borderWidth' => 1
+                ]
+            ]
+        ];
+    }
+}
+```
+
+**Database Schema:**
+
+```sql
+-- Portfolio positions with sector classification
+CREATE TABLE portfolio_positions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    symbol VARCHAR(10) NOT NULL,
+    quantity DECIMAL(15, 6) NOT NULL,
+    purchase_price DECIMAL(15, 2) NOT NULL,
+    current_price DECIMAL(15, 2),
+    sector VARCHAR(50),
+    INDEX idx_user_symbol (user_id, symbol),
+    INDEX idx_sector (sector)
+);
+
+-- Stock fundamentals with GICS sector classification
+CREATE TABLE stock_fundamentals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    symbol VARCHAR(10) NOT NULL UNIQUE,
+    company_name VARCHAR(255),
+    sector VARCHAR(50),
+    industry VARCHAR(100),
+    market_cap BIGINT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_sector (sector)
+);
+
+-- S&P 500 sector weights (benchmark)
+CREATE TABLE sector_performance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sector VARCHAR(50) NOT NULL,
+    weight_percentage DECIMAL(5, 2) NOT NULL,
+    as_of_date DATE NOT NULL,
+    INDEX idx_sector_date (sector, as_of_date)
+);
+```
+
+**Test Coverage:**
+
+```php
+// tests/Services/SectorAnalysisChartServiceTest.php
+class SectorAnalysisChartServiceTest extends TestCase
+{
+    private SectorAnalysisChartService $service;
+    private SectorAnalysisDAO $mockDAO;
+    
+    // 11 test methods, all passing:
+    // - testCalculateSectorAllocation()
+    // - testCompareToBenchmark()
+    // - testIdentifyOverweightUnderweight()
+    // - testCalculateConcentrationRisk()
+    // - testDiversificationScore()
+    // - testFormatForPieChart()
+    // - testFormatForComparisonChart()
+    // - testValidateSectorData()
+    // - testSanitizeSectorName()
+    // - testGetPortfolioSectorAnalysis()
+    // - testHandleInvalidUserId()
+}
+```
+
+#### 4.5.2 Index Benchmarking System
+
+**Purpose:** Comprehensive performance comparison against major market indexes with statistical analysis and risk metrics
+
+**Architecture Overview:**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Presentation Layer                       │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  index_benchmark.php (UI Page)                     │   │
+│  │  - Interactive Controls (Symbol/Index/Period)     │   │
+│  │  - 4 Key Metric Cards (Return/Beta/Alpha/Sharpe) │   │
+│  │  - Cumulative Performance Line Chart              │   │
+│  │  - Detailed Metrics Comparison Table              │   │
+│  │  - Risk Metrics Panel                             │   │
+│  │  - Performance Summary                            │   │
+│  └─────────────────────────────────────────────────────┘   │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  chart_service.js (Charting Utilities)             │   │
+│  │  - createIndexPerformanceChart()                   │   │
+│  │  - fetchIndexBenchmark()                           │   │
+│  │  - formatMetricsTable()                            │   │
+│  │  - showLoading() / showError()                    │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    API Layer                                │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  /api/index-benchmark.php                          │   │
+│  │  GET ?symbol={sym}&index={idx}&period={per}       │   │
+│  │  Response: Performance comparison JSON             │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Service Layer                            │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  IndexBenchmarkService                             │   │
+│  │  - fetchIndexData()                                │   │
+│  │  - calculateTotalReturn()                          │   │
+│  │  - calculateAnnualizedReturn()                     │   │
+│  │  - calculateBeta()                                 │   │
+│  │  - calculateAlpha()                                │   │
+│  │  - calculateCorrelation()                          │   │
+│  │  - calculateSharpeRatio()                          │   │
+│  │  - calculateSortinoRatio()                         │   │
+│  │  - calculateMaxDrawdown()                          │   │
+│  │  - formatForPerformanceChart()                     │   │
+│  │  - formatForComparisonTable()                      │   │
+│  │  - alignDataByDate()                               │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Data Access Layer                        │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  IndexDataDAOImpl                                  │   │
+│  │  - getIndexData(symbol, period)                   │   │
+│  │  - getCurrentIndexValue(symbol)                   │   │
+│  │  - getSupportedIndexes()                          │   │
+│  │  - validateIndexSymbol()                          │   │
+│  │  - validatePeriod()                               │   │
+│  │  - normalizeSymbol()                              │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Database Layer                           │
+│  ┌─────────────────────────────────────────────────────┐   │
+│  │  stock_prices (historical index data)              │   │
+│  │  - Supports: SPX, IXIC, DJI, RUT                  │   │
+│  │  - Periods: 1M, 3M, 6M, 1Y, 3Y, 5Y                │   │
+│  └─────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Component Details:**
+
+```php
+namespace App\Services;
+
+/**
+ * Index Benchmark Service
+ * 
+ * Compares portfolio/stock performance against market indexes.
+ * Calculates statistical metrics (beta, alpha, correlation) and
+ * risk-adjusted returns (Sharpe, Sortino, max drawdown).
+ */
+class IndexBenchmarkService
+{
+    private IndexDataDAO $dao;
+    
+    public function __construct(IndexDataDAO $dao) {
+        $this->dao = $dao;
+    }
+    
+    /**
+     * Calculate total return
+     * 
+     * @param array $returns Array of period returns
+     * @return float Total compound return
+     */
+    public function calculateTotalReturn(array $returns): float
+    {
+        $totalReturn = 1.0;
+        foreach ($returns as $r) {
+            $totalReturn *= (1 + $r);
+        }
+        return round(($totalReturn - 1) * 100, 2);
+    }
+    
+    /**
+     * Calculate beta (systematic risk)
+     * 
+     * β = Cov(portfolio, index) / Var(index)
+     * 
+     * @param array $portfolioReturns Portfolio returns
+     * @param array $indexReturns Index returns
+     * @return float Beta coefficient
+     */
+    public function calculateBeta(array $portfolioReturns, array $indexReturns): float
+    {
+        if (count($portfolioReturns) !== count($indexReturns) || count($portfolioReturns) < 2) {
+            throw new InvalidArgumentException('Insufficient aligned data for beta calculation');
+        }
+        
+        $covariance = $this->calculateCovariance($portfolioReturns, $indexReturns);
+        $variance = $this->calculateVariance($indexReturns);
+        
+        if ($variance == 0) {
+            return 0.0;
+        }
+        
+        return round($covariance / $variance, 4);
+    }
+    
+    /**
+     * Calculate alpha (excess return)
+     * 
+     * α = Rp - (Rf + β(Rm - Rf))
+     * 
+     * @param float $portfolioReturn Portfolio return
+     * @param float $indexReturn Market return
+     * @param float $beta Beta coefficient
+     * @param float $riskFreeRate Risk-free rate (default 0%)
+     * @return float Alpha
+     */
+    public function calculateAlpha(
+        float $portfolioReturn,
+        float $indexReturn,
+        float $beta,
+        float $riskFreeRate = 0.0
+    ): float {
+        $expectedReturn = $riskFreeRate + ($beta * ($indexReturn - $riskFreeRate));
+        return round($portfolioReturn - $expectedReturn, 2);
+    }
+    
+    /**
+     * Calculate correlation coefficient
+     * 
+     * ρ = Cov(portfolio, index) / (σp × σm)
+     * 
+     * @param array $portfolioReturns Portfolio returns
+     * @param array $indexReturns Index returns
+     * @return float Correlation (-1 to +1)
+     */
+    public function calculateCorrelation(array $portfolioReturns, array $indexReturns): float
+    {
+        if (count($portfolioReturns) !== count($indexReturns) || count($portfolioReturns) < 2) {
+            throw new InvalidArgumentException('Insufficient aligned data for correlation');
+        }
+        
+        $covariance = $this->calculateCovariance($portfolioReturns, $indexReturns);
+        $stdDevPortfolio = sqrt($this->calculateVariance($portfolioReturns));
+        $stdDevIndex = sqrt($this->calculateVariance($indexReturns));
+        
+        if ($stdDevPortfolio == 0 || $stdDevIndex == 0) {
+            return 0.0;
+        }
+        
+        return round($covariance / ($stdDevPortfolio * $stdDevIndex), 4);
+    }
+    
+    /**
+     * Calculate Sharpe ratio (risk-adjusted return)
+     * 
+     * Sharpe = (Rp - Rf) / σp
+     * 
+     * @param array $returns Portfolio returns
+     * @param float $riskFreeRate Risk-free rate (default 0%)
+     * @return float Sharpe ratio
+     */
+    public function calculateSharpeRatio(array $returns, float $riskFreeRate = 0.0): float
+    {
+        if (count($returns) < 2) {
+            throw new InvalidArgumentException('Insufficient data for Sharpe ratio');
+        }
+        
+        $meanReturn = array_sum($returns) / count($returns);
+        $stdDev = sqrt($this->calculateVariance($returns));
+        
+        if ($stdDev == 0) {
+            return 0.0;
+        }
+        
+        // Annualize assuming daily returns (252 trading days)
+        $annualizedReturn = $meanReturn * 252;
+        $annualizedStdDev = $stdDev * sqrt(252);
+        
+        return round(($annualizedReturn - $riskFreeRate) / $annualizedStdDev, 2);
+    }
+    
+    /**
+     * Calculate Sortino ratio (downside risk-adjusted)
+     * 
+     * Sortino = (Rp - Rt) / σdownside
+     * 
+     * @param array $returns Portfolio returns
+     * @param float $targetReturn Target return (default 0%)
+     * @return float Sortino ratio
+     */
+    public function calculateSortinoRatio(array $returns, float $targetReturn = 0.0): float
+    {
+        if (count($returns) < 2) {
+            throw new InvalidArgumentException('Insufficient data for Sortino ratio');
+        }
+        
+        $meanReturn = array_sum($returns) / count($returns);
+        
+        // Calculate downside deviation (only negative returns)
+        $downsideReturns = array_filter($returns, fn($r) => $r < $targetReturn);
+        
+        if (empty($downsideReturns)) {
+            return PHP_FLOAT_MAX; // No downside risk
+        }
+        
+        $sumSquaredDeviations = array_reduce(
+            $downsideReturns,
+            fn($sum, $r) => $sum + pow($r - $targetReturn, 2),
+            0
+        );
+        
+        $downsideDeviation = sqrt($sumSquaredDeviations / count($returns));
+        
+        if ($downsideDeviation == 0) {
+            return PHP_FLOAT_MAX;
+        }
+        
+        // Annualize
+        $annualizedReturn = $meanReturn * 252;
+        $annualizedDownsideDev = $downsideDeviation * sqrt(252);
+        
+        return round(($annualizedReturn - $targetReturn) / $annualizedDownsideDev, 2);
+    }
+    
+    /**
+     * Calculate maximum drawdown
+     * 
+     * @param array $cumulativeReturns Cumulative portfolio values
+     * @return float Maximum drawdown percentage
+     */
+    public function calculateMaxDrawdown(array $cumulativeReturns): float
+    {
+        if (empty($cumulativeReturns)) {
+            return 0.0;
+        }
+        
+        $maxDrawdown = 0.0;
+        $peak = $cumulativeReturns[0];
+        
+        foreach ($cumulativeReturns as $value) {
+            if ($value > $peak) {
+                $peak = $value;
+            }
+            
+            $drawdown = ($peak - $value) / $peak;
+            if ($drawdown > $maxDrawdown) {
+                $maxDrawdown = $drawdown;
+            }
+        }
+        
+        return round($maxDrawdown * 100, 2);
+    }
+    
+    /**
+     * Format data for Chart.js performance line chart
+     * 
+     * @param array $portfolioData Portfolio time series
+     * @param array $indexData Index time series
+     * @return array Chart.js compatible format
+     */
+    public function formatForPerformanceChart(array $portfolioData, array $indexData): array
+    {
+        $aligned = $this->alignDataByDate($portfolioData, $indexData);
+        
+        $labels = array_keys($aligned);
+        $portfolioReturns = [];
+        $indexReturns = [];
+        
+        $portfolioCumulative = 100;
+        $indexCumulative = 100;
+        
+        foreach ($aligned as $date => $data) {
+            $portfolioCumulative *= (1 + $data['portfolio_return']);
+            $indexCumulative *= (1 + $data['index_return']);
+            
+            $portfolioReturns[] = round($portfolioCumulative - 100, 2);
+            $indexReturns[] = round($indexCumulative - 100, 2);
+        }
+        
+        return [
+            'labels' => $labels,
+            'datasets' => [
+                [
+                    'label' => 'Portfolio',
+                    'data' => $portfolioReturns,
+                    'borderColor' => 'rgba(54, 162, 235, 1)',
+                    'backgroundColor' => 'rgba(54, 162, 235, 0.1)',
+                    'borderWidth' => 2,
+                    'fill' => false
+                ],
+                [
+                    'label' => 'Index',
+                    'data' => $indexReturns,
+                    'borderColor' => 'rgba(201, 203, 207, 1)',
+                    'backgroundColor' => 'rgba(201, 203, 207, 0.1)',
+                    'borderWidth' => 2,
+                    'fill' => false
+                ]
+            ]
+        ];
+    }
+}
+```
+
+**Database Schema:**
+
+```sql
+-- Historical stock/index prices
+CREATE TABLE stock_prices (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    symbol VARCHAR(10) NOT NULL,
+    date DATE NOT NULL,
+    open DECIMAL(15, 4),
+    high DECIMAL(15, 4),
+    low DECIMAL(15, 4),
+    close DECIMAL(15, 4) NOT NULL,
+    volume BIGINT,
+    adjusted_close DECIMAL(15, 4),
+    UNIQUE KEY idx_symbol_date (symbol, date),
+    INDEX idx_symbol (symbol),
+    INDEX idx_date (date)
+);
+
+-- Supported indexes: SPX, IXIC, DJI, RUT
+-- Time periods: 1M (30 days), 3M (90), 6M (180), 1Y (365), 3Y (1095), 5Y (1825)
+```
+
+**Test Coverage:**
+
+```php
+// tests/Services/IndexBenchmarkServiceTest.php
+class IndexBenchmarkServiceTest extends TestCase
+{
+    private IndexBenchmarkService $service;
+    private IndexDataDAO $mockDAO;
+    
+    // 19 test methods, all passing:
+    // - testFetchIndexData()
+    // - testCalculateTotalReturn()
+    // - testCalculateAnnualizedReturn()
+    // - testCalculateBeta()
+    // - testCalculateAlpha()
+    // - testCalculateCorrelation()
+    // - testCalculateSharpeRatio()
+    // - testCalculateSortinoRatio()
+    // - testCalculateMaxDrawdown()
+    // - testFormatForPerformanceChart()
+    // - testFormatForComparisonTable()
+    // - testAlignDataByDate()
+    // - testHandleInsufficientData()
+    // - testHandleZeroVariance()
+    // - testHandleInvalidSymbol()
+    // - testHandleInvalidPeriod()
+    // - testMultipleIndexComparison()
+    // - testRelativePerformance()
+    // - testOutperformancePeriods()
+}
+```
+
+#### 4.5.3 MenuService Architecture
+
+**Purpose:** Centralized navigation menu generation with role-based access control
+
+**Component Details:**
+
+```php
+namespace App\Services;
+
+/**
+ * Menu Service
+ * 
+ * Generates navigation menus based on user permissions and current page.
+ * Supports authenticated, admin, and unauthenticated user types.
+ */
+class MenuService
+{
+    /**
+     * Get menu items based on context
+     * 
+     * @param string $currentPage Current page filename
+     * @param bool $isAdmin Whether user is admin
+     * @param bool $isAuthenticated Whether user is logged in
+     * @return array Menu items
+     */
+    public function getMenuItems(
+        string $currentPage,
+        bool $isAdmin = false,
+        bool $isAuthenticated = true
+    ): array {
+        $items = [
+            [
+                'label' => 'Dashboard',
+                'url' => 'dashboard.php',
+                'icon' => 'bi-speedometer2',
+                'active' => $currentPage === 'dashboard.php',
+                'admin_only' => false
+            ],
+            [
+                'label' => 'Portfolio',
+                'url' => 'portfolio.php',
+                'icon' => 'bi-briefcase',
+                'active' => $currentPage === 'portfolio.php',
+                'admin_only' => false
+            ],
+            [
+                'label' => 'Sector Analysis',
+                'url' => 'sector_analysis.php',
+                'icon' => 'bi-pie-chart',
+                'active' => $currentPage === 'sector_analysis.php',
+                'admin_only' => false
+            ],
+            [
+                'label' => 'Index Benchmark',
+                'url' => 'index_benchmark.php',
+                'icon' => 'bi-graph-up',
+                'active' => $currentPage === 'index_benchmark.php',
+                'admin_only' => false
+            ],
+            [
+                'label' => 'Database',
+                'url' => 'database.php',
+                'icon' => 'bi-database',
+                'active' => $currentPage === 'database.php',
+                'admin_only' => true
+            ]
+        ];
+        
+        if (!$isAuthenticated) {
+            return [];
+        }
+        
+        return $this->filterAdminItems($items, $isAdmin);
+    }
+    
+    /**
+     * Filter admin-only items
+     * 
+     * @param array $items Menu items
+     * @param bool $isAdmin Whether user is admin
+     * @return array Filtered menu items
+     */
+    private function filterAdminItems(array $items, bool $isAdmin): array
+    {
+        if ($isAdmin) {
+            return $items;
+        }
+        
+        return array_filter($items, fn($item) => !$item['admin_only']);
+    }
+    
+    /**
+     * Get active menu item
+     * 
+     * @param string $currentPage Current page filename
+     * @return array|null Active menu item or null
+     */
+    public function getActiveItem(string $currentPage): ?array
+    {
+        $items = $this->getMenuItems($currentPage, true, true);
+        
+        foreach ($items as $item) {
+            if ($item['active']) {
+                return $item;
+            }
+        }
+        
+        return null;
+    }
+}
+```
+
+**Test Coverage:**
+
+```php
+// tests/Services/ServicesTest.php (MenuService tests)
+class ServicesTest extends TestCase
+{
+    private MenuService $menuService;
+    
+    // 5 test methods, all passing:
+    // - testGetMenuItemsAuthenticated()
+    // - testGetMenuItemsAdmin()
+    // - testGetMenuItemsUnauthenticated()
+    // - testFilterAdminItems()
+    // - testGetActiveItem()
+}
+```
+
 ---
 
 ## 5. Deployment Architecture
