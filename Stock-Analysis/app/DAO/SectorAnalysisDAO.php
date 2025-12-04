@@ -45,4 +45,16 @@ interface SectorAnalysisDAO
      * @return array<string, string> Symbol => Sector name
      */
     public function getSectorsBySymbols(array $symbols): array;
+    
+    /**
+     * Get historical sector weights for user portfolio
+     * 
+     * Returns sector allocation percentages over time.
+     * 
+     * @param int $userId User ID
+     * @param string $startDate Start date (YYYY-MM-DD)
+     * @param string $endDate End date (YYYY-MM-DD)
+     * @return array<string, array<string, float>> Date => [Sector => Weight%]
+     */
+    public function getHistoricalSectorWeights(int $userId, string $startDate, string $endDate): array;
 }
