@@ -58,6 +58,7 @@ RUN add-apt-repository ppa:ondrej/php -y && \
         php${PHP_VERSION}-opcache \
         php${PHP_VERSION}-intl \
         php${PHP_VERSION}-bcmath \
+        php${PHP_VERSION}-redis \
         libapache2-mod-php${PHP_VERSION} \
     && rm -rf /var/lib/apt/lists/*
 

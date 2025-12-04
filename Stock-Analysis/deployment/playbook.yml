@@ -6,15 +6,19 @@
   hosts: stockanalysis
   become: yes
   vars:
-    app_name: stock-analysis
+    app_name: "{{ lookup('env', 'APP_NAME') | default('stock-analysis', true) }}"
+    app_domain: "{{ lookup('env', 'APP_DOMAIN') | default('example.com', true) }}"
     app_user: www-data
     app_root: /var/www/{{ app_name }}
     php_version: "8.2"
     python_version: "3.11"
     mysql_root_password: "{{ lookup('env', 'MYSQL_ROOT_PASSWORD') | default('changeme', true) }}"
-    mysql_database: stock_analysis
-    mysql_user: stock_app
+    mysql_database: "{{ lookup('env', 'MYSQL_DATABASE') | default('stock_analysis', true) }}"
+    mysql_user: "{{ lookup('env', 'MYSQL_USER') | default('stock_app', true) }}"
     mysql_password: "{{ lookup('env', 'MYSQL_APP_PASSWORD') | default('changeme', true) }}"
+    redis_password: "{{ lookup('env', 'REDIS_PASSWORD') | default('changeme', true) }}"
+    redis_port: "{{ lookup('env', 'REDIS_PORT') | default('6379', true) }}"
+    redis_maxmemory: "{{ lookup('env', 'REDIS_MAXMEMORY') | default('256mb', true) }}"
   
   tasks:
     - name: Update apt cache
@@ -84,6 +88,7 @@
           - php{{ php_version }}-intl
           - php{{ php_version }}-bcmath
           - php{{ php_version }}-json
+          - php{{ php_version }}-redis
           - libapache2-mod-php{{ php_version }}
         state: present
 
@@ -181,6 +186,61 @@
         state: present
         login_user: root
         login_password: "{{ mysql_root_password }}"
+
+    # ===== REDIS INSTALLATION =====
+    
+    - name: Install Redis server
+      apt:
+        name:
+          - redis-server
+          - redis-tools
+        state: present
+
+    - name: Configure Redis authentication
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '^# requirepass'
+        line: 'requirepass {{ redis_password }}'
+        state: present
+      notify: restart redis
+
+    - name: Configure Redis port
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '^port '
+        line: 'port {{ redis_port }}'
+        state: present
+      notify: restart redis
+
+    - name: Configure Redis maxmemory
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '^# maxmemory '
+        line: 'maxmemory {{ redis_maxmemory }}'
+        state: present
+      notify: restart redis
+
+    - name: Configure Redis maxmemory-policy
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '^# maxmemory-policy '
+        line: 'maxmemory-policy allkeys-lru'
+        state: present
+      notify: restart redis
+
+    - name: Configure Redis to bind to localhost only
+      lineinfile:
+        path: /etc/redis/redis.conf
+        regexp: '^bind '
+        line: 'bind 127.0.0.1 ::1'
+        state: present
+      notify: restart redis
+
+    - name: Start Redis service
+      service:
+        name: redis-server
+        state: started
+        enabled: yes
 
     # ===== APPLICATION DEPLOYMENT =====
     
@@ -385,4 +445,9 @@
     - name: restart mysql
       service:
         name: mysql
+        state: restarted
+
+    - name: restart redis
+      service:
+        name: redis-server
         state: restarted

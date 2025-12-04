@@ -225,24 +225,56 @@ Main deployment playbook with tasks:
 
 ## Environment Variables
 
+Copy `.env.example` to `.env` and customize:
+
+```bash
+cp .env.example .env
+# Edit .env with your values
+```
+
 ### Application
 
+- `APP_NAME` - Application name (default: stock-analysis)
+- `APP_DOMAIN` - Domain name (default: example.com)
 - `APP_ENV` - Environment (production, development, testing)
-- `APP_DEBUG` - Debug mode (true/false)
+- `APP_DEBUG` - Debug mode (default: false)
 - `APP_ROOT` - Application root directory
+- `APP_PORT` - HTTP port (default: 8080)
 
 ### Database
 
-- `DB_HOST` - Database host
+- `MYSQL_ROOT_PASSWORD` - MySQL root password (default: changeme)
+- `MYSQL_DATABASE` - Database name (default: stock_analysis)
+- `MYSQL_USER` - Database user (default: stock_app)
+- `MYSQL_APP_PASSWORD` - Database password (default: changeme)
+- `MYSQL_PORT` - MySQL port (default: 3306)
+- `DB_HOST` - Database host (default: db)
 - `DB_PORT` - Database port (default: 3306)
 - `DB_DATABASE` - Database name
 - `DB_USERNAME` - Database user
 - `DB_PASSWORD` - Database password
 
+### Redis Cache
+
+- `REDIS_HOST` - Redis host (default: redis)
+- `REDIS_PORT` - Redis port (default: 6379)
+- `REDIS_PASSWORD` - Redis password (default: changeme)
+- `REDIS_DATABASE` - Redis database number (default: 0)
+- `REDIS_MAXMEMORY` - Max memory for Redis (default: 256mb)
+
+### Management Tools
+
+- `PHPMYADMIN_PORT` - phpMyAdmin port (default: 8081)
+- `REDIS_COMMANDER_PORT` - Redis Commander port (default: 8082)
+
 ### Python
 
 - `PYTHON_PATH` - Path to Python executable
-- `PYTHON_ANALYSIS_SCRIPT` - Path to analysis.py
+- `PYTHON_VERSION` - Python version (default: 3.11)
+
+### Networking
+
+- `NETWORK_NAME` - Docker network name (default: stock-analysis-network)
 
 ### Paths
 
@@ -297,6 +329,28 @@ docker exec -i stock-analysis-db mysql -u root -p stock_analysis < backup.sql
 
 # MySQL shell
 docker exec -it stock-analysis-db mysql -u root -p
+```
+
+### Redis Operations
+
+```bash
+# Connect to Redis CLI
+docker exec -it stock-analysis-redis redis-cli -a changeme
+
+# Monitor Redis commands
+docker exec stock-analysis-redis redis-cli -a changeme MONITOR
+
+# Get Redis info
+docker exec stock-analysis-redis redis-cli -a changeme INFO
+
+# Check memory usage
+docker exec stock-analysis-redis redis-cli -a changeme INFO memory
+
+# Flush cache (⚠️ clears all cached data)
+docker exec stock-analysis-redis redis-cli -a changeme FLUSHALL
+
+# Check number of keys
+docker exec stock-analysis-redis redis-cli -a changeme DBSIZE
 ```
 
 ### Update Application
@@ -377,16 +431,92 @@ docker exec stock-analysis-app chmod -R 775 /var/www/stock-analysis/data
 7. **Use Docker secrets** for sensitive data in production
 8. **Scan images** for vulnerabilities
 
+## Kubernetes Pod Deployment
+
+For simplified Kubernetes deployment, use the pod configuration which runs all services in a single pod:
+
+### Prerequisites
+
+- Kubernetes cluster (minikube, Docker Desktop, cloud provider)
+- kubectl configured
+
+### Deploy Pod
+
+```bash
+# Create namespace (optional)
+kubectl create namespace stock-analysis
+
+# Update secrets with your passwords
+kubectl create secret generic stock-analysis-secrets \
+  --from-literal=mysql-root-password=your_secure_password \
+  --from-literal=mysql-password=your_app_password \
+  --from-literal=redis-password=your_redis_password \
+  -n stock-analysis
+
+# Update ConfigMap values if needed
+kubectl edit configmap stock-analysis-config -n stock-analysis
+
+# Deploy pod and services
+kubectl apply -f deployment/pod.yml -n stock-analysis
+
+# Check status
+kubectl get pods -n stock-analysis
+kubectl get svc -n stock-analysis
+
+# View logs
+kubectl logs -f stock-analysis -c app -n stock-analysis
+kubectl logs -f stock-analysis -c mysql -n stock-analysis
+kubectl logs -f stock-analysis -c redis -n stock-analysis
+
+# Get service URL
+kubectl get svc stock-analysis-service -n stock-analysis
+```
+
+### Access Application
+
+```bash
+# Port forward to access locally
+kubectl port-forward pod/stock-analysis 8080:80 -n stock-analysis
+
+# Access at http://localhost:8080
+```
+
+### Update Deployment
+
+```bash
+# Update image
+kubectl set image pod/stock-analysis app=stock-analysis:latest -n stock-analysis
+
+# Restart pod
+kubectl delete pod stock-analysis -n stock-analysis
+kubectl apply -f deployment/pod.yml -n stock-analysis
+```
+
+### Cleanup
+
+```bash
+# Delete pod and services
+kubectl delete -f deployment/pod.yml -n stock-analysis
+
+# Delete secrets and configmaps
+kubectl delete secret stock-analysis-secrets -n stock-analysis
+kubectl delete configmap stock-analysis-config -n stock-analysis
+```
+
 ## Production Recommendations
 
 1. **Use separate database server** - don't run MySQL in container for production
-2. **Use orchestration** - Kubernetes, Docker Swarm for high availability
-3. **Configure logging** - centralized log aggregation
-4. **Monitor performance** - Prometheus, Grafana
-5. **Set up CI/CD** - automated testing and deployment
-6. **Use reverse proxy** - Nginx or Traefik for SSL termination and load balancing
-7. **Implement backups** - automated database and volume backups
-8. **Configure alerting** - notify on errors and resource issues
+2. **Use orchestration** - Kubernetes Deployments/StatefulSets instead of Pods for high availability
+3. **Configure logging** - centralized log aggregation (ELK stack, Loki)
+4. **Monitor performance** - Prometheus, Grafana for metrics
+5. **Set up CI/CD** - automated testing and deployment pipelines
+6. **Use reverse proxy** - Nginx Ingress or Traefik for SSL termination and load balancing
+7. **Implement backups** - automated database and volume backups with retention policies
+8. **Configure alerting** - notify on errors and resource issues (PagerDuty, Slack)
+9. **Use managed services** - Consider managed MySQL and Redis for production
+10. **Implement auto-scaling** - HPA (Horizontal Pod Autoscaler) for application pods
+11. **Use secrets management** - HashiCorp Vault, AWS Secrets Manager, or cloud provider secrets
+12. **Configure resource limits** - Set appropriate CPU/memory requests and limits
 
 ## Support
 
