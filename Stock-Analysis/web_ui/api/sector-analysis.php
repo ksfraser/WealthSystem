@@ -24,6 +24,7 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/cache.php';
 
 use App\Services\SectorAnalysisChartService;
 use App\DAO\SectorAnalysisDAOImpl;
@@ -40,20 +41,40 @@ try {
         throw new InvalidArgumentException('Invalid user_id');
     }
     
-    // Get database connection
-    $pdo = getDbConnection();
+    // Try to get from cache
+    $cache = getCacheService();
+    $cacheKey = null;
+    $analysis = null;
     
-    // Create DAO and service
-    $dao = new SectorAnalysisDAOImpl($pdo);
-    $service = new SectorAnalysisChartService($dao);
+    if ($cache !== null) {
+        $cacheKey = $cache->generateKey('sector_analysis', ['user_id' => $userId]);
+        $analysis = $cache->get($cacheKey);
+    }
     
-    // Get complete sector analysis
-    $analysis = $service->getPortfolioSectorAnalysis($userId);
+    // If not in cache, calculate and store
+    if ($analysis === null) {
+        // Get database connection
+        $pdo = getDbConnection();
+        
+        // Create DAO and service
+        $dao = new SectorAnalysisDAOImpl($pdo);
+        $service = new SectorAnalysisChartService($dao);
+        
+        // Get complete sector analysis
+        $analysis = $service->getPortfolioSectorAnalysis($userId);
+        
+        // Store in cache
+        if ($cache !== null && $cacheKey !== null) {
+            $ttl = getCacheTTL('sector_analysis');
+            $cache->set($cacheKey, $analysis, $ttl);
+        }
+    }
     
     // Return success response
     echo json_encode([
         'success' => true,
-        'data' => $analysis
+        'data' => $analysis,
+        'cached' => ($cache !== null && $cacheKey !== null)
     ], JSON_PRETTY_PRINT);
     
 } catch (InvalidArgumentException $e) {

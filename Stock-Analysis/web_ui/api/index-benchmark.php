@@ -25,6 +25,7 @@ header('Content-Type: application/json');
 
 require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../config/cache.php';
 
 use App\Services\IndexBenchmarkService;
 use App\DAO\IndexDataDAOImpl;
@@ -38,6 +39,30 @@ try {
     $symbol = strtoupper(trim($_GET['symbol']));
     $indexSymbol = $_GET['index'] ?? 'SPX';
     $period = $_GET['period'] ?? '1Y';
+    
+    // Try to get from cache
+    $cache = getCacheService();
+    $cacheKey = null;
+    $cachedData = null;
+    
+    if ($cache !== null) {
+        $cacheKey = $cache->generateKey('index_benchmark', [
+            'symbol' => $symbol,
+            'index' => $indexSymbol,
+            'period' => $period
+        ]);
+        $cachedData = $cache->get($cacheKey);
+    }
+    
+    // If cached data exists, return it
+    if ($cachedData !== null) {
+        echo json_encode([
+            'success' => true,
+            'data' => $cachedData,
+            'cached' => true
+        ], JSON_PRETTY_PRINT);
+        exit;
+    }
     
     // Get database connection
     $pdo = getDbConnection();
@@ -99,21 +124,31 @@ try {
         'sortino_ratio' => $service->calculateSortinoRatio($indexReturns, 0)
     ]);
     
+    // Prepare response data
+    $responseData = [
+        'performance_chart' => $performanceChart,
+        'metrics_table' => $metricsTable,
+        'relative_performance' => $relativePerf,
+        'risk_metrics' => [
+            'beta' => round($beta, 3),
+            'alpha' => round($alpha, 2),
+            'correlation' => round($correlation, 3),
+            'sharpe_ratio' => round($sharpe, 2),
+            'sortino_ratio' => round($sortino, 2)
+        ]
+    ];
+    
+    // Store in cache
+    if ($cache !== null && $cacheKey !== null) {
+        $ttl = getCacheTTL('index_benchmark');
+        $cache->set($cacheKey, $responseData, $ttl);
+    }
+    
     // Return success response
     echo json_encode([
         'success' => true,
-        'data' => [
-            'performance_chart' => $performanceChart,
-            'metrics_table' => $metricsTable,
-            'relative_performance' => $relativePerf,
-            'risk_metrics' => [
-                'beta' => round($beta, 3),
-                'alpha' => round($alpha, 2),
-                'correlation' => round($correlation, 3),
-                'sharpe_ratio' => round($sharpe, 2),
-                'sortino_ratio' => round($sortino, 2)
-            ]
-        ]
+        'data' => $responseData,
+        'cached' => false
     ], JSON_PRETTY_PRINT);
     
 } catch (InvalidArgumentException $e) {
