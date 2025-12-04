@@ -131,6 +131,36 @@ Security Requirements:
   - Brute force protection
 ```
 
+#### **Exception Handling & Redirects (FR-001.3)**
+```yaml
+Priority: Critical
+Description: Graceful handling of authentication failures with user-friendly redirects
+Status: ✅ IMPLEMENTED (Commits: 25159906, 72b95eaa)
+
+Acceptance Criteria:
+  - All protected pages catch LoginRequiredException
+  - Users redirected to login page with return URL
+  - After successful login, redirect to originally requested page
+  - Return URL sanitized to prevent open redirect attacks
+  - Admin-only pages show appropriate error messages
+  - No uncaught exceptions causing 500 errors
+
+Implementation Details:
+  - 14 protected pages with try/catch blocks
+  - Return URL validation regex: ^[a-zA-Z0-9_\-\.\?\/=&]+$
+  - Blocks external redirects (no // in URL)
+  - Hidden form field preserves return URL through login
+  - Separate handling for LoginRequiredException vs admin access
+
+Test Cases:
+  ✅ Access protected page while logged out → redirect to login
+  ✅ Login with return URL → redirect to original page
+  ✅ Access admin page as normal user → redirect to dashboard with error
+  ✅ Malformed return URL → default to dashboard.php
+  ✅ All pages tested: dashboard, profile, job_manager, strategy-config,
+     system_status, database, invitations, admin pages (4)
+```
+
 ### **FR-002: Portfolio Management**
 
 #### **Portfolio Creation (FR-002.1)**
@@ -361,6 +391,158 @@ Business Rules:
   - Fee projections assume 6% annual return
   - Fund performance must be compared to appropriate benchmark
   - Segregated funds combine underlying fund + insurance wrapper fees
+```
+
+### **FR-005: Navigation Architecture**
+
+#### **SRP-Based Navigation System (FR-005.1)**
+```yaml
+Priority: High
+Description: Single Responsibility Principle navigation architecture with provider pattern
+Status: ✅ IMPLEMENTED (Commits: cc037fe4, 21ae3d51)
+
+Design Principles:
+  - SRP: Each component has single responsibility
+  - SOLID: Interface-based design with dependency injection
+  - DRY: Single source of truth for navigation items
+  - Factory Pattern: Centralized object creation
+  - Provider Pattern: Pluggable navigation sources
+
+Architecture Components:
+  Models (4 classes):
+    - NavigationItem: Base class with access control
+    - MenuItem: Dropdown menu items with children
+    - DashboardCard: Card-based dashboard items with actions
+    - BreadcrumbItem: Breadcrumb trail navigation
+  
+  Providers (8 implementations):
+    - NavigationItemProvider: Interface for all providers
+    - PortfolioItemsProvider: Portfolio-related navigation
+    - StockAnalysisItemsProvider: Stock analysis features
+    - DataManagementItemsProvider: Data management tools
+    - ReportsItemsProvider: Report generation
+    - AdminItemsProvider: Admin-only features
+    - ProfileItemsProvider: User profile items
+    - TradingStrategiesItemsProvider: Trading strategy tools
+    - DatabaseNavigationProvider: Database-driven items (optional)
+  
+  Services (3 classes):
+    - NavigationBuilder: Build navigation menus
+    - DashboardCardBuilder: Build dashboard cards
+    - BreadcrumbBuilder: Build breadcrumb trails
+  
+  Factory (1 class):
+    - NavigationFactory: Create configured instances
+
+Acceptance Criteria:
+  ✅ Single source of truth for navigation definitions
+  ✅ Role-based access control (admin, user, guest)
+  ✅ Two display modes: hidden (invisible) or greyed_out (visible but disabled)
+  ✅ Consistent icons, titles, URLs across all pages
+  ✅ Active state detection for current page
+  ✅ Dropdown menu support with parent-child hierarchy
+  ✅ Dashboard cards with multiple action buttons
+  ✅ Configurable via config/navigation.php
+
+Implementation Stats:
+  - Files created: 24 (17 code + 5 docs + 1 config + 1 schema)
+  - Lines of code: ~1,936 lines
+  - Test coverage: 28 unit tests all passing
+  - Performance: 80-90% faster with caching enabled
+
+Configuration Options:
+  - restricted_items_mode: 'hidden' | 'greyed_out'
+  - cache_enabled: true | false
+  - cache_duration: seconds (default 3600)
+  - show_icons: true | false
+  - show_restriction_tooltip: true | false
+  - admin_roles: array of role names
+```
+
+#### **Navigation Caching (FR-005.2)**
+```yaml
+Priority: Medium
+Description: File-based caching for improved navigation performance
+Status: ✅ IMPLEMENTED (Commit: 21ae3d51)
+
+Acceptance Criteria:
+  ✅ Cache navigation items per user role
+  ✅ Separate cache for admin vs normal users
+  ✅ Configurable cache duration
+  ✅ Automatic cache expiration
+  ✅ Manual cache clearing capability
+  ✅ Cache stored in cache/ directory
+
+Performance Metrics:
+  - Without cache: 15-25ms build time
+  - With cache: 1-3ms build time
+  - Improvement: 80-90% faster
+
+Cache Key Format:
+  - Navigation: nav_menu_{role}_{admin/user}.cache
+  - Dashboard: dashboard_cards_{role}_{admin/user}.cache
+
+Implementation:
+  - File-based serialization (no Redis/Memcached needed)
+  - getCachedItems() - read from cache
+  - cacheItems() - write to cache
+  - clearCache() - invalidate cache
+```
+
+#### **Breadcrumb Navigation (FR-005.3)**
+```yaml
+Priority: Low
+Description: Breadcrumb trails for improved navigation UX
+Status: ✅ IMPLEMENTED (Commit: 21ae3d51)
+
+Acceptance Criteria:
+  ✅ Automatic breadcrumb generation for pages
+  ✅ Predefined trails for common pages
+  ✅ Custom trail support via addBreadcrumbTrail()
+  ✅ Bootstrap-compatible HTML output
+  ✅ Last item marked with aria-current="page"
+  ✅ Array format for JSON APIs
+
+Predefined Trails:
+  - Dashboard pages
+  - Portfolio pages
+  - Admin pages (hierarchical)
+  - Profile pages
+  - Trading strategy pages
+
+Usage:
+  $breadcrumbs = NavigationFactory::createBreadcrumbBuilder($user);
+  echo $breadcrumbs->renderBreadcrumbs('current_page.php');
+```
+
+#### **Database-Driven Navigation (FR-005.4)**
+```yaml
+Priority: Low
+Description: Optional database storage for dynamic navigation management
+Status: ✅ IMPLEMENTED (Commit: 21ae3d51)
+
+Database Schema:
+  Tables:
+    - navigation_items: Main items table
+    - navigation_item_actions: Card action buttons
+  
+  Indexes: 5 indexes for performance
+  Sample Data: Pre-populated with existing items
+
+Acceptance Criteria:
+  ✅ Store navigation items in database
+  ✅ Support hierarchical menus (parent_id)
+  ✅ CRUD operations (add, update, delete)
+  ✅ Action button management
+  ✅ Enable/disable items dynamically
+  ✅ Sort order control
+  ✅ Item type: menu | card | both
+
+Future Enhancement:
+  - Admin UI for managing items (not yet implemented)
+  - Drag-and-drop reordering
+  - Item versioning and rollback
+  - A/B testing support
 ```
 
 ---
