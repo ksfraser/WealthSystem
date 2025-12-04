@@ -62,8 +62,17 @@ $navManager = getNavManager();
     <div class="container mt-4">
         <div class="row">
             <div class="col-12">
-                <h1>📊 Portfolio Sector Analysis</h1>
-                <p class="lead">Analyze your portfolio's sector allocation and concentration risk</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h1>📊 Portfolio Sector Analysis</h1>
+                        <p class="lead">Analyze your portfolio's sector allocation and concentration risk</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-danger" onclick="exportToPDF()">
+                            <i class="bi bi-file-pdf"></i> Export PDF
+                        </button>
+                    </div>
+                </div>
                 <hr>
             </div>
         </div>
@@ -267,6 +276,12 @@ $navManager = getNavManager();
                 html += '</ul>';
                 underweightDiv.innerHTML = html;
             }
+        }
+        
+        // Export to PDF
+        function exportToPDF() {
+            const userId = 1; // TODO: Get from session
+            window.location.href = `/api/export.php?action=sector_analysis&user_id=${userId}`;
         }
         
         // Load data on page load

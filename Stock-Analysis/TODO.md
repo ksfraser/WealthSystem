@@ -9,7 +9,14 @@
   - ✅ Frontend: advanced_chart_service.js with Chart.js visualizations
   - ✅ API: advanced-charts.php endpoint with 5 actions (correlation, treemap, trends, concentration, rebalancing)
   - ✅ UI: advanced_charts.php page with Bootstrap 5 tabs and interactive controls - COMPLETED
-- [ ] Implement Export Features
-  - Add PDF and Excel export functionality for sector analysis and index benchmark reports. Include charts and metrics tables
-- [ ] Build Alert System
-  - Create notification system for concentration risk alerts, sector rebalancing suggestions, and performance warnings
+- [x] Implement Export Features
+  - ✅ PDF export service with mPDF library
+  - ✅ Export API endpoint (/api/export.php)
+  - ✅ Export buttons added to UI pages
+  - ✅ Sector analysis, index benchmark, and advanced charts PDF reports
+  - ⚠️ Excel export skipped (requires zip extension) - COMPLETED (PDF only)
+- [x] Build Alert System
+  - ✅ AlertService with concentration risk, rebalancing, and performance monitoring
+  - ✅ Alert API endpoint (/api/alerts.php)
+  - ✅ Configurable thresholds (HHI, rebalancing deviation, underperformance)
+  - ✅ Alert generation, storage, and dismissal functionality - COMPLETED
