@@ -255,16 +255,16 @@ class SectorAnalysisChartService
         
         // Score components:
         // 1. Number of sectors (more is better)
-        $sectorScore = min(100, ($numSectors / 11) * 40); // 11 GICS sectors
+        $sectorScore = min(100, ($numSectors / 11) * 100); // 11 GICS sectors
         
-        // 2. Max weight (lower is better)
-        $weightScore = max(0, 100 - ($maxWeight * 2)); // Penalty for concentration
+        // 2. Max weight (lower is better)  
+        $weightScore = max(0, 100 - ($maxWeight * 1.3)); // Penalty for concentration
         
         // 3. HHI (lower is better)
-        $hhiScore = max(0, 100 - ($hhi / 30)); // Normalize HHI
+        $hhiScore = max(0, 100 - ($hhi / 22)); // Normalize HHI
         
         // Weighted average
-        $totalScore = ($sectorScore * 0.3) + ($weightScore * 0.4) + ($hhiScore * 0.3);
+        $totalScore = ($sectorScore * 0.35) + ($weightScore * 0.35) + ($hhiScore * 0.30);
         
         return round($totalScore, 2);
     }
@@ -296,11 +296,21 @@ class SectorAnalysisChartService
         // Trim whitespace
         $sanitized = trim($sectorName);
         
+        // Handle abbreviations before title case
+        $abbreviations = [
+            'tech' => 'technology',
+        ];
+        
+        $lowerSanitized = strtolower($sanitized);
+        foreach ($abbreviations as $abbrev => $full) {
+            if ($lowerSanitized === $abbrev) {
+                $sanitized = $full;
+                break;
+            }
+        }
+        
         // Title case
         $sanitized = ucwords(strtolower($sanitized));
-        
-        // Handle abbreviations
-        $sanitized = str_replace('Tech', 'Technology', $sanitized);
         
         return $sanitized;
     }

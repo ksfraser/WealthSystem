@@ -74,8 +74,7 @@ class SectorAnalysisChartServiceTest extends TestCase
         ];
         
         // Create service with mocked dependencies
-        // This will fail initially (TDD: Red phase)
-        // $this->service = new SectorAnalysisChartService($this->mockDAO);
+        $this->service = new SectorAnalysisChartService($this->mockDAO);
     }
     
     // ===== TEST: Service Creation =====
@@ -87,8 +86,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testServiceCanBeInstantiated(): void
     {
-        $this->markTestIncomplete('SectorAnalysisChartService not yet implemented');
-        
         // Assert: Service should be creatable with DAO dependency
         $service = new SectorAnalysisChartService($this->mockDAO);
         $this->assertInstanceOf(SectorAnalysisChartService::class, $service);
@@ -105,8 +102,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testCalculatePortfolioSectorAllocation(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange
         $totalValue = 30000; // Sum of all positions
         
@@ -142,8 +137,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testCalculateSectorAllocationWithEmptyPortfolio(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange: Empty portfolio
         $emptyPortfolio = [];
         
@@ -166,8 +159,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testCompareAgainstBenchmark(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange
         $portfolioAllocation = [
             'Technology' => 60.0,
@@ -205,8 +196,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testCalculateConcentrationRisk(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange
         $allocation = [
             'Technology' => 60.0,
@@ -244,8 +233,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testFormatForPieChart(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange
         $allocation = [
             'Technology' => 60.0,
@@ -282,8 +269,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testFormatForComparisonChart(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange
         $portfolioAllocation = [
             'Technology' => 60.0,
@@ -323,8 +308,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testCalculateDiversificationScore(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange: Well-diversified portfolio
         $diversified = [
             'Technology' => 15.0,
@@ -369,8 +352,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testValidateSectorData(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange: Valid data
         $validData = $this->samplePortfolioData;
         
@@ -395,8 +376,6 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testSanitizeSectorNames(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange: Inconsistent sector names
         $inconsistent = [
             'technology',
@@ -429,10 +408,8 @@ class SectorAnalysisChartServiceTest extends TestCase
      */
     public function testHandleDatabaseErrors(): void
     {
-        $this->markTestIncomplete('Method not yet implemented');
-        
         // Arrange: Mock DAO to throw exception
-        $this->mockDAO->method('getSectorData')
+        $this->mockDAO->method('getPortfolioSectorData')
             ->willThrowException(new \Exception('Database connection failed'));
         
         // Act & Assert: Should catch and handle gracefully
