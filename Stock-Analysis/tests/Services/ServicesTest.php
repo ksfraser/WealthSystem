@@ -43,6 +43,8 @@ if (!function_exists('headers_sent')) {
 // Include the classes under test after setting up mocks
 require_once __DIR__ . '/../../web_ui/UiRenderer.php';
 
+use App\Services\MenuService;
+
 class ServicesTest extends TestCase
 {
     private $mockNavManager;
