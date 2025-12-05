@@ -9,8 +9,10 @@
 - **Sprint 2**: Technical Indicators, Metrics, Alert System (69 tests, 100%) ✅
 - **Sprint 3**: Phase 1 Trading Strategies (RSI, Bollinger Bands, Moving Averages) (63 tests, 100%) ✅
 - **Sprint 4**: Phase 2 Trading Strategies (VWAP, MACD), Portfolio Rebalancing (46 tests, 100%) ✅
+- **Sprint 5**: Alert Persistence & Migration System (47 tests, 100%) ✅
+- **Sprint 6**: Backtesting Framework (BacktestEngine, PerformanceMetrics) (37 tests, 100%) ✅
 
-**Total Completed**: 178 tests, 384 assertions, 100% pass rate
+**Total Completed**: 262 tests, 100% pass rate
 
 ### Sprint Status
 | Sprint | Focus Area | Tests | Status | Completion Date |
@@ -18,7 +20,9 @@
 | Sprint 2 | Technical Indicators, Alerts | 69/69 | ✅ Complete | Dec 4, 2025 |
 | Sprint 3 | Phase 1 Strategies (RSI, BB, MA) | 63/63 | ✅ Complete | Dec 4, 2025 |
 | Sprint 4 | Phase 2 Strategies (VWAP, MACD), Rebalancing | 46/46 | ✅ Complete | Dec 5, 2025 |
-| Sprint 5 | TBD | - | ⏳ Planned | - |
+| Sprint 5 | Alert Persistence, Migration System | 47/47 | ✅ Complete | Dec 5, 2025 |
+| Sprint 6 | Backtesting Framework | 37/37 | ✅ Complete | Dec 5, 2025 |
+| Sprint 7 | TBD | - | ⏳ Planned | - |
 
 ## Feature Completion Matrix
 
@@ -61,9 +65,10 @@
 ### Backtesting & Optimization
 | Feature | Status | Tests | Sprint | Notes |
 |---------|--------|-------|--------|-------|
-| Backtesting Framework | ❌ Not Started | - | - | Historical strategy testing |
-| Performance Metrics | ❌ Not Started | - | - | Sharpe, Sortino, drawdown |
-| Strategy Optimization | ❌ Not Started | - | - | Parameter tuning |
+| Backtesting Framework | ✅ Complete | 16/16 | Sprint 6 | BacktestEngine with commission/slippage |
+| Performance Metrics | ✅ Complete | 21/21 | Sprint 6 | Sharpe, Sortino, drawdown, win rate |
+| Strategy Comparison | ⏳ Planned | - | Sprint 7 | Side-by-side comparison, ranking |
+| Strategy Optimization | ❌ Not Started | - | - | Parameter tuning, grid search |
 | Walk-Forward Validation | ❌ Not Started | - | - | Out-of-sample testing |
 
 ### Real-Time Features
@@ -78,64 +83,57 @@
 | Feature | Status | Tests | Sprint | Notes |
 |---------|--------|-------|--------|-------|
 | Schema Design | ✅ Complete | N/A | Sprint 1 | MySQL schema defined |
-| Migration System | ❌ Not Started | - | - | Schema versioning, rollback |
-| Seed Data | ⏳ Partial | - | Sprint 1 | Basic seeds exist |
-| Alert Persistence | ❌ Not Started | - | - | Currently in-memory only |
+| Migration System | ✅ Complete | 15/15 | Sprint 5 | Version tracking, up/down, rollback |
+| Database Connection | ✅ Complete | 12/12 | Sprint 5 | Multi-driver PDO connection |
+| Alert Persistence | ✅ Complete | 20/20 | Sprint 5 | Full CRUD with AlertRepository |
 
 ## Critical Gaps
 
 ### High Priority 🔴
-1. **Alert Persistence** - Alerts currently stored in-memory, lost on restart
-   - Impact: Users lose all configured alerts on server restart
-   - Effort: Medium (database table + CRUD operations)
-   - Dependencies: Database schema update, migration system
-
-2. **Migration System** - No schema versioning or rollback capability
-   - Impact: Cannot safely update database schema in production
-   - Effort: Medium (migration runner, version tracking)
-   - Dependencies: None
-
-3. **Backtesting Framework** - Cannot validate strategies on historical data
-   - Impact: Strategies deployed without historical validation
-   - Effort: High (historical data loading, execution engine, metrics)
-   - Dependencies: Performance metrics implementation
-
-4. **Performance Metrics** - No way to measure portfolio/strategy performance
-   - Impact: Cannot evaluate strategy effectiveness
-   - Effort: Medium (returns calculation, Sharpe ratio, drawdown)
-   - Dependencies: Portfolio holdings tracking
+1. **Strategy Comparison Tool** - No side-by-side strategy comparison
+   - Impact: Cannot easily compare and rank strategies
+   - Effort: Medium (comparison engine, ranking, reporting)
+   - Dependencies: Backtesting framework (Sprint 6 ✅)
+   - Status: RECOMMENDED for Sprint 7
 
 ### Medium Priority 🟡
-5. **Additional Phase 3 Strategies** - Only 6 of 10 planned strategies complete
+2. **Parameter Optimization** - Manual parameter tuning only
+   - Impact: Suboptimal strategy parameters
+   - Effort: High (grid search, walk-forward validation)
+   - Dependencies: Backtesting framework (Sprint 6 ✅)
+
+3. **Additional Phase 3 Strategies** - Only 6 of 10 planned strategies complete
    - Remaining: Ichimoku, Fibonacci, Volume Profile, Support/Resistance
    - Impact: Limited strategy diversity
    - Effort: High (4 strategies × 15 tests each = 60 tests)
 
-6. **WebSocket Integration** - No real-time price updates
+4. **WebSocket Integration** - No real-time price updates
    - Impact: Users must manually refresh data
    - Effort: Medium (WebSocket client, event handlers)
    - Dependencies: Real-time data source (Alpha Vantage or alternative)
 
-7. **Multi-User Support** - Single-user system only
+5. **Multi-User Support** - Single-user system only
    - Impact: Cannot serve multiple users simultaneously
    - Effort: High (authentication, user models, permission system)
    - Dependencies: User database tables, session management
 
-8. **Risk Analysis** - No portfolio risk metrics
+6. **Risk Analysis** - No portfolio risk metrics
    - Impact: Users unaware of portfolio risk exposure
    - Effort: Medium (VaR, correlation, beta calculations)
    - Dependencies: Portfolio holdings tracking, historical data
 
 ### Low Priority 🟢
-9. **Strategy Optimization** - Manual parameter tuning only
-   - Impact: Suboptimal strategy parameters
-   - Effort: High (grid search, genetic algorithms)
-   - Dependencies: Backtesting framework
+7. **Advanced Backtesting Features** - Basic backtest complete, needs enhancements
+   - Short selling support, position sizing, multi-symbol portfolios
+   - Impact: More realistic backtesting scenarios
+   - Effort: Medium (extend BacktestEngine)
+   - Dependencies: Backtesting framework (Sprint 6 ✅)
 
-10. **Walk-Forward Validation** - No out-of-sample testing
-    - Impact: Risk of overfitting strategies to historical data
-    - Effort: Medium (rolling window testing)
-    - Dependencies: Backtesting framework
+8. **Visualization Tools** - No charts or graphs
+   - Equity curves, drawdown graphs, trade distribution
+   - Impact: Better strategy analysis and presentation
+   - Effort: Medium (charting library integration)
+   - Dependencies: Backtesting framework (Sprint 6 ✅)
 
 ## Technical Debt
 
@@ -158,43 +156,42 @@
 - ❌ **Monitoring**: No application monitoring (consider APM)
 - ❌ **Error Handling**: Basic try-catch, needs custom exceptions
 
-## Sprint 5 Recommendations
+## Sprint 7 Recommendations
 
-### Option A: Complete Alert & Persistence (HIGH VALUE) 🔴
-**Focus**: Alert persistence + Migration system  
-**Value**: Prevents data loss, enables production deployment  
+### Option A: Strategy Comparison Tool (HIGH VALUE) 🔴 RECOMMENDED
+**Focus**: Side-by-side strategy comparison and ranking  
+**Value**: Data-driven strategy selection, easy performance comparison  
 **Effort**: 2-3 days  
 **Components**:
-1. Create `alerts` database table
-2. Implement AlertRepository (CRUD operations)
-3. Update AlertService to use repository
-4. Create migration system (version tracking, up/down methods)
-5. Write migrations for existing schema + new alerts table
-6. Test alert persistence (save, load, update, delete)
+1. StrategyComparator class (compare multiple strategies)
+2. Ranking system (by Sharpe ratio, return, drawdown, win rate)
+3. Comparison report generation (table format, CSV export)
+4. Visual comparison (if time permits - equity curves)
+5. Test suite (15-20 tests)
 
 **Deliverables**:
-- Persistent alerts (survive server restarts)
-- Migration system for safe schema updates
-- 20-25 new tests
-- Production-ready alert system
+- Compare multiple strategies on same data
+- Automatic ranking by selected metric
+- Comparison reports (console, CSV)
+- 15-20 new tests
+- Production-ready comparison tool
 
-### Option B: Backtesting Framework (HIGH IMPACT) 🔴
-**Focus**: Historical strategy testing + Performance metrics  
-**Value**: Validate strategies before deployment, measure effectiveness  
-**Effort**: 4-5 days  
+### Option B: Parameter Optimization Engine (HIGH IMPACT) 🟡
+**Focus**: Automated parameter tuning with validation  
+**Value**: Find optimal strategy parameters, prevent overfitting  
+**Effort**: 3-4 days  
 **Components**:
-1. Historical data loader (load OHLCV from database)
-2. Backtesting engine (simulate trades based on strategy signals)
-3. Performance metrics (returns, Sharpe, Sortino, drawdown, win rate)
-4. Strategy comparison (compare multiple strategies side-by-side)
-5. Report generation (summary statistics, trade log, equity curve)
-6. Test suite (25-30 tests)
+1. ParameterOptimizer class (grid search)
+2. Walk-forward validation (rolling window testing)
+3. Overfitting detection (in-sample vs out-of-sample comparison)
+4. Optimization report (best parameters, performance metrics)
+5. Test suite (20-25 tests)
 
 **Deliverables**:
-- Backtest any strategy on historical data
-- Performance reports with key metrics
-- Strategy comparison tool
-- 25-30 new tests
+- Automated parameter search
+- Walk-forward validation
+- Overfitting detection
+- 20-25 new tests
 
 ### Option C: Additional Phase 3 Strategies (EXPAND FEATURES) 🟡
 **Focus**: Ichimoku, Fibonacci, Volume Profile, Support/Resistance  
@@ -212,60 +209,62 @@
 - 60 new tests
 - 10 total strategies (comprehensive suite)
 
-### Option D: WebSocket + Real-Time (USER EXPERIENCE) 🟡
-**Focus**: Real-time price updates + Live alerts  
-**Value**: Better user experience, immediate feedback  
-**Effort**: 3-4 days  
+### Option D: Alert Integration Enhancement (USER EXPERIENCE) 🟢
+**Focus**: Integrate AlertRepository with existing alert system  
+**Value**: Complete alert workflow, real-time evaluation  
+**Effort**: 1-2 days  
 **Components**:
-1. WebSocket client (connect to data provider)
-2. Event system (dispatch price updates, strategy signals)
-3. Real-time alert triggering (check conditions on every price update)
-4. Frontend integration (display live prices, alerts)
-5. Test suite (15-20 tests)
+1. AlertEngine integration with AlertRepository
+2. Load persistent alerts on startup
+3. Real-time alert evaluation (existing logic)
+4. Alert history tracking
+5. Test suite (10-15 tests)
 
 **Deliverables**:
-- Real-time price updates
-- Live alert notifications
-- WebSocket event system
-- 15-20 new tests
+- Complete alert workflow
+- Alert history
+- Real-time evaluation with persistence
+- 10-15 new tests
 
 ## Recommendation
 
-**Recommended Sprint 5**: **Option A - Alert Persistence + Migration System** 🔴
+**Recommended Sprint 7**: **Option A - Strategy Comparison Tool** 🔴
 
 **Rationale**:
-1. **Highest Value**: Enables production deployment without data loss
-2. **Foundational**: Migration system required for all future database changes
-3. **Quick Win**: 2-3 days vs 4-6 days for other options
-4. **Prerequisite**: Other features (backtesting, real-time) will need migrations too
-5. **Risk Mitigation**: Currently losing all alerts on restart (critical bug)
+1. **High Value**: Enables data-driven strategy selection
+2. **Quick Win**: 2-3 days effort, immediate benefits
+3. **Builds on Sprint 6**: Leverages completed backtesting framework
+4. **User-Facing**: Directly useful for strategy evaluation
+5. **Foundation**: Comparison tool useful for future parameter optimization
 
-**After Sprint 5**, revisit priorities:
-- If focus is **validation**: Sprint 6 = Backtesting (Option B)
-- If focus is **features**: Sprint 6 = Phase 3 Strategies (Option C)
-- If focus is **UX**: Sprint 6 = WebSocket/Real-time (Option D)
+**After Sprint 7**, revisit priorities:
+- If focus is **optimization**: Sprint 8 = Parameter Optimization (Option B)
+- If focus is **features**: Sprint 8 = Phase 3 Strategies (Option C)
+- If focus is **integration**: Sprint 8 = Alert Enhancement (Option D)
 
 ## Success Metrics
 
-### Sprint 2-4 Achievements
-- ✅ 178 tests written and passing (100% pass rate)
-- ✅ 384 assertions across 3 sprints
+### Sprint 2-6 Achievements
+- ✅ **262 tests** written and passing (100% pass rate)
 - ✅ 6 trading strategies implemented (RSI, BB, MA, VWAP, MACD, Combined)
+- ✅ **Backtesting framework** with commission/slippage simulation
+- ✅ **Performance metrics** (Sharpe, Sortino, drawdown, win rate, profit factor)
+- ✅ **Alert persistence** (AlertRepository, CRUD operations)
+- ✅ **Migration system** (version tracking, up/down, rollback)
 - ✅ Portfolio rebalancing with tax optimization
 - ✅ 18 technical indicators
 - ✅ 10 analysis metrics
-- ✅ Alert system (in-memory)
-- ✅ ~3,500+ LOC production code
-- ✅ ~3,800+ LOC test code
-- ✅ Comprehensive documentation (Sprint summaries, PHPDoc)
+- ✅ **~6,000+ LOC production code**
+- ✅ **~6,400+ LOC test code**
+- ✅ Comprehensive documentation (Sprint summaries, Gap Analysis, PHPDoc)
 
-### Sprint 5 Target Metrics (Option A)
-- 🎯 20-25 new tests (alert persistence, migrations)
+### Sprint 7 Target Metrics (Option A)
+- 🎯 15-20 new tests (strategy comparison)
 - 🎯 100% test pass rate maintained
-- 🎯 Alert system production-ready (database persistence)
-- 🎯 Migration system operational (up/down, versioning)
-- 🎯 ~500-600 LOC production code
-- 🎯 ~600-700 LOC test code
+- 🎯 Strategy comparison tool operational
+- 🎯 Ranking system by multiple metrics
+- 🎯 ~400-500 LOC production code
+- 🎯 ~500-600 LOC test code
 
 ## Dependencies & Blockers
 
@@ -289,18 +288,22 @@
 
 ## Timeline Estimates
 
-### Completed
-- **Sprint 2**: 2 days (Dec 4, 2025)
-- **Sprint 3**: 1 day (Dec 4, 2025)
-- **Sprint 4**: 1 day (Dec 5, 2025)
+### Completed ✅
+- **Sprint 2**: 2 days (Dec 4, 2025) - Technical Indicators, Alerts
+- **Sprint 3**: 1 day (Dec 4, 2025) - Phase 1 Strategies
+- **Sprint 4**: 1 day (Dec 5, 2025) - Phase 2 Strategies, Rebalancing
+- **Sprint 5**: 1 day (Dec 5, 2025) - Alert Persistence, Migrations
+- **Sprint 6**: 1 day (Dec 5, 2025) - Backtesting Framework
+
+**Total Completed**: 6 days, 262 tests, 100% pass rate
 
 ### Planned
-- **Sprint 5 (Option A)**: 2-3 days (Alert persistence + Migrations)
-- **Sprint 6**: 4-5 days (Backtesting framework)
-- **Sprint 7**: 3-4 days (WebSocket + Real-time)
-- **Sprint 8**: 5-6 days (Phase 3 Strategies)
+- **Sprint 7**: 2-3 days (Strategy Comparison Tool)
+- **Sprint 8**: 3-4 days (Parameter Optimization)
+- **Sprint 9**: 3-4 days (WebSocket + Real-time)
+- **Sprint 10**: 5-6 days (Phase 3 Strategies)
 
-**Estimated Total**: 10-18 days for production-ready system with backtesting
+**Estimated Total to Feature Complete**: 13-17 additional days
 
 ## Notes
 
@@ -317,6 +320,9 @@
 3. **Tax Optimization**: Portfolio rebalancing must consider tax implications
 4. **Documentation**: Comprehensive docs prevent misunderstandings, speed up development
 5. **Incremental Progress**: Small, focused sprints deliver consistent progress
+6. **Cost Simulation**: Realistic backtesting requires commission and slippage modeling
+7. **Risk-Adjusted Metrics**: Sharpe ratio more valuable than raw returns for comparison
+8. **Interface Integration**: Existing interfaces (TradingStrategyInterface) enable seamless integration
 
 ### Future Considerations
 - **Performance**: Consider Redis caching for frequently accessed data
