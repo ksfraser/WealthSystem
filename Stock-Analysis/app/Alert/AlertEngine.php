@@ -41,6 +41,49 @@ class AlertEngine
     }
 
     /**
+     * Load alerts from repository into engine
+     *
+     * @param array<int, \App\Models\Alert> $repositoryAlerts Alerts from repository
+     * @param bool $replace Whether to replace existing alerts (default: true)
+     * @return int Number of alerts loaded
+     */
+    public function loadAlertsFromRepository(array $repositoryAlerts, bool $replace = true): int
+    {
+        if ($replace) {
+            $this->alerts = [];
+            $this->nextAlertId = 1;
+        }
+
+        $loadedCount = 0;
+
+        foreach ($repositoryAlerts as $alert) {
+            $alertId = $this->nextAlertId++;
+
+            // Create condition from alert model
+            $condition = new AlertCondition(
+                $alert->getConditionType(),
+                $alert->getThreshold()
+            );
+
+            $this->alerts[$alertId] = [
+                'id' => $alertId,
+                'user_id' => $alert->getUserId(),
+                'name' => $alert->getName(),
+                'symbol' => $alert->getSymbol(),
+                'conditions' => [$condition],
+                'email' => $alert->getEmail(),
+                'throttle_minutes' => $alert->getThrottleMinutes(),
+                'active' => $alert->isActive(),
+                'created_at' => $alert->getCreatedAt()->getTimestamp()
+            ];
+
+            $loadedCount++;
+        }
+
+        return $loadedCount;
+    }
+
+    /**
      * Create a new alert
      *
      * @param array<string, mixed> $config Alert configuration
