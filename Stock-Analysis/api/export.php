@@ -22,18 +22,25 @@ require_once __DIR__ . '/../DatabaseConfig.php';
 
 use App\Services\PdfExportService;
 use App\DAO\SectorAnalysisDAOImpl;
+use App\Security\InputValidator;
 
 try {
-    // Get parameters
-    $action = $_GET['action'] ?? '';
-    $userId = (int)($_GET['user_id'] ?? 0);
+    // Validate input parameters
+    $validator = new InputValidator($_GET);
     
-    if (empty($action)) {
-        throw new InvalidArgumentException('Action parameter is required');
-    }
+    $action = $validator->required('action')
+        ->string()
+        ->in(['sector_analysis', 'index_benchmark', 'advanced_charts'])
+        ->getValue();
     
-    if ($userId <= 0) {
-        throw new InvalidArgumentException('Valid user_id is required');
+    $userId = $validator->required('user_id')
+        ->int()
+        ->min(1)
+        ->getValue();
+    
+    // Check for validation errors
+    if ($validator->hasErrors()) {
+        throw new InvalidArgumentException($validator->getFirstError());
     }
     
     // Initialize services

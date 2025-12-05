@@ -1,223 +1,396 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 /**
- * Input Validator
+ * Input Validation Layer
  * 
- * Provides secure input validation and sanitization for all user input.
- * Prevents XSS, SQL injection, and other injection attacks.
+ * Provides comprehensive input validation and sanitization for user data.
+ * Prevents XSS, SQL injection, and other input-based attacks.
+ * 
+ * Usage:
+ *   $validator = new InputValidator($_POST);
+ *   $userId = $validator->required('user_id')->int()->min(1)->getValue();
+ *   $email = $validator->required('email')->email()->getValue();
  */
 class InputValidator
 {
+    private array $data;
+    private array $errors = [];
+    private ?string $currentField = null;
+    private mixed $currentValue = null;
+    private bool $isRequired = false;
+
     /**
-     * Sanitize string input - removes tags and special characters
+     * @param array $data Input data to validate ($_GET, $_POST, etc.)
      */
-    public static function sanitizeString(string $input): string
+    public function __construct(array $data)
     {
-        // Remove any null bytes
-        $input = str_replace(chr(0), '', $input);
-        
-        // Strip all tags
-        $input = strip_tags($input);
-        
-        // Trim whitespace
-        $input = trim($input);
-        
-        // Convert special characters to HTML entities
-        return htmlspecialchars($input, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        $this->data = $data;
     }
-    
+
     /**
-     * Validate and sanitize integer
+     * Start validating a required field
+     * 
+     * @param string $field Field name
+     * @return self For method chaining
      */
-    public static function validateInt($input): ?int
+    public function required(string $field): self
     {
-        $filtered = filter_var($input, FILTER_VALIDATE_INT);
-        return $filtered !== false ? $filtered : null;
-    }
-    
-    /**
-     * Validate and sanitize float
-     */
-    public static function validateFloat($input): ?float
-    {
-        $filtered = filter_var($input, FILTER_VALIDATE_FLOAT);
-        return $filtered !== false ? $filtered : null;
-    }
-    
-    /**
-     * Validate email address
-     */
-    public static function validateEmail(string $input): ?string
-    {
-        $filtered = filter_var($input, FILTER_VALIDATE_EMAIL);
-        return $filtered !== false ? $filtered : null;
-    }
-    
-    /**
-     * Validate URL
-     */
-    public static function validateUrl(string $input): ?string
-    {
-        $filtered = filter_var($input, FILTER_VALIDATE_URL);
-        return $filtered !== false ? $filtered : null;
-    }
-    
-    /**
-     * Validate boolean
-     */
-    public static function validateBoolean($input): bool
-    {
-        return filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
-    }
-    
-    /**
-     * Validate date in Y-m-d format
-     */
-    public static function validateDate(string $input): ?string
-    {
-        $date = \DateTime::createFromFormat('Y-m-d', $input);
-        if ($date && $date->format('Y-m-d') === $input) {
-            return $input;
+        $this->currentField = $field;
+        $this->isRequired = true;
+        $this->currentValue = $this->data[$field] ?? null;
+
+        if ($this->currentValue === null || $this->currentValue === '') {
+            $this->errors[$field][] = "Field '$field' is required";
         }
-        return null;
+
+        return $this;
     }
-    
+
     /**
-     * Validate datetime in Y-m-d H:i:s format
+     * Start validating an optional field
+     * 
+     * @param string $field Field name
+     * @param mixed $default Default value if not present
+     * @return self For method chaining
      */
-    public static function validateDateTime(string $input): ?string
+    public function optional(string $field, mixed $default = null): self
     {
-        $datetime = \DateTime::createFromFormat('Y-m-d H:i:s', $input);
-        if ($datetime && $datetime->format('Y-m-d H:i:s') === $input) {
-            return $input;
+        $this->currentField = $field;
+        $this->isRequired = false;
+        $this->currentValue = $this->data[$field] ?? $default;
+
+        return $this;
+    }
+
+    /**
+     * Validate as integer
+     * 
+     * @return self For method chaining
+     */
+    public function int(): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
         }
-        return null;
-    }
-    
-    /**
-     * Validate and sanitize alphanumeric string
-     */
-    public static function validateAlphanumeric(string $input): ?string
-    {
-        if (preg_match('/^[a-zA-Z0-9]+$/', $input)) {
-            return $input;
+
+        if (!is_numeric($this->currentValue) || (int)$this->currentValue != $this->currentValue) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be an integer";
+        } else {
+            $this->currentValue = (int)$this->currentValue;
         }
-        return null;
+
+        return $this;
     }
-    
+
     /**
-     * Validate stock symbol (1-5 uppercase letters)
+     * Validate as float
+     * 
+     * @return self For method chaining
      */
-    public static function validateStockSymbol(string $input): ?string
+    public function float(): self
     {
-        $input = strtoupper(trim($input));
-        if (preg_match('/^[A-Z]{1,5}$/', $input)) {
-            return $input;
+        if ($this->shouldSkipValidation()) {
+            return $this;
         }
-        return null;
+
+        if (!is_numeric($this->currentValue)) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be a number";
+        } else {
+            $this->currentValue = (float)$this->currentValue;
+        }
+
+        return $this;
     }
-    
+
     /**
-     * Sanitize filename - removes dangerous characters
+     * Validate as string
+     * 
+     * @return self For method chaining
      */
-    public static function sanitizeFilename(string $filename): string
+    public function string(): self
     {
-        // Remove path separators
-        $filename = str_replace(['/', '\\', '..'], '', $filename);
-        
-        // Remove null bytes
-        $filename = str_replace(chr(0), '', $filename);
-        
-        // Keep only safe characters
-        $filename = preg_replace('/[^a-zA-Z0-9._-]/', '_', $filename);
-        
-        return $filename;
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        $this->currentValue = (string)$this->currentValue;
+        return $this;
     }
-    
+
     /**
-     * Validate array of values
+     * Validate as email
+     * 
+     * @return self For method chaining
      */
-    public static function validateArray(array $input, string $type): array
+    public function email(): self
     {
-        $validated = [];
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (!filter_var($this->currentValue, FILTER_VALIDATE_EMAIL)) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be a valid email";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate as URL
+     * 
+     * @return self For method chaining
+     */
+    public function url(): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (!filter_var($this->currentValue, FILTER_VALIDATE_URL)) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be a valid URL";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate as boolean
+     * 
+     * @return self For method chaining
+     */
+    public function bool(): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        $this->currentValue = filter_var($this->currentValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
         
-        foreach ($input as $key => $value) {
-            switch ($type) {
-                case 'int':
-                    $validated[$key] = self::validateInt($value);
-                    break;
-                case 'string':
-                    $validated[$key] = self::sanitizeString($value);
-                    break;
-                case 'email':
-                    $validated[$key] = self::validateEmail($value);
-                    break;
-                default:
-                    $validated[$key] = $value;
+        if ($this->currentValue === null) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be a boolean";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate minimum value
+     * 
+     * @param int|float $min Minimum value
+     * @return self For method chaining
+     */
+    public function min(int|float $min): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (is_numeric($this->currentValue) && $this->currentValue < $min) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be at least $min";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate maximum value
+     * 
+     * @param int|float $max Maximum value
+     * @return self For method chaining
+     */
+    public function max(int|float $max): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (is_numeric($this->currentValue) && $this->currentValue > $max) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be at most $max";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate minimum length
+     * 
+     * @param int $length Minimum length
+     * @return self For method chaining
+     */
+    public function minLength(int $length): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (strlen((string)$this->currentValue) < $length) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be at least $length characters";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate maximum length
+     * 
+     * @param int $length Maximum length
+     * @return self For method chaining
+     */
+    public function maxLength(int $length): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (strlen((string)$this->currentValue) > $length) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be at most $length characters";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate against pattern
+     * 
+     * @param string $pattern Regular expression pattern
+     * @param string $message Error message
+     * @return self For method chaining
+     */
+    public function pattern(string $pattern, string $message = 'Invalid format'): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (!preg_match($pattern, (string)$this->currentValue)) {
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}': $message";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Validate against array of allowed values
+     * 
+     * @param array $values Allowed values
+     * @return self For method chaining
+     */
+    public function in(array $values): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if (!in_array($this->currentValue, $values, true)) {
+            $allowed = implode(', ', $values);
+            $this->errors[$this->currentField][] = "Field '{$this->currentField}' must be one of: $allowed";
+        }
+
+        return $this;
+    }
+
+    /**
+     * Sanitize HTML to prevent XSS
+     * 
+     * @param bool $allowBasicTags Allow basic HTML tags (<b>, <i>, etc.)
+     * @return self For method chaining
+     */
+    public function sanitizeHtml(bool $allowBasicTags = false): self
+    {
+        if ($this->shouldSkipValidation()) {
+            return $this;
+        }
+
+        if ($allowBasicTags) {
+            $this->currentValue = strip_tags(
+                (string)$this->currentValue,
+                '<b><i><u><strong><em><p><br><ul><ol><li>'
+            );
+        } else {
+            $this->currentValue = strip_tags((string)$this->currentValue);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get validated value
+     * 
+     * @return mixed The validated and sanitized value
+     */
+    public function getValue(): mixed
+    {
+        return $this->currentValue;
+    }
+
+    /**
+     * Check if validation has errors
+     * 
+     * @return bool True if there are errors
+     */
+    public function hasErrors(): bool
+    {
+        return !empty($this->errors);
+    }
+
+    /**
+     * Get all validation errors
+     * 
+     * @return array Array of errors by field name
+     */
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Get first error message
+     * 
+     * @return string|null First error message or null
+     */
+    public function getFirstError(): ?string
+    {
+        foreach ($this->errors as $fieldErrors) {
+            if (!empty($fieldErrors)) {
+                return $fieldErrors[0];
             }
         }
-        
-        return array_filter($validated, fn($v) => $v !== null);
-    }
-    
-    /**
-     * Validate money amount (positive float with 2 decimals)
-     */
-    public static function validateMoney($input): ?float
-    {
-        $amount = self::validateFloat($input);
-        
-        if ($amount !== null && $amount >= 0) {
-            return round($amount, 2);
-        }
-        
         return null;
     }
-    
+
     /**
-     * Validate phone number (basic validation)
+     * Throw exception if validation failed
+     * 
+     * @throws \InvalidArgumentException If validation failed
      */
-    public static function validatePhone(string $input): ?string
+    public function validate(): void
     {
-        // Remove all non-numeric characters
-        $phone = preg_replace('/[^0-9]/', '', $input);
-        
-        // Check if it's 10 digits (North American format)
-        if (strlen($phone) === 10) {
-            return $phone;
+        if ($this->hasErrors()) {
+            throw new \InvalidArgumentException($this->getFirstError());
         }
-        
-        return null;
     }
-    
+
     /**
-     * Validate against whitelist
+     * Check if validation should be skipped
+     * 
+     * @return bool True if should skip
      */
-    public static function validateWhitelist($input, array $whitelist): ?string
+    private function shouldSkipValidation(): bool
     {
-        if (in_array($input, $whitelist, true)) {
-            return $input;
+        // Skip if there's already an error for this field
+        if (isset($this->errors[$this->currentField])) {
+            return true;
         }
-        return null;
-    }
-    
-    /**
-     * Sanitize HTML content (allows safe tags)
-     */
-    public static function sanitizeHtml(string $input): string
-    {
-        // Allow only safe HTML tags
-        $allowedTags = '<p><br><strong><em><u><ul><ol><li><a>';
-        
-        // Strip dangerous tags
-        $sanitized = strip_tags($input, $allowedTags);
-        
-        // Remove any JavaScript
-        $sanitized = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', '', $sanitized);
-        $sanitized = preg_replace('/on\w+="[^"]*"/i', '', $sanitized);
-        
-        return $sanitized;
+
+        // Skip if optional and value is null
+        if (!$this->isRequired && $this->currentValue === null) {
+            return true;
+        }
+
+        return false;
     }
 }

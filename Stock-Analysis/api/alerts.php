@@ -23,18 +23,25 @@ require_once __DIR__ . '/../config/cache.php';
 
 use App\Services\AlertService;
 use App\DAO\SectorAnalysisDAOImpl;
+use App\Security\InputValidator;
 
 try {
-    // Get parameters
-    $action = $_GET['action'] ?? '';
-    $userId = (int)($_GET['user_id'] ?? 0);
+    // Validate input parameters
+    $validator = new InputValidator($_GET);
     
-    if (empty($action)) {
-        throw new InvalidArgumentException('Action parameter is required');
-    }
+    $action = $validator->required('action')
+        ->string()
+        ->in(['generate', 'get_active', 'mark_read', 'dismiss', 'clear_all'])
+        ->getValue();
     
-    if ($userId <= 0) {
-        throw new InvalidArgumentException('Valid user_id is required');
+    $userId = $validator->required('user_id')
+        ->int()
+        ->min(1)
+        ->getValue();
+    
+    // Check for validation errors
+    if ($validator->hasErrors()) {
+        throw new InvalidArgumentException($validator->getFirstError());
     }
     
     // Initialize services
@@ -65,9 +72,10 @@ try {
             break;
             
         case 'mark_read':
-            $alertId = (int)($_GET['alert_id'] ?? 0);
-            if ($alertId <= 0) {
-                throw new InvalidArgumentException('Valid alert_id is required');
+            $alertValidator = new InputValidator($_GET);
+            $alertId = $alertValidator->required('alert_id')->int()->min(1)->getValue();
+            if ($alertValidator->hasErrors()) {
+                throw new InvalidArgumentException($alertValidator->getFirstError());
             }
             $success = $alertService->markAlertAsRead($alertId);
             echo json_encode([
