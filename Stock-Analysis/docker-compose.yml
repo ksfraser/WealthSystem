@@ -1,10 +1,10 @@
 version: '3.8'
 
 services:
-  # MySQL Database
-  db:
+  # MySQL Database (default)
+  mysql:
     image: mysql:8.0
-    container_name: ${APP_NAME:-stock-analysis}-db
+    container_name: ${APP_NAME:-stock-analysis}-mysql
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
@@ -23,6 +23,34 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    profiles:
+      - mysql
+      - ""
+
+  # MariaDB Database (alternative)
+  mariadb:
+    image: mariadb:11.2
+    container_name: ${APP_NAME:-stock-analysis}-mariadb
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-changeme}
+      MARIADB_DATABASE: ${MYSQL_DATABASE:-stock_analysis}
+      MARIADB_USER: ${MYSQL_USER:-stock_app}
+      MARIADB_PASSWORD: ${MYSQL_APP_PASSWORD:-changeme}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./database/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    networks:
+      - ${NETWORK_NAME:-stock-analysis-network}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles:
+      - mariadb
 
   # Redis Cache Server
   redis:
@@ -50,17 +78,19 @@ services:
     container_name: ${APP_NAME:-stock-analysis}-app
     restart: unless-stopped
     depends_on:
-      db:
-        condition: service_healthy
       redis:
         condition: service_healthy
     environment:
-      # Database
-      DB_HOST: db
-      DB_PORT: 3306
+      # Database (use external or container-based)
+      # Set USE_EXTERNAL_DB=true to use external database
+      # Set DB_TYPE=mariadb to use MariaDB instead of MySQL
+      DB_HOST: ${DB_HOST:-mysql}
+      DB_PORT: ${DB_PORT:-3306}
       DB_DATABASE: ${MYSQL_DATABASE:-stock_analysis}
       DB_USERNAME: ${MYSQL_USER:-stock_app}
       DB_PASSWORD: ${MYSQL_APP_PASSWORD:-changeme}
+      USE_EXTERNAL_DB: ${USE_EXTERNAL_DB:-false}
+      DB_TYPE: ${DB_TYPE:-mysql}
       
       # Redis Cache
       REDIS_HOST: redis
@@ -148,6 +178,8 @@ networks:
 
 volumes:
   mysql_data:
+    driver: local
+  mariadb_data:
     driver: local
   redis_data:
     driver: local

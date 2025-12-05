@@ -12,10 +12,20 @@
     app_root: /var/www/{{ app_name }}
     php_version: "8.2"
     python_version: "3.11"
+    
+    # Database configuration
+    db_type: "{{ lookup('env', 'DB_TYPE') | default('mysql', true) }}"  # mysql or mariadb
+    use_external_db: "{{ lookup('env', 'USE_EXTERNAL_DB') | default('false', true) | bool }}"
     mysql_root_password: "{{ lookup('env', 'MYSQL_ROOT_PASSWORD') | default('changeme', true) }}"
     mysql_database: "{{ lookup('env', 'MYSQL_DATABASE') | default('stock_analysis', true) }}"
     mysql_user: "{{ lookup('env', 'MYSQL_USER') | default('stock_app', true) }}"
     mysql_password: "{{ lookup('env', 'MYSQL_APP_PASSWORD') | default('changeme', true) }}"
+    
+    # External database settings (used when use_external_db=true)
+    external_db_host: "{{ lookup('env', 'DB_HOST') | default('localhost', true) }}"
+    external_db_port: "{{ lookup('env', 'DB_PORT') | default('3306', true) }}"
+    
+    # Redis configuration
     redis_password: "{{ lookup('env', 'REDIS_PASSWORD') | default('changeme', true) }}"
     redis_port: "{{ lookup('env', 'REDIS_PORT') | default('6379', true) }}"
     redis_maxmemory: "{{ lookup('env', 'REDIS_MAXMEMORY') | default('256mb', true) }}"
@@ -146,7 +156,7 @@
         state: link
         force: yes
 
-    # ===== MYSQL INSTALLATION =====
+    # ===== DATABASE INSTALLATION =====
     
     - name: Install MySQL server
       apt:
@@ -155,12 +165,38 @@
           - mysql-client
           - python3-pymysql
         state: present
+      when: not use_external_db and db_type == 'mysql'
+
+    - name: Install MariaDB server
+      apt:
+        name:
+          - mariadb-server
+          - mariadb-client
+          - python3-pymysql
+        state: present
+      when: not use_external_db and db_type == 'mariadb'
+
+    - name: Install database client only (for external database)
+      apt:
+        name:
+          - mysql-client
+          - python3-pymysql
+        state: present
+      when: use_external_db
 
     - name: Start MySQL service
       service:
         name: mysql
         state: started
         enabled: yes
+      when: not use_external_db and db_type == 'mysql'
+
+    - name: Start MariaDB service
+      service:
+        name: mariadb
+        state: started
+        enabled: yes
+      when: not use_external_db and db_type == 'mariadb'
 
     - name: Set MySQL root password
       mysql_user:
@@ -169,6 +205,16 @@
         host: localhost
         login_unix_socket: /var/run/mysqld/mysqld.sock
         state: present
+      when: not use_external_db and db_type == 'mysql'
+
+    - name: Set MariaDB root password
+      mysql_user:
+        name: root
+        password: "{{ mysql_root_password }}"
+        host: localhost
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+        state: present
+      when: not use_external_db and db_type == 'mariadb'
 
     - name: Create application database
       mysql_db:
@@ -176,6 +222,7 @@
         state: present
         login_user: root
         login_password: "{{ mysql_root_password }}"
+      when: not use_external_db
 
     - name: Create application database user
       mysql_user:
@@ -186,6 +233,7 @@
         state: present
         login_user: root
         login_password: "{{ mysql_root_password }}"
+      when: not use_external_db
 
     # ===== REDIS INSTALLATION =====
     

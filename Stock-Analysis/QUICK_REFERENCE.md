@@ -32,15 +32,36 @@ docker-compose --profile tools up -d
 # - Redis Commander: http://localhost:8082
 ```
 
+### With MariaDB Instead of MySQL
+
+```bash
+# Start with MariaDB
+docker-compose --profile mariadb up -d
+
+# Or with tools
+docker-compose --profile mariadb --profile tools up -d
+```
+
+### With External Database
+
+```bash
+# Create override file (see docker-compose.override.yml.example)
+# Then start without database container
+docker-compose up -d app redis
+```
+
 ## 📦 What's Deployed
 
 | Service | Container | Port | Purpose |
 |---------|-----------|------|---------|
 | Application | `stock-analysis-app` | 8080 | Main web application |
-| MySQL | `stock-analysis-db` | 3306 | Database |
+| MySQL (default) | `stock-analysis-mysql` | 3306 | Database (default profile) |
+| MariaDB (optional) | `stock-analysis-mariadb` | 3306 | Database (mariadb profile) |
 | Redis | `stock-analysis-redis` | 6379 | Cache server |
-| phpMyAdmin | `stock-analysis-phpmyadmin` | 8081 | DB management (optional) |
-| Redis Commander | `stock-analysis-redis-commander` | 8082 | Cache management (optional) |
+| phpMyAdmin | `stock-analysis-phpmyadmin` | 8081 | DB management (tools profile) |
+| Redis Commander | `stock-analysis-redis-commander` | 8082 | Cache management (tools profile) |
+
+**Note**: Only one database (MySQL or MariaDB) runs at a time. Use profiles to select.
 
 ## ⚙️ Essential Commands
 
@@ -68,14 +89,23 @@ docker-compose logs -f db
 ### Database Operations
 
 ```bash
-# Backup database
-docker exec stock-analysis-db mysqldump -u root -p stock_analysis > backup.sql
+# Backup MySQL database
+docker exec stock-analysis-mysql mysqldump -u root -p stock_analysis > backup.sql
 
-# Restore database
-docker exec -i stock-analysis-db mysql -u root -p stock_analysis < backup.sql
+# Backup MariaDB database
+docker exec stock-analysis-mariadb mysqldump -u root -p stock_analysis > backup.sql
+
+# Restore to MySQL
+docker exec -i stock-analysis-mysql mysql -u root -p stock_analysis < backup.sql
+
+# Restore to MariaDB
+docker exec -i stock-analysis-mariadb mysql -u root -p stock_analysis < backup.sql
 
 # MySQL shell
-docker exec -it stock-analysis-db mysql -u root -p
+docker exec -it stock-analysis-mysql mysql -u root -p
+
+# MariaDB shell
+docker exec -it stock-analysis-mariadb mysql -u root -p
 ```
 
 ### Redis Operations
@@ -116,6 +146,20 @@ docker exec stock-analysis-app /var/www/stock-analysis/venv/bin/python /var/www/
 MYSQL_ROOT_PASSWORD=your_secure_root_password
 MYSQL_APP_PASSWORD=your_secure_app_password
 REDIS_PASSWORD=your_secure_redis_password
+```
+
+### Database Options
+
+```bash
+# Choose database type
+DB_TYPE=mysql          # or mariadb
+USE_EXTERNAL_DB=false  # Set true for external database
+
+# For external database, also set:
+DB_HOST=my-db-instance.example.com
+DB_PORT=3306
+DB_USERNAME=stock_app
+DB_PASSWORD=your_password
 ```
 
 ### Optional Variables (Have Defaults)

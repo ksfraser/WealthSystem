@@ -1,0 +1,246 @@
+# Kubernetes Pod Configuration with MariaDB
+# Alternative to pod.yml that uses MariaDB instead of MySQL
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stock-analysis-mariadb
+  labels:
+    app: stock-analysis
+    tier: application
+    db: mariadb
+spec:
+  containers:
+  # MariaDB Database Container
+  - name: mariadb
+    image: mariadb:11.2
+    ports:
+    - containerPort: 3306
+      name: mariadb
+    env:
+    - name: MARIADB_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: stock-analysis-secrets
+          key: mysql-root-password
+    - name: MARIADB_DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: stock-analysis-config
+          key: mysql-database
+    - name: MARIADB_USER
+      valueFrom:
+        configMapKeyRef:
+          name: stock-analysis-config
+          key: mysql-user
+    - name: MARIADB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: stock-analysis-secrets
+          key: mysql-password
+    volumeMounts:
+    - name: mariadb-data
+      mountPath: /var/lib/mysql
+    - name: mariadb-init
+      mountPath: /docker-entrypoint-initdb.d
+      readOnly: true
+    livenessProbe:
+      exec:
+        command:
+        - healthcheck.sh
+        - --connect
+        - --innodb_initialized
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 5
+    resources:
+      limits:
+        memory: "1Gi"
+        cpu: "500m"
+      requests:
+        memory: "512Mi"
+        cpu: "250m"
+
+  # Redis Cache Container
+  - name: redis
+    image: redis:7-alpine
+    command:
+    - redis-server
+    - --requirepass
+    - $(REDIS_PASSWORD)
+    - --maxmemory
+    - 256mb
+    - --maxmemory-policy
+    - allkeys-lru
+    ports:
+    - containerPort: 6379
+      name: redis
+    env:
+    - name: REDIS_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: stock-analysis-secrets
+          key: redis-password
+    volumeMounts:
+    - name: redis-data
+      mountPath: /data
+    livenessProbe:
+      exec:
+        command:
+        - redis-cli
+        - --raw
+        - incr
+        - ping
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    resources:
+      limits:
+        memory: "512Mi"
+        cpu: "250m"
+      requests:
+        memory: "256Mi"
+        cpu: "100m"
+
+  # Application Container
+  - name: app
+    image: stock-analysis:latest
+    ports:
+    - containerPort: 80
+      name: http
+    env:
+    # Database Configuration
+    - name: DB_HOST
+      value: "localhost"
+    - name: DB_PORT
+      value: "3306"
+    - name: DB_DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: stock-analysis-config
+          key: mysql-database
+    - name: DB_USERNAME
+      valueFrom:
+        configMapKeyRef:
+          name: stock-analysis-config
+          key: mysql-user
+    - name: DB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: stock-analysis-secrets
+          key: mysql-password
+    - name: DB_TYPE
+      value: "mariadb"
+    - name: USE_EXTERNAL_DB
+      value: "false"
+    
+    # Redis Configuration
+    - name: REDIS_HOST
+      value: "localhost"
+    - name: REDIS_PORT
+      value: "6379"
+    - name: REDIS_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: stock-analysis-secrets
+          key: redis-password
+    - name: REDIS_DATABASE
+      value: "0"
+    
+    # Application Configuration
+    - name: APP_NAME
+      valueFrom:
+        configMapKeyRef:
+          name: stock-analysis-config
+          key: app-name
+    - name: APP_ENV
+      value: "production"
+    - name: APP_DEBUG
+      value: "false"
+    - name: APP_ROOT
+      value: "/var/www/stock-analysis"
+    - name: APP_DOMAIN
+      valueFrom:
+        configMapKeyRef:
+          name: stock-analysis-config
+          key: app-domain
+    
+    # Python Configuration
+    - name: PYTHON_PATH
+      value: "/var/www/stock-analysis/venv/bin/python"
+    
+    # Migrations
+    - name: RUN_MIGRATIONS
+      value: "true"
+    
+    volumeMounts:
+    - name: app-data
+      mountPath: /var/www/stock-analysis/data
+    - name: app-logs
+      mountPath: /var/www/stock-analysis/logs
+    - name: app-uploads
+      mountPath: /var/www/stock-analysis/uploads
+    
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 60
+      periodSeconds: 30
+      timeoutSeconds: 10
+      failureThreshold: 3
+    
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 3
+    
+    resources:
+      limits:
+        memory: "2Gi"
+        cpu: "1000m"
+      requests:
+        memory: "1Gi"
+        cpu: "500m"
+
+  volumes:
+  - name: mariadb-data
+    persistentVolumeClaim:
+      claimName: stock-analysis-mariadb-pvc
+  - name: mariadb-init
+    configMap:
+      name: stock-analysis-mysql-init
+  - name: redis-data
+    persistentVolumeClaim:
+      claimName: stock-analysis-redis-pvc
+  - name: app-data
+    persistentVolumeClaim:
+      claimName: stock-analysis-app-data-pvc
+  - name: app-logs
+    persistentVolumeClaim:
+      claimName: stock-analysis-app-logs-pvc
+  - name: app-uploads
+    persistentVolumeClaim:
+      claimName: stock-analysis-app-uploads-pvc
+
+  restartPolicy: Always
+
+---
+# PersistentVolumeClaim for MariaDB data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stock-analysis-mariadb-pvc
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
