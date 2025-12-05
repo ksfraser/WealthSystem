@@ -57,4 +57,18 @@ interface SectorAnalysisDAO
      * @return array<string, array<string, float>> Date => [Sector => Weight%]
      */
     public function getHistoricalSectorWeights(int $userId, string $startDate, string $endDate): array;
+    
+    /**
+     * Get sector breakdown with values and percentages
+     * 
+     * Returns aggregated sector data for portfolio export.
+     * 
+     * @param int $userId User ID
+     * @return array{
+     *   sector: string,
+     *   value: float,
+     *   percentage: float
+     * }[]
+     */
+    public function getSectorBreakdown(int $userId): array;
 }
