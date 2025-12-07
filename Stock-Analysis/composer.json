@@ -32,7 +32,7 @@
     },
     "suggest": {
         "theodo-group/llphant": "^0.7 - Comprehensive GenAI framework with RAG, embeddings, vector stores, and document processing. Use for semantic search and advanced AI features.",
-        "guzzlehttp/guzzle": "^7.0 - HTTP client for Anthropic API (already required, but needed for AnthropicProvider)"
+        "guzzlehttp/guzzle": "^7.0 - HTTP client for Anthropic and fundamental data APIs (already required, needed for AnthropicProvider and AlphaVantageFundamentalProvider)"
     },
     "autoload": {
         "psr-4": {
