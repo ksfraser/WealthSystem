@@ -31,7 +31,8 @@
         "squizlabs/php_codesniffer": "^3.6"
     },
     "suggest": {
-        "theodo-group/llphant": "^0.7 - Comprehensive GenAI framework with RAG, embeddings, vector stores, and document processing. Use for semantic search and advanced AI features."
+        "theodo-group/llphant": "^0.7 - Comprehensive GenAI framework with RAG, embeddings, vector stores, and document processing. Use for semantic search and advanced AI features.",
+        "guzzlehttp/guzzle": "^7.0 - HTTP client for Anthropic API (already required, but needed for AnthropicProvider)"
     },
     "autoload": {
         "psr-4": {
